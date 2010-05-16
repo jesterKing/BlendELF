@@ -210,6 +210,8 @@ void gfx_write_to_log(const char *fmt, ...);
 
 //////////////////////////////// OBJECT ////////////////////////////////
 
+void gfx_init_objects();
+void gfx_deinit_objects();
 void gfx_inc_ref(gfx_object *obj);
 void gfx_dec_ref(gfx_object *obj);
 void gfx_log_ref_count_table();
