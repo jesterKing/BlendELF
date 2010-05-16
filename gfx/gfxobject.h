@@ -1,4 +1,34 @@
 
+void gfx_init_objects()
+{
+	memset(gfx_global_ref_count_table, 0x0, sizeof(int)*GFX_OBJECT_TYPE_COUNT);
+}
+
+void gfx_deinit_objects()
+{
+	if(gfx_get_global_ref_count() > 0)
+	{
+		gfx_write_to_log("error: possible memory leak in GFX, [%d] references not dereferenced\n",
+			gfx_get_global_ref_count());
+		gfx_log_ref_count_table();
+	}
+
+	if(gfx_get_global_ref_count() < 0)
+	{
+		gfx_write_to_log("error: possible double free in GFX, [%d] negative reference count\n",
+			gfx_get_global_ref_count());
+		gfx_log_ref_count_table();
+	}
+
+	if(gfx_get_global_obj_count() > 0)
+		gfx_write_to_log("error: possible memory leak in GFX, [%d] objects not destroyed\n",
+			gfx_get_global_obj_count());
+
+	if(gfx_get_global_obj_count() < 0)
+		gfx_write_to_log("error: possible double free in GFX, [%d] negative object count\n",
+			gfx_get_global_obj_count());
+}
+
 void gfx_log_ref_count_table()
 {
 	int i;

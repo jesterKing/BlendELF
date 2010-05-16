@@ -82,10 +82,10 @@ unsigned char gfx_init()
 
 	if(driver) return GFX_TRUE;
 
+	gfx_init_objects();
+
 	driver = (gfx_driver*)malloc(sizeof(gfx_driver));
 	memset(driver, 0x0, sizeof(gfx_driver));
-
-	memset(gfx_global_ref_count_table, 0x0, sizeof(int)*GFX_OBJECT_TYPE_COUNT);
 
 	driver->format_sizes[GFX_FLOAT] = sizeof(float);
 	driver->format_sizes[GFX_INT] = sizeof(int);
@@ -298,27 +298,7 @@ void gfx_deinit()
 	free(driver);
 	driver = NULL;
 
-	if(gfx_get_global_ref_count() > 0)
-	{
-		gfx_write_to_log("error: possible memory leak in GFX, [%d] references not dereferenced\n",
-			gfx_get_global_ref_count());
-		gfx_log_ref_count_table();
-	}
-
-	if(gfx_get_global_ref_count() < 0)
-	{
-		gfx_write_to_log("error: possible double free in GFX, [%d] negative reference count\n",
-			gfx_get_global_ref_count());
-		gfx_log_ref_count_table();
-	}
-
-	if(gfx_get_global_obj_count() > 0)
-		gfx_write_to_log("error: possible memory leak in GFX, [%d] objects not destroyed\n",
-			gfx_get_global_obj_count());
-
-	if(gfx_get_global_obj_count() < 0)
-		gfx_write_to_log("error: possible double free in GFX, [%d] negative object count\n",
-			gfx_get_global_obj_count());
+	gfx_deinit_objects();
 }
 
 void gfx_clear_buffers(float r, float g, float b, float a, float d)
