@@ -3724,10 +3724,6 @@ ELF_API void ELF_APIENTRY elfRunScript(elf_handle script)
 	}
 	elf_run_script((elf_script*)script.get());
 }
-ELF_API void ELF_APIENTRY elfRunString(const char* str)
-{
-	elf_run_string(str);
-}
 ELF_API bool ELF_APIENTRY elfIsScriptError(elf_handle script)
 {
 	if(!script.get() || elf_get_object_type(script.get()) != ELF_SCRIPT)
@@ -3736,6 +3732,10 @@ ELF_API bool ELF_APIENTRY elfIsScriptError(elf_handle script)
 		return false;
 	}
 	return (bool)elf_is_script_error((elf_script*)script.get());
+}
+ELF_API bool ELF_APIENTRY elfRunString(const char* str)
+{
+	return (bool)elf_run_string(str);
 }
 ELF_API void ELF_APIENTRY elfSetAudioVolume(float volume)
 {

@@ -70,7 +70,7 @@ void elf_destroy_context(elf_context *context)
 	global_obj_count--;
 }
 
-unsigned char elf_open_window(int width, int height,
+unsigned char elf_init_context(int width, int height,
 	const char *title, unsigned char fullscreen)
 {
 	if(ctx)
@@ -118,7 +118,7 @@ unsigned char elf_open_window(int width, int height,
 	return ELF_TRUE;
 }
 
-void elf_close_window()
+void elf_deinit_context()
 {
 	if(!ctx) return;
 
@@ -130,7 +130,7 @@ void elf_close_window()
 
 #if defined(__WIN32__) || defined(WIN32) || defined(__CYGWIN__)
 	#ifndef ELF_PLAYER
-unsigned char elf_open_window_with_hwnd(int width, int height,
+unsigned char elf_init_context_with_hwnd(int width, int height,
 	const char *title, unsigned char fullscreen, HWND hwnd)
 {
 	if(ctx)

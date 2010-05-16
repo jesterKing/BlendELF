@@ -217,18 +217,6 @@ elf_engine* elf_create_engine()
 	memset(engine, 0x0, sizeof(elf_engine));
 	engine->type = ELF_ENGINE;
 
-	engine->L = lua_open();
-	if(!engine->L)
-	{
-		printf("error: failed to initialize lua\n");
-		elf_destroy_engine(engine);
-		return NULL;
-	}
-	luaL_openlibs(engine->L);
-	luaopen_elf(engine->L);
-
-	elf_init_audio();
-
 	engine->fps_timer = elf_create_timer();
 	engine->fps_limit_timer = elf_create_timer();
 	engine->time_sync_timer = elf_create_timer();
@@ -257,8 +245,6 @@ elf_engine* elf_create_engine()
 
 void elf_destroy_engine(elf_engine *engine)
 {
-	if(engine->L) lua_close(engine->L);
-
 	gfx_dec_ref((gfx_object*)engine->lines);
 
 	if(engine->scene) elf_dec_ref((elf_object*)engine->scene);
@@ -272,15 +258,12 @@ void elf_destroy_engine(elf_engine *engine)
 	elf_dec_ref((elf_object*)engine->fps_limit_timer);
 	elf_dec_ref((elf_object*)engine->time_sync_timer);
 
-	elf_deinit_audio();
-
 	free(engine);
 
 	gfx_deinit();
 }
 
-unsigned char elf_init(int width, int height,
-	const char *title, unsigned char fullscreen)
+unsigned char elf_init_engine()
 {
 	if(eng)
 	{
@@ -288,22 +271,31 @@ unsigned char elf_init(int width, int height,
 		return ELF_FALSE;
 	}
 
-	memset(global_ref_count_table, 0x0, sizeof(int)*ELF_OBJECT_TYPE_COUNT);
-	elf_start_log("BlendELF 0.9 Beta\n");
-
-	if(!elf_open_window(width, height, title, fullscreen)) return ELF_FALSE;
-
 	eng = elf_create_engine();
 	if(!eng) return ELF_FALSE;
 	elf_inc_ref((elf_object*)eng);
 
-	res = elf_create_resources();
-	elf_inc_ref((elf_object*)res);
+	return ELF_TRUE;
+}
 
-	// mbg: initialises networking
+void elf_deinit_engine()
+{
+	if(!eng) return;
+
+	elf_dec_ref((elf_object*)eng);
+}
+
+unsigned char elf_init(int width, int height,
+	const char *title, unsigned char fullscreen)
+{
+	elf_start_log("BlendELF 0.9 Beta\n");
+
+	elf_init_objects();
+	if(!elf_init_context(width, height, title, fullscreen)) return ELF_FALSE;
+	if(!elf_init_audio());
+	if(!elf_init_engine()) return ELF_FALSE;
+	if(!elf_init_scripting()) return ELF_FALSE;
 	if(!elf_init_networking()) return ELF_FALSE;
-
-	elf_run_string("me = nil");
 
 	return ELF_TRUE;
 }
@@ -319,19 +311,12 @@ unsigned char elf_init_with_hwnd(int width, int height,
 		return ELF_FALSE;
 	}
 
-	memset(global_ref_count_table, 0x0, sizeof(int)*ELF_OBJECT_TYPE_COUNT);
-	elf_start_log("BlendELF 0.9 Beta\n");
-
-	if(!elf_open_window_with_hwnd(width, height, title, fullscreen, hwnd)) return ELF_FALSE;
-
-	eng = elf_create_engine();
-	if(!eng) return ELF_FALSE;
-	elf_inc_ref((elf_object*)eng);
-
-	res = elf_create_resources();
-	elf_inc_ref((elf_object*)res);
-
-	elf_run_string("me = nil");
+	elf_init_objects();
+	if(!elf_init_context_with_hwnd(width, height, title, fullscreen, hwnd)) return ELF_FALSE;
+	if(!elf_init_audio());
+	if(!elf_init_scripting()) return ELF_FALSE;
+	if(!elf_init_engine()) return ELF_FALSE;
+	if(!elf_init_networking()) return ELF_FALSE;
 
 	return ELF_TRUE;
 }
@@ -445,8 +430,6 @@ unsigned char elf_run()
 
 	gfx_reset_vertices_drawn();
 
-	elf_update_resources(res);
-
 	if(eng->scene && eng->post_process) elf_begin_post_process(eng->post_process, eng->scene);
 	else gfx_clear_buffers(0.0, 0.0, 0.0, 0.0, 1.0);
 
@@ -468,37 +451,12 @@ unsigned char elf_run()
 
 void elf_deinit()
 {
-	if(!eng)
-	{
-		elf_write_to_log("error: engine not initialized yet or already deinited\n");
-		return;
-	}
-
-	elf_dec_ref((elf_object*)res);
-	elf_dec_ref((elf_object*)eng);
-	elf_close_window();
-
-	if(elf_get_global_ref_count() > 0)
-	{
-		elf_write_to_log("error: possible memory leak in ELF, [%d] references not dereferenced\n",
-			elf_get_global_ref_count());
-		elf_log_ref_count_table();
-	}
-
-	if(elf_get_global_ref_count() < 0)
-	{
-		elf_write_to_log("error: possible double free in ELF, [%d] negative reference count\n",
-			elf_get_global_ref_count());
-		elf_log_ref_count_table();
-	}
-
-	if(elf_get_global_obj_count() > 0)
-		elf_write_to_log("error: possible memory leak in ELF, [%d] objects not destroyed\n",
-			elf_get_global_obj_count());
-
-	if(elf_get_global_obj_count() < 0)
-		elf_write_to_log("error: possible double free in ELF, [%d] negative object count\n",
-			elf_get_global_obj_count());
+	elf_deinit_networking();
+	elf_deinit_scripting();
+	elf_deinit_engine();
+	elf_deinit_audio();
+	elf_deinit_context();
+	elf_deinit_objects();
 }
 
 int elf_get_version_major()

@@ -149,7 +149,8 @@
 #define ELF_FRAME_PLAYER 0x003F
 #define ELF_PROPERTY 0x0040
 #define ELF_CLIENT 0x0041
-#define ELF_OBJECT_TYPE_COUNT 0x0042
+#define ELF_SCRIPTING 0x0042
+#define ELF_OBJECT_TYPE_COUNT 0x0043
 #define ELF_PERSPECTIVE 0x0000
 #define ELF_ORTHOGRAPHIC 0x0001
 #define ELF_BOX 0x0001
@@ -721,8 +722,8 @@ ELF_API const char* ELF_APIENTRY elfGetScriptName(elf_handle script);
 ELF_API const char* ELF_APIENTRY elfGetScriptFilePath(elf_handle script);
 ELF_API void ELF_APIENTRY elfSetScriptText(elf_handle script, const char* text);
 ELF_API void ELF_APIENTRY elfRunScript(elf_handle script);
-ELF_API void ELF_APIENTRY elfRunString(const char* str);
 ELF_API bool ELF_APIENTRY elfIsScriptError(elf_handle script);
+ELF_API bool ELF_APIENTRY elfRunString(const char* str);
 ELF_API void ELF_APIENTRY elfSetAudioVolume(float volume);
 ELF_API float ELF_APIENTRY elfGetAudioVolume();
 ELF_API void ELF_APIENTRY elfSetAudioRolloff(float rolloff);

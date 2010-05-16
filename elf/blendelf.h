@@ -163,7 +163,8 @@ extern "C" {
 #define ELF_FRAME_PLAYER				0x003F
 #define ELF_PROPERTY					0x0040
 #define ELF_CLIENT					0x0041
-#define ELF_OBJECT_TYPE_COUNT				0x0042	// <mdoc> NUMBER OF OBJECT TYPES
+#define ELF_SCRIPTING					0x0042
+#define ELF_OBJECT_TYPE_COUNT				0x0043	// <mdoc> NUMBER OF OBJECT TYPES
 
 #define ELF_PERSPECTIVE					0x0000	// <mdoc> CAMERA MODE <mdocc> The camera modes used by camera internal functions
 #define ELF_ORTHOGRAPHIC				0x0001
@@ -333,6 +334,8 @@ typedef struct elf_frame_player				elf_frame_player;
 typedef struct elf_property				elf_property;
 typedef struct elf_server				elf_server;
 typedef struct elf_client				elf_client;
+typedef struct elf_scripting				elf_scripting;
+
 // <!!
 struct elf_vec2i {
 	int x;
@@ -368,6 +371,8 @@ struct elf_color {
 //////////////////////////////// OBJECT ////////////////////////////////
 
 // <!!
+void elf_init_objects();
+void elf_deinit_objects();
 void elf_inc_ref(elf_object *obj);
 void elf_dec_ref(elf_object *obj);
 void elf_log_ref_count_table();
@@ -424,14 +429,14 @@ void elf_destroy_char_event(elf_char_event *char_event);
 elf_context* elf_create_context();
 void elf_destroy_context(elf_context *context);
 
-unsigned char elf_open_window(int width, int height,
+unsigned char elf_init_context(int width, int height,
 		const char *title, unsigned char fullscreen);
 void elf_close_window();
 
 #if defined(__WIN32__) || defined(WIN32) || defined(__CYGWIN__)
 	#ifndef ELF_PLAYER
 		#include "windows.h"
-		unsigned char elf_open_window_with_hwnd(int width, int height, const char *title, unsigned char fullscreen, HWND hwnd);
+		unsigned char elf_init_context_with_hwnd(int width, int height, const char *title, unsigned char fullscreen, HWND hwnd);
 		HWND elf_get_window_hwnd();
 	#endif
 #endif
@@ -472,13 +477,17 @@ elf_game_config* elf_create_game_config();
 void elf_destroy_game_config(elf_game_config *config);
 
 elf_engine* elf_create_engine();
+void elf_destroy_engine(elf_engine *engine);
+
+unsigned char elf_init_engine();
+void elf_deinit_engine();
+
 #if defined(__WIN32__) || defined(WIN32) || defined(__CYGWIN__)
 	#ifndef ELF_PLAYER
 		#include "windows.h"
 		unsigned char elf_init_with_hwnd(int width, int height, const char *title, unsigned char fullscreen, HWND hwnd);
 	#endif
 #endif
-void elf_destroy_engine(elf_engine *engine);
 // !!>
 
 elf_game_config* elf_read_game_config(const char *file_path);	// <mdoc> GAME CONFIGURATION FUNCTIONS
@@ -1248,8 +1257,19 @@ const char* elf_get_script_file_path(elf_script *script);
 
 void elf_set_script_text(elf_script *script, const char *text);
 void elf_run_script(elf_script *script);
-void elf_run_string(const char *str);
 unsigned char elf_is_script_error(elf_script *script);
+
+//////////////////////////////// SCRIPTING ////////////////////////////////
+
+// <!!
+elf_scripting* elf_create_scripting();
+void elf_destroy_scripting(elf_scripting *scripting);
+
+unsigned char elf_init_scripting();
+void elf_deinit_scripting();
+// !!>
+
+unsigned char elf_run_string(const char *str);
 
 //////////////////////////////// AUDIO ////////////////////////////////
 
