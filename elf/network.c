@@ -1,14 +1,20 @@
-#ifndef network_h
-#define network_h
+/*
+	BlendELF
+	------------------------------------------
+	File: 		network.c
+	Author:		mbg
+	Purpose:	Contains all functions related to networking.
+*/
+
+#include "default.h"
+
+#include <GL/glfw.h>
+
+#include "gfx.h"
+#include "blendelf.h"
+#include "types.h"
 
 #include <enet/enet.h>
-
-typedef struct elf_network_object elf_network_object;
-
-struct elf_network_object {
-	elf_object* data;
-	elf_network_object* next;
-};
 
 ENetHost* server;
 ENetHost* client;
@@ -26,8 +32,6 @@ unsigned char runClient = ELF_FALSE;
 
 elf_script* serverScript = NULL;
 elf_script* clientScript = NULL;
-
-elf_network_object* root = NULL;
 
 /* initialises networking */
 unsigned char elf_init_networking()
@@ -362,4 +366,3 @@ void elf_deinit_networking()
 	enet_deinitialize();
 }
 
-#endif

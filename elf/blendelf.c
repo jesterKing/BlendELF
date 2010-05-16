@@ -69,9 +69,6 @@ int luaopen_elf(lua_State* L);
 #include "resources.h"
 #include "particles.h"
 
-// mbg: adds networking support to BlendELF
-#include "network.h"
-
 #ifdef ELF_PLAYER
 
 int main()

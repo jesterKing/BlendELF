@@ -300,6 +300,9 @@ unsigned char elf_init(int width, int height,
 	res = elf_create_resources();
 	elf_inc_ref((elf_object*)res);
 
+	// mbg: initialises networking
+	if(!elf_init_networking()) return ELF_FALSE;
+
 	elf_run_string("me = nil");
 
 	return ELF_TRUE;
