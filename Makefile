@@ -13,12 +13,14 @@ BLENDELF_LIBS = -lGL -lGLU -lGLEW -lglfw -lXxf86vm -lXrandr -lXrender -pthread \
 BLENDELF_STATIC_LIBS = -lGL -lGLU /usr/lib/libGLEW.a /usr/lib/libglfw.a \
 	/usr/lib/libXxf86vm.a /usr/lib/libXrandr.a /usr/lib/libXrender.a \
 	/usr/lib/libvorbisfile.a /usr/lib/libvorbis.a /usr/lib/libogg.a \
-	/usr/lib/liblua5.1.a /usr/local/lib/libBulletDynamics.a \
-	/usr/local/lib/libLinearMath.a /usr/local/lib/libBulletCollision.a \
+	/usr/lib/liblua5.1.a /usr/local/lib/libenet.a
+	/usr/local/lib/libBulletDynamics.a \
+	/usr/local/lib/libLinearMath.a \
+	/usr/local/lib/libBulletCollision.a \
 	-lfreeimage -lfreetype -lopenal -pthread
 
 all:
-	python genwraps.py
+	#python genwraps.py
 	gcc -c elf/blendelf.c $(DEV_CFLAGS) $(INCS)
 	gcc -c gfx/gfx.c $(DEV_CFLAGS) $(INCS)
 	gcc -c elf/audio.c $(DEV_CFLAGS) $(INCS)
