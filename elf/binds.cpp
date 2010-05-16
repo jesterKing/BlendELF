@@ -426,6 +426,10 @@ ELF_API bool ELF_APIENTRY elfInitWithConfig(const char* file_path)
 {
 	return (bool)elf_init_with_config(file_path);
 }
+ELF_API void ELF_APIENTRY elfDeinit()
+{
+	elf_deinit();
+}
 ELF_API int ELF_APIENTRY elfGetVersionMajor()
 {
 	return elf_get_version_major();

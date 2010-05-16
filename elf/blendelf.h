@@ -479,7 +479,6 @@ elf_engine* elf_create_engine();
 	#endif
 #endif
 void elf_destroy_engine(elf_engine *engine);
-void elf_deinit();
 // !!>
 
 elf_game_config* elf_read_game_config(const char *file_path);	// <mdoc> GAME CONFIGURATION FUNCTIONS
@@ -492,6 +491,7 @@ const char* elf_get_game_config_start(elf_game_config *config);
 
 unsigned char elf_init(int width, int height, const char *title, unsigned char fullscreen);	// <mdoc> ENGINE FUNCTIONS
 unsigned char elf_init_with_config(const char *file_path);
+void elf_deinit();
 
 int elf_get_version_major();
 int elf_get_version_minor();

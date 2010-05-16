@@ -3773,6 +3773,22 @@ fail:
 }
 
 
+static int _wrap_elfDeinit(lua_State* L) {
+  int SWIG_arg = 0;
+  
+  SWIG_check_num_args("Deinit",0,0)
+  elfDeinit();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfGetVersionMajor(lua_State* L) {
   int SWIG_arg = 0;
   int result;
@@ -17672,6 +17688,7 @@ static const struct luaL_reg swig_commands[] = {
     { "GetGameConfigStart", _wrap_elfGetGameConfigStart},
     { "Init", _wrap_elfInit},
     { "InitWithConfig", _wrap_elfInitWithConfig},
+    { "Deinit", _wrap_elfDeinit},
     { "GetVersionMajor", _wrap_elfGetVersionMajor},
     { "GetVersionMinor", _wrap_elfGetVersionMinor},
     { "GetVersionRelease", _wrap_elfGetVersionRelease},
