@@ -102,6 +102,7 @@ elf_texture *elf_create_texture_from_pak(FILE *file, const char *name, elf_scene
 	}
 	else if(type == 1)
 	{
+		// mbg: sizeof(int) fixes a bug on 64-bit platforms
 		fread((char*)&length, sizeof(int), 1, file);
 
 		mem = (char*)malloc(sizeof(char)*length);
