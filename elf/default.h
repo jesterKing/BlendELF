@@ -22,6 +22,7 @@
 #include <stdarg.h>
 #include <math.h>
 #include <malloc.h>
+#include <sys/types.h>
 
 #if ELF_BUILD_OS == ELF_OS_WINDOWS
 	// mbg: prevents windows.h from including winsock.h, this is later handled by enet 
@@ -31,6 +32,13 @@
 #else
 	#include <dirent.h>
 #endif
+
+#include <GL/glfw.h>
+#include <GL/gl.h>
+
+#include <enet/enet.h>
+
+typedef unsigned char ELF_BOOL;
 
 /* 
 	End of File 

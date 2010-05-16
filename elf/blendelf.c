@@ -1,22 +1,5 @@
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdarg.h>
-#include <math.h>
-#include <malloc.h>
-#include <sys/types.h>
-#if defined(__WIN32__) || defined(WIN32) || defined(_WIN32) || defined(__CYGWIN__)
-	// mbg: prevents windows.h from including winsock.h, this is later handled by enet 
-	#define _WINSOCKAPI_
-	#include <windows.h>
-	#include <strsafe.h>
-#else
-	#include <dirent.h>
-#endif
-
-#include <GL/glfw.h>
-#include <GL/gl.h>
+#include "default.h"
 
 #include <FreeImage.h>
 

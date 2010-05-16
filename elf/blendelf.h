@@ -162,7 +162,8 @@ extern "C" {
 #define ELF_IPO						0x003E
 #define ELF_FRAME_PLAYER				0x003F
 #define ELF_PROPERTY					0x0040
-#define ELF_OBJECT_TYPE_COUNT				0x0041	// <mdoc> NUMBER OF OBJECT TYPES
+#define ELF_CLIENT					0x0041
+#define ELF_OBJECT_TYPE_COUNT				0x0042	// <mdoc> NUMBER OF OBJECT TYPES
 
 #define ELF_PERSPECTIVE					0x0000	// <mdoc> CAMERA MODE <mdocc> The camera modes used by camera internal functions
 #define ELF_ORTHOGRAPHIC				0x0001
@@ -330,6 +331,8 @@ typedef struct elf_particles				elf_particles;
 typedef struct elf_game_config				elf_game_config;
 typedef struct elf_frame_player				elf_frame_player;
 typedef struct elf_property				elf_property;
+typedef struct elf_server				elf_server;
+typedef struct elf_client				elf_client;
 // <!!
 struct elf_vec2i {
 	int x;

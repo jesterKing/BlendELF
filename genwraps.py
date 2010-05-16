@@ -279,7 +279,8 @@ elfobjs = ['elf_object',
 	'elf_frame_player',
 	'elf_sound',
 	'elf_audio_source',
-	'elf_property']
+	'elf_property',
+	'elf_client']
 
 defines = []
 functions = []

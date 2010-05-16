@@ -650,3 +650,14 @@ struct elf_gui {
 	unsigned char char_repeat;
 };
 
+struct elf_server {
+	ENetHost* host;
+	ENetAddress address;
+	ENetEvent event;
+	GLFWthread thread;
+};
+
+struct elf_client {
+	ELF_OBJECT_HEADER;
+};
+
