@@ -1,0 +1,909 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>BlendELF, Lua API doc</title>
+<link rel="stylesheet" type="text/css" href="style.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="description" content="BlendELF, Compact and powerful 3D Game Engine" />
+</head>
+<body>
+
+<div class="images">
+<img src="images/topbanner.jpg" alt="Top Banner" />
+</div>
+
+<div class="links">
+<a href="index.html">Home</a> | 
+<a href="http://forum.blendelf.com">Forums</a> | 
+<a href="http://blendelf.com/index.html#Demos">Demos</a> | 
+<a href="http://blendelf.com/index.html#Features">Features</a> | 
+<a href="http://blendelf.com/index.html#Devkit">Get Development Kit</a> | 
+<a href="http://blendelf.com/index.html#Documentation">Documentation</a> | 
+<a href="http://blendelf.com/index.html#License">License</a> | 
+<a href="http://blendelf.com/index.html#IRC">IRC</a> | 
+<a href="http://blendelf.com/index.html#Contact">Contact</a>
+</div>
+
+<div class="topic">BlendELF Lua API doc</div>
+<div class="info">
+This document contains all of the avaialable functions for the BlendELF Lua API.
+</div>
+
+<div class="apitopic">BlendELF TYPES</div>
+<div class="apiinfo">
+<span class="apikeytype">float</span> - a floating point value, like 0.25 or 7.24
+<br /><span class="apikeytype">double</span> - same as a floating poit value but can store more decimals
+<br /><span class="apikeytype">int</span> - a positive or negative integer value, like 40 or -2500
+<br /><span class="apikeytype">unsigned int</span> - a positive integer value, like 21 or 60
+<br /><span class="apikeytype">bool</span> - a truth value, like true or false
+<br /><span class="apikeytype">string</span> - a string of characters, like "cat" or "MyEntity"
+<br /><span class="apikeytype">elf_vec2i</span> - contains the integer attributes [x|y] which can be accessed by vec.x and vec.y
+<br /><span class="apikeytype">elf_vec2f</span> - contains the floating point attributes [x|y] which can be accessed by vec.x and vec.y
+<br /><span class="apikeytype">elf_vec3f</span> - contains the floating point attributes [x|y|z] which can be accessed by vec.x, vec.y and vec.z
+<br /><span class="apikeytype">elf_vec4f</span> - contains the floating point attributes [x|y|z|w] which can be accessed by vec.x, vec.y, vec.z and vec.w
+<br /><span class="apikeytype">elf_color</span> - contains the floating point attributes [r|g|b|a] which can be accessed by col.r, col.g, col.b and col.a
+<br /><span class="apiobjtype">object</span> - any BlendELF object other than the types listed above
+</div>
+
+<div class="apitopic">BUILT IN VARIABLES</div>
+<div class="apiinfo">
+The variables <b>scn</b>, <b>gui</b> and <b>event</b> are used for internal operations and you can freely access from them, but <b>NOT ASSIGN</b> anything to them.
+</div>
+<div class="apitopic">TRUTH VALUES</div>
+<div class="apiinfo">The thruth value flags. Usually you can just use normal Lua true and false but there are some special cases.</div>
+<div class="apidefine">elf.FALSE</div>
+<div class="apidefine">elf.TRUE</div>
+<div class="apitopic">NONE VALUE</div>
+<div class="apidefine">elf.NONE</div>
+<div class="apitopic">KEY CODES</div>
+<div class="apiinfo">The key codes used by elf.GetKeyState</div>
+<div class="apidefine">elf.KEY_ESC</div>
+<div class="apidefine">elf.KEY_F1</div>
+<div class="apidefine">elf.KEY_F2</div>
+<div class="apidefine">elf.KEY_F3</div>
+<div class="apidefine">elf.KEY_F4</div>
+<div class="apidefine">elf.KEY_F5</div>
+<div class="apidefine">elf.KEY_F6</div>
+<div class="apidefine">elf.KEY_F7</div>
+<div class="apidefine">elf.KEY_F8</div>
+<div class="apidefine">elf.KEY_F9</div>
+<div class="apidefine">elf.KEY_F10</div>
+<div class="apidefine">elf.KEY_F11</div>
+<div class="apidefine">elf.KEY_F12</div>
+<div class="apidefine">elf.KEY_UP</div>
+<div class="apidefine">elf.KEY_DOWN</div>
+<div class="apidefine">elf.KEY_LEFT</div>
+<div class="apidefine">elf.KEY_RIGHT</div>
+<div class="apidefine">elf.KEY_LSHIFT</div>
+<div class="apidefine">elf.KEY_RSHIFT</div>
+<div class="apidefine">elf.KEY_LCTRL</div>
+<div class="apidefine">elf.KEY_RCTRL</div>
+<div class="apidefine">elf.KEY_LALT</div>
+<div class="apidefine">elf.KEY_RALT</div>
+<div class="apidefine">elf.KEY_TAB</div>
+<div class="apidefine">elf.KEY_ENTER</div>
+<div class="apidefine">elf.KEY_BACKSPACE</div>
+<div class="apidefine">elf.KEY_INSERT</div>
+<div class="apidefine">elf.KEY_DEL</div>
+<div class="apidefine">elf.KEY_PAGEUP</div>
+<div class="apidefine">elf.KEY_PAGEDOWN</div>
+<div class="apidefine">elf.KEY_HOME</div>
+<div class="apidefine">elf.KEY_END</div>
+<div class="apidefine">elf.KEY_KP_0</div>
+<div class="apidefine">elf.KEY_KP_1</div>
+<div class="apidefine">elf.KEY_KP_2</div>
+<div class="apidefine">elf.KEY_KP_3</div>
+<div class="apidefine">elf.KEY_KP_4</div>
+<div class="apidefine">elf.KEY_KP_5</div>
+<div class="apidefine">elf.KEY_KP_6</div>
+<div class="apidefine">elf.KEY_KP_7</div>
+<div class="apidefine">elf.KEY_KP_8</div>
+<div class="apidefine">elf.KEY_KP_9</div>
+<div class="apidefine">elf.KEY_KP_DIVIDE</div>
+<div class="apidefine">elf.KEY_KP_MULTIPLY</div>
+<div class="apidefine">elf.KEY_KP_SUBTRACT</div>
+<div class="apidefine">elf.KEY_KP_ADD</div>
+<div class="apidefine">elf.KEY_KP_DECIMAL</div>
+<div class="apidefine">elf.KEY_KP_EQUAL</div>
+<div class="apidefine">elf.KEY_KP_ENTER</div>
+<div class="apidefine">elf.KEY_SPACE</div>
+<div class="apidefine">elf.KEY_0</div>
+<div class="apidefine">elf.KEY_1</div>
+<div class="apidefine">elf.KEY_2</div>
+<div class="apidefine">elf.KEY_3</div>
+<div class="apidefine">elf.KEY_4</div>
+<div class="apidefine">elf.KEY_5</div>
+<div class="apidefine">elf.KEY_6</div>
+<div class="apidefine">elf.KEY_7</div>
+<div class="apidefine">elf.KEY_8</div>
+<div class="apidefine">elf.KEY_9</div>
+<div class="apidefine">elf.KEY_A</div>
+<div class="apidefine">elf.KEY_B</div>
+<div class="apidefine">elf.KEY_C</div>
+<div class="apidefine">elf.KEY_D</div>
+<div class="apidefine">elf.KEY_E</div>
+<div class="apidefine">elf.KEY_F</div>
+<div class="apidefine">elf.KEY_G</div>
+<div class="apidefine">elf.KEY_H</div>
+<div class="apidefine">elf.KEY_I</div>
+<div class="apidefine">elf.KEY_J</div>
+<div class="apidefine">elf.KEY_K</div>
+<div class="apidefine">elf.KEY_L</div>
+<div class="apidefine">elf.KEY_M</div>
+<div class="apidefine">elf.KEY_N</div>
+<div class="apidefine">elf.KEY_O</div>
+<div class="apidefine">elf.KEY_P</div>
+<div class="apidefine">elf.KEY_Q</div>
+<div class="apidefine">elf.KEY_R</div>
+<div class="apidefine">elf.KEY_S</div>
+<div class="apidefine">elf.KEY_T</div>
+<div class="apidefine">elf.KEY_U</div>
+<div class="apidefine">elf.KEY_V</div>
+<div class="apidefine">elf.KEY_W</div>
+<div class="apidefine">elf.KEY_X</div>
+<div class="apidefine">elf.KEY_Y</div>
+<div class="apidefine">elf.KEY_Z</div>
+<div class="apitopic">KEY AND MOUSE STATES</div>
+<div class="apiinfo">The state codes returned by elf.GetKeyState and elf.GetMouseButtonState</div>
+<div class="apidefine">elf.UP</div>
+<div class="apidefine">elf.PRESSED</div>
+<div class="apidefine">elf.DOWN</div>
+<div class="apidefine">elf.RELEASED</div>
+<div class="apitopic">GUI BUTTON STATE</div>
+<div class="apiinfo">The gui button states returned by elf.GetButtonState</div>
+<div class="apidefine">elf.OFF</div>
+<div class="apidefine">elf.ON</div>
+<div class="apidefine">elf.OVER</div>
+<div class="apitopic">MOUSE BUTTON CODES</div>
+<div class="apiinfo">The mouse button codes used by elf.GetMouseButtonState</div>
+<div class="apidefine">elf.BUTTON_LEFT</div>
+<div class="apidefine">elf.BUTTON_MIDDLE</div>
+<div class="apidefine">elf.BUTTON_RIGHT</div>
+<div class="apitopic">ELF OBJECT TYEPS</div>
+<div class="apiinfo">The object types returned by elf.GetObjectType</div>
+<div class="apidefine">elf.TEXTURE</div>
+<div class="apidefine">elf.MATERIAL</div>
+<div class="apidefine">elf.MODEL</div>
+<div class="apidefine">elf.CAMERA</div>
+<div class="apidefine">elf.ENTITY</div>
+<div class="apidefine">elf.LIGHT</div>
+<div class="apidefine">elf.SCENE</div>
+<div class="apidefine">elf.LIST</div>
+<div class="apidefine">elf.PAK</div>
+<div class="apidefine">elf.PAK_INDEX</div>
+<div class="apidefine">elf.KEY_EVENT</div>
+<div class="apidefine">elf.CHAR_EVENT</div>
+<div class="apidefine">elf.CONTEXT</div>
+<div class="apidefine">elf.ENGINE</div>
+<div class="apidefine">elf.TIMER</div>
+<div class="apidefine">elf.IMAGE</div>
+<div class="apidefine">elf.POST_PROCESS</div>
+<div class="apidefine">elf.SCRIPT</div>
+<div class="apidefine">elf.AUDIO_DEVICE</div>
+<div class="apidefine">elf.AUDIO_SOURCE</div>
+<div class="apidefine">elf.SOUND</div>
+<div class="apidefine">elf.BONE</div>
+<div class="apidefine">elf.ARMATURE</div>
+<div class="apidefine">elf.STRING</div>
+<div class="apidefine">elf.FONT</div>
+<div class="apidefine">elf.LABEL</div>
+<div class="apidefine">elf.BUTTON</div>
+<div class="apidefine">elf.PICTURE</div>
+<div class="apidefine">elf.TEXT_FIELD</div>
+<div class="apidefine">elf.SLIDER</div>
+<div class="apidefine">elf.SCREEN</div>
+<div class="apidefine">elf.TEXT_LIST</div>
+<div class="apidefine">elf.CHECK_BOX</div>
+<div class="apidefine">elf.GUI</div>
+<div class="apidefine">elf.DIRECTORY_ITEM</div>
+<div class="apidefine">elf.DIRECTORY</div>
+<div class="apidefine">elf.COLLISION</div>
+<div class="apidefine">elf.PHYSICS_OBJECT</div>
+<div class="apidefine">elf.PHYSICS_WORLD</div>
+<div class="apidefine">elf.JOINT</div>
+<div class="apidefine">elf.RESOURCES</div>
+<div class="apidefine">elf.PARTICLE</div>
+<div class="apidefine">elf.PARTICLES</div>
+<div class="apidefine">elf.GAME_CONFIG</div>
+<div class="apidefine">elf.BEZIER_POINT</div>
+<div class="apidefine">elf.BEZIER_CURVE</div>
+<div class="apidefine">elf.IPO</div>
+<div class="apidefine">elf.FRAME_PLAYER</div>
+<div class="apidefine">elf.PROPERTY</div>
+<div class="apitopic">NUMBER OF OBJECT TYPES</div>
+<div class="apidefine">elf.OBJECT_TYPE_COUNT</div>
+<div class="apitopic">CAMERA MODE</div>
+<div class="apiinfo">The camera modes used by camera internal functions</div>
+<div class="apidefine">elf.PERSPECTIVE</div>
+<div class="apidefine">elf.ORTHOGRAPHIC</div>
+<div class="apitopic">PHYSICS SHAPES</div>
+<div class="apiinfo">The physics shapes used by elf.SetEntityPhysics</div>
+<div class="apidefine">elf.BOX</div>
+<div class="apidefine">elf.SPHERE</div>
+<div class="apidefine">elf.MESH</div>
+<div class="apitopic">JOINT TYPES</div>
+<div class="apiinfo">The joint types returned by elf.GetJointType</div>
+<div class="apidefine">elf.HINGE</div>
+<div class="apidefine">elf.BALL</div>
+<div class="apidefine">elf.CONE_TWIST</div>
+<div class="apitopic">LIGHT TYPES</div>
+<div class="apiinfo">The light types used by elf.SetLightType</div>
+<div class="apidefine">elf.POINT_LIGHT</div>
+<div class="apidefine">elf.SUN_LIGHT</div>
+<div class="apidefine">elf.SPOT_LIGHT</div>
+<div class="apitopic">TEXTURE FORMATS</div>
+<div class="apiinfo">The texture formats returned by elf.GetTextureFormat</div>
+<div class="apidefine">elf.LUMINANCE</div>
+<div class="apidefine">elf.LUMINANCE_ALPHA</div>
+<div class="apidefine">elf.RGB</div>
+<div class="apidefine">elf.RGBA</div>
+<div class="apidefine">elf.BGR</div>
+<div class="apidefine">elf.BGRA</div>
+<div class="apidefine">elf.RGB16F</div>
+<div class="apidefine">elf.RGB32F</div>
+<div class="apidefine">elf.RGBA16F</div>
+<div class="apidefine">elf.RGBA32F</div>
+<div class="apidefine">elf.ALPHA32F</div>
+<div class="apidefine">elf.DEPTH_COMPONENT</div>
+<div class="apidefine">elf.COMPRESSED_RGB</div>
+<div class="apidefine">elf.COMPRESSED_RGBA</div>
+<div class="apitopic">TEXTURE DATA FORMATS</div>
+<div class="apiinfo">The texture formats returned by elf.GetTextureDataFormat</div>
+<div class="apidefine">elf.FLOAT</div>
+<div class="apidefine">elf.INT</div>
+<div class="apidefine">elf.UINT</div>
+<div class="apidefine">elf.SHORT</div>
+<div class="apidefine">elf.USHORT</div>
+<div class="apidefine">elf.BYTE</div>
+<div class="apidefine">elf.UBYTE</div>
+<div class="apitopic">PROPERTY TYPES</div>
+<div class="apiinfo">The property types returned by elf.GetPropertyType</div>
+<div class="apidefine">elf.PROPERTY_INT</div>
+<div class="apidefine">elf.PROPERTY_FLOAT</div>
+<div class="apidefine">elf.PROPERTY_STRING</div>
+<div class="apidefine">elf.PROPERTY_BOOL</div>
+<div class="apitopic">TEXTURE TYPES</div>
+<div class="apiinfo">The textures types used by elf.SetMaterialTextureType</div>
+<div class="apidefine">elf.COLOR_MAP</div>
+<div class="apidefine">elf.NORMAL_MAP</div>
+<div class="apidefine">elf.HEIGHT_MAP</div>
+<div class="apidefine">elf.SPECULAR_MAP</div>
+<div class="apidefine">elf.DETAIL_MAP</div>
+<div class="apidefine">elf.SHADOW_MAP</div>
+<div class="apidefine">elf.COLOR_RAMP_MAP</div>
+<div class="apidefine">elf.LIGHT_MAP</div>
+<div class="apitopic">PARTICLE DRAW MODES</div>
+<div class="apiinfo">The draw modes used by elf.SetParticlesDrawMode</div>
+<div class="apidefine">elf.TRANSPARENT</div>
+<div class="apidefine">elf.ADD</div>
+<div class="apitopic">DIRECTORY ITEM TYPES</div>
+<div class="apiinfo">The directory item types used by elf.GetDirectoryItemType</div>
+<div class="apidefine">elf.DIR</div>
+<div class="apidefine">elf.FILE</div>
+<div class="apitopic">GUI EVENTS</div>
+<div class="apiinfo">The gui events triggered by gui objects. The gui events are automatically set to the "event" variable when in a gui action.</div>
+<div class="apidefine">elf.CLICKED</div>
+<div class="apidefine">elf.VALUE_CHANGED</div>
+<div class="apidefine">elf.GAIN_FOCUS</div>
+<div class="apidefine">elf.LOSE_FOCUS</div>
+<div class="apidefine">elf.CHAR_INPUT</div>
+<div class="apidefine">elf.SELECTION_CHANGED</div>
+<div class="apidefine">elf.STATE_CHANGED</div>
+<div class="apitopic">JOYSTICK BUTTONS</div>
+<div class="apiinfo">The joystick buttons used by elf.GetJoystickButtonState</div>
+<div class="apidefine">elf.JOYSTICK_BUTTON_1</div>
+<div class="apidefine">elf.JOYSTICK_BUTTON_2</div>
+<div class="apidefine">elf.JOYSTICK_BUTTON_3</div>
+<div class="apidefine">elf.JOYSTICK_BUTTON_4</div>
+<div class="apidefine">elf.JOYSTICK_BUTTON_5</div>
+<div class="apidefine">elf.JOYSTICK_BUTTON_6</div>
+<div class="apidefine">elf.JOYSTICK_BUTTON_7</div>
+<div class="apidefine">elf.JOYSTICK_BUTTON_8</div>
+<div class="apidefine">elf.JOYSTICK_BUTTON_9</div>
+<div class="apidefine">elf.JOYSTICK_BUTTON_10</div>
+<div class="apidefine">elf.JOYSTICK_BUTTON_11</div>
+<div class="apidefine">elf.JOYSTICK_BUTTON_12</div>
+<div class="apidefine">elf.JOYSTICK_BUTTON_13</div>
+<div class="apidefine">elf.JOYSTICK_BUTTON_14</div>
+<div class="apidefine">elf.JOYSTICK_BUTTON_15</div>
+<div class="apidefine">elf.JOYSTICK_BUTTON_16</div>
+<div class="apitopic">BEZIER CURVE TYPES</div>
+<div class="apidefine">elf.LOC_X</div>
+<div class="apidefine">elf.LOC_Y</div>
+<div class="apidefine">elf.LOC_Z</div>
+<div class="apidefine">elf.ROT_X</div>
+<div class="apidefine">elf.ROT_Y</div>
+<div class="apidefine">elf.ROT_Z</div>
+<div class="apidefine">elf.SCALE_X</div>
+<div class="apidefine">elf.SCALE_Y</div>
+<div class="apidefine">elf.SCALE_Z</div>
+<div class="apidefine">elf.QUA_X</div>
+<div class="apidefine">elf.QUA_Y</div>
+<div class="apidefine">elf.QUA_Z</div>
+<div class="apidefine">elf.QUA_W</div>
+<div class="apitopic">SOUND FILE TYPES</div>
+<div class="apiinfo">The sound file types returned by elf.GetSoundFileType</div>
+<div class="apidefine">elf.OGG</div>
+<div class="apidefine">elf.WAV</div>
+<div class="apitopic">OBJECT FUNCTIONS</div>
+<div class="apiinfo">The object functions can be performed on any generic ELF objects.</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetObjectType( <span class="apiobjtype">object</span> obj )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetObjectRefCount( <span class="apiobjtype">object</span> obj )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetGlobalRefCount(  )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetGlobalObjCount(  )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.IsActor( <span class="apiobjtype">object</span> obj )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.IsGuiObject( <span class="apiobjtype">object</span> obj )</div>
+<div class="apitopic">LIST FUNCTIONS</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.CreateList(  )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetListLength( <span class="apiobjtype">object</span> list )</div>
+<div class="apifunc">elf.InsertToList( <span class="apiobjtype">object</span> list, <span class="apikeytype">int</span> idx, <span class="apiobjtype">object</span> obj )</div>
+<div class="apifunc">elf.AppendToList( <span class="apiobjtype">object</span> list, <span class="apiobjtype">object</span> obj )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveFromList( <span class="apiobjtype">object</span> list, <span class="apiobjtype">object</span> obj )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetItemFromList( <span class="apiobjtype">object</span> list, <span class="apikeytype">int</span> idx )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.BeginList( <span class="apiobjtype">object</span> list )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.NextInList( <span class="apiobjtype">object</span> list )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.RbeginList( <span class="apiobjtype">object</span> list )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.RnextInList( <span class="apiobjtype">object</span> list )</div>
+<div class="apifunc">elf.SeekList( <span class="apiobjtype">object</span> list, <span class="apiobjtype">object</span> ptr )</div>
+<div class="apifunc">elf.RseekList( <span class="apiobjtype">object</span> list, <span class="apiobjtype">object</span> ptr )</div>
+<div class="apitopic">CONTEXT FUNCTIONS</div>
+<div class="apifunc">elf.SetTitle( <span class="apikeytype">string</span> title )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetWindowWidth(  )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetWindowHeight(  )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.IsFullscreen(  )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetTitle(  )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetMultisamples(  )</div>
+<div class="apifunc"><span class="apikeytype">double</span> elf.GetTime(  )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.IsWindowOpened(  )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec2i</span> elf.GetMousePosition(  )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec2i</span> elf.GetMouseForce(  )</div>
+<div class="apifunc">elf.SetMousePosition( <span class="apikeytype">int</span> x, <span class="apikeytype">int</span> y )</div>
+<div class="apifunc">elf.HideMouse( <span class="apikeytype">bool</span> hide )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.IsMouseHidden(  )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetMouseWheel(  )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetMouseButtonState( <span class="apikeytype">int</span> button )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetKeyState( <span class="apikeytype">int</span> key )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.GetJoystickPresent( <span class="apikeytype">int</span> joy )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec2f</span> elf.GetJoystickAxis( <span class="apikeytype">int</span> joy )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetJoystickButtonState( <span class="apikeytype">int</span> joy, <span class="apikeytype">int</span> but )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetEventCount(  )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetEvent( <span class="apikeytype">int</span> idx )</div>
+<div class="apitopic">GAME CONFIGURATION FUNCTIONS</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.ReadGameConfig( <span class="apikeytype">string</span> file_path )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetGameConfigWindowWidth( <span class="apiobjtype">object</span> config )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetGameConfigWindowHeight( <span class="apiobjtype">object</span> config )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.GetGameConfigFullscreen( <span class="apiobjtype">object</span> config )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetGameConfigTextureAnisotropy( <span class="apiobjtype">object</span> config )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetGameConfigShadowMapSize( <span class="apiobjtype">object</span> config )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetGameConfigStart( <span class="apiobjtype">object</span> config )</div>
+<div class="apitopic">ENGINE FUNCTIONS</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.Init( <span class="apikeytype">int</span> width, <span class="apikeytype">int</span> height, <span class="apikeytype">string</span> title, <span class="apikeytype">bool</span> fullscreen )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.InitWithConfig( <span class="apikeytype">string</span> file_path )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetVersionMajor(  )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetVersionMinor(  )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetVersionRelease(  )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetVersion(  )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.Run(  )</div>
+<div class="apifunc">elf.Quit(  )</div>
+<div class="apifunc">elf.SetF10Exit( <span class="apikeytype">bool</span> exit )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.GetF10Exit(  )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.LoadScene( <span class="apikeytype">string</span> file_path )</div>
+<div class="apifunc">elf.SetScene( <span class="apiobjtype">object</span> scene )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetScene(  )</div>
+<div class="apifunc">elf.SetGui( <span class="apiobjtype">object</span> gui )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetGui(  )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetSync(  )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetFps(  )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.SaveScreenShot( <span class="apikeytype">string</span> file_path )</div>
+<div class="apifunc">elf.SetFpsLimit( <span class="apikeytype">int</span> fps_limit )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetFpsLimit(  )</div>
+<div class="apifunc">elf.SetTickRate( <span class="apikeytype">float</span> tick_rate )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetTickRate(  )</div>
+<div class="apifunc">elf.SetSpeed( <span class="apikeytype">float</span> speed )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetSpeed(  )</div>
+<div class="apifunc">elf.SetTextureAnisotropy( <span class="apikeytype">float</span> anisotropy )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetTextureAnisotropy(  )</div>
+<div class="apifunc">elf.SetShadowMapSize( <span class="apikeytype">int</span> size )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetShadowMapSize(  )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetPolygonsRendered(  )</div>
+<div class="apifunc">elf.SetBloom( <span class="apikeytype">float</span> threshold )</div>
+<div class="apifunc">elf.DisableBloom(  )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetBloomThreshold(  )</div>
+<div class="apifunc">elf.SetDof( <span class="apikeytype">float</span> focal_range, <span class="apikeytype">float</span> focal_distance )</div>
+<div class="apifunc">elf.DisableDof(  )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetDofFocalRange(  )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetDofFocalDistance(  )</div>
+<div class="apifunc">elf.SetSsao( <span class="apikeytype">float</span> amount )</div>
+<div class="apifunc">elf.DisableSsao(  )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetSsaoAmount(  )</div>
+<div class="apifunc">elf.SetLightShafts( <span class="apikeytype">float</span> intensity )</div>
+<div class="apifunc">elf.DisableLightShafts(  )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetLightShaftsInteisity(  )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.IsBloom(  )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.IsSsao(  )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.IsDof(  )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.IsLightShafts(  )</div>
+<div class="apifunc">elf.SetOcclusionCulling( <span class="apikeytype">bool</span> cull )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.IsOcclusionCulling(  )</div>
+<div class="apifunc">elf.SetDebugDraw( <span class="apikeytype">bool</span> debug_draw )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.IsDebugDraw(  )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetActor(  )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.CreateVec3f(  )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.CreateVec3fFromValues( <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec4f</span> elf.CreateQua(  )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec4f</span> elf.CreateQuaFromEuler( <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.MulQuaVec3f( <span class="apikeytype">elf_vec4f</span> qua, <span class="apikeytype">elf_vec3f</span> vec )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec4f</span> elf.MulQuaQua( <span class="apikeytype">elf_vec4f</span> qua1, <span class="apikeytype">elf_vec4f</span> qua2 )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec4f</span> elf.GetQuaInverted( <span class="apikeytype">elf_vec4f</span> qua )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.SubVec3fVec3f( <span class="apikeytype">elf_vec3f</span> vec1, <span class="apikeytype">elf_vec3f</span> vec2 )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.AddVec3fVec3f( <span class="apikeytype">elf_vec3f</span> vec1, <span class="apikeytype">elf_vec3f</span> vec2 )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetVec3fLength( <span class="apikeytype">elf_vec3f</span> vec )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.AboutZero( <span class="apikeytype">float</span> val )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.FloatAbs( <span class="apikeytype">float</span> val )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.FloatMax( <span class="apikeytype">float</span> a, <span class="apikeytype">float</span> b )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.RandomFloat(  )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.RandomFloatRange( <span class="apikeytype">float</span> min, <span class="apikeytype">float</span> max )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.RandomInt(  )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.RandomIntRange( <span class="apikeytype">int</span> min, <span class="apikeytype">int</span> max )</div>
+<div class="apitopic">FRAME PLAYER FUNCTIONS</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.CreateFramePlayer(  )</div>
+<div class="apifunc">elf.UpdateFramePlayer( <span class="apiobjtype">object</span> player )</div>
+<div class="apifunc">elf.SetFramePlayerFrame( <span class="apiobjtype">object</span> player, <span class="apikeytype">float</span> frame )</div>
+<div class="apifunc">elf.PlayFramePlayer( <span class="apiobjtype">object</span> player, <span class="apikeytype">float</span> start, <span class="apikeytype">float</span> end, <span class="apikeytype">float</span> speed )</div>
+<div class="apifunc">elf.LoopFramePlayer( <span class="apiobjtype">object</span> player, <span class="apikeytype">float</span> start, <span class="apikeytype">float</span> end, <span class="apikeytype">float</span> speed )</div>
+<div class="apifunc">elf.StopFramePlayer( <span class="apiobjtype">object</span> player )</div>
+<div class="apifunc">elf.PauseFramePlayer( <span class="apiobjtype">object</span> player )</div>
+<div class="apifunc">elf.ResumeFramePlayer( <span class="apiobjtype">object</span> player )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetFramePlayerStart( <span class="apiobjtype">object</span> player )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetFramePlayerEnd( <span class="apiobjtype">object</span> player )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetFramePlayerSpeed( <span class="apiobjtype">object</span> player )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetFramePlayerFrame( <span class="apiobjtype">object</span> player )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.IsFramePlayerPlaying( <span class="apiobjtype">object</span> player )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.IsFramePlayerPaused( <span class="apiobjtype">object</span> player )</div>
+<div class="apitopic">TIMER FUNCTIONS</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.CreateTimer(  )</div>
+<div class="apifunc">elf.StartTimer( <span class="apiobjtype">object</span> timer )</div>
+<div class="apifunc"><span class="apikeytype">double</span> elf.GetElapsedTime( <span class="apiobjtype">object</span> timer )</div>
+<div class="apitopic">TEXTURE FUNCTIONS</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.CreateTextureFromFile( <span class="apikeytype">string</span> file_path )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetTextureName( <span class="apiobjtype">object</span> texture )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetTextureFilePath( <span class="apiobjtype">object</span> texture )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetTextureWidth( <span class="apiobjtype">object</span> texture )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetTextureHeight( <span class="apiobjtype">object</span> texture )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetTextureFormat( <span class="apiobjtype">object</span> texture )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetTextureDataFormat( <span class="apiobjtype">object</span> texture )</div>
+<div class="apitopic">MATERIAL FUNCTIONS</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.CreateMaterial( <span class="apikeytype">string</span> name )</div>
+<div class="apifunc">elf.SetMaterialTexture( <span class="apiobjtype">object</span> material, <span class="apikeytype">int</span> slot, <span class="apiobjtype">object</span> texture )</div>
+<div class="apifunc">elf.SetMaterialTextureType( <span class="apiobjtype">object</span> material, <span class="apikeytype">int</span> slot, <span class="apikeytype">int</span> type )</div>
+<div class="apifunc">elf.SetMaterialTextureParallaxScale( <span class="apiobjtype">object</span> material, <span class="apikeytype">int</span> slot, <span class="apikeytype">float</span> scale )</div>
+<div class="apifunc">elf.SetMaterialDiffuseColor( <span class="apiobjtype">object</span> material, <span class="apikeytype">float</span> r, <span class="apikeytype">float</span> g, <span class="apikeytype">float</span> b, <span class="apikeytype">float</span> a )</div>
+<div class="apifunc">elf.SetMaterialSpecularColor( <span class="apiobjtype">object</span> material, <span class="apikeytype">float</span> r, <span class="apikeytype">float</span> g, <span class="apikeytype">float</span> b, <span class="apikeytype">float</span> a )</div>
+<div class="apifunc">elf.SetMaterialAmbientColor( <span class="apiobjtype">object</span> material, <span class="apikeytype">float</span> r, <span class="apikeytype">float</span> g, <span class="apikeytype">float</span> b, <span class="apikeytype">float</span> a )</div>
+<div class="apifunc">elf.SetMaterialSpecularPower( <span class="apiobjtype">object</span> material, <span class="apikeytype">float</span> power )</div>
+<div class="apifunc">elf.SetMaterialLighting( <span class="apiobjtype">object</span> material, <span class="apikeytype">bool</span> lighting )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetMaterialName( <span class="apiobjtype">object</span> material )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetMaterialFilePath( <span class="apiobjtype">object</span> material )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetMaterialTexture( <span class="apiobjtype">object</span> material, <span class="apikeytype">int</span> slot )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetMaterialTextureType( <span class="apiobjtype">object</span> material, <span class="apikeytype">int</span> slot )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetMaterialTextureParallaxScale( <span class="apiobjtype">object</span> material, <span class="apikeytype">int</span> slot )</div>
+<div class="apifunc"><span class="apikeytype">elf_color</span> elf.GetMaterialDiffuseColor( <span class="apiobjtype">object</span> material )</div>
+<div class="apifunc"><span class="apikeytype">elf_color</span> elf.GetMaterialSpecularColor( <span class="apiobjtype">object</span> material )</div>
+<div class="apifunc"><span class="apikeytype">elf_color</span> elf.GetMaterialAmbientColor( <span class="apiobjtype">object</span> material )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetMaterialSpecularPower( <span class="apiobjtype">object</span> material )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.GetMaterialLighting( <span class="apiobjtype">object</span> material )</div>
+<div class="apifunc">elf.AddPointToBezierCurve( <span class="apiobjtype">object</span> curve, <span class="apiobjtype">object</span> point )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.AddCurveToIpo( <span class="apiobjtype">object</span> ipo, <span class="apiobjtype">object</span> curve )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetIpoLoc( <span class="apiobjtype">object</span> ipo, <span class="apikeytype">float</span> x )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetIpoRot( <span class="apiobjtype">object</span> ipo, <span class="apikeytype">float</span> x )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetIpoScale( <span class="apiobjtype">object</span> ipo, <span class="apikeytype">float</span> x )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec4f</span> elf.GetIpoQua( <span class="apiobjtype">object</span> ipo, <span class="apikeytype">float</span> x )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.CreateProperty( <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetPropertyType( <span class="apiobjtype">object</span> property )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetPropertyInt( <span class="apiobjtype">object</span> property )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetPropertyFloat( <span class="apiobjtype">object</span> property )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetPropertyString( <span class="apiobjtype">object</span> property )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.GetPropertyBool( <span class="apiobjtype">object</span> property )</div>
+<div class="apifunc">elf.SetPropertyInt( <span class="apiobjtype">object</span> property, <span class="apikeytype">int</span> ival )</div>
+<div class="apifunc">elf.SetPropertyFloat( <span class="apiobjtype">object</span> property, <span class="apikeytype">float</span> fval )</div>
+<div class="apifunc">elf.SetPropertyString( <span class="apiobjtype">object</span> property, <span class="apikeytype">string</span> sval )</div>
+<div class="apifunc">elf.SetPropertyBool( <span class="apiobjtype">object</span> property, <span class="apikeytype">bool</span> bval )</div>
+<div class="apitopic">ACTOR FUNCTIONS</div>
+<div class="apiinfo">Actor functions can be performed on all actor types. [Camera|Entity|Light|Armature]</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetActorName( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetActorFilePath( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetActorParent( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc">elf.SetActorParent( <span class="apiobjtype">object</span> actor, <span class="apiobjtype">object</span> parent )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetActorChildCount( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetActorChildByName( <span class="apiobjtype">object</span> actor, <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetActorChildByIndex( <span class="apiobjtype">object</span> actor, <span class="apikeytype">int</span> idx )</div>
+<div class="apifunc">elf.RemoveActorChildren( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetActorScript( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc">elf.SetActorScript( <span class="apiobjtype">object</span> actor, <span class="apiobjtype">object</span> script )</div>
+<div class="apifunc">elf.SetActorPosition( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apifunc">elf.SetActorRotation( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apifunc">elf.SetActorOrientation( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z, <span class="apikeytype">float</span> w )</div>
+<div class="apifunc">elf.RotateActor( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apifunc">elf.RotateActorLocal( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apifunc">elf.MoveActor( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apifunc">elf.MoveActorLocal( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorPosition( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorRotation( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec4f</span> elf.GetActorOrientation( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc">elf.SetActorDamping( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> lin_damp, <span class="apikeytype">float</span> ang_damp )</div>
+<div class="apifunc">elf.SetActorSleepThresholds( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> lin_thrs, <span class="apikeytype">float</span> ang_thrs )</div>
+<div class="apifunc">elf.SetActorRestitution( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> restitution )</div>
+<div class="apifunc">elf.AddForceToActor( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apifunc">elf.AddTorqueToActor( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apifunc">elf.SetActorLinearVelocity( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apifunc">elf.SetActorAngularVelocity( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apifunc">elf.SetActorLinearFactor( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apifunc">elf.SetActorAngularFactor( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorLinearVelocity( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorAngularVelocity( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorLinearFactor( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorAngularFactor( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetActorLinearDamping( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetActorAngularDamping( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetActorLinearSleepThreshold( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetActorAngularSleepThreshold( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetActorRestitution( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.AddHingeJointToActor( <span class="apiobjtype">object</span> actor, <span class="apiobjtype">object</span> actor2, <span class="apikeytype">string</span> name, <span class="apikeytype">float</span> px, <span class="apikeytype">float</span> py, <span class="apikeytype">float</span> pz, <span class="apikeytype">float</span> ax, <span class="apikeytype">float</span> ay, <span class="apikeytype">float</span> az )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.AddBallJointToActor( <span class="apiobjtype">object</span> actor, <span class="apiobjtype">object</span> actor2, <span class="apikeytype">string</span> name, <span class="apikeytype">float</span> px, <span class="apikeytype">float</span> py, <span class="apikeytype">float</span> pz )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.AddConeTwistJointToActor( <span class="apiobjtype">object</span> actor, <span class="apiobjtype">object</span> actor2, <span class="apikeytype">string</span> name, <span class="apikeytype">float</span> px, <span class="apikeytype">float</span> py, <span class="apikeytype">float</span> pz, <span class="apikeytype">float</span> ax, <span class="apikeytype">float</span> ay, <span class="apikeytype">float</span> az )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetActorJointByName( <span class="apiobjtype">object</span> actor, <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetActorJointByIndex( <span class="apiobjtype">object</span> actor, <span class="apikeytype">int</span> idx )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveActorJointByName( <span class="apiobjtype">object</span> actor, <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveActorJointByIndex( <span class="apiobjtype">object</span> actor, <span class="apikeytype">int</span> idx )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveActorJointByObject( <span class="apiobjtype">object</span> actor, <span class="apiobjtype">object</span> joint )</div>
+<div class="apifunc">elf.SetActorIpoFrame( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> frame )</div>
+<div class="apifunc">elf.SetActorHierarchyIpoFrame( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> frame )</div>
+<div class="apifunc">elf.PlayActorIpo( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> start, <span class="apikeytype">float</span> end, <span class="apikeytype">float</span> speed )</div>
+<div class="apifunc">elf.LoopActorIpo( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> start, <span class="apikeytype">float</span> end, <span class="apikeytype">float</span> speed )</div>
+<div class="apifunc">elf.StopActorIpo( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc">elf.PauseActorIpo( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc">elf.ResumeActorIpo( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetActorIpoStart( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetActorIpoEnd( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetActorIpoSpeed( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetActorIpoFrame( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.IsActorIpoPlaying( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.IsActorIpoPaused( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetActorCollisionCount( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetActorCollision( <span class="apiobjtype">object</span> actor, <span class="apikeytype">int</span> idx )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetActorPropertyCount( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc">elf.AddPropertyToActor( <span class="apiobjtype">object</span> actor, <span class="apiobjtype">object</span> property )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetActorPropertyByName( <span class="apiobjtype">object</span> actor, <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetActorPropertyByIndex( <span class="apiobjtype">object</span> actor, <span class="apikeytype">int</span> idx )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveActorPropertyByName( <span class="apiobjtype">object</span> actor, <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveActorPropertyByIndex( <span class="apiobjtype">object</span> actor, <span class="apikeytype">int</span> idx )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveActorPropertyByObject( <span class="apiobjtype">object</span> actor, <span class="apiobjtype">object</span> property )</div>
+<div class="apifunc">elf.RemoveActorProperties( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc">elf.SetActorSelected( <span class="apiobjtype">object</span> actor, <span class="apikeytype">bool</span> selected )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.GetActorSelected( <span class="apiobjtype">object</span> actor )</div>
+<div class="apitopic">CAMERA FUNCTIONS</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.CreateCamera( <span class="apikeytype">string</span> name )</div>
+<div class="apifunc">elf.SetCameraViewport( <span class="apiobjtype">object</span> camera, <span class="apikeytype">int</span> x, <span class="apikeytype">int</span> y, <span class="apikeytype">int</span> width, <span class="apikeytype">int</span> height )</div>
+<div class="apifunc">elf.SetCameraPerspective( <span class="apiobjtype">object</span> camera, <span class="apikeytype">float</span> fov, <span class="apikeytype">float</span> aspect, <span class="apikeytype">float</span> clip_near, <span class="apikeytype">float</span> clip_far )</div>
+<div class="apifunc">elf.SetCameraOrthographic( <span class="apiobjtype">object</span> camera, <span class="apikeytype">int</span> x, <span class="apikeytype">int</span> y, <span class="apikeytype">int</span> width, <span class="apikeytype">int</span> height, <span class="apikeytype">float</span> clip_near, <span class="apikeytype">float</span> clip_far )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetCameraFov( <span class="apiobjtype">object</span> camera )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetCameraAspect( <span class="apiobjtype">object</span> camera )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec2f</span> elf.GetCameraClip( <span class="apiobjtype">object</span> camera )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec2f</span> elf.GetCameraFarPlaneSize( <span class="apiobjtype">object</span> camera )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.UnProjectCameraPoint( <span class="apiobjtype">object</span> camera, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apitopic">MODEL FUNCTIONS</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetModelName( <span class="apiobjtype">object</span> model )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetModelFilePath( <span class="apiobjtype">object</span> model )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetModelVerticeCount( <span class="apiobjtype">object</span> model )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetModelIndiceCount( <span class="apiobjtype">object</span> model )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetModelBoundingBoxMin( <span class="apiobjtype">object</span> model )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetModelBoundingBoxMax( <span class="apiobjtype">object</span> model )</div>
+<div class="apitopic">ENTITY FUNCTIONS</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.CreateEntity( <span class="apikeytype">string</span> name )</div>
+<div class="apifunc">elf.SetEntityScale( <span class="apiobjtype">object</span> entity, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetEntityScale( <span class="apiobjtype">object</span> entity )</div>
+<div class="apifunc">elf.SetEntityModel( <span class="apiobjtype">object</span> entity, <span class="apiobjtype">object</span> model )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetEntityModel( <span class="apiobjtype">object</span> entity )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetEntityMaterialCount( <span class="apiobjtype">object</span> entity )</div>
+<div class="apifunc">elf.AddEntityMaterial( <span class="apiobjtype">object</span> entity, <span class="apiobjtype">object</span> material )</div>
+<div class="apifunc">elf.SetEntityMaterial( <span class="apiobjtype">object</span> entity, <span class="apikeytype">int</span> idx, <span class="apiobjtype">object</span> material )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetEntityMaterial( <span class="apiobjtype">object</span> entity, <span class="apikeytype">int</span> idx )</div>
+<div class="apifunc">elf.SetEntityVisible( <span class="apiobjtype">object</span> entity, <span class="apikeytype">bool</span> visible )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.GetEntityVisible( <span class="apiobjtype">object</span> entity )</div>
+<div class="apifunc">elf.SetEntityPhysics( <span class="apiobjtype">object</span> entity, <span class="apikeytype">int</span> type, <span class="apikeytype">float</span> mass )</div>
+<div class="apifunc">elf.DisableEntityPhysics( <span class="apiobjtype">object</span> entity )</div>
+<div class="apifunc">elf.SetEntityArmature( <span class="apiobjtype">object</span> entity, <span class="apiobjtype">object</span> armature )</div>
+<div class="apifunc">elf.SetEntityArmatureFrame( <span class="apiobjtype">object</span> entity, <span class="apikeytype">float</span> frame )</div>
+<div class="apifunc">elf.PlayEntityArmature( <span class="apiobjtype">object</span> entity, <span class="apikeytype">float</span> start, <span class="apikeytype">float</span> end, <span class="apikeytype">float</span> speed )</div>
+<div class="apifunc">elf.LoopEntityArmature( <span class="apiobjtype">object</span> entity, <span class="apikeytype">float</span> start, <span class="apikeytype">float</span> end, <span class="apikeytype">float</span> speed )</div>
+<div class="apifunc">elf.StopEntityArmature( <span class="apiobjtype">object</span> entity )</div>
+<div class="apifunc">elf.PauseEntityArmature( <span class="apiobjtype">object</span> entity )</div>
+<div class="apifunc">elf.ResumeEntityArmature( <span class="apiobjtype">object</span> entity )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetEntityArmatureStart( <span class="apiobjtype">object</span> entity )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetEntityArmatureEnd( <span class="apiobjtype">object</span> entity )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetEntityArmatureSpeed( <span class="apiobjtype">object</span> entity )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetEntityArmatureFrame( <span class="apiobjtype">object</span> entity )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.IsEntityArmaturePlaying( <span class="apiobjtype">object</span> entity )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.IsEntityArmaturePaused( <span class="apiobjtype">object</span> entity )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetEntityArmature( <span class="apiobjtype">object</span> entity )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.GetEntityChanged( <span class="apiobjtype">object</span> entity )</div>
+<div class="apitopic">LIGHT FUNCTIONS</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.CreateLight( <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetLightType( <span class="apiobjtype">object</span> light )</div>
+<div class="apifunc"><span class="apikeytype">elf_color</span> elf.GetLightColor( <span class="apiobjtype">object</span> light )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetLightDistance( <span class="apiobjtype">object</span> light )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetLightFadeSpeed( <span class="apiobjtype">object</span> light )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.GetLightShadowCaster( <span class="apiobjtype">object</span> light )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.GetLightVisible( <span class="apiobjtype">object</span> light )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec2f</span> elf.GetLightCone( <span class="apiobjtype">object</span> light )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.IsLightShaft( <span class="apiobjtype">object</span> light )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetLightShaftSize( <span class="apiobjtype">object</span> light )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetLightShaftIntensity( <span class="apiobjtype">object</span> light )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetLightShaftFadeOff( <span class="apiobjtype">object</span> light )</div>
+<div class="apifunc">elf.SetLightType( <span class="apiobjtype">object</span> light, <span class="apikeytype">int</span> type )</div>
+<div class="apifunc">elf.SetLightColor( <span class="apiobjtype">object</span> light, <span class="apikeytype">float</span> r, <span class="apikeytype">float</span> g, <span class="apikeytype">float</span> b, <span class="apikeytype">float</span> a )</div>
+<div class="apifunc">elf.SetLightDistance( <span class="apiobjtype">object</span> light, <span class="apikeytype">float</span> distance )</div>
+<div class="apifunc">elf.SetLightFadeSpeed( <span class="apiobjtype">object</span> light, <span class="apikeytype">float</span> fade_speed )</div>
+<div class="apifunc">elf.SetLightShadowCaster( <span class="apiobjtype">object</span> light, <span class="apikeytype">bool</span> shadow_caster )</div>
+<div class="apifunc">elf.SetLightVisible( <span class="apiobjtype">object</span> light, <span class="apikeytype">bool</span> visible )</div>
+<div class="apifunc">elf.SetLightCone( <span class="apiobjtype">object</span> light, <span class="apikeytype">float</span> inner_cone, <span class="apikeytype">float</span> outer_cone )</div>
+<div class="apifunc">elf.SetLightShaft( <span class="apiobjtype">object</span> light, <span class="apikeytype">float</span> size, <span class="apikeytype">float</span> intensity, <span class="apikeytype">float</span> fade_off )</div>
+<div class="apifunc">elf.DisableLightShaft( <span class="apiobjtype">object</span> light )</div>
+<div class="apitopic">BONE FUNCTIONS</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.CreateBone( <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetBoneArmature( <span class="apiobjtype">object</span> bone )</div>
+<div class="apitopic">ARMATURE FUNCTIONS</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.CreateArmature( <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetBoneFromArmatureByName( <span class="apikeytype">string</span> name, <span class="apiobjtype">object</span> armature )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetBoneFromArmatureById( <span class="apikeytype">int</span> id, <span class="apiobjtype">object</span> armature )</div>
+<div class="apifunc">elf.AddRootBoneToArmature( <span class="apiobjtype">object</span> armature, <span class="apiobjtype">object</span> bone )</div>
+<div class="apitopic">PARTICLES FUNCTIONS</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.CreateParticles( <span class="apikeytype">string</span> name, <span class="apikeytype">int</span> max_count )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetParticlesName( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetParticlesFilePath( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc">elf.SetParticlesMaxCount( <span class="apiobjtype">object</span> particles, <span class="apikeytype">int</span> max_count )</div>
+<div class="apifunc">elf.SetParticlesDrawMode( <span class="apiobjtype">object</span> particles, <span class="apikeytype">int</span> mode )</div>
+<div class="apifunc">elf.SetParticlesTexture( <span class="apiobjtype">object</span> particles, <span class="apiobjtype">object</span> texture )</div>
+<div class="apifunc">elf.SetParticlesModel( <span class="apiobjtype">object</span> particles, <span class="apiobjtype">object</span> model )</div>
+<div class="apifunc">elf.SetParticlesGravity( <span class="apiobjtype">object</span> particles, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apifunc">elf.SetParticlesSpawnDelay( <span class="apiobjtype">object</span> particles, <span class="apikeytype">float</span> delay )</div>
+<div class="apifunc">elf.SetParticlesSize( <span class="apiobjtype">object</span> particles, <span class="apikeytype">float</span> min, <span class="apikeytype">float</span> max )</div>
+<div class="apifunc">elf.SetParticlesSizeGrowth( <span class="apiobjtype">object</span> particles, <span class="apikeytype">float</span> min, <span class="apikeytype">float</span> max )</div>
+<div class="apifunc">elf.SetParticlesRotation( <span class="apiobjtype">object</span> particles, <span class="apikeytype">float</span> min, <span class="apikeytype">float</span> max )</div>
+<div class="apifunc">elf.SetParticlesRotationGrowth( <span class="apiobjtype">object</span> particles, <span class="apikeytype">float</span> min, <span class="apikeytype">float</span> max )</div>
+<div class="apifunc">elf.SetParticlesLifeSpan( <span class="apiobjtype">object</span> particles, <span class="apikeytype">float</span> min, <span class="apikeytype">float</span> max )</div>
+<div class="apifunc">elf.SetParticlesFadeSpeed( <span class="apiobjtype">object</span> particles, <span class="apikeytype">float</span> min, <span class="apikeytype">float</span> max )</div>
+<div class="apifunc">elf.SetParticlesPositionMin( <span class="apiobjtype">object</span> particles, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apifunc">elf.SetParticlesPositionMax( <span class="apiobjtype">object</span> particles, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apifunc">elf.SetParticlesVelocityMin( <span class="apiobjtype">object</span> particles, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apifunc">elf.SetParticlesVelocityMax( <span class="apiobjtype">object</span> particles, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apifunc">elf.SetParticlesColorMin( <span class="apiobjtype">object</span> particles, <span class="apikeytype">float</span> r, <span class="apikeytype">float</span> g, <span class="apikeytype">float</span> b, <span class="apikeytype">float</span> a )</div>
+<div class="apifunc">elf.SetParticlesColorMax( <span class="apiobjtype">object</span> particles, <span class="apikeytype">float</span> r, <span class="apikeytype">float</span> g, <span class="apikeytype">float</span> b, <span class="apikeytype">float</span> a )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetParticlesMaxCount( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetParticlesCount( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetParticlesDrawMode( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetParticlesTexture( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetParticlesModel( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetParticlesGravity( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetParticlesSpawnDelay( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetParticlesSizeMin( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetParticlesSizeMax( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetParticlesSizeGrowthMin( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetParticlesSizeGrowthMax( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetParticlesRotationMin( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetParticlesRotationMax( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetParticlesRotationGrowthMin( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetParticlesRotationGrowthMax( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetParticlesLifeSpanMin( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetParticlesLifeSpanMax( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetParticlesFadeSpeedMin( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetParticlesFadeSpeedMax( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetParticlesPositionMin( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetParticlesPositionMax( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetParticlesVelocityMin( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetParticlesVelocityMax( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apikeytype">elf_color</span> elf.GetParticlesColorMin( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apikeytype">elf_color</span> elf.GetParticlesColorMax( <span class="apiobjtype">object</span> particles )</div>
+<div class="apitopic">SCENE FUNCTIONS</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.CreateSceneFromFile( <span class="apikeytype">string</span> file_path )</div>
+<div class="apifunc">elf.SetSceneAmbientColor( <span class="apiobjtype">object</span> scene, <span class="apikeytype">float</span> r, <span class="apikeytype">float</span> g, <span class="apikeytype">float</span> b, <span class="apikeytype">float</span> a )</div>
+<div class="apifunc"><span class="apikeytype">elf_color</span> elf.GetSceneAmbientColor( <span class="apiobjtype">object</span> scene )</div>
+<div class="apifunc">elf.SetSceneGravity( <span class="apiobjtype">object</span> scene, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetSceneGravity( <span class="apiobjtype">object</span> scene )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetSceneName( <span class="apiobjtype">object</span> scene )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetSceneFilePath( <span class="apiobjtype">object</span> scene )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetSceneCameraCount( <span class="apiobjtype">object</span> scene )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetSceneEntityCount( <span class="apiobjtype">object</span> scene )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetSceneLightCount( <span class="apiobjtype">object</span> scene )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetSceneArmatureCount( <span class="apiobjtype">object</span> scene )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetSceneParticlesCount( <span class="apiobjtype">object</span> scene )</div>
+<div class="apifunc">elf.AddCameraToScene( <span class="apiobjtype">object</span> scene, <span class="apiobjtype">object</span> camera )</div>
+<div class="apifunc">elf.AddEntityToScene( <span class="apiobjtype">object</span> scene, <span class="apiobjtype">object</span> entity )</div>
+<div class="apifunc">elf.AddLightToScene( <span class="apiobjtype">object</span> scene, <span class="apiobjtype">object</span> light )</div>
+<div class="apifunc">elf.AddParticlesToScene( <span class="apiobjtype">object</span> scene, <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc">elf.SetSceneActiveCamera( <span class="apiobjtype">object</span> scene, <span class="apiobjtype">object</span> camera )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetSceneActiveCamera( <span class="apiobjtype">object</span> scene )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetSceneRayCastResult( <span class="apiobjtype">object</span> scene, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z, <span class="apikeytype">float</span> dx, <span class="apikeytype">float</span> dy, <span class="apikeytype">float</span> dz )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetSceneRayCastResults( <span class="apiobjtype">object</span> scene, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z, <span class="apikeytype">float</span> dx, <span class="apikeytype">float</span> dy, <span class="apikeytype">float</span> dz )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetDebugSceneRayCastResult( <span class="apiobjtype">object</span> scene, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z, <span class="apikeytype">float</span> dx, <span class="apikeytype">float</span> dy, <span class="apikeytype">float</span> dz )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetDebugSceneRayCastResults( <span class="apiobjtype">object</span> scene, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z, <span class="apikeytype">float</span> dx, <span class="apikeytype">float</span> dy, <span class="apikeytype">float</span> dz )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetCameraByIndex( <span class="apiobjtype">object</span> scene, <span class="apikeytype">int</span> idx )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetEntityByIndex( <span class="apiobjtype">object</span> scene, <span class="apikeytype">int</span> idx )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetLightByIndex( <span class="apiobjtype">object</span> scene, <span class="apikeytype">int</span> idx )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetArmatureByIndex( <span class="apiobjtype">object</span> scene, <span class="apikeytype">int</span> idx )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetParticlesByIndex( <span class="apiobjtype">object</span> scene, <span class="apikeytype">int</span> idx )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetTextureByName( <span class="apiobjtype">object</span> scene, <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetMaterialByName( <span class="apiobjtype">object</span> scene, <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetModelByName( <span class="apiobjtype">object</span> scene, <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetScriptByName( <span class="apiobjtype">object</span> scene, <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetCameraByName( <span class="apiobjtype">object</span> scene, <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetEntityByName( <span class="apiobjtype">object</span> scene, <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetLightByName( <span class="apiobjtype">object</span> scene, <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetArmatureByName( <span class="apiobjtype">object</span> scene, <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetParticlesByName( <span class="apiobjtype">object</span> scene, <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetActorByName( <span class="apiobjtype">object</span> scene, <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveCameraByName( <span class="apiobjtype">object</span> scene, <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveEntityByName( <span class="apiobjtype">object</span> scene, <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveLightByName( <span class="apiobjtype">object</span> scene, <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveParticlesByName( <span class="apiobjtype">object</span> scene, <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveCameraByIndex( <span class="apiobjtype">object</span> scene, <span class="apikeytype">int</span> idx )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveEntityByIndex( <span class="apiobjtype">object</span> scene, <span class="apikeytype">int</span> idx )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveLightByIndex( <span class="apiobjtype">object</span> scene, <span class="apikeytype">int</span> idx )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveParticlesByIndex( <span class="apiobjtype">object</span> scene, <span class="apikeytype">int</span> idx )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveCameraByObject( <span class="apiobjtype">object</span> scene, <span class="apiobjtype">object</span> camera )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveEntityByObject( <span class="apiobjtype">object</span> scene, <span class="apiobjtype">object</span> entity )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveLightByObject( <span class="apiobjtype">object</span> scene, <span class="apiobjtype">object</span> light )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveParticlesByObject( <span class="apiobjtype">object</span> scene, <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveActorByObject( <span class="apiobjtype">object</span> scene, <span class="apiobjtype">object</span> actor )</div>
+<div class="apitopic">SCRIPT FUNCTIONS</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.CreateScript(  )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.CreateScriptFromFile( <span class="apikeytype">string</span> file_path )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetScriptName( <span class="apiobjtype">object</span> script )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetScriptFilePath( <span class="apiobjtype">object</span> script )</div>
+<div class="apifunc">elf.SetScriptText( <span class="apiobjtype">object</span> script, <span class="apikeytype">string</span> text )</div>
+<div class="apifunc">elf.RunScript( <span class="apiobjtype">object</span> script )</div>
+<div class="apifunc">elf.RunString( <span class="apikeytype">string</span> str )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.IsScriptError( <span class="apiobjtype">object</span> script )</div>
+<div class="apitopic">AUDIO FUNCTIONS</div>
+<div class="apifunc">elf.SetAudioVolume( <span class="apikeytype">float</span> volume )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetAudioVolume(  )</div>
+<div class="apifunc">elf.SetAudioRolloff( <span class="apikeytype">float</span> rolloff )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetAudioRolloff(  )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.LoadSound( <span class="apikeytype">string</span> file_path )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.LoadStreamedSound( <span class="apikeytype">string</span> file_path )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetSoundFileType( <span class="apiobjtype">object</span> sound )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.PlaySound( <span class="apiobjtype">object</span> sound, <span class="apikeytype">float</span> volume )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.PlayEntitySound( <span class="apiobjtype">object</span> entity, <span class="apiobjtype">object</span> sound, <span class="apikeytype">float</span> volume )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.LoopSound( <span class="apiobjtype">object</span> sound, <span class="apikeytype">float</span> volume )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.LoopEntitySound( <span class="apiobjtype">object</span> entity, <span class="apiobjtype">object</span> sound, <span class="apikeytype">float</span> volume )</div>
+<div class="apifunc">elf.SetSoundVolume( <span class="apiobjtype">object</span> source, <span class="apikeytype">float</span> volume )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetSoundVolume( <span class="apiobjtype">object</span> source )</div>
+<div class="apifunc">elf.PauseSound( <span class="apiobjtype">object</span> source )</div>
+<div class="apifunc">elf.ResumeSound( <span class="apiobjtype">object</span> source )</div>
+<div class="apifunc">elf.StopSound( <span class="apiobjtype">object</span> source )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.IsSoundPlaying( <span class="apiobjtype">object</span> source )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.IsSoundPaused( <span class="apiobjtype">object</span> source )</div>
+<div class="apitopic">COLLIISION FUNCTIONS</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetCollisionActor( <span class="apiobjtype">object</span> collision )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetCollisionPosition( <span class="apiobjtype">object</span> collision )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetCollisionNormal( <span class="apiobjtype">object</span> collision )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetCollisionDepth( <span class="apiobjtype">object</span> collision )</div>
+<div class="apitopic">JOINT FUNCTIONS</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetJointName( <span class="apiobjtype">object</span> joint )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetJointType( <span class="apiobjtype">object</span> joint )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetJointActorA( <span class="apiobjtype">object</span> joint )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetJointActorB( <span class="apiobjtype">object</span> joint )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetJointPivot( <span class="apiobjtype">object</span> joint )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetJointAxis( <span class="apiobjtype">object</span> joint )</div>
+<div class="apitopic">FONT FUNCTIONS</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.CreateFontFromFile( <span class="apikeytype">string</span> file_path, <span class="apikeytype">int</span> size )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetFontName( <span class="apiobjtype">object</span> font )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetFontFilePath( <span class="apiobjtype">object</span> font )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetFontSize( <span class="apiobjtype">object</span> font )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetStringWidth( <span class="apiobjtype">object</span> font, <span class="apikeytype">string</span> str )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetStringHeight( <span class="apiobjtype">object</span> font, <span class="apikeytype">string</span> str )</div>
+<div class="apitopic">GUI OBJECT FUNCTIONS</div>
+<div class="apiinfo">Gui object functions can be performed on all gui object types [Labels|Buttons|Pictures|etc...]</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetGuiObjectName( <span class="apiobjtype">object</span> object )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec2i</span> elf.GetGuiObjectPosition( <span class="apiobjtype">object</span> object )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec2i</span> elf.GetGuiObjectSize( <span class="apiobjtype">object</span> object )</div>
+<div class="apifunc"><span class="apikeytype">elf_color</span> elf.GetGuiObjectColor( <span class="apiobjtype">object</span> object )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.GetGuiObjectVisible( <span class="apiobjtype">object</span> object )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetGuiObjectScript( <span class="apiobjtype">object</span> object )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetGuiObjectEvent( <span class="apiobjtype">object</span> object )</div>
+<div class="apifunc">elf.SetGuiObjectPosition( <span class="apiobjtype">object</span> object, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y )</div>
+<div class="apifunc">elf.SetGuiObjectColor( <span class="apiobjtype">object</span> object, <span class="apikeytype">float</span> r, <span class="apikeytype">float</span> g, <span class="apikeytype">float</span> b, <span class="apikeytype">float</span> a )</div>
+<div class="apifunc">elf.SetGuiObjectVisible( <span class="apiobjtype">object</span> object, <span class="apikeytype">bool</span> visible )</div>
+<div class="apifunc">elf.SetGuiObjectScript( <span class="apiobjtype">object</span> object, <span class="apiobjtype">object</span> script )</div>
+<div class="apitopic">LABEL FUNCTIONS</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.CreateLabel( <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetLabelFont( <span class="apiobjtype">object</span> label )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetLabelText( <span class="apiobjtype">object</span> label )</div>
+<div class="apifunc">elf.SetLabelFont( <span class="apiobjtype">object</span> label, <span class="apiobjtype">object</span> font )</div>
+<div class="apifunc">elf.SetLabelText( <span class="apiobjtype">object</span> label, <span class="apikeytype">string</span> text )</div>
+<div class="apitopic">BUTTON FUNCTIONS</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.CreateButton( <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.GetButtonState( <span class="apiobjtype">object</span> button )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetButtonOffTexture( <span class="apiobjtype">object</span> button )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetButtonOverTexture( <span class="apiobjtype">object</span> button )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetButtonOnTexture( <span class="apiobjtype">object</span> button )</div>
+<div class="apifunc">elf.SetButtonOffTexture( <span class="apiobjtype">object</span> button, <span class="apiobjtype">object</span> off )</div>
+<div class="apifunc">elf.SetButtonOverTexture( <span class="apiobjtype">object</span> button, <span class="apiobjtype">object</span> over )</div>
+<div class="apifunc">elf.SetButtonOnTexture( <span class="apiobjtype">object</span> button, <span class="apiobjtype">object</span> on )</div>
+<div class="apitopic">PICTURE FUNCTIONS</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.CreatePicture( <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetPictureTexture( <span class="apiobjtype">object</span> picture )</div>
+<div class="apifunc">elf.SetPictureTexture( <span class="apiobjtype">object</span> picture, <span class="apiobjtype">object</span> texture )</div>
+<div class="apitopic">TEXT FIELD FUNCTIONS</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.CreateTextField( <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetTextFieldTexture( <span class="apiobjtype">object</span> text_field )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetTextFieldFont( <span class="apiobjtype">object</span> text_field )</div>
+<div class="apifunc"><span class="apikeytype">elf_color</span> elf.GetTextFieldTextColor( <span class="apiobjtype">object</span> text_field )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec2i</span> elf.GetTextFieldOffset( <span class="apiobjtype">object</span> text_field )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetTextFieldText( <span class="apiobjtype">object</span> text_field )</div>
+<div class="apifunc">elf.SetTextFieldTexture( <span class="apiobjtype">object</span> text_field, <span class="apiobjtype">object</span> texture )</div>
+<div class="apifunc">elf.SetTextFieldFont( <span class="apiobjtype">object</span> text_field, <span class="apiobjtype">object</span> font )</div>
+<div class="apifunc">elf.SetTextFieldTextColor( <span class="apiobjtype">object</span> text_field, <span class="apikeytype">float</span> r, <span class="apikeytype">float</span> g, <span class="apikeytype">float</span> b, <span class="apikeytype">float</span> a )</div>
+<div class="apifunc">elf.SetTextFieldOffset( <span class="apiobjtype">object</span> text_field, <span class="apikeytype">int</span> offset_x, <span class="apikeytype">int</span> offset_y )</div>
+<div class="apifunc">elf.SetTextFieldText( <span class="apiobjtype">object</span> text_field, <span class="apikeytype">string</span> text )</div>
+<div class="apitopic">SLIDER FUNCTIONS</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.CreateSlider( <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetSliderBackgroundTexture( <span class="apiobjtype">object</span> slider )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetSliderSliderTexture( <span class="apiobjtype">object</span> slider )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetSliderValue( <span class="apiobjtype">object</span> slider )</div>
+<div class="apifunc">elf.SetSliderBackgroundTexture( <span class="apiobjtype">object</span> slider, <span class="apiobjtype">object</span> background )</div>
+<div class="apifunc">elf.SetSliderSliderTexture( <span class="apiobjtype">object</span> slider, <span class="apiobjtype">object</span> slider_texture )</div>
+<div class="apifunc">elf.SetSliderValue( <span class="apiobjtype">object</span> slider, <span class="apikeytype">float</span> value )</div>
+<div class="apitopic">SCREEN FUNCTIONS</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.CreateScreen( <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetScreenTexture( <span class="apiobjtype">object</span> screen )</div>
+<div class="apifunc">elf.SetScreenTexture( <span class="apiobjtype">object</span> screen, <span class="apiobjtype">object</span> texture )</div>
+<div class="apitopic">TEXT LIST FUNCTIONS</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.CreateTextList( <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetTextListFont( <span class="apiobjtype">object</span> text_list )</div>
+<div class="apifunc"><span class="apikeytype">elf_color</span> elf.GetTextListSelectionColor( <span class="apiobjtype">object</span> text_list )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetTextListRowCount( <span class="apiobjtype">object</span> text_list )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetTextListItemCount( <span class="apiobjtype">object</span> text_list )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetTextListSelectionIndex( <span class="apiobjtype">object</span> text_list )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetTextListOffset( <span class="apiobjtype">object</span> text_list )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetTextListItem( <span class="apiobjtype">object</span> text_list, <span class="apikeytype">int</span> idx )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetTextListSelectedItem( <span class="apiobjtype">object</span> text_list )</div>
+<div class="apifunc">elf.SetTextListFont( <span class="apiobjtype">object</span> text_list, <span class="apiobjtype">object</span> font )</div>
+<div class="apifunc">elf.SetTextListSelectionColor( <span class="apiobjtype">object</span> text_list, <span class="apikeytype">float</span> r, <span class="apikeytype">float</span> g, <span class="apikeytype">float</span> b, <span class="apikeytype">float</span> a )</div>
+<div class="apifunc">elf.SetTextListSize( <span class="apiobjtype">object</span> text_list, <span class="apikeytype">int</span> rows, <span class="apikeytype">int</span> width )</div>
+<div class="apifunc">elf.AddTextListItem( <span class="apiobjtype">object</span> text_list, <span class="apikeytype">string</span> text )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveTextListItem( <span class="apiobjtype">object</span> text_list, <span class="apikeytype">int</span> idx )</div>
+<div class="apifunc">elf.RemoveTextListItems( <span class="apiobjtype">object</span> text_list )</div>
+<div class="apifunc">elf.SetTextListOffset( <span class="apiobjtype">object</span> text_list, <span class="apikeytype">int</span> offset )</div>
+<div class="apifunc">elf.SetTextListSelection( <span class="apiobjtype">object</span> text_list, <span class="apikeytype">int</span> selection )</div>
+<div class="apitopic">CHECK BOX FUNCTIONS</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.CreateCheckBox( <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.GetCheckBoxState( <span class="apiobjtype">object</span> check_box )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetCheckBoxOffTexture( <span class="apiobjtype">object</span> check_box )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetCheckBoxOnTexture( <span class="apiobjtype">object</span> check_box )</div>
+<div class="apifunc">elf.SetCheckBoxOffTexture( <span class="apiobjtype">object</span> check_box, <span class="apiobjtype">object</span> off )</div>
+<div class="apifunc">elf.SetCheckBoxOnTexture( <span class="apiobjtype">object</span> check_box, <span class="apiobjtype">object</span> on )</div>
+<div class="apifunc">elf.SetCheckBoxState( <span class="apiobjtype">object</span> check_box, <span class="apikeytype">bool</span> state )</div>
+<div class="apitopic">GUI FUNCTIONS</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.CreateGui(  )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.AddGuiObject( <span class="apiobjtype">object</span> parent, <span class="apiobjtype">object</span> object )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetGuiObjectByName( <span class="apiobjtype">object</span> parent, <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetGuiObjectByIndex( <span class="apiobjtype">object</span> parent, <span class="apikeytype">int</span> idx )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveGuiObjectByName( <span class="apiobjtype">object</span> parent, <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveGuiObjectByIndex( <span class="apiobjtype">object</span> parent, <span class="apikeytype">int</span> idx )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveGuiObjectByObject( <span class="apiobjtype">object</span> parent, <span class="apiobjtype">object</span> object )</div>
+<div class="apifunc">elf.EmptyGui( <span class="apiobjtype">object</span> gui )</div>
+<div class="copyright">Copyright &copy; 2009-2010 Samuel Anjam</div>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-4880379-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+</html>

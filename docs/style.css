@@ -1,0 +1,144 @@
+body {
+	background-color: #000;
+	color: #bbbbbb;
+	font-family: sans-serif;
+	text-align: center;
+	line-height: 125%;
+}
+
+a:link {color: #fff; text-decoration: underline; }
+a:active {color: #fff; text-decoration: underline; }
+a:visited {color: #fff; text-decoration: underline; }
+a:hover {color: #fff; text-decoration: none; }
+
+img
+{
+	border-style: none;
+}
+
+.links
+{
+	margin: 0 auto 1em auto;
+	font-size: 85%;
+	width: 800px;
+	text-align: center;
+}
+
+.topic
+{
+	display: block;
+	margin: 0 auto;
+	width: 800px;
+	font-size: 125%;
+	font-weight: bold;
+	border-style: solid;
+	border-width: 0 0 1px 0;
+	text-align: left;
+}
+
+.sub_topic
+{
+	display: block;
+	background-color: #333;
+	margin: 1em auto;
+	padding: 0 0 0 0.25em;
+	width: 800px;
+	font-size: 100%;
+	font-weight: bold;
+	text-align: left;
+}
+
+.info
+{
+	margin: 1em auto;
+	width: 800px;
+	font-size: 85%;
+	text-align: left;
+}
+
+.image
+{
+	margin: 1em auto;
+	width: 800px;
+	font-size: 85%;
+	text-align: left;
+}
+
+.codebox
+{
+	font-family: monospace;
+	background-color: #333;
+	color: #fff;
+	line-height: 115%;
+	border: 1px solid #fff;
+	margin: 0em auto;
+	padding: 2px;
+	width: 796px;
+	font-size: 100%;
+	text-align: left;
+	white-space: pre;
+}
+
+.apitopic
+{
+	display: block;
+	background-color: #444;
+	padding: 2px 0 2px 5px;
+	color: #ccc;
+	margin: 1em auto;
+	width: 795px;
+	font-size: 125%;
+	font-weight: bold;
+	text-align: left;
+}
+
+.apiinfo
+{
+	margin: 1.5em auto;
+	width: 800px;
+	font-size: 85%;
+	text-align: left;
+}
+
+.apidefine
+{
+	display: block;
+	background-color: #222;
+	color: #999;
+	margin: 0 auto;
+	border-width: 0 0 1px 0;
+	border-style: solid;
+	border-color: #444;
+	width: 800px;
+	text-align: left;
+}
+
+.apifunc
+{
+	display: block;
+	background-color: #222;
+	color: #bbb;
+	margin: 0 auto;
+	border-width: 0 0 1px 0;
+	border-style: solid;
+	border-color: #444;
+	width: 800px;
+	text-align: left;
+}
+
+.apiobjtype
+{
+	color: #f42;
+}
+
+.apikeytype
+{
+	color: #47f;
+}
+
+.copyright
+{
+	margin: 2em auto;
+	font-size: 70%;
+}
+
