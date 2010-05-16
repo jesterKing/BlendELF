@@ -484,6 +484,7 @@ void elf_play_entity_armature(elf_entity *entity, float start, float end, float 
 void elf_loop_entity_armature(elf_entity *entity, float start, float end, float speed)
 {
 	elf_loop_frame_player(entity->armature_player, start, end, speed);
+	if(entity->armature) elf_deform_entity_with_armature(entity->armature, entity, start);
 }
 
 void elf_stop_entity_armature(elf_entity *entity)
