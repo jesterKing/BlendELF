@@ -17346,6 +17346,278 @@ fail:
 }
 
 
+static int _wrap_elfCreateSession(lua_State* L) {
+  int SWIG_arg = 0;
+  char *arg1 = (char *) 0 ;
+  unsigned short arg2 ;
+  bool result;
+  
+  SWIG_check_num_args("CreateSession",2,2)
+  if(!lua_isstring(L,1)) SWIG_fail_arg("CreateSession",1,"char const *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("CreateSession",2,"unsigned short");
+  arg1 = (char *)lua_tostring(L, 1);
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned short)lua_tonumber(L, 2);
+  result = (bool)elfCreateSession((char const *)arg1,arg2);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfConnectSession(lua_State* L) {
+  int SWIG_arg = 0;
+  char *arg1 = (char *) 0 ;
+  unsigned short arg2 ;
+  bool result;
+  
+  SWIG_check_num_args("ConnectSession",2,2)
+  if(!lua_isstring(L,1)) SWIG_fail_arg("ConnectSession",1,"char const *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("ConnectSession",2,"unsigned short");
+  arg1 = (char *)lua_tostring(L, 1);
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned short)lua_tonumber(L, 2);
+  result = (bool)elfConnectSession((char const *)arg1,arg2);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfSetServerScript(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  
+  SWIG_check_num_args("SetServerScript",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetServerScript",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("SetServerScript",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  elfSetServerScript(arg1);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfSetClientScript(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  
+  SWIG_check_num_args("SetClientScript",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetClientScript",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("SetClientScript",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  elfSetClientScript(arg1);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfDisconnectSession(lua_State* L) {
+  int SWIG_arg = 0;
+  bool result;
+  
+  SWIG_check_num_args("DisconnectSession",0,0)
+  result = (bool)elfDisconnectSession();
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfSendStringToClients(lua_State* L) {
+  int SWIG_arg = 0;
+  char *arg1 = (char *) 0 ;
+  
+  SWIG_check_num_args("SendStringToClients",1,1)
+  if(!lua_isstring(L,1)) SWIG_fail_arg("SendStringToClients",1,"char const *");
+  arg1 = (char *)lua_tostring(L, 1);
+  elfSendStringToClients((char const *)arg1);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfSendStringToServer(lua_State* L) {
+  int SWIG_arg = 0;
+  char *arg1 = (char *) 0 ;
+  
+  SWIG_check_num_args("SendStringToServer",1,1)
+  if(!lua_isstring(L,1)) SWIG_fail_arg("SendStringToServer",1,"char const *");
+  arg1 = (char *)lua_tostring(L, 1);
+  elfSendStringToServer((char const *)arg1);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetServerDataAsString(lua_State* L) {
+  int SWIG_arg = 0;
+  char *result = 0 ;
+  
+  SWIG_check_num_args("GetServerDataAsString",0,0)
+  result = (char *)elfGetServerDataAsString();
+  lua_pushstring(L,(const char*)result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetClientDataAsString(lua_State* L) {
+  int SWIG_arg = 0;
+  char *result = 0 ;
+  
+  SWIG_check_num_args("GetClientDataAsString",0,0)
+  result = (char *)elfGetClientDataAsString();
+  lua_pushstring(L,(const char*)result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetServerEvent(lua_State* L) {
+  int SWIG_arg = 0;
+  int result;
+  
+  SWIG_check_num_args("GetServerEvent",0,0)
+  result = (int)elfGetServerEvent();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetClientEvent(lua_State* L) {
+  int SWIG_arg = 0;
+  int result;
+  
+  SWIG_check_num_args("GetClientEvent",0,0)
+  result = (int)elfGetClientEvent();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetCurrentClient(lua_State* L) {
+  int SWIG_arg = 0;
+  int result;
+  
+  SWIG_check_num_args("GetCurrentClient",0,0)
+  result = (int)elfGetCurrentClient();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfIsServer(lua_State* L) {
+  int SWIG_arg = 0;
+  bool result;
+  
+  SWIG_check_num_args("IsServer",0,0)
+  result = (bool)elfIsServer();
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfIsClient(lua_State* L) {
+  int SWIG_arg = 0;
+  bool result;
+  
+  SWIG_check_num_args("IsClient",0,0)
+  result = (bool)elfIsClient();
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 #ifdef __cplusplus
 }
 #endif
@@ -17884,6 +18156,20 @@ static const struct luaL_reg swig_commands[] = {
     { "RemoveGuiObjectByIndex", _wrap_elfRemoveGuiObjectByIndex},
     { "RemoveGuiObjectByObject", _wrap_elfRemoveGuiObjectByObject},
     { "EmptyGui", _wrap_elfEmptyGui},
+    { "CreateSession", _wrap_elfCreateSession},
+    { "ConnectSession", _wrap_elfConnectSession},
+    { "SetServerScript", _wrap_elfSetServerScript},
+    { "SetClientScript", _wrap_elfSetClientScript},
+    { "DisconnectSession", _wrap_elfDisconnectSession},
+    { "SendStringToClients", _wrap_elfSendStringToClients},
+    { "SendStringToServer", _wrap_elfSendStringToServer},
+    { "GetServerDataAsString", _wrap_elfGetServerDataAsString},
+    { "GetClientDataAsString", _wrap_elfGetClientDataAsString},
+    { "GetServerEvent", _wrap_elfGetServerEvent},
+    { "GetClientEvent", _wrap_elfGetClientEvent},
+    { "GetCurrentClient", _wrap_elfGetCurrentClient},
+    { "IsServer", _wrap_elfIsServer},
+    { "IsClient", _wrap_elfIsClient},
     {0,0}
 };
 
@@ -18125,6 +18411,10 @@ static swig_lua_const_info swig_constants[] = {
 { SWIG_LUA_INT,     (char *)"QUA_Y", (long) 0x000A, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"QUA_Z", (long) 0x000B, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"QUA_W", (long) 0x000C, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"NET_NONE", (long) 0x0000, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"NET_CONNECT", (long) 0x0001, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"NET_RECEIVE", (long) 0x0002, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"NET_DISCONNECT", (long) 0x0003, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"OGG", (long) 0x0001, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"WAV", (long) 0x0002, 0, 0, 0},
     {0,0,0,0,0,0}

@@ -7,6 +7,8 @@
 #include <malloc.h>
 #include <sys/types.h>
 #if defined(__WIN32__) || defined(WIN32) || defined(_WIN32) || defined(__CYGWIN__)
+	// mbg: prevents windows.h from including winsock.h, this is later handled by enet 
+	#define _WINSOCKAPI_
 	#include <windows.h>
 	#include <strsafe.h>
 #else
@@ -66,6 +68,9 @@ int luaopen_elf(lua_State* L);
 #include "sst.h"
 #include "resources.h"
 #include "particles.h"
+
+// mbg: adds networking support to BlendELF
+#include "network.h"
 
 #ifdef ELF_PLAYER
 

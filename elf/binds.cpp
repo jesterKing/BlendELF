@@ -4869,4 +4869,70 @@ ELF_API void ELF_APIENTRY elfEmptyGui(elf_handle gui)
 	}
 	elf_empty_gui((elf_gui*)gui.get());
 }
+ELF_API bool ELF_APIENTRY elfCreateSession(const char* address, unsigned short port)
+{
+	return (bool)elf_create_session(address, port);
+}
+ELF_API bool ELF_APIENTRY elfConnectSession(const char* address, unsigned short port)
+{
+	return (bool)elf_connect_session(address, port);
+}
+ELF_API void ELF_APIENTRY elfSetServerScript(elf_handle script)
+{
+	if(!script.get() || elf_get_object_type(script.get()) != ELF_SCRIPT)
+	{
+		printf("SetServerScript() -> invalid handle\n");
+		return;
+	}
+	elf_set_server_script((elf_script*)script.get());
+}
+ELF_API void ELF_APIENTRY elfSetClientScript(elf_handle script)
+{
+	if(!script.get() || elf_get_object_type(script.get()) != ELF_SCRIPT)
+	{
+		printf("SetClientScript() -> invalid handle\n");
+		return;
+	}
+	elf_set_client_script((elf_script*)script.get());
+}
+ELF_API bool ELF_APIENTRY elfDisconnectSession()
+{
+	return (bool)elf_disconnect_session();
+}
+ELF_API void ELF_APIENTRY elfSendStringToClients(const char* message)
+{
+	elf_send_string_to_clients(message);
+}
+ELF_API void ELF_APIENTRY elfSendStringToServer(const char* message)
+{
+	elf_send_string_to_server(message);
+}
+ELF_API const char* ELF_APIENTRY elfGetServerDataAsString()
+{
+	return elf_get_server_data_as_string();
+}
+ELF_API const char* ELF_APIENTRY elfGetClientDataAsString()
+{
+	return elf_get_client_data_as_string();
+}
+ELF_API int ELF_APIENTRY elfGetServerEvent()
+{
+	return elf_get_server_event();
+}
+ELF_API int ELF_APIENTRY elfGetClientEvent()
+{
+	return elf_get_client_event();
+}
+ELF_API int ELF_APIENTRY elfGetCurrentClient()
+{
+	return elf_get_current_client();
+}
+ELF_API bool ELF_APIENTRY elfIsServer()
+{
+	return (bool)elf_is_server();
+}
+ELF_API bool ELF_APIENTRY elfIsClient()
+{
+	return (bool)elf_is_client();
+}
 

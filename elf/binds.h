@@ -233,6 +233,10 @@
 #define ELF_QUA_Y 0x000A
 #define ELF_QUA_Z 0x000B
 #define ELF_QUA_W 0x000C
+#define ELF_NET_NONE 0x0000
+#define ELF_NET_CONNECT 0x0001
+#define ELF_NET_RECEIVE 0x0002
+#define ELF_NET_DISCONNECT 0x0003
 #define ELF_OGG 0x0001
 #define ELF_WAV 0x0002
 #if defined(__WIN32__) || defined(WIN32) || defined(__CYGWIN__)
@@ -831,4 +835,18 @@ ELF_API bool ELF_APIENTRY elfRemoveGuiObjectByName(elf_handle parent, const char
 ELF_API bool ELF_APIENTRY elfRemoveGuiObjectByIndex(elf_handle parent, int idx);
 ELF_API bool ELF_APIENTRY elfRemoveGuiObjectByObject(elf_handle parent, elf_handle object);
 ELF_API void ELF_APIENTRY elfEmptyGui(elf_handle gui);
+ELF_API bool ELF_APIENTRY elfCreateSession(const char* address, unsigned short port);
+ELF_API bool ELF_APIENTRY elfConnectSession(const char* address, unsigned short port);
+ELF_API void ELF_APIENTRY elfSetServerScript(elf_handle script);
+ELF_API void ELF_APIENTRY elfSetClientScript(elf_handle script);
+ELF_API bool ELF_APIENTRY elfDisconnectSession();
+ELF_API void ELF_APIENTRY elfSendStringToClients(const char* message);
+ELF_API void ELF_APIENTRY elfSendStringToServer(const char* message);
+ELF_API const char* ELF_APIENTRY elfGetServerDataAsString();
+ELF_API const char* ELF_APIENTRY elfGetClientDataAsString();
+ELF_API int ELF_APIENTRY elfGetServerEvent();
+ELF_API int ELF_APIENTRY elfGetClientEvent();
+ELF_API int ELF_APIENTRY elfGetCurrentClient();
+ELF_API bool ELF_APIENTRY elfIsServer();
+ELF_API bool ELF_APIENTRY elfIsClient();
 #endif

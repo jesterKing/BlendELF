@@ -261,6 +261,12 @@ extern "C" {
 #define ELF_QUA_Z					0x000B
 #define ELF_QUA_W					0x000C
 
+// mbg: networking stuff
+#define ELF_NET_NONE					0x0000
+#define ELF_NET_CONNECT					0x0001	// <mdoc> NETWORKING EVENTS
+#define ELF_NET_RECEIVE					0x0002
+#define ELF_NET_DISCONNECT				0x0003
+
 #define ELF_OGG						0x0001	// <mdoc> SOUND FILE TYPES <mdocc> The sound file types returned by elf.GetSoundFileType
 #define ELF_WAV						0x0002
 
@@ -1560,6 +1566,26 @@ unsigned char elf_remove_gui_object_by_index(elf_gui_object *parent, int idx);
 unsigned char elf_remove_gui_object_by_object(elf_gui_object *parent, elf_gui_object *object);
 
 void elf_empty_gui(elf_gui *gui);
+
+//////////////////////////////// NET ////////////////////////////////
+
+/* <!> */ unsigned char elf_init_networking();
+/* <!> */ void elf_deinit_networking();
+/* <!> */ void elf_run_networking();
+unsigned char elf_create_session(const char* address, unsigned short port); // <mdoc> NETWORKING FUNCTIONS
+unsigned char elf_connect_session(const char* address, unsigned short port);
+void elf_set_server_script(elf_script* script);
+void elf_set_client_script(elf_script* script);
+unsigned char elf_disconnect_session();
+void elf_send_string_to_clients(const char* message);
+void elf_send_string_to_server(const char* message);
+const char* elf_get_server_data_as_string();
+const char* elf_get_client_data_as_string();
+int elf_get_server_event();
+int elf_get_client_event();
+int elf_get_current_client();
+unsigned char elf_is_server();
+unsigned char elf_is_client();
 
 //////////////////////////////// SST ////////////////////////////////
 

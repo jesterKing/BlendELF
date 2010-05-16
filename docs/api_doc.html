@@ -321,6 +321,11 @@ The variables <b>scn</b>, <b>gui</b> and <b>event</b> are used for internal oper
 <div class="apidefine">elf.QUA_Y</div>
 <div class="apidefine">elf.QUA_Z</div>
 <div class="apidefine">elf.QUA_W</div>
+<div class="apidefine">elf.NET_NONE</div>
+<div class="apitopic">NETWORKING EVENTS</div>
+<div class="apidefine">elf.NET_CONNECT</div>
+<div class="apidefine">elf.NET_RECEIVE</div>
+<div class="apidefine">elf.NET_DISCONNECT</div>
 <div class="apitopic">SOUND FILE TYPES</div>
 <div class="apiinfo">The sound file types returned by elf.GetSoundFileType</div>
 <div class="apidefine">elf.OGG</div>
@@ -893,6 +898,21 @@ The variables <b>scn</b>, <b>gui</b> and <b>event</b> are used for internal oper
 <div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveGuiObjectByIndex( <span class="apiobjtype">object</span> parent, <span class="apikeytype">int</span> idx )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveGuiObjectByObject( <span class="apiobjtype">object</span> parent, <span class="apiobjtype">object</span> object )</div>
 <div class="apifunc">elf.EmptyGui( <span class="apiobjtype">object</span> gui )</div>
+<div class="apitopic">NETWORKING FUNCTIONS</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.CreateSession( <span class="apikeytype">string</span> address, <span class="apikeytype">unsigned short</span> port )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.ConnectSession( <span class="apikeytype">string</span> address, <span class="apikeytype">unsigned short</span> port )</div>
+<div class="apifunc">elf.SetServerScript( <span class="apiobjtype">object</span> script )</div>
+<div class="apifunc">elf.SetClientScript( <span class="apiobjtype">object</span> script )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.DisconnectSession(  )</div>
+<div class="apifunc">elf.SendStringToClients( <span class="apikeytype">string</span> message )</div>
+<div class="apifunc">elf.SendStringToServer( <span class="apikeytype">string</span> message )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetServerDataAsString(  )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetClientDataAsString(  )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetServerEvent(  )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetClientEvent(  )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetCurrentClient(  )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.IsServer(  )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.IsClient(  )</div>
 <div class="copyright">Copyright &copy; 2009-2010 Samuel Anjam</div>
 
 <script type="text/javascript">
