@@ -200,10 +200,6 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <br /><span class="apiobjtype">object</span> - any BlendELF object other than the types listed above
 </div>
 
-<div class="apitopic">BUILT IN VARIABLES</div>
-<div class="apiinfo">
-The variables <b>scn</b>, <b>gui</b> and <b>event</b> are used for internal operations and you can freely access from them, but <b>NOT ASSIGN</b> anything to them.
-</div>
 """
 
 apifooter = """<div class="copyright">Copyright &copy; 2009-2010 Samuel Anjam</div>
