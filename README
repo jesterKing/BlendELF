@@ -1,0 +1,20 @@
+BlendELF is a work in progress, OpenGL graphics powered, compact
+open source 3d game engine aimed towards independent game developers
+for quick prototyping and game/virtual environment creation. It
+supports a standard set of features, like skeletal animation, post
+processing, windows and linux support, LUA/C++/.NET programming,
+physics powered by Bullet Physics, GUI and 2D/3D Audio. BlendELF
+binaries and code are provided free of charge without restrictions. 
+
+--------------------------------
+----------- Authors ------------
+--------------------------------
+
+Samuel Anjam - Lead coder
+
+--------------------------------
+----- Current Contributors -----
+--------------------------------
+
+Michael Gale - Networking, bug fixing
+
