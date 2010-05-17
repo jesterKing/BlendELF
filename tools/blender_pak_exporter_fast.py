@@ -870,7 +870,7 @@ class Script:
 		f.write(struct.pack('<I', len(self.text)))
 		if len(self.text) > 0: f.write(struct.pack('<'+str(len(self.text))+'s', self.text))
 		
-		print 'Script: '+text.name+' saved'
+		print 'Script: '+self.name+' saved'
 
 class Scene:
 	def __init__(self):
@@ -998,7 +998,7 @@ def export(path):
 		offset += scene.size_bytes
 	for script in scripts:
 		f.write(struct.pack('<B', 17))
-		write_name_to_file(script.file_path, f)
+		write_name_to_file(script.name, f)
 		f.write(struct.pack('<I', offset))
 		offset += script.size_bytes
 	for texture in textures:
