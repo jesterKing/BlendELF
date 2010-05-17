@@ -314,8 +314,8 @@ unsigned char elf_init_with_hwnd(int width, int height,
 	elf_init_objects();
 	if(!elf_init_context_with_hwnd(width, height, title, fullscreen, hwnd)) return ELF_FALSE;
 	if(!elf_init_audio());
-	if(!elf_init_scripting()) return ELF_FALSE;
 	if(!elf_init_engine()) return ELF_FALSE;
+	if(!elf_init_scripting()) return ELF_FALSE;
 	if(!elf_init_networking()) return ELF_FALSE;
 
 	return ELF_TRUE;

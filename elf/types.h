@@ -291,7 +291,7 @@ struct elf_model {
 	unsigned int *index;
 	float *weights;
 	int *boneids;
-	float cur_frame;
+	elf_physics_tri_mesh *tri_mesh;
 	elf_model_area *areas;
 	elf_vec3f bb_min;
 	elf_vec3f bb_max;

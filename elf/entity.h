@@ -376,11 +376,15 @@ void elf_set_entity_physics(elf_entity *entity, int type, float mass)
 		case ELF_MESH:
 		{
 			if(!elf_get_model_indices(entity->model)) return;
-			entity->object = elf_create_physics_object_mesh(
-				elf_get_model_vertices(entity->model),
-				elf_get_model_indices(entity->model),
-				elf_get_model_indice_count(entity->model),
-				mass);
+			if(!entity->model->tri_mesh)
+			{
+				entity->model->tri_mesh = elf_create_physics_tri_mesh(
+					elf_get_model_vertices(entity->model),
+					elf_get_model_indices(entity->model),
+					elf_get_model_indice_count(entity->model));
+				elf_inc_ref((elf_object*)entity->model->tri_mesh);
+			}
+			entity->object = elf_create_physics_object_mesh(entity->model->tri_mesh, mass);
 			break;
 		}
 		default: return;

@@ -164,7 +164,8 @@ extern "C" {
 #define ELF_PROPERTY					0x0040
 #define ELF_CLIENT					0x0041
 #define ELF_SCRIPTING					0x0042
-#define ELF_OBJECT_TYPE_COUNT				0x0043	// <mdoc> NUMBER OF OBJECT TYPES
+#define ELF_PHYSICS_TRI_MESH				0x0043
+#define ELF_OBJECT_TYPE_COUNT				0x0044	// <mdoc> NUMBER OF OBJECT TYPES
 
 #define ELF_PERSPECTIVE					0x0000	// <mdoc> CAMERA MODE <mdocc> The camera modes used by camera internal functions
 #define ELF_ORTHOGRAPHIC				0x0001
@@ -323,6 +324,7 @@ typedef struct elf_gui					elf_gui;
 typedef struct elf_directory_item			elf_directory_item;
 typedef struct elf_directory				elf_directory;
 typedef struct elf_collision				elf_collision;
+typedef struct elf_physics_tri_mesh			elf_physics_tri_mesh;
 typedef struct elf_physics_object			elf_physics_object;
 typedef struct elf_physics_world			elf_physics_world;
 typedef struct elf_joint				elf_joint;
@@ -1362,7 +1364,11 @@ elf_vec3f elf_get_joint_pivot(elf_joint *joint);
 elf_vec3f elf_get_joint_axis(elf_joint *joint);
 
 // <!!
-elf_physics_object* elf_create_physics_object_mesh(float *verts, unsigned int *idx, int indicle_count, float mass);
+elf_physics_tri_mesh* elf_create_physics_tri_mesh(float *verts, unsigned int *idx, int indice_count);
+void elf_destroy_physics_tri_mesh(elf_physics_tri_mesh *tri_mesh);
+
+elf_physics_object* elf_create_physics_object();
+elf_physics_object* elf_create_physics_object_mesh(elf_physics_tri_mesh *tri_mesh, float mass);
 elf_physics_object* elf_create_physics_object_sphere(float radius, float mass, float ox, float oy, float oz);
 elf_physics_object* elf_create_physics_object_box(float hx, float hy, float hz, float mass, float ox, float oy, float oz);
 void elf_set_physics_object_world(elf_physics_object *object, elf_physics_world *world);
