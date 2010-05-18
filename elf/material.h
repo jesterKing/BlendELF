@@ -44,7 +44,7 @@ elf_material* elf_create_material_from_pak(FILE *file, const char *name, elf_sce
 
 	if(magic != 179532109)
 	{
-		elf_write_to_log("error: invalid material \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
+		elf_set_error(ELF_INVALID_FILE, "error: invalid material \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
 		return NULL;
 	}
 

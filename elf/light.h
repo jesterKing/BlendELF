@@ -49,7 +49,7 @@ elf_light* elf_create_light_from_pak(FILE *file, const char *name, elf_scene *sc
 
 	if(magic != 179532113)
 	{
-		elf_write_to_log("error: invalid light \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
+		elf_set_error(ELF_INVALID_FILE, "error: invalid light \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
 		return NULL;
 	}
 

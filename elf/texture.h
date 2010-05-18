@@ -38,7 +38,7 @@ elf_texture* elf_create_texture_from_file(const char *file_path)
 			internal_format = GFX_COMPRESSED_RGBA;
 			break;
 		default:
-			elf_write_to_log("error: unsupported bits per pixel value [%d] in image \"%s\"\n", elf_get_image_bits_per_pixel(image), file_path);
+			elf_set_error(ELF_INVALID_FILE, "error: unsupported bits per pixel value [%d] in image \"%s\"\n", elf_get_image_bits_per_pixel(image), file_path);
 			elf_destroy_image(image);
 			return NULL;
 	}
@@ -52,7 +52,7 @@ elf_texture* elf_create_texture_from_file(const char *file_path)
 
 	if(!texture->texture)
 	{
-		elf_write_to_log("error: failed to create texture \"%s\"\n", file_path);
+		elf_set_error(ELF_CANT_CREATE, "error: failed to create texture \"%s\"\n", file_path);
 		elf_destroy_texture(texture);
 		return NULL;
 	}
@@ -85,7 +85,7 @@ elf_texture *elf_create_texture_from_pak(FILE *file, const char *name, elf_scene
 
 	if(magic != 179532108)
 	{
-		elf_write_to_log("error: invalid texture file \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
+		elf_set_error(ELF_INVALID_FILE, "error: invalid texture \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
 		return NULL;
 	}
 
@@ -127,7 +127,7 @@ elf_texture *elf_create_texture_from_pak(FILE *file, const char *name, elf_scene
 	}
 	else
 	{
-		elf_write_to_log("error: invalid texture file \"%s//%s\", unknown format\n", elf_get_scene_file_path(scene), rname);
+		elf_set_error(ELF_UNKNOWN_FORMAT, "error: can't load texture \"%s//%s\", unknown format\n", elf_get_scene_file_path(scene), rname);
 		return NULL;
 	}
 
@@ -139,7 +139,7 @@ elf_texture *elf_create_texture_from_pak(FILE *file, const char *name, elf_scene
 		case 32: format = GFX_BGRA; internal_format = GFX_COMPRESSED_RGBA; data_format = GFX_UBYTE; break;
 		case 48: format = GFX_BGR; internal_format = GFX_COMPRESSED_RGB; data_format = GFX_USHORT; break;
 		default:
-			elf_write_to_log("error: unsupported bits per pixel value [%d] in texture \"%s//%s\"\n", (int)bpp, elf_get_scene_file_path(scene), rname);
+			elf_set_error(ELF_INVALID_FILE, "error: unsupported bits per pixel value [%d] in texture \"%s//%s\"\n", (int)bpp, elf_get_scene_file_path(scene), rname);
 			free(data);
 			return NULL;
 	}
@@ -154,7 +154,7 @@ elf_texture *elf_create_texture_from_pak(FILE *file, const char *name, elf_scene
 
 	if(!texture->texture)
 	{
-		elf_write_to_log("error: failed to create texture \"%s//%s\"\n", elf_get_scene_file_path(scene), rname);
+		elf_set_error(ELF_CANT_CREATE, "error: can't create texture \"%s//%s\"\n", elf_get_scene_file_path(scene), rname);
 		elf_destroy_texture(texture);
 		return NULL;
 	}

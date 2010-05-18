@@ -51,7 +51,7 @@ elf_camera* elf_create_camera_from_pak(FILE *file, const char *name, elf_scene *
 
 	if(magic != 179532111)
 	{
-		elf_write_to_log("error: invalid camera \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
+		elf_set_error(ELF_INVALID_FILE, "error: invalid camera \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
 		return NULL;
 	}
 

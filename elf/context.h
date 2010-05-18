@@ -81,7 +81,7 @@ unsigned char elf_init_context(int width, int height,
 
 	if(width < 1 || height < 1)
 	{
-		elf_write_to_log("error: invalid dimensions (%d, %d) for window\n", width, height);
+		elf_set_error(ELF_INVALID_SIZE, "error: invalid window size (%d, %d)\n", width, height);
 		return ELF_FALSE;
 	}
 
@@ -141,7 +141,7 @@ unsigned char elf_init_context_with_hwnd(int width, int height,
 
 	if(width < 1 || height < 1)
 	{
-		elf_write_to_log("error: invalid dimensions (%d, %d) for window\n", width, height);
+		elf_set_error(ELF_INVALID_SIZE, "error: invalid window size (%d, %d)\n", width, height);
 		return ELF_FALSE;
 	}
 

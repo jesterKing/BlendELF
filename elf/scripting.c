@@ -29,7 +29,7 @@ elf_scripting* elf_create_scripting()
 	scripting->L = lua_open();
 	if(!scripting->L)
 	{
-		printf("error: failed to initialize lua\n");
+		elf_set_error(ELF_CANT_INITIALIZE, "error: failed to initialize lua\n");
 		elf_destroy_scripting(scripting);
 	}
 	luaL_openlibs(scripting->L);
@@ -79,7 +79,7 @@ unsigned char elf_run_string(const char *str)
 	err = luaL_dostring(scr->L, str);
 	if(err)
 	{
-		elf_write_to_log("error: could not run string \"%s\"\n%s\n", str, lua_tostring(scr->L, -1));
+		elf_set_error(ELF_CANT_RUN_STRING, "error: can't run string \"%s\"\n%s\n", str, lua_tostring(scr->L, -1));
 		return ELF_FALSE;
 	}
 

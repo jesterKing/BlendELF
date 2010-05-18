@@ -3857,6 +3857,40 @@ fail:
 }
 
 
+static int _wrap_elfGetErrorString(lua_State* L) {
+  int SWIG_arg = 0;
+  char *result = 0 ;
+  
+  SWIG_check_num_args("GetErrorString",0,0)
+  result = (char *)elfGetErrorString();
+  lua_pushstring(L,(const char*)result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetError(lua_State* L) {
+  int SWIG_arg = 0;
+  int result;
+  
+  SWIG_check_num_args("GetError",0,0)
+  result = (int)elfGetError();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfRun(lua_State* L) {
   int SWIG_arg = 0;
   bool result;
@@ -17707,6 +17741,8 @@ static const struct luaL_reg swig_commands[] = {
     { "GetVersionMinor", _wrap_elfGetVersionMinor},
     { "GetVersionRelease", _wrap_elfGetVersionRelease},
     { "GetVersion", _wrap_elfGetVersion},
+    { "GetErrorString", _wrap_elfGetErrorString},
+    { "GetError", _wrap_elfGetError},
     { "Run", _wrap_elfRun},
     { "Quit", _wrap_elfQuit},
     { "SetF10Exit", _wrap_elfSetF10Exit},
@@ -18451,6 +18487,16 @@ static swig_lua_const_info swig_constants[] = {
 { SWIG_LUA_INT,     (char *)"NET_DISCONNECT", (long) 0x0003, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"OGG", (long) 0x0001, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"WAV", (long) 0x0002, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"NO_ERROR", (long) 0x0000, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"INVALID_FILE", (long) 0x0001, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"CANT_OPEN_FILE", (long) 0x0002, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"CANT_OPEN_DIRECTORY", (long) 0x0003, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"CANT_INITIALIZE", (long) 0x0004, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"CANT_RUN_STRING", (long) 0x0005, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"CANT_CREATE", (long) 0x0006, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"INVALID_SIZE", (long) 0x0007, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"UNKNOWN_FORMAT", (long) 0x0008, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"UNKNOWN_TYPE", (long) 0x0009, 0, 0, 0},
     {0,0,0,0,0,0}
 };
 

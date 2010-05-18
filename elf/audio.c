@@ -346,7 +346,7 @@ unsigned char elf_init_sound_with_ogg(elf_sound *snd, const char *file_path)
 	snd->file = fopen(file_path, "rb");
 	if(!snd->file)
 	{
-		elf_write_to_log("error: could not load \"%s\"\n", file_path);
+		elf_set_error(ELF_CANT_OPEN_FILE, "error: can't open file \"%s\"\n", file_path);
 		return ELF_FALSE;
 	}
 
@@ -359,7 +359,7 @@ unsigned char elf_init_sound_with_ogg(elf_sound *snd, const char *file_path)
 	else if(info->channels == 2) snd->format = AL_FORMAT_STEREO16;
 	else
 	{
-		elf_write_to_log("error: invalid number of channels in \"%s\"\n", file_path);
+		elf_set_error(ELF_CANT_OPEN_FILE, "error: invalid number of channels in \"%s\"\n", file_path);
 		ov_clear(&snd->ogg_file);
 		return ELF_FALSE;
 	}
@@ -401,7 +401,7 @@ unsigned char elf_init_sound_with_wav(elf_sound *snd, const char *file_path)
 	snd->file = fopen(file_path, "rb");
 	if(!snd->file)
 	{
-		elf_write_to_log("error: could not load \"%s\"\n", file_path);
+		elf_set_error(ELF_CANT_OPEN_FILE, "error: can't open file \"%s\"\n", file_path);
 		return ELF_FALSE;
 	}
 
@@ -410,7 +410,7 @@ unsigned char elf_init_sound_with_wav(elf_sound *snd, const char *file_path)
 	fread(&magic, sizeof(int), 1, snd->file);
 	if(strcmp((char*)&magic, "RIFF"))
 	{
-		elf_write_to_log("error: \"%s\" invalid wav file, RIFF not found\n", file_path);
+		elf_set_error(ELF_INVALID_FILE, "error: \"%s\" invalid wav file, RIFF not found\n", file_path);
 		return ELF_FALSE;
 	}
 
@@ -418,7 +418,7 @@ unsigned char elf_init_sound_with_wav(elf_sound *snd, const char *file_path)
 	fread(&magic, sizeof(int), 1, snd->file);
 	if(strcmp((char*)&magic, "WAVE"))
 	{
-		elf_write_to_log("error: \"%s\" invalid wav file, WAVE not found\n", file_path);
+		elf_set_error(ELF_INVALID_FILE, "error: \"%s\" invalid wav file, WAVE not found\n", file_path);
 		return ELF_FALSE;
 	}
 
@@ -430,7 +430,7 @@ unsigned char elf_init_sound_with_wav(elf_sound *snd, const char *file_path)
 		{
 			if(!fmt_found || !data_found)
 			{
-				elf_write_to_log("error: \"%s\" invalid wav file\n", file_path);
+				elf_set_error(ELF_INVALID_FILE, "error: \"%s\" invalid wav file\n", file_path);
 				return ELF_FALSE;
 			}
 			break;
@@ -451,7 +451,7 @@ unsigned char elf_init_sound_with_wav(elf_sound *snd, const char *file_path)
 
 			if(audio_format != 1)
 			{
-				elf_write_to_log("error: \"%s\" invalid audio format\n", file_path);
+				elf_set_error(ELF_INVALID_FILE, "error: \"%s\" invalid wav file, invalid audio format\n", file_path);
 				return ELF_FALSE;
 			}
 
@@ -461,7 +461,7 @@ unsigned char elf_init_sound_with_wav(elf_sound *snd, const char *file_path)
 			else if(channels == 2) snd->format = AL_FORMAT_STEREO16;
 			else
 			{
-				elf_write_to_log("error: \"%s\" invalid number of channels\n", file_path);
+				elf_set_error(ELF_INVALID_FILE, "error: \"%s\" invalid wav file, invalid number of channels\n", file_path);
 				return ELF_FALSE;
 			}
 
@@ -538,7 +538,7 @@ elf_sound* elf_load_sound(const char *file_path)
 	}
 	else
 	{
-		elf_write_to_log("error: could not open \"%s\", unknown file format\n", file_path);
+		elf_set_error(ELF_UNKNOWN_FORMAT, "error: can't load \"%s\", unknown format\n", file_path);
 		elf_destroy_sound(snd);
 		return NULL;
 	}
@@ -584,7 +584,7 @@ elf_sound* elf_load_streamed_sound(const char *file_path)
 	}
 	else
 	{
-		elf_write_to_log("error: could not open \"%s\", unknown file format\n", file_path);
+		elf_set_error(ELF_UNKNOWN_FORMAT, "error: can't load \"%s\", unknown format\n", file_path);
 		elf_destroy_sound(snd);
 		return NULL;
 	}

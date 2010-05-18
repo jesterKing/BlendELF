@@ -16,6 +16,9 @@ elf_resources *res = NULL;
 int global_ref_count;
 int global_ref_count_table[ELF_OBJECT_TYPE_COUNT];
 int global_obj_count;
+char* elf_err_str = NULL;
+char* elf_err_str_store = NULL;
+int elf_err_code = 0;
 
 #include "object.h"
 #include "str.h"
@@ -66,7 +69,7 @@ int main()
 
 	if(!elf_init(config->window_size[0], config->window_size[1], "BlendELF", !config->fullscreen == ELF_FALSE))
 	{
-		elf_write_to_log("error: could not initialize engine\n");
+		elf_set_error(ELF_CANT_INITIALIZE, "error: can't initialize engine\n");
 		elf_destroy_game_config(config);
 		return -1;
 	}

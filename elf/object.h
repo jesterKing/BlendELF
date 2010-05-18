@@ -110,7 +110,7 @@ void elf_dec_ref(elf_object *obj)
 			case ELF_SCRIPTING: elf_destroy_scripting((elf_scripting*)obj); break;
 			case ELF_PHYSICS_TRI_MESH: elf_destroy_physics_tri_mesh((elf_physics_tri_mesh*)obj); break;
 			case ELF_LIST: elf_destroy_list((elf_list*)obj); break;
-			default: elf_write_to_log("error: can not destroy unknown type\n"); break;
+			default: elf_set_error(ELF_UNKNOWN_TYPE, "error: can not destroy unknown type\n"); break;
 		}
 	}
 }

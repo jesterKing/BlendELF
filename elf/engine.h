@@ -59,6 +59,84 @@ void elf_write_to_log(const char *fmt, ...)
 	if(file) fclose(file);
 }
 
+void elf_set_error(int code, const char *fmt, ...)
+{
+	va_list list;
+	const char *p, *s;
+	int d;
+	double f;
+	char* err_str;
+	char* tmp_str;
+	char num[32];
+	FILE *file;
+
+	va_start(list, fmt);
+
+	file = fopen("elf.log", "a");
+	if(!file) fopen("elf.log", "w");
+
+	err_str = elf_create_string("");
+
+	for(p = fmt; *p; ++p)
+	{
+		if(*p != '%')
+		{
+			putc(*p, stdout);
+			if(file) putc(*p, file);
+			tmp_str = elf_append_char_to_string(err_str, *p);
+			elf_destroy_string(err_str);
+			err_str = tmp_str;
+		}
+		else
+		{
+			switch(*++p)
+			{
+				case 's':
+					s = va_arg(list, char*);
+					printf("%s", s);
+					if(file) fprintf(file, "%s", s);
+
+					tmp_str = elf_merge_strings(err_str, s);
+					elf_destroy_string(err_str);
+					err_str = tmp_str;
+					continue;
+				case 'd':
+					d = va_arg(list, int);
+					printf("%d", d);
+					if(file) fprintf(file, "%d", d);
+
+					memset(num, 0x0, sizeof(char)*32);
+					sprintf(num, "%d", d);
+
+					tmp_str = elf_merge_strings(err_str, num);
+					elf_destroy_string(err_str);
+					err_str = tmp_str;
+					continue;
+				case 'f':
+					f = va_arg(list, double);
+					printf("%f", f);
+					if(file) fprintf(file, "%f", f);
+
+					memset(num, 0x0, sizeof(char)*32);
+					sprintf(num, "%f", f);
+
+					tmp_str = elf_merge_strings(err_str, num);
+					elf_destroy_string(err_str);
+					err_str = tmp_str;
+					continue;
+			}
+		}
+	}
+
+	elf_err_code = code;
+
+	if(elf_err_str) elf_destroy_string(elf_err_str);
+	elf_err_str = elf_create_string(err_str);
+	elf_destroy_string(err_str);
+
+	if(file) fclose(file);
+}
+
 elf_game_config* elf_create_game_config()
 {
 	elf_game_config *config;
@@ -267,7 +345,7 @@ unsigned char elf_init_engine()
 {
 	if(eng)
 	{
-		elf_start_log("error: can't initialize the engine twice!\n");
+		elf_set_error(ELF_CANT_INITIALIZE, "error: can't initialize the engine twice!\n");
 		return ELF_FALSE;
 	}
 
@@ -283,6 +361,7 @@ void elf_deinit_engine()
 	if(!eng) return;
 
 	elf_dec_ref((elf_object*)eng);
+	eng = NULL;
 }
 
 unsigned char elf_init(int width, int height,
@@ -305,12 +384,6 @@ unsigned char elf_init(int width, int height,
 unsigned char elf_init_with_hwnd(int width, int height,
 	const char *title, unsigned char fullscreen, HWND hwnd)
 {
-	if(eng)
-	{
-		elf_start_log("error: can't initialize the engine twice!\n");
-		return ELF_FALSE;
-	}
-
 	elf_init_objects();
 	if(!elf_init_context_with_hwnd(width, height, title, fullscreen, hwnd)) return ELF_FALSE;
 	if(!elf_init_audio());
@@ -340,7 +413,7 @@ unsigned char elf_init_with_config(const char *file_path)
 
 	if(!elf_init(config->window_size[0], config->window_size[1], "BlendELF", !config->fullscreen == ELF_FALSE))
 	{
-		elf_write_to_log("error: could not initialize engine\n");
+		elf_set_error(ELF_CANT_INITIALIZE, "error: could not initialize engine\n");
 		elf_destroy_game_config(config);
 		return ELF_FALSE;
 	}
@@ -376,7 +449,7 @@ void elf_update_engine()
 	if(elf_get_elapsed_time(eng->time_sync_timer) > 0.0)
 	{
 		if(elf_about_zero(eng->tick_rate))
-			eng->sync = (eng->sync*4.0f+((float)elf_get_elapsed_time(eng->time_sync_timer)*eng->speed))/5.0f;
+			eng->sync = (eng->sync*4.0+((float)elf_get_elapsed_time(eng->time_sync_timer)*eng->speed))/5.0;
 		else eng->sync = eng->tick_rate;
 
 		elf_start_timer(eng->time_sync_timer);
@@ -456,7 +529,11 @@ void elf_deinit()
 	elf_deinit_engine();
 	elf_deinit_audio();
 	elf_deinit_context();
+	if(elf_err_str) elf_destroy_string(elf_err_str);
+	if(elf_err_str_store) elf_destroy_string(elf_err_str_store);
 	elf_deinit_objects();
+	elf_err_str = NULL;
+	elf_err_str_store = NULL;
 }
 
 int elf_get_version_major()
@@ -477,6 +554,21 @@ const char* elf_get_version_release()
 const char* elf_get_version()
 {
 	return "BlendELF 0.91 Beta";
+}
+
+const char* elf_get_error_string()
+{
+	if(elf_err_str_store) elf_destroy_string(elf_err_str_store);
+	elf_err_str_store = elf_err_str;
+	elf_err_str = NULL;
+	return elf_err_str_store;
+}
+
+int elf_get_error()
+{
+	int err;
+	err = elf_err_code;
+	return elf_err_code;
 }
 
 void elf_quit()
@@ -877,7 +969,7 @@ elf_directory* elf_read_directory(const char *path)
 	StringCbLength(path, MAX_PATH, &length_of_arg);
 	if (length_of_arg > (MAX_PATH - 3))
 	{
-		elf_write_to_log("error: could not open directory, \"%s\". directory path is too long\n", path);
+		elf_set_error(ELF_CANT_OPEN_DIRECTORY, error: can't open directory, \"%s\". directory path is too long\n", path);
 		return NULL;
 	}
 
@@ -888,7 +980,7 @@ elf_directory* elf_read_directory(const char *path)
 
 	if(hFind == INVALID_HANDLE_VALUE) 
 	{
-		elf_write_to_log("error: could not open directory \"%s\"\n", path);
+		elf_set_error(ELF_CANT_OPEN_DIRECTORY, "error: can't open directory \"%s\"\n", path);
 		return NULL;
 	}
 
@@ -918,13 +1010,13 @@ elf_directory* elf_read_directory(const char *path)
 	dwError = GetLastError();
 	if (dwError != ERROR_NO_MORE_FILES) 
 	{
-		elf_write_to_log("error: something happened during listing the directory \"%s\"... dunno what though :D\n", path);
+		elf_set_error(ELF_LOL, "error: something happened during listing the directory \"%s\"... dunno what though :D\n", path);
 	}
 
 	FindClose(hFind);
 
 	return directory;*/
-	elf_write_to_log("error: file listing not supported on windows yet\n");
+	elf_set_error(ELF_MISSING_FEATURE, "error: file listing not supported on windows yet\n");
 #else
 	elf_directory *directory;
 	elf_directory_item *dir_item;
@@ -933,7 +1025,7 @@ elf_directory* elf_read_directory(const char *path)
 
 	if((num_entries = scandir(path, &namelist, NULL, alphasort)) < 0)
 	{
-		elf_write_to_log("error: could not open directory \"%s\"\n", path);
+		elf_set_error(ELF_CANT_OPEN_DIRECTORY, "error: could not open directory \"%s\"\n", path);
 		return NULL;
 	}
 	else
@@ -1087,7 +1179,7 @@ float elf_get_vec3f_length(elf_vec3f vec)
 
 unsigned char elf_about_zero(float val)
 {
-	if(val < 0.00001f && val > -0.00001f) return ELF_TRUE;
+	if(val < 0.0001 && val > -0.0001) return ELF_TRUE;
 	return ELF_FALSE;
 }
 

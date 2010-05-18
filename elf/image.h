@@ -21,13 +21,13 @@ elf_image* elf_create_image_from_file(const char *file_path)
 		in = FreeImage_Load(FIF_DDS, file_path, 0);
 	else
 	{
-		elf_write_to_log("error: failed to load image \"%s\", unknown format\n", file_path);
+		elf_set_error(ELF_UNKNOWN_FORMAT, "error: can't load image \"%s\", unknown format\n", file_path);
 		return NULL;
 	}
 
 	if(!in)
 	{
-		elf_write_to_log("error: failed to to load image \"%s\"\n", file_path);
+		elf_set_error(ELF_CANT_OPEN_FILE, "error: can't open file \"%s\"\n", file_path);
 		return NULL;
 	}
 
@@ -41,7 +41,7 @@ elf_image* elf_create_image_from_file(const char *file_path)
 
 	if(image->width == 0 || image->height == 0)
 	{
-		elf_write_to_log("error: \"%s\" contains invalid dimensions\n", file_path);
+		elf_set_error(ELF_INVALID_SIZE, "error: \"%s\" has invalid size\n", file_path);
 		FreeImage_Unload(in);
 		free(image);
 		return 0;
@@ -101,7 +101,7 @@ unsigned char elf_save_image_data(const char *file_path, int width, int height, 
 
 	if(!out)
 	{
-		elf_write_to_log("error: could not save image \"%s\"\n", file_path);
+		elf_set_error(ELF_CANT_OPEN_FILE, "error: can't save image \"%s\"\n", file_path);
 		return ELF_FALSE;
 	}
 
@@ -121,7 +121,7 @@ unsigned char elf_save_image_data(const char *file_path, int width, int height, 
 	else
 	{
 		FreeImage_Unload(out);
-		elf_write_to_log("error: could not save image \"%s\", unknown format\n", file_path);
+		elf_set_error(ELF_UNKNOWN_FORMAT, "error: can't save image \"%s\", unknown format\n", file_path);
 		return ELF_FALSE;
 	}
 

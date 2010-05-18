@@ -157,7 +157,7 @@ elf_armature* elf_create_armature_from_pak(FILE *file, const char *name, elf_sce
 
 	if(magic != 179532122)
 	{
-		elf_write_to_log("error: invalid armature \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
+		elf_set_error(ELF_INVALID_FILE, "error: invalid armature \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
 		return NULL;
 	}
 

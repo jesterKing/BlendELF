@@ -446,6 +446,14 @@ ELF_API const char* ELF_APIENTRY elfGetVersion()
 {
 	return elf_get_version();
 }
+ELF_API const char* ELF_APIENTRY elfGetErrorString()
+{
+	return elf_get_error_string();
+}
+ELF_API int ELF_APIENTRY elfGetError()
+{
+	return elf_get_error();
+}
 ELF_API bool ELF_APIENTRY elfRun()
 {
 	return (bool)elf_run();

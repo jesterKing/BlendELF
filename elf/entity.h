@@ -78,7 +78,7 @@ elf_entity* elf_create_entity_from_pak(FILE *file, const char *name, elf_scene *
 
 	if(magic != 179532112)
 	{
-		elf_write_to_log("error: invalid entity \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
+		elf_set_error(ELF_INVALID_FILE, "error: invalid entity \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
 		return NULL;
 	}
 

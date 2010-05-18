@@ -37,7 +37,7 @@ elf_pak* elf_create_pak_from_file(const char *file_path)
 	file = fopen(file_path, "rb");
 	if(!file)
 	{
-		elf_write_to_log("error: could not open \"%s\"\n", file_path);
+		elf_set_error(ELF_CANT_OPEN_FILE, "error: could not open \"%s\"\n", file_path);
 		return NULL;
 	}
 
@@ -46,7 +46,7 @@ elf_pak* elf_create_pak_from_file(const char *file_path)
 
 	if(magic != 179532100)
 	{
-		elf_write_to_log("error: \"%s\" is not a elf pak file\n", file_path);
+		elf_set_error(ELF_CANT_OPEN_FILE, "error: \"%s\" is not a elf pak file\n", file_path);
 		fclose(file);
 		return NULL;
 	}

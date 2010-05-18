@@ -273,6 +273,17 @@ extern "C" {
 #define ELF_OGG						0x0001	// <mdoc> SOUND FILE TYPES <mdocc> The sound file types returned by elf.GetSoundFileType
 #define ELF_WAV						0x0002
 
+#define ELF_NO_ERROR					0x0000 // <mdoc> ERROR CODES <mdocc> error codes returned by elf.GetError
+#define ELF_INVALID_FILE				0x0001
+#define ELF_CANT_OPEN_FILE				0x0002
+#define ELF_CANT_OPEN_DIRECTORY				0x0003
+#define ELF_CANT_INITIALIZE				0x0004
+#define ELF_CANT_RUN_STRING				0x0005
+#define ELF_CANT_CREATE					0x0006
+#define ELF_INVALID_SIZE				0x0007
+#define ELF_UNKNOWN_FORMAT				0x0008
+#define ELF_UNKNOWN_TYPE				0x0009
+
 typedef struct elf_vec2i				elf_vec2i;
 typedef struct elf_vec2f				elf_vec2f;
 typedef struct elf_vec3f				elf_vec3f;
@@ -396,7 +407,7 @@ void elf_destroy_string(char *str);
 char* elf_remove_char_from_string(char *str, int idx);
 char* elf_append_char_to_string(char *str, char c);
 char* elf_insert_char_to_string(char *str, int idx, char c);
-char* elf_merge_strings(char *str1, char *str2);
+char* elf_merge_strings(const char *str1, const char *str2);
 char* elf_merge_strings3(const char *str1, const char *str2, const char *str3);
 char* elf_sub_string(char *str, int start, int len);
 unsigned char elf_is_char_number(char c);
@@ -474,6 +485,7 @@ int elf_get_key_event_state(elf_key_event *key_event);
 
 // <!!
 void elf_write_to_log(const char *fmt, ...);
+void elf_set_error(int code, const char *fmt, ...);
 
 elf_game_config* elf_create_game_config();
 void elf_destroy_game_config(elf_game_config *config);
@@ -508,6 +520,9 @@ int elf_get_version_major();
 int elf_get_version_minor();
 const char* elf_get_version_release();
 const char* elf_get_version();
+
+const char* elf_get_error_string();
+int elf_get_error();
 
 unsigned char elf_run();
 void elf_quit();

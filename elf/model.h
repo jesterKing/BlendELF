@@ -20,7 +20,7 @@ elf_model* elf_create_model_from_pak(FILE *file, const char *name, elf_scene *sc
 
 	if(magic != 179532110)
 	{
-		elf_write_to_log("error: invalid model \"%s\", wrong magic number\n", name);
+		elf_set_error(ELF_INVALID_FILE, "error: invalid model \"%s\", wrong magic number\n", name);
 		return NULL;
 	}
 
@@ -48,25 +48,25 @@ elf_model* elf_create_model_from_pak(FILE *file, const char *name, elf_scene *sc
 
 	if((int)model->vertice_count < 3)
 	{
-		elf_write_to_log("error: invalid model \"%s\", invalid vertex count\n", name);
+		elf_set_error(ELF_INVALID_FILE, "error: invalid model \"%s\", invalid vertex count\n", name);
 		elf_destroy_model(model);
 		return NULL;
 	}
 	if((int)model->frame_count < 1)
 	{
-		elf_write_to_log("error: invalid model \"%s\", invalid frame count\n", name);
+		elf_set_error(ELF_INVALID_FILE, "error: invalid model \"%s\", invalid frame count\n", name);
 		elf_destroy_model(model);
 		return NULL;
 	}
 	if((int)model->indice_count < 3)
 	{
-		elf_write_to_log("error: invalid model \"%s\", invalid indice count\n", name);
+		elf_set_error(ELF_INVALID_FILE, "error: invalid model \"%s\", invalid indice count\n", name);
 		elf_destroy_model(model);
 		return NULL;
 	}
 	if((int)model->area_count < 1)
 	{
-		elf_write_to_log("error: invalid model \"%s\", invalid area count\n", name);
+		elf_set_error(ELF_INVALID_FILE, "error: invalid model \"%s\", invalid area count\n", name);
 		elf_destroy_model(model);
 		return NULL;
 	}

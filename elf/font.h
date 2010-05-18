@@ -26,25 +26,25 @@ elf_font* elf_create_font_from_file(const char *file_path, int size)
 
 	if(size < 1)
 	{
-		elf_write_to_log("error: can not load a font size smaller than 1\n");
+		elf_set_error(ELF_INVALID_SIZE, "error: can not load a font size smaller than 1\n");
 		return NULL;
 	}
 
 	error = FT_Init_FreeType(&library);
 	if(error)
 	{
-		elf_write_to_log("error: could not initialize freetype, could not open \"%s\"\n", file_path);
+		elf_set_error(ELF_CANT_INITIALIZE, "error: could not initialize freetype, could not open \"%s\"\n", file_path);
 		return NULL;
 	}
 
 	error = FT_New_Face(library, file_path, 0, &face);
 	if(error)
 	{
-		elf_write_to_log("error: could not open font file \"%s\"\n", file_path);
+		elf_set_error(ELF_CANT_OPEN_FILE, "error: can't open file \"%s\"\n", file_path);
 		error = FT_Done_FreeType(library);
 		if(error)
 		{
-			elf_write_to_log("error: could not unload freetype\n");
+			elf_set_error(ELF_CANT_OPEN_FILE, "error: can't deinitialize freetype\n");
 			return NULL;
 		}
 		return NULL;
@@ -53,13 +53,10 @@ elf_font* elf_create_font_from_file(const char *file_path, int size)
 	error = FT_Set_Pixel_Sizes(face, 0, size);
 	if(error)
 	{
-		elf_write_to_log("error: could not set the size of font \"%s\"\n", file_path);
+		elf_set_error(ELF_INVALID_SIZE, "error: can't set the size of font \"%s\"\n", file_path);
 
 		error = FT_Done_Face(face);
-		if(error) elf_write_to_log("error: could not unload font face for \"%s\"\n", file_path);
-
 		error = FT_Done_FreeType(library);
-		if(error) elf_write_to_log("error: could not unload freetype\n");
 
 		return NULL;
 	}
@@ -106,10 +103,7 @@ elf_font* elf_create_font_from_file(const char *file_path, int size)
 	}
 
 	error = FT_Done_Face(face);
-	if(error) elf_write_to_log("error: could not unload font face for \"%s\"\n", file_path);
-
 	error = FT_Done_FreeType(library);
-	if(error) elf_write_to_log("error: could not unload freetype\n");
 
 	return font;
 }

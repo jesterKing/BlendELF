@@ -92,7 +92,7 @@ char* elf_insert_char_to_string(char *str, int idx, char c)
 	return nstr;
 }
 
-char* elf_merge_strings(char *str1, char *str2)
+char* elf_merge_strings(const char *str1, const char *str2)
 {
 	char *nstr;
 

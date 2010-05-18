@@ -22,7 +22,7 @@ elf_script* elf_create_script_from_pak(FILE *file, const char *name, elf_scene *
 
 	if(magic != 179532121)
 	{
-		elf_write_to_log("error: invalid script \"%s\", wrong magic number\n", name);
+		elf_set_error(ELF_INVALID_FILE, "error: invalid script \"%s\", wrong magic number\n", name);
 		return NULL;
 	}
 
@@ -58,7 +58,7 @@ elf_script* elf_create_script_from_file(const char *file_path)
 	file = fopen(file_path, "r");
 	if(!file)
 	{
-		elf_write_to_log("error: could not load script \"%s\"\n", file_path);
+		elf_set_error(ELF_CANT_OPEN_FILE, "error: can't open file \"%s\"\n", file_path);
 		return NULL;
 	}
 
