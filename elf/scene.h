@@ -26,7 +26,7 @@ const char *dof_depth_write_alpha_vert =
 "uniform mat4 elf_ProjectionMatrix;\n"
 "uniform mat4 elf_ModelviewMatrix;\n"
 "attribute vec3 elf_VertexAttr;\n"
-"attribute vec3 elf_TexCoordAttr;\n"
+"attribute vec2 elf_TexCoordAttr;\n"
 "uniform float elf_FocalRange;\n"
 "uniform float elf_FocalDistance;\n"
 "varying vec2 elf_TexCoord;\n"
