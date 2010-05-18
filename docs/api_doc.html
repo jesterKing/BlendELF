@@ -207,6 +207,8 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apidefine">elf.FRAME_PLAYER</div>
 <div class="apidefine">elf.PROPERTY</div>
 <div class="apidefine">elf.CLIENT</div>
+<div class="apidefine">elf.SCRIPTING</div>
+<div class="apidefine">elf.PHYSICS_TRI_MESH</div>
 <div class="apitopic">NUMBER OF OBJECT TYPES</div>
 <div class="apidefine">elf.OBJECT_TYPE_COUNT</div>
 <div class="apitopic">CAMERA MODE</div>
@@ -327,6 +329,19 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apiinfo">The sound file types returned by elf.GetSoundFileType</div>
 <div class="apidefine">elf.OGG</div>
 <div class="apidefine">elf.WAV</div>
+<div class="apitopic">ERROR CODES</div>
+<div class="apiinfo">error codes returned by elf.GetError</div>
+<div class="apidefine">elf.NO_ERROR</div>
+<div class="apidefine">elf.INVALID_FILE</div>
+<div class="apidefine">elf.CANT_OPEN_FILE</div>
+<div class="apidefine">elf.CANT_OPEN_DIRECTORY</div>
+<div class="apidefine">elf.CANT_INITIALIZE</div>
+<div class="apidefine">elf.CANT_RUN_STRING</div>
+<div class="apidefine">elf.CANT_CREATE</div>
+<div class="apidefine">elf.INVALID_SIZE</div>
+<div class="apidefine">elf.UNKNOWN_FORMAT</div>
+<div class="apidefine">elf.UNKNOWN_TYPE</div>
+<div class="apidefine">elf.INVALID_HANDLE</div>
 <div class="apitopic">OBJECT FUNCTIONS</div>
 <div class="apiinfo">The object functions can be performed on any generic ELF objects.</div>
 <div class="apifunc"><span class="apikeytype">int</span> elf.GetObjectType( <span class="apiobjtype">object</span> obj )</div>
@@ -381,10 +396,13 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apitopic">ENGINE FUNCTIONS</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.Init( <span class="apikeytype">int</span> width, <span class="apikeytype">int</span> height, <span class="apikeytype">string</span> title, <span class="apikeytype">bool</span> fullscreen )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.InitWithConfig( <span class="apikeytype">string</span> file_path )</div>
+<div class="apifunc">elf.Deinit(  )</div>
 <div class="apifunc"><span class="apikeytype">int</span> elf.GetVersionMajor(  )</div>
 <div class="apifunc"><span class="apikeytype">int</span> elf.GetVersionMinor(  )</div>
 <div class="apifunc"><span class="apikeytype">string</span> elf.GetVersionRelease(  )</div>
 <div class="apifunc"><span class="apikeytype">string</span> elf.GetVersion(  )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetErrorString(  )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetError(  )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.Run(  )</div>
 <div class="apifunc">elf.Quit(  )</div>
 <div class="apifunc">elf.SetF10Exit( <span class="apikeytype">bool</span> exit )</div>
@@ -532,6 +550,7 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorPosition( <span class="apiobjtype">object</span> actor )</div>
 <div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorRotation( <span class="apiobjtype">object</span> actor )</div>
 <div class="apifunc"><span class="apikeytype">elf_vec4f</span> elf.GetActorOrientation( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc">elf.SetActorAnisotropicFriction( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
 <div class="apifunc">elf.SetActorDamping( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> lin_damp, <span class="apikeytype">float</span> ang_damp )</div>
 <div class="apifunc">elf.SetActorSleepThresholds( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> lin_thrs, <span class="apikeytype">float</span> ang_thrs )</div>
 <div class="apifunc">elf.SetActorRestitution( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> restitution )</div>
@@ -545,6 +564,7 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorAngularVelocity( <span class="apiobjtype">object</span> actor )</div>
 <div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorLinearFactor( <span class="apiobjtype">object</span> actor )</div>
 <div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorAngularFactor( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorAnisotropicFriction( <span class="apiobjtype">object</span> actor )</div>
 <div class="apifunc"><span class="apikeytype">float</span> elf.GetActorLinearDamping( <span class="apiobjtype">object</span> actor )</div>
 <div class="apifunc"><span class="apikeytype">float</span> elf.GetActorAngularDamping( <span class="apiobjtype">object</span> actor )</div>
 <div class="apifunc"><span class="apikeytype">float</span> elf.GetActorLinearSleepThreshold( <span class="apiobjtype">object</span> actor )</div>
@@ -764,8 +784,8 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc"><span class="apikeytype">string</span> elf.GetScriptFilePath( <span class="apiobjtype">object</span> script )</div>
 <div class="apifunc">elf.SetScriptText( <span class="apiobjtype">object</span> script, <span class="apikeytype">string</span> text )</div>
 <div class="apifunc">elf.RunScript( <span class="apiobjtype">object</span> script )</div>
-<div class="apifunc">elf.RunString( <span class="apikeytype">string</span> str )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.IsScriptError( <span class="apiobjtype">object</span> script )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RunString( <span class="apikeytype">string</span> str )</div>
 <div class="apitopic">AUDIO FUNCTIONS</div>
 <div class="apifunc">elf.SetAudioVolume( <span class="apikeytype">float</span> volume )</div>
 <div class="apifunc"><span class="apikeytype">float</span> elf.GetAudioVolume(  )</div>
