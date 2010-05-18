@@ -1494,6 +1494,15 @@ ELF_API elf_vec4f ELF_APIENTRY elfGetActorOrientation(elf_handle actor)
 	_e_type = elf_get_actor_orientation((elf_actor*)actor.get());
 	return _e_type;
 }
+ELF_API void ELF_APIENTRY elfSetActorAnisotropicFriction(elf_handle actor, float x, float y, float z)
+{
+	if(!actor.get() || !elf_is_actor(actor.get()))
+	{
+		printf("SetActorAnisotropicFriction() -> invalid handle\n");
+		return;
+	}
+	elf_set_actor_anisotropic_friction((elf_actor*)actor.get(), x, y, z);
+}
 ELF_API void ELF_APIENTRY elfSetActorDamping(elf_handle actor, float lin_damp, float ang_damp)
 {
 	if(!actor.get() || !elf_is_actor(actor.get()))
@@ -1621,6 +1630,18 @@ ELF_API elf_vec3f ELF_APIENTRY elfGetActorAngularFactor(elf_handle actor)
 		return _e_type;
 	}
 	_e_type = elf_get_actor_angular_factor((elf_actor*)actor.get());
+	return _e_type;
+}
+ELF_API elf_vec3f ELF_APIENTRY elfGetActorAnisotropicFriction(elf_handle actor)
+{
+	elf_vec3f _e_type;
+	memset(&_e_type, 0x0, sizeof(elf_vec3f));
+	if(!actor.get() || !elf_is_actor(actor.get()))
+	{
+		printf("GetActorAnisotropicFriction() -> invalid handle\n");
+		return _e_type;
+	}
+	_e_type = elf_get_actor_anisotropic_friction((elf_actor*)actor.get());
 	return _e_type;
 }
 ELF_API float ELF_APIENTRY elfGetActorLinearDamping(elf_handle actor)

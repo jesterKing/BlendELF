@@ -629,6 +629,11 @@ void elf_get_actor_orientation_(elf_actor *actor, float *params)
 	gfx_get_transform_orientation(actor->transform, params);
 }
 
+void elf_set_actor_anisotropic_friction(elf_actor *actor, float x, float y, float z)
+{
+	if(actor->object) elf_set_physics_object_anisotropic_friction(actor->object, x, y, z);
+}
+
 void elf_set_actor_damping(elf_actor *actor, float lin_damp, float ang_damp)
 {
 	if(actor->object) elf_set_physics_object_damping(actor->object, lin_damp, ang_damp);
@@ -710,6 +715,16 @@ elf_vec3f elf_get_actor_angular_factor(elf_actor *actor)
 	memset(&result, 0x0, sizeof(elf_vec3f));
 
 	if(actor->object) elf_get_physics_object_angular_factor(actor->object, &result.x);
+
+	return result;
+}
+
+elf_vec3f elf_get_actor_anisotropic_friction(elf_actor *actor)
+{
+	elf_vec3f result;
+	memset(&result, 0x0, sizeof(elf_vec3f));
+
+	if(actor->object) elf_get_physics_object_anisotropic_friction(actor->object, &result.x);
 
 	return result;
 }

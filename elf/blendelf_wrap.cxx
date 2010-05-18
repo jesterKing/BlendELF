@@ -7401,6 +7401,40 @@ fail:
 }
 
 
+static int _wrap_elfSetActorAnisotropicFriction(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  float arg2 ;
+  float arg3 ;
+  float arg4 ;
+  elf_handle *argp1 ;
+  
+  SWIG_check_num_args("SetActorAnisotropicFriction",4,4)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetActorAnisotropicFriction",1,"handle");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("SetActorAnisotropicFriction",2,"float");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("SetActorAnisotropicFriction",3,"float");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("SetActorAnisotropicFriction",4,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("SetActorAnisotropicFriction",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (float)lua_tonumber(L, 2);
+  arg3 = (float)lua_tonumber(L, 3);
+  arg4 = (float)lua_tonumber(L, 4);
+  elfSetActorAnisotropicFriction(arg1,arg2,arg3,arg4);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfSetActorDamping(lua_State* L) {
   int SWIG_arg = 0;
   elf_handle arg1 ;
@@ -7797,6 +7831,35 @@ static int _wrap_elfGetActorAngularFactor(lua_State* L) {
   arg1 = *argp1;
   
   result = elfGetActorAngularFactor(arg1);
+  {
+    elf_vec3f * resultptr = new elf_vec3f((const elf_vec3f &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_vec3f,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetActorAnisotropicFriction(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  elf_vec3f result;
+  
+  SWIG_check_num_args("GetActorAnisotropicFriction",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetActorAnisotropicFriction",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetActorAnisotropicFriction",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = elfGetActorAnisotropicFriction(arg1);
   {
     elf_vec3f * resultptr = new elf_vec3f((const elf_vec3f &) result);
     SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_vec3f,1); SWIG_arg++;
@@ -17785,6 +17848,7 @@ static const struct luaL_reg swig_commands[] = {
     { "GetActorPosition", _wrap_elfGetActorPosition},
     { "GetActorRotation", _wrap_elfGetActorRotation},
     { "GetActorOrientation", _wrap_elfGetActorOrientation},
+    { "SetActorAnisotropicFriction", _wrap_elfSetActorAnisotropicFriction},
     { "SetActorDamping", _wrap_elfSetActorDamping},
     { "SetActorSleepThresholds", _wrap_elfSetActorSleepThresholds},
     { "SetActorRestitution", _wrap_elfSetActorRestitution},
@@ -17798,6 +17862,7 @@ static const struct luaL_reg swig_commands[] = {
     { "GetActorAngularVelocity", _wrap_elfGetActorAngularVelocity},
     { "GetActorLinearFactor", _wrap_elfGetActorLinearFactor},
     { "GetActorAngularFactor", _wrap_elfGetActorAngularFactor},
+    { "GetActorAnisotropicFriction", _wrap_elfGetActorAnisotropicFriction},
     { "GetActorLinearDamping", _wrap_elfGetActorLinearDamping},
     { "GetActorAngularDamping", _wrap_elfGetActorAngularDamping},
     { "GetActorLinearSleepThreshold", _wrap_elfGetActorLinearSleepThreshold},

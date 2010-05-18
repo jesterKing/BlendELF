@@ -788,6 +788,7 @@ void elf_get_actor_rotation_(elf_actor *actor, float *params);
 void elf_get_actor_orientation_(elf_actor *actor, float *params);
 // !!>
 
+void elf_set_actor_anisotropic_friction(elf_actor *actor, float x, float y, float z);
 void elf_set_actor_damping(elf_actor *actor, float lin_damp, float ang_damp);
 void elf_set_actor_sleep_thresholds(elf_actor *actor, float lin_thrs, float ang_thrs);
 void elf_set_actor_restitution(elf_actor *actor, float restitution);
@@ -802,6 +803,7 @@ elf_vec3f elf_get_actor_linear_velocity(elf_actor *actor);
 elf_vec3f elf_get_actor_angular_velocity(elf_actor *actor);
 elf_vec3f elf_get_actor_linear_factor(elf_actor *actor);
 elf_vec3f elf_get_actor_angular_factor(elf_actor *actor);
+elf_vec3f elf_get_actor_anisotropic_friction(elf_actor *actor);
 float elf_get_actor_linear_damping(elf_actor *actor);
 float elf_get_actor_angular_damping(elf_actor *actor);
 float elf_get_actor_linear_sleep_threshold(elf_actor *actor);
@@ -1393,6 +1395,7 @@ void elf_get_physics_object_scale(elf_physics_object *object, float *params);
 unsigned char elf_is_physics_object_static(elf_physics_object *object);
 
 void elf_set_physics_object_damping(elf_physics_object *object, float lin_damp, float ang_damp);
+void elf_set_physics_object_anisotropic_friction(elf_physics_object *object, float x, float y, float z);
 void elf_set_physics_object_sleep_thresholds(elf_physics_object *object, float lin_thrs, float ang_thrs);
 void elf_set_physics_object_restitution(elf_physics_object *object, float restitution);
 void elf_add_force_to_physics_object(elf_physics_object *object, float x, float y, float z);
@@ -1408,6 +1411,7 @@ void elf_get_physics_object_linear_factor(elf_physics_object *object, float *par
 void elf_get_physics_object_angular_factor(elf_physics_object *object, float *params);
 float elf_get_physics_object_linear_damping(elf_physics_object *object);
 float elf_get_physics_object_angular_damping(elf_physics_object *object);
+void elf_get_physics_object_anisotropic_friction(elf_physics_object *object, float *params);
 float elf_get_physics_object_linear_sleep_threshold(elf_physics_object *object);
 float elf_get_physics_object_angular_sleep_threshold(elf_physics_object *object);
 float elf_get_physics_object_restitution(elf_physics_object *object);

@@ -830,6 +830,11 @@ unsigned char elf_is_physics_object_static(elf_physics_object *object)
 	return object->body->isStaticObject();
 }
 
+void elf_set_physics_object_anisotropic_friction(elf_physics_object *object, float x, float y, float z)
+{
+	object->body->setAnisotropicFriction(btVector3(x, y, z));
+}
+
 void elf_set_physics_object_damping(elf_physics_object *object, float lin_damp, float ang_damp)
 {
 	object->body->setDamping(lin_damp, ang_damp);
@@ -910,6 +915,15 @@ void elf_get_physics_object_angular_factor(elf_physics_object *object, float *pa
 {
 	btVector3 vec;
 	vec = object->body->getAngularFactor();
+	params[0] = vec.x();
+	params[1] = vec.y();
+	params[2] = vec.z();
+}
+
+void elf_get_physics_object_anisotropic_friction(elf_physics_object *object, float *params)
+{
+	btVector3 vec;
+	vec = object->body->getAnisotropicFriction();
 	params[0] = vec.x();
 	params[1] = vec.y();
 	params[2] = vec.z();

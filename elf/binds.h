@@ -500,6 +500,7 @@ ELF_API void ELF_APIENTRY elfMoveActorLocal(elf_handle actor, float x, float y, 
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorPosition(elf_handle actor);
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorRotation(elf_handle actor);
 ELF_API elf_vec4f ELF_APIENTRY elfGetActorOrientation(elf_handle actor);
+ELF_API void ELF_APIENTRY elfSetActorAnisotropicFriction(elf_handle actor, float x, float y, float z);
 ELF_API void ELF_APIENTRY elfSetActorDamping(elf_handle actor, float lin_damp, float ang_damp);
 ELF_API void ELF_APIENTRY elfSetActorSleepThresholds(elf_handle actor, float lin_thrs, float ang_thrs);
 ELF_API void ELF_APIENTRY elfSetActorRestitution(elf_handle actor, float restitution);
@@ -513,6 +514,7 @@ ELF_API elf_vec3f ELF_APIENTRY elfGetActorLinearVelocity(elf_handle actor);
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorAngularVelocity(elf_handle actor);
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorLinearFactor(elf_handle actor);
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorAngularFactor(elf_handle actor);
+ELF_API elf_vec3f ELF_APIENTRY elfGetActorAnisotropicFriction(elf_handle actor);
 ELF_API float ELF_APIENTRY elfGetActorLinearDamping(elf_handle actor);
 ELF_API float ELF_APIENTRY elfGetActorAngularDamping(elf_handle actor);
 ELF_API float ELF_APIENTRY elfGetActorLinearSleepThreshold(elf_handle actor);
