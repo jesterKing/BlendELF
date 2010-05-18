@@ -52,28 +52,6 @@ const char *dof_depth_write_alpha_frag =
 "\tgl_FragColor.a = elf_Blur;\n"
 "}\n";
 
-const char *ssao_depth_write_vert =
-"uniform mat4 elf_ProjectionMatrix;\n"
-"uniform mat4 elf_ModelviewMatrix;\n"
-"attribute vec3 elf_VertexAttr;\n"
-"uniform float elf_ClipEnd;\n"
-"varying float elf_Depth;\n"
-"\n"
-"void main()\n"
-"{\n"
-"\tvec4 vertex = elf_ModelviewMatrix*vec4(elf_VertexAttr, 1.0);\n"
-"\telf_Depth = clamp(-vertex.z/elf_ClipEnd, 0.0, 1.0);\n"
-"\tgl_Position = elf_ProjectionMatrix*vertex;\n"
-"}\n";
-
-const char *ssao_depth_write_frag =
-"varying float elf_Depth;\n"
-"\n"
-"void main()\n"
-"{\n"
-"\tgl_FragColor = elf_Depth;\n"
-"}\n";
-
 elf_scene* elf_create_scene()
 {
 	elf_scene *scene;
@@ -112,7 +90,6 @@ elf_scene* elf_create_scene()
 
 	scene->dof_depth_write = gfx_create_shader_program(dof_depth_write_vert, dof_depth_write_frag);
 	scene->dof_depth_write_alpha = gfx_create_shader_program(dof_depth_write_alpha_vert, dof_depth_write_alpha_frag);
-	scene->ssao_depth_write = gfx_create_shader_program(ssao_depth_write_vert, ssao_depth_write_frag);
 
 	return scene;
 }
@@ -296,7 +273,6 @@ void elf_destroy_scene(elf_scene *scene)
 
 	if(scene->dof_depth_write) gfx_destroy_shader_program(scene->dof_depth_write);
 	if(scene->dof_depth_write_alpha) gfx_destroy_shader_program(scene->dof_depth_write_alpha);
-	if(scene->ssao_depth_write) gfx_destroy_shader_program(scene->ssao_depth_write);
 
 	if(scene->pak) elf_dec_ref((elf_object*)scene->pak);
 
@@ -1196,29 +1172,6 @@ void elf_draw_scene(elf_scene *scene)
 		scene->shader_params.render_params.offset_bias = 0.0f;
 		scene->shader_params.render_params.offset_scale = 0.0f;
 	}
-
-	// render ssao depth pass if needed
-	/*if(elf_is_ssao())
-	{
-		gfx_set_render_target_color_texture(render_target,
-			0, eng->post_process->main_rt_ssao_depth);
-
-		scene->shader_params.render_params.depth_write = GFX_FALSE;
-		scene->shader_params.render_params.depth_func = GFX_EQUAL;
-		scene->shader_params.render_params.color_write = GFX_TRUE;
-		scene->shader_params.render_params.alpha_write = GFX_TRUE;
-		scene->shader_params.shader_program = scene->ssao_depth_write;
-
-		for(i = 0, ent = (elf_entity*)elf_begin_list(scene->entity_queue);
-			i < scene->entity_queue_count && ent != NULL;
-			i++, ent = (elf_entity*)elf_next_in_list(scene->entity_queue))
-		{
-			elf_draw_entity_without_materials(ent, &scene->shader_params);
-		}
-
-		gfx_set_render_target_color_texture(render_target, 0,
-			eng->post_process->main_rt_color[0]);
-	}*/
 
 	eng->ambient_color = scene->ambient_color;
 
