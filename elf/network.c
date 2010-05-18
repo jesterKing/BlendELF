@@ -284,18 +284,20 @@ void elf_send_string_to_server(const char* message)
 
 const char* elf_get_server_data_as_string()
 {
-	return clientEvent.packet->data;
+	return (char*)clientEvent.packet->data;
 }
 
 const char* elf_get_client_data_as_string()
 {
-	return server->event.packet->data;
+	return (char*)server->event.packet->data;
 }
 
 int elf_get_server_event()
 {
 	switch(server->event.type)
 	{
+	case ENET_EVENT_TYPE_NONE:
+		return (int)ELF_NET_NONE;
 	case ENET_EVENT_TYPE_CONNECT:
 		return (int)ELF_NET_CONNECT;
 	case ENET_EVENT_TYPE_RECEIVE:
@@ -311,6 +313,8 @@ int elf_get_client_event()
 {
 	switch(clientEvent.type)
 	{
+	case ENET_EVENT_TYPE_NONE:
+		return (int)ELF_NET_NONE;
 	case ENET_EVENT_TYPE_CONNECT:
 		return (int)ELF_NET_CONNECT;
 	case ENET_EVENT_TYPE_RECEIVE:
