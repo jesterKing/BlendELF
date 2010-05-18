@@ -507,7 +507,7 @@ for func in functions:
 				elif param.orig_type in elfgenobjs: bindscpp.write('\tif(!'+param.name+'.get() || !elf_is_'+param.orig_type[4:]+'('+param.name+'.get()))\n')
 				elif param.orig_type in elfobjs: bindscpp.write('\tif(!'+param.name+'.get() || elf_get_object_type('+param.name+'.get()) != '+param.orig_type.upper()+')\n')
 				bindscpp.write('\t{\n')
-				bindscpp.write('\t\tprintf(\"'+func.name+'() -> invalid handle\\n\");\n')
+				bindscpp.write('\t\telf_set_error_no_save(ELF_INVALID_HANDLE, \"'+func.name+'() -> invalid handle\\n\");\n')
 				if func.type in elfobjs:
 					bindscpp.write('\t\treturn handle;\n')
 				elif func.type in elftypes:

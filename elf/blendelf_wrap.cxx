@@ -18497,6 +18497,7 @@ static swig_lua_const_info swig_constants[] = {
 { SWIG_LUA_INT,     (char *)"INVALID_SIZE", (long) 0x0007, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"UNKNOWN_FORMAT", (long) 0x0008, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"UNKNOWN_TYPE", (long) 0x0009, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"INVALID_HANDLE", (long) 0x000A, 0, 0, 0},
     {0,0,0,0,0,0}
 };
 

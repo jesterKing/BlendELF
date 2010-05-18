@@ -137,6 +137,75 @@ void elf_set_error(int code, const char *fmt, ...)
 	if(file) fclose(file);
 }
 
+void elf_set_error_no_save(int code, const char *fmt, ...)
+{
+	va_list list;
+	const char *p, *s;
+	int d;
+	double f;
+	char* err_str;
+	char* tmp_str;
+	char num[32];
+
+	va_start(list, fmt);
+
+	err_str = elf_create_string("");
+
+	for(p = fmt; *p; ++p)
+	{
+		if(*p != '%')
+		{
+			putc(*p, stdout);
+
+			tmp_str = elf_append_char_to_string(err_str, *p);
+			elf_destroy_string(err_str);
+			err_str = tmp_str;
+		}
+		else
+		{
+			switch(*++p)
+			{
+				case 's':
+					s = va_arg(list, char*);
+					printf("%s", s);
+
+					tmp_str = elf_merge_strings(err_str, s);
+					elf_destroy_string(err_str);
+					err_str = tmp_str;
+					continue;
+				case 'd':
+					d = va_arg(list, int);
+					printf("%d", d);
+
+					memset(num, 0x0, sizeof(char)*32);
+					sprintf(num, "%d", d);
+
+					tmp_str = elf_merge_strings(err_str, num);
+					elf_destroy_string(err_str);
+					err_str = tmp_str;
+					continue;
+				case 'f':
+					f = va_arg(list, double);
+					printf("%f", f);
+
+					memset(num, 0x0, sizeof(char)*32);
+					sprintf(num, "%f", f);
+
+					tmp_str = elf_merge_strings(err_str, num);
+					elf_destroy_string(err_str);
+					err_str = tmp_str;
+					continue;
+			}
+		}
+	}
+
+	elf_err_code = code;
+
+	if(elf_err_str) elf_destroy_string(elf_err_str);
+	elf_err_str = elf_create_string(err_str);
+	elf_destroy_string(err_str);
+}
+
 elf_game_config* elf_create_game_config()
 {
 	elf_game_config *config;

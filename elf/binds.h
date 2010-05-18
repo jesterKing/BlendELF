@@ -252,6 +252,7 @@
 #define ELF_INVALID_SIZE 0x0007
 #define ELF_UNKNOWN_FORMAT 0x0008
 #define ELF_UNKNOWN_TYPE 0x0009
+#define ELF_INVALID_HANDLE 0x000A
 #if defined(__WIN32__) || defined(WIN32) || defined(__CYGWIN__)
 	#ifndef ELF_PLAYER
 		#define ELF_APIENTRY __stdcall

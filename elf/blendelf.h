@@ -283,6 +283,7 @@ extern "C" {
 #define ELF_INVALID_SIZE				0x0007
 #define ELF_UNKNOWN_FORMAT				0x0008
 #define ELF_UNKNOWN_TYPE				0x0009
+#define ELF_INVALID_HANDLE				0x000A
 
 typedef struct elf_vec2i				elf_vec2i;
 typedef struct elf_vec2f				elf_vec2f;
@@ -486,6 +487,7 @@ int elf_get_key_event_state(elf_key_event *key_event);
 // <!!
 void elf_write_to_log(const char *fmt, ...);
 void elf_set_error(int code, const char *fmt, ...);
+void elf_set_error_no_save(int code, const char *fmt, ...);
 
 elf_game_config* elf_create_game_config();
 void elf_destroy_game_config(elf_game_config *config);
