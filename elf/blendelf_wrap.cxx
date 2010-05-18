@@ -3773,6 +3773,22 @@ fail:
 }
 
 
+static int _wrap_elfDeinit(lua_State* L) {
+  int SWIG_arg = 0;
+  
+  SWIG_check_num_args("Deinit",0,0)
+  elfDeinit();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfGetVersionMajor(lua_State* L) {
   int SWIG_arg = 0;
   int result;
@@ -14061,25 +14077,6 @@ fail:
 }
 
 
-static int _wrap_elfRunString(lua_State* L) {
-  int SWIG_arg = 0;
-  char *arg1 = (char *) 0 ;
-  
-  SWIG_check_num_args("RunString",1,1)
-  if(!lua_isstring(L,1)) SWIG_fail_arg("RunString",1,"char const *");
-  arg1 = (char *)lua_tostring(L, 1);
-  elfRunString((char const *)arg1);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
 static int _wrap_elfIsScriptError(lua_State* L) {
   int SWIG_arg = 0;
   elf_handle arg1 ;
@@ -14095,6 +14092,26 @@ static int _wrap_elfIsScriptError(lua_State* L) {
   arg1 = *argp1;
   
   result = (bool)elfIsScriptError(arg1);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfRunString(lua_State* L) {
+  int SWIG_arg = 0;
+  char *arg1 = (char *) 0 ;
+  bool result;
+  
+  SWIG_check_num_args("RunString",1,1)
+  if(!lua_isstring(L,1)) SWIG_fail_arg("RunString",1,"char const *");
+  arg1 = (char *)lua_tostring(L, 1);
+  result = (bool)elfRunString((char const *)arg1);
   lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
   return SWIG_arg;
   
@@ -17622,6 +17639,7 @@ static const struct luaL_reg swig_commands[] = {
     { "GetGameConfigStart", _wrap_elfGetGameConfigStart},
     { "Init", _wrap_elfInit},
     { "InitWithConfig", _wrap_elfInitWithConfig},
+    { "Deinit", _wrap_elfDeinit},
     { "GetVersionMajor", _wrap_elfGetVersionMajor},
     { "GetVersionMinor", _wrap_elfGetVersionMinor},
     { "GetVersionRelease", _wrap_elfGetVersionRelease},
@@ -17990,8 +18008,8 @@ static const struct luaL_reg swig_commands[] = {
     { "GetScriptFilePath", _wrap_elfGetScriptFilePath},
     { "SetScriptText", _wrap_elfSetScriptText},
     { "RunScript", _wrap_elfRunScript},
-    { "RunString", _wrap_elfRunString},
     { "IsScriptError", _wrap_elfIsScriptError},
+    { "RunString", _wrap_elfRunString},
     { "SetAudioVolume", _wrap_elfSetAudioVolume},
     { "GetAudioVolume", _wrap_elfGetAudioVolume},
     { "SetAudioRolloff", _wrap_elfSetAudioRolloff},
@@ -18275,7 +18293,9 @@ static swig_lua_const_info swig_constants[] = {
 { SWIG_LUA_INT,     (char *)"FRAME_PLAYER", (long) 0x003F, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"PROPERTY", (long) 0x0040, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"CLIENT", (long) 0x0041, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"OBJECT_TYPE_COUNT", (long) 0x0042, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"SCRIPTING", (long) 0x0042, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"PHYSICS_TRI_MESH", (long) 0x0043, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"OBJECT_TYPE_COUNT", (long) 0x0044, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"PERSPECTIVE", (long) 0x0000, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"ORTHOGRAPHIC", (long) 0x0001, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"BOX", (long) 0x0001, 0, 0, 0},

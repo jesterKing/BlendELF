@@ -196,6 +196,10 @@ void elf_calc_entity_bounding_volumes(elf_entity *entity)
 	entity->bb_max.y *= entity->scale.y;
 	entity->bb_max.z *= entity->scale.z;
 
+	entity->bb_offset.x = (entity->bb_max.x+entity->bb_min.x)/2.0;
+	entity->bb_offset.y = (entity->bb_max.y+entity->bb_min.y)/2.0;
+	entity->bb_offset.z = (entity->bb_max.z+entity->bb_min.z)/2.0;
+
 	entity->cull_radius = entity->model->radius;
 
 	if(entity->armature)
@@ -217,10 +221,10 @@ void elf_set_entity_scale(elf_entity *entity, float x, float y, float z)
 	gfx_set_transform_scale(entity->transform, x, y, z);
 	gfx_get_transform_scale(entity->transform, &entity->scale.x);
 
+	elf_calc_entity_bounding_volumes(entity);
+
 	if(entity->object) elf_set_physics_object_scale(entity->object, x, y, z);
 	if(entity->dobject) elf_set_physics_object_scale(entity->dobject, x, y, z);
-
-	elf_calc_entity_bounding_volumes(entity);
 }
 
 elf_vec3f elf_get_entity_scale(elf_entity *entity)
@@ -256,8 +260,6 @@ void elf_set_entity_model(elf_entity *entity, elf_model *model)
 		elf_inc_ref((elf_object*)entity->model);
 	}
 
-	elf_calc_entity_bounding_volumes(entity);
-
 	while((int)entity->model->area_count > elf_get_entity_material_count(entity))
 	{
 		material = elf_create_material("");
@@ -265,9 +267,9 @@ void elf_set_entity_model(elf_entity *entity, elf_model *model)
 	}
 
 	elf_set_entity_scale(entity, 1.0, 1.0, 1.0);
+	elf_calc_entity_bounding_volumes(entity);
 
 	if(entity->object) elf_set_entity_physics(entity, elf_get_physics_object_shape(entity->object), elf_get_physics_object_mass(entity->object));
-
 	elf_reset_entity_debug_physics_object(entity);
 
 	entity->moved = ELF_TRUE;
@@ -349,9 +351,7 @@ void elf_set_entity_physics(elf_entity *entity, int type, float mass)
 				(entity->model->bb_max.x-entity->model->bb_min.x)/2.0,
 				(entity->model->bb_max.y-entity->model->bb_min.y)/2.0,
 				(entity->model->bb_max.z-entity->model->bb_min.z)/2.0, mass,
-				(entity->model->bb_max.x+entity->model->bb_min.x)/2.0,
-				(entity->model->bb_max.y+entity->model->bb_min.y)/2.0,
-				(entity->model->bb_max.z+entity->model->bb_min.z)/2.0);
+				entity->bb_offset.x, entity->bb_offset.y, entity->bb_offset.z);
 			break;
 		case ELF_SPHERE:
 		{
@@ -368,19 +368,21 @@ void elf_set_entity_physics(elf_entity *entity, int type, float mass)
 			else  radius = (entity->model->bb_max.z-entity->model->bb_min.z)/2.0;
 
 			entity->object = elf_create_physics_object_sphere(radius, mass,
-				(entity->model->bb_max.x+entity->model->bb_min.x)/2.0,
-				(entity->model->bb_max.y+entity->model->bb_min.y)/2.0,
-				(entity->model->bb_max.z+entity->model->bb_min.z)/2.0);
+				entity->bb_offset.x, entity->bb_offset.y, entity->bb_offset.z);
 			break;
 		}
 		case ELF_MESH:
 		{
 			if(!elf_get_model_indices(entity->model)) return;
-			entity->object = elf_create_physics_object_mesh(
-				elf_get_model_vertices(entity->model),
-				elf_get_model_indices(entity->model),
-				elf_get_model_indice_count(entity->model),
-				mass);
+			if(!entity->model->tri_mesh)
+			{
+				entity->model->tri_mesh = elf_create_physics_tri_mesh(
+					elf_get_model_vertices(entity->model),
+					elf_get_model_indices(entity->model),
+					elf_get_model_indice_count(entity->model));
+				elf_inc_ref((elf_object*)entity->model->tri_mesh);
+			}
+			entity->object = elf_create_physics_object_mesh(entity->model->tri_mesh, mass);
 			break;
 		}
 		default: return;
@@ -443,9 +445,7 @@ void elf_reset_entity_debug_physics_object(elf_entity *entity)
 			(entity->model->bb_max.x-entity->model->bb_min.x)/2.0,
 			(entity->model->bb_max.y-entity->model->bb_min.y)/2.0,
 			(entity->model->bb_max.z-entity->model->bb_min.z)/2.0, 0.0,
-			(entity->model->bb_max.x+entity->model->bb_min.x)/2.0,
-			(entity->model->bb_max.y+entity->model->bb_min.y)/2.0,
-			(entity->model->bb_max.z+entity->model->bb_min.z)/2.0);
+			entity->bb_offset.x, entity->bb_offset.y, entity->bb_offset.z);
 	}
 
 	elf_set_physics_object_actor(entity->dobject, (elf_actor*)entity);
@@ -484,6 +484,7 @@ void elf_play_entity_armature(elf_entity *entity, float start, float end, float 
 void elf_loop_entity_armature(elf_entity *entity, float start, float end, float speed)
 {
 	elf_loop_frame_player(entity->armature_player, start, end, speed);
+	if(entity->armature) elf_deform_entity_with_armature(entity->armature, entity, start);
 }
 
 void elf_stop_entity_armature(elf_entity *entity)

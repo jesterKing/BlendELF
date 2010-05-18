@@ -31,6 +31,11 @@ struct elf_joint {
 	float axis[3];
 };
 
+struct elf_physics_tri_mesh {
+	ELF_OBJECT_HEADER;
+	btTriangleMesh *triMesh;
+};
+
 struct elf_physics_object {
 	ELF_OBJECT_HEADER;
 	int shape_type;
@@ -39,7 +44,7 @@ struct elf_physics_object {
 	btCompoundShape *cshape;
 	btRigidBody *body;
 	btDefaultMotionState *motionState;
-	btTriangleMesh *triMesh;
+	elf_physics_tri_mesh *tri_mesh;
 	elf_physics_world *world;
 	elf_list *collisions;
 	int collision_count;
@@ -540,6 +545,38 @@ elf_vec3f elf_get_joint_axis(elf_joint *joint)
 	return result;
 }
 
+elf_physics_tri_mesh* elf_create_physics_tri_mesh(float *verts, unsigned int *idx, int indice_count)
+{
+	elf_physics_tri_mesh *tri_mesh;
+	int i;
+
+	if(indice_count < 3) return NULL;
+
+	tri_mesh = (elf_physics_tri_mesh*)malloc(sizeof(elf_physics_tri_mesh));
+	memset(tri_mesh, 0x0, sizeof(elf_physics_tri_mesh));
+	tri_mesh->type = ELF_PHYSICS_TRI_MESH;
+
+	tri_mesh->triMesh = new btTriangleMesh();
+
+	for(i = 0; i < indice_count; i+=3)
+	{
+		tri_mesh->triMesh->addTriangle(
+			btVector3(verts[idx[i]*3], verts[idx[i]*3+1], verts[idx[i]*3+2]),
+			btVector3(verts[idx[i+1]*3], verts[idx[i+1]*3+1], verts[idx[i+1]*3+2]),
+			btVector3(verts[idx[i+2]*3], verts[idx[i+2]*3+1], verts[idx[i+2]*3+2])
+			);
+	}
+
+	return tri_mesh;
+}
+
+void elf_destroy_physics_tri_mesh(elf_physics_tri_mesh *tri_mesh)
+{
+	delete tri_mesh->triMesh;
+
+	free(tri_mesh);
+}
+
 elf_physics_object* elf_create_physics_object()
 {
 	elf_physics_object *object;
@@ -554,36 +591,24 @@ elf_physics_object* elf_create_physics_object()
 	return object;
 }
 
-elf_physics_object* elf_create_physics_object_mesh(float *verts, unsigned int *idx, int indicle_count, float mass)
+elf_physics_object* elf_create_physics_object_mesh(elf_physics_tri_mesh *tri_mesh, float mass)
 {
 	elf_physics_object *object;
-	int i;
-
-	if(indicle_count < 3) return NULL;
 
 	object = elf_create_physics_object();
 
-	object->triMesh = new btTriangleMesh();
-
-	for(i = 0; i < indicle_count; i+=3)
-	{
-		object->triMesh->addTriangle(
-			btVector3(verts[idx[i]*3], verts[idx[i]*3+1], verts[idx[i]*3+2]),
-			btVector3(verts[idx[i+1]*3], verts[idx[i+1]*3+1], verts[idx[i+1]*3+2]),
-			btVector3(verts[idx[i+2]*3], verts[idx[i+2]*3+1], verts[idx[i+2]*3+2])
-			);
-	}
-
-	object->shape = new btBvhTriangleMeshShape(object->triMesh, true);
+	object->shape = new btBvhTriangleMeshShape(tri_mesh->triMesh, true);
 
 	object->shape_type = ELF_MESH;
-
 	object->mass = mass;
+
+	object->tri_mesh = tri_mesh;
+	elf_inc_ref((elf_object*)tri_mesh);
 
 	btScalar bodyMass(mass);
 	btVector3 localInertia(0.0, 0.0, 0.0);
 
-	if(mass > 0.0) object->shape->calculateLocalInertia(mass, localInertia);
+	if(!elf_about_zero(mass)) object->shape->calculateLocalInertia(mass, localInertia);
 
 	btTransform startTransform;
 	startTransform.setOrigin(btVector3(0.0, 0.0, 0.0));
@@ -604,7 +629,7 @@ elf_physics_object* elf_create_physics_object_sphere(float radius, float mass, f
 	object = elf_create_physics_object();
 
 	object->shape = new btSphereShape(btScalar(radius));
-	if(ox != 0.0f || oy != 0.0f || oz != 0.0f)
+	if(!elf_about_zero(ox) || !elf_about_zero(oy) || !elf_about_zero(oz))
 	{
 		btTransform localTrans;
 		localTrans.setOrigin(btVector3(ox, oy, oz));
@@ -619,7 +644,7 @@ elf_physics_object* elf_create_physics_object_sphere(float radius, float mass, f
 	btScalar bodyMass(mass);
 	btVector3 localInertia(0.0, 0.0, 0.0);
 
-	if(mass > 0.0) object->shape->calculateLocalInertia(mass, localInertia);
+	if(!elf_about_zero(mass)) object->shape->calculateLocalInertia(mass, localInertia);
 
 	btTransform startTransform;
 	startTransform.setOrigin(btVector3(0.0, 0.0, 0.0));
@@ -639,12 +664,12 @@ elf_physics_object* elf_create_physics_object_box(float hx, float hy, float hz, 
 
 	object = elf_create_physics_object();
 
-	object->shape = new btBoxShape(btVector3(hx+0.001f, hy+0.001f, hz+0.001f));
+	object->shape = new btBoxShape(btVector3(hx+0.001, hy+0.001, hz+0.001));
 	if(!elf_about_zero(ox) || !elf_about_zero(oy) || !elf_about_zero(oz))
 	{
 		btTransform localTrans;
 		localTrans.setOrigin(btVector3(ox, oy, oz));
-		localTrans.setRotation(btQuaternion(0.0f, 0.0f, 0.0f, 1.0f));
+		localTrans.setRotation(btQuaternion(0.0, 0.0, 0.0, 1.0));
 		object->cshape = new btCompoundShape();
 		object->cshape->addChildShape(localTrans, object->shape);
 	}
@@ -654,13 +679,13 @@ elf_physics_object* elf_create_physics_object_box(float hx, float hy, float hz, 
 	object->mass = mass;
 
 	btScalar bodyMass(mass);
-	btVector3 localInertia(0.0f, 0.0f, 0.0f);
+	btVector3 localInertia(0.0, 0.0, 0.0);
 
-	if(mass > 0.0f) object->shape->calculateLocalInertia(mass, localInertia);
+	if(!elf_about_zero(mass)) object->shape->calculateLocalInertia(mass, localInertia);
 
 	btTransform startTransform;
-	startTransform.setOrigin(btVector3(0.0f, 0.0f, 0.0f));
-	startTransform.setRotation(btQuaternion(0.0f, 0.0f, 0.0f, 1.0f));
+	startTransform.setOrigin(btVector3(0.0, 0.0, 0.0));
+	startTransform.setRotation(btQuaternion(0.0, 0.0, 0.0, 1.0));
 
 	object->motionState = new btDefaultMotionState(startTransform);
 	object->body = new btRigidBody(bodyMass, object->motionState, object->cshape ? object->cshape : object->shape, localInertia);
@@ -691,7 +716,7 @@ void elf_destroy_physics_object(elf_physics_object *object)
 	if(object->cshape) delete object->cshape;
 	if(object->shape) delete object->shape;
 	if(object->motionState) delete object->motionState;
-	if(object->triMesh) delete object->triMesh;
+	if(object->tri_mesh) elf_dec_ref((elf_object*)object->tri_mesh);
 	elf_dec_ref((elf_object*)object->collisions);
 
 	free(object);
@@ -822,25 +847,25 @@ void elf_set_physics_object_restitution(elf_physics_object *object, float restit
 
 void elf_add_force_to_physics_object(elf_physics_object *object, float x, float y, float z)
 {
-	if(object->body->isStaticObject()) object->body->activate(true);
+	object->body->activate(true);
 	object->body->applyCentralForce(btVector3(x, y, z));
 }
 
 void elf_add_torque_to_physics_object(elf_physics_object *object, float x, float y, float z)
 {
-	if(object->body->isStaticObject()) object->body->activate(true);
+	object->body->activate(true);
 	object->body->applyTorque(btVector3(x, y, z));
 }
 
 void elf_set_physics_object_linear_velocity(elf_physics_object *object, float x, float y, float z)
 {
-	if(object->body->isStaticObject()) object->body->activate(true);
+	object->body->activate(true);
 	object->body->setLinearVelocity(btVector3(x, y, z));
 }
 
 void elf_set_physics_object_angular_velocity(elf_physics_object *object, float x, float y, float z)
 {
-	if(object->body->isStaticObject()) object->body->activate(true);
+	 object->body->activate(true);
 	object->body->setAngularVelocity(btVector3(x, y, z));
 }
 

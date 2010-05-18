@@ -109,31 +109,9 @@ void elf_set_script_text(elf_script *script, const char *text)
 
 void elf_run_script(elf_script *script)
 {
-	int err;
-
 	if(!script->text || !strlen(script->text) || script->error) return;
 
-	err = 0;
-	err = luaL_dostring(eng->L, script->text);
-	if(err)
-	{
-		elf_write_to_log("error: could not run script \"%s\"\n%s\n", script->file_path, lua_tostring(eng->L, -1));
-		script->error = ELF_TRUE;
-	}
-}
-
-void elf_run_string(const char *str)
-{
-	int err;
-
-	if(!str || !strlen(str))
-
-	err = 0;
-	err = luaL_dostring(eng->L, str);
-	if(err)
-	{
-		elf_write_to_log("error: could not run string \"%s\"\n%s\n", str, lua_tostring(eng->L, -1));
-	}
+	script->error = elf_run_string(script->text);
 }
 
 unsigned char elf_is_script_error(elf_script *script)

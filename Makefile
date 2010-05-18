@@ -13,8 +13,10 @@ BLENDELF_LIBS = -lGL -lGLU -lGLEW -lglfw -lXxf86vm -lXrandr -lXrender -pthread \
 BLENDELF_STATIC_LIBS = -lGL -lGLU /usr/lib/libGLEW.a /usr/lib/libglfw.a \
 	/usr/lib/libXxf86vm.a /usr/lib/libXrandr.a /usr/lib/libXrender.a \
 	/usr/lib/libvorbisfile.a /usr/lib/libvorbis.a /usr/lib/libogg.a \
-	/usr/lib/liblua5.1.a /usr/local/lib/libBulletDynamics.a \
-	/usr/local/lib/libLinearMath.a /usr/local/lib/libBulletCollision.a \
+	/usr/lib/liblua5.1.a /usr/local/lib/libenet.a \
+	/usr/local/lib/libBulletDynamics.a \
+	/usr/local/lib/libLinearMath.a \
+	/usr/local/lib/libBulletCollision.a \
 	-lfreeimage -lfreetype -lopenal -pthread
 
 all:
@@ -22,6 +24,7 @@ all:
 	gcc -c elf/blendelf.c $(DEV_CFLAGS) $(INCS)
 	gcc -c gfx/gfx.c $(DEV_CFLAGS) $(INCS)
 	gcc -c elf/audio.c $(DEV_CFLAGS) $(INCS)
+	gcc -c elf/scripting.c $(DEV_CFLAGS) $(INCS)
 	gcc -c elf/network.c $(DEV_CFLAGS) $(INCS)
 	g++ -c elf/physics.cpp $(DEV_CFLAGS) $(INCS)
 	g++ -c elf/binds.cpp $(DEV_CFLAGS) $(INCS)
@@ -34,6 +37,7 @@ static:
 	gcc -c elf/blendelf.c $(STA_CFLAGS) $(INCS)
 	gcc -c gfx/gfx.c $(STA_CFLAGS) $(INCS)
 	gcc -c elf/audio.c $(STA_CFLAGS) $(INCS)
+	gcc -c elf/scripting.c $(DEV_CFLAGS) $(INCS)
 	gcc -c elf/network.c $(STA_CFLAGS) $(INCS)
 	g++ -c elf/physics.cpp $(STA_CFLAGS) $(INCS)
 	g++ -c elf/binds.cpp $(STA_CFLAGS) $(INCS)
@@ -46,6 +50,7 @@ shared:
 	gcc -c -fPIC elf/blendelf.c $(SHR_CFLAGS) $(INCS)
 	gcc -c -fPIC gfx/gfx.c $(SHR_CFLAGS) $(INCS)
 	gcc -c -fPIC elf/audio.c $(SHR_CFLAGS) $(INCS)
+	gcc -c -fPIC elf/scripting.c $(DEV_CFLAGS) $(INCS)
 	gcc -c -fPIC elf/network.c $(SHR_CFLAGS) $(INCS)
 	g++ -c -fPIC elf/physics.cpp $(SHR_CFLAGS) $(INCS)
 	g++ -c -fPIC elf/binds.cpp $(SHR_CFLAGS) $(INCS)

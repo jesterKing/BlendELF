@@ -32,13 +32,13 @@ const char *blur_shader =
 "\tvec4 tex;\n"
 "\ttex = texture2D(elf_Texture0, elf_TexCoord)*0.2;\n"
 "\ttex += texture2D(elf_Texture0, elf_TexCoord+offset)*0.16;\n"
-"\ttex += texture2D(elf_Texture0, elf_TexCoord+offset*2)*0.12;\n"
-"\ttex += texture2D(elf_Texture0, elf_TexCoord+offset*3)*0.07;\n"
-"\ttex += texture2D(elf_Texture0, elf_TexCoord+offset*4)*0.05;\n"
+"\ttex += texture2D(elf_Texture0, elf_TexCoord+offset*2.0)*0.12;\n"
+"\ttex += texture2D(elf_Texture0, elf_TexCoord+offset*3.0)*0.07;\n"
+"\ttex += texture2D(elf_Texture0, elf_TexCoord+offset*4.0)*0.05;\n"
 "\ttex += texture2D(elf_Texture0, elf_TexCoord-offset)*0.16;\n"
-"\ttex += texture2D(elf_Texture0, elf_TexCoord-offset*2)*0.12;\n"
-"\ttex += texture2D(elf_Texture0, elf_TexCoord-offset*3)*0.07;\n"
-"\ttex += texture2D(elf_Texture0, elf_TexCoord-offset*4)*0.05;\n"
+"\ttex += texture2D(elf_Texture0, elf_TexCoord-offset*2.0)*0.12;\n"
+"\ttex += texture2D(elf_Texture0, elf_TexCoord-offset*3.0)*0.07;\n"
+"\ttex += texture2D(elf_Texture0, elf_TexCoord-offset*4.0)*0.05;\n"
 "\tgl_FragColor = tex;\n"
 "}\n";
 
@@ -80,8 +80,8 @@ const char *ssao_shader =
 "uniform float amount;\n"
 "varying vec2 elf_TexCoord;\n"
 "#define PI 3.14159265\n"
-"float width = elf_ViewportWidth;\n"
-"float height = elf_ViewportHeight;\n"
+"float width = float(elf_ViewportWidth);\n"
+"float height = float(elf_ViewportHeight);\n"
 "float near = elf_ClipStart;\n"
 "float far = elf_ClipEnd;\n"
 "int samples = 7;\n"
@@ -124,7 +124,7 @@ const char *ssao_shader =
 "\t\tfade *= 0.5;\n"
 "\t\tfor (int j = 0 ; j < samples*i; j += 1)\n"
 "\t\t{\n"
-"\t\t\tfloat step = PI*2.0 / (samples*float(i));\n"
+"\t\t\tfloat step = PI*2.0 / (float(samples*i));\n"
 "\t\t\tpw = (cos(float(j)*step)*float(i));\n"
 "\t\t\tph = (sin(float(j)*step)*float(i))*aspect;\n"
 "\t\t\td = readDepth( vec2(elf_TexCoord.s+pw*w,elf_TexCoord.t+ph*h));\n"
@@ -357,33 +357,33 @@ void elf_end_post_process(elf_post_process *post_process, elf_scene *scene)
 	// DOF
 	if(post_process->dof)
 	{
-		gfx_set_viewport(0, 0, post_process->buffer_width, post_process->buffer_height);
-		gfx_get_orthographic_projection_matrix(0, post_process->buffer_width, 0, post_process->buffer_height, -1.0, 1.0,
+		gfx_set_viewport(0, 0, post_process->buffer_width*2, post_process->buffer_height*2);
+		gfx_get_orthographic_projection_matrix(0, post_process->buffer_width*2, 0, post_process->buffer_height*2, -1.0, 1.0,
 			post_process->shader_params.projection_matrix);
 
-		gfx_set_render_target(post_process->rt_med);
-		gfx_set_render_target_color_texture(post_process->rt_med, 0, post_process->rt_tex_med_1);
+		gfx_set_render_target(post_process->rt_high);
+		gfx_set_render_target_color_texture(post_process->rt_high, 0, post_process->rt_tex_high_1);
 
 		post_process->shader_params.texture_params[0].texture = post_process->main_rt_color[source_rt];
 		gfx_set_shader_params(&post_process->shader_params);
-		gfx_draw_textured_2d_quad(0.0, 0.0, post_process->buffer_width, post_process->buffer_height);
+		gfx_draw_textured_2d_quad(0.0, 0.0, post_process->buffer_width*2, post_process->buffer_height*2);
 
-		gfx_set_render_target_color_texture(post_process->rt_med, 0, post_process->rt_tex_med_2);
+		gfx_set_render_target_color_texture(post_process->rt_high, 0, post_process->rt_tex_high_2);
 
 		post_process->shader_params.shader_program = post_process->blur_shdr;
-		post_process->shader_params.texture_params[0].texture = post_process->rt_tex_med_1;
+		post_process->shader_params.texture_params[0].texture = post_process->rt_tex_high_1;
 		gfx_set_shader_params(&post_process->shader_params);
-		gfx_set_shader_program_uniform_vec2("offset", 1.0/((float)post_process->buffer_width), 0.0);
-		gfx_draw_textured_2d_quad(0.0, 0.0, post_process->buffer_width, post_process->buffer_height);
+		gfx_set_shader_program_uniform_vec2("offset", 1.0/((float)(post_process->buffer_width*2)), 0.0);
+		gfx_draw_textured_2d_quad(0.0, 0.0, post_process->buffer_width*2, post_process->buffer_height*2);
 
-		gfx_set_render_target_color_texture(post_process->rt_med, 0, post_process->rt_tex_med_3);
+		gfx_set_render_target_color_texture(post_process->rt_high, 0, post_process->rt_tex_high_1);
 
-		post_process->shader_params.texture_params[0].texture = post_process->rt_tex_med_2;
+		post_process->shader_params.texture_params[0].texture = post_process->rt_tex_high_2;
 		gfx_set_shader_params(&post_process->shader_params);
-		gfx_set_shader_program_uniform_vec2("offset", 0.0, 1.0/((float)post_process->buffer_height));
-		gfx_draw_textured_2d_quad(0.0, 0.0, post_process->buffer_width, post_process->buffer_height);
+		gfx_set_shader_program_uniform_vec2("offset", 0.0, 1.0/((float)(post_process->buffer_height*2)));
+		gfx_draw_textured_2d_quad(0.0, 0.0, post_process->buffer_width*2, post_process->buffer_height*2);
 
-		if(post_process->bloom || post_process->ssao)
+		if(post_process->bloom)
 		{
 			gfx_set_render_target(post_process->main_rt);
 			gfx_set_render_target_color_texture(post_process->main_rt, 0, post_process->main_rt_color[!source_rt]);
@@ -400,7 +400,7 @@ void elf_end_post_process(elf_post_process *post_process, elf_scene *scene)
 
 		post_process->shader_params.shader_program = post_process->dof_combine_shdr;
 		post_process->shader_params.texture_params[0].texture = post_process->main_rt_color[source_rt];
-		post_process->shader_params.texture_params[1].texture = post_process->rt_tex_med_3;
+		post_process->shader_params.texture_params[1].texture = post_process->rt_tex_high_1;
 		gfx_set_shader_params(&post_process->shader_params);
 
 		gfx_draw_textured_2d_quad(0.0, 0.0, (float)elf_get_window_width(), (float)elf_get_window_height());

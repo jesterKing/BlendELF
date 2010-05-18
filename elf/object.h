@@ -1,4 +1,34 @@
 
+void elf_init_objects()
+{
+	memset(global_ref_count_table, 0x0, sizeof(int)*ELF_OBJECT_TYPE_COUNT);
+}
+
+void elf_deinit_objects()
+{
+	if(elf_get_global_ref_count() > 0)
+	{
+		elf_write_to_log("error: possible memory leak in ELF, [%d] references not dereferenced\n",
+			elf_get_global_ref_count());
+		elf_log_ref_count_table();
+	}
+
+	if(elf_get_global_ref_count() < 0)
+	{
+		elf_write_to_log("error: possible double free in ELF, [%d] negative reference count\n",
+			elf_get_global_ref_count());
+		elf_log_ref_count_table();
+	}
+
+	if(elf_get_global_obj_count() > 0)
+		elf_write_to_log("error: possible memory leak in ELF, [%d] objects not destroyed\n",
+			elf_get_global_obj_count());
+
+	if(elf_get_global_obj_count() < 0)
+		elf_write_to_log("error: possible double free in ELF, [%d] negative object count\n",
+			elf_get_global_obj_count());
+}
+
 void elf_log_ref_count_table()
 {
 	int i;
@@ -77,6 +107,8 @@ void elf_dec_ref(elf_object *obj)
 			case ELF_IPO: elf_destroy_ipo((elf_ipo*)obj); break;
 			case ELF_FRAME_PLAYER: elf_destroy_frame_player((elf_frame_player*)obj); break;
 			case ELF_PROPERTY: elf_destroy_property((elf_property*)obj); break;
+			case ELF_SCRIPTING: elf_destroy_scripting((elf_scripting*)obj); break;
+			case ELF_PHYSICS_TRI_MESH: elf_destroy_physics_tri_mesh((elf_physics_tri_mesh*)obj); break;
 			case ELF_LIST: elf_destroy_list((elf_list*)obj); break;
 			default: elf_write_to_log("error: can not destroy unknown type\n"); break;
 		}

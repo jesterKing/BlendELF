@@ -6,10 +6,6 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#include "lua.h"
-#include "lualib.h"
-#include "lauxlib.h"
-
 #include "gfx.h"
 #include "blendelf.h"
 #include "types.h"
@@ -20,8 +16,6 @@ elf_resources *res = NULL;
 int global_ref_count;
 int global_ref_count_table[ELF_OBJECT_TYPE_COUNT];
 int global_obj_count;
-
-int luaopen_elf(lua_State* L);
 
 #include "object.h"
 #include "str.h"

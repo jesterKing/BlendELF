@@ -291,7 +291,7 @@ struct elf_model {
 	unsigned int *index;
 	float *weights;
 	int *boneids;
-	float cur_frame;
+	elf_physics_tri_mesh *tri_mesh;
 	elf_model_area *areas;
 	elf_vec3f bb_min;
 	elf_vec3f bb_max;
@@ -301,8 +301,6 @@ struct elf_model {
 
 struct elf_entity {
 	ELF_ACTOR_HEADER;
-
-	elf_vec3f scale;
 
 	elf_model *model;
 
@@ -314,8 +312,10 @@ struct elf_entity {
 	elf_frame_player *armature_player;
 	float prev_armature_frame;
 
+	elf_vec3f scale;
 	elf_vec3f bb_min;
 	elf_vec3f bb_max;
+	elf_vec3f bb_offset;
 	float bradius;
 	float cull_radius;
 	elf_vec3f position;
@@ -459,7 +459,6 @@ struct elf_scene {
 
 	gfx_shader_program *dof_depth_write;
 	gfx_shader_program *dof_depth_write_alpha;
-	gfx_shader_program *ssao_depth_write;
 
 	elf_pak *pak;
 };
