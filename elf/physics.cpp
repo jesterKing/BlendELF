@@ -870,7 +870,7 @@ void elf_set_physics_object_linear_velocity(elf_physics_object *object, float x,
 
 void elf_set_physics_object_angular_velocity(elf_physics_object *object, float x, float y, float z)
 {
-	 object->body->activate(true);
+	object->body->activate(true);
 	object->body->setAngularVelocity(btVector3(x, y, z));
 }
 
