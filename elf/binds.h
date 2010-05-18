@@ -838,8 +838,6 @@ ELF_API bool ELF_APIENTRY elfRemoveGuiObjectByObject(elf_handle parent, elf_hand
 ELF_API void ELF_APIENTRY elfEmptyGui(elf_handle gui);
 ELF_API bool ELF_APIENTRY elfCreateSession(const char* address, unsigned short port);
 ELF_API bool ELF_APIENTRY elfConnectSession(const char* address, unsigned short port);
-ELF_API void ELF_APIENTRY elfSetServerScript(elf_handle script);
-ELF_API void ELF_APIENTRY elfSetClientScript(elf_handle script);
 ELF_API bool ELF_APIENTRY elfDisconnectSession();
 ELF_API void ELF_APIENTRY elfSendStringToClients(const char* message);
 ELF_API void ELF_APIENTRY elfSendStringToServer(const char* message);

@@ -661,3 +661,9 @@ struct elf_client {
 	ELF_OBJECT_HEADER;
 };
 
+struct elf_networking_event {
+	ELF_OBJECT_HEADER;
+	int event_type;
+	elf_client* client;
+};
+

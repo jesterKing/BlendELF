@@ -8,16 +8,19 @@
 
 #include "default.h"
 
-#include <GL/glfw.h>
-#include <enet/enet.h>
-
 #include "gfx.h"
 #include "blendelf.h"
 #include "types.h"
 
+// global networking variables
+int elf_net_connect_timeout = 5000;
+int elf_net_event_timeout = 100;
+
+// global server variables
 elf_server* server = NULL;
 ELF_BOOL run_server = ELF_FALSE;
 
+// global client variables
 ELF_BOOL run_client = ELF_FALSE;
 
 ENetHost* client;
@@ -26,10 +29,6 @@ ENetPeer* peer;
 ENetEvent clientEvent;
 
 GLFWthread clientThread;
-unsigned char runClient = ELF_FALSE;
-
-elf_script* serverScript = NULL;
-elf_script* clientScript = NULL;
 
 /* initialises networking */
 ELF_BOOL elf_init_networking()
@@ -41,20 +40,6 @@ ELF_BOOL elf_init_networking()
 	}
 
 	return ELF_TRUE;
-}
-
-void elf_set_server_script(elf_script* script)
-{
-	if(serverScript) elf_dec_ref((elf_object*)serverScript);
-	serverScript = script;
-	if(serverScript) elf_inc_ref((elf_object*)serverScript);
-}
-
-void elf_set_client_script(elf_script* script)
-{
-	if(clientScript) elf_dec_ref((elf_object*)clientScript);
-	clientScript = script;
-	if(clientScript) elf_inc_ref((elf_object*)clientScript);
 }
 
 /* the server thread */
@@ -84,7 +69,7 @@ void GLFWCALL elf_run_networking(void* arg)
 					server->event.packet->dataLength,
 					server->event.packet->data);
 
-				elf_run_script(serverScript);
+				// TODO: add event to queue
 
 				enet_packet_destroy(server->event.packet);
 				break;
@@ -104,7 +89,7 @@ void GLFWCALL elf_run_client_networking(void* arg)
 	if(client == NULL)
 		return;
 
-	while(runClient)
+	while(run_client)
 	{
 		if(enet_host_service(client, &clientEvent, 100) > 0)
 		{
@@ -123,7 +108,7 @@ void GLFWCALL elf_run_client_networking(void* arg)
 				elf_write_to_log("net: packet of length %d received\n",
 					clientEvent.packet->dataLength);
 
-				elf_run_script(clientScript);
+				// TODO: add event to queue
 
 				enet_packet_destroy(clientEvent.packet);
 				break;
@@ -205,11 +190,11 @@ unsigned char elf_connect_session(const char* address, unsigned short port)
 		return ELF_FALSE;
 	}
 
-	if(enet_host_service(client, &clientEvent, 5000) > 0 && clientEvent.type == ENET_EVENT_TYPE_CONNECT)
+	if(enet_host_service(client, &clientEvent, elf_net_connect_timeout) > 0 && clientEvent.type == ENET_EVENT_TYPE_CONNECT)
 	{
 		elf_write_to_log("net: successfully connected to %s:%d\n", address, port);
 
-		runClient = ELF_TRUE;
+		run_client = ELF_TRUE;
 
 		clientThread = glfwCreateThread(elf_run_client_networking, client);
 
@@ -230,7 +215,7 @@ unsigned char elf_disconnect_session()
 		return ELF_FALSE;
 	}
 
-	runClient = ELF_FALSE;
+	run_client = ELF_FALSE;
 
 	if(glfwWaitThread(clientThread, GLFW_WAIT))
 	{
@@ -265,6 +250,7 @@ unsigned char elf_stop_session()
 	{
 		enet_host_destroy(server->host);
 
+		free(server);
 		server = NULL;
 
 		return ELF_TRUE;
@@ -341,12 +327,14 @@ int elf_get_current_client()
 	return (int)server->event.peer->incomingPeerID;
 }
 
-unsigned char elf_is_server()
+/* gets a value indicating whether the engine is running in server mode */
+ELF_BOOL elf_is_server()
 {
 	return NULL == peer;
 }
 
-unsigned char elf_is_client()
+/* gets a value indicating whether the engine is running in client mode */
+ELF_BOOL elf_is_client()
 {
 	return NULL == server;
 }
@@ -358,21 +346,21 @@ void elf_deinit_networking()
 	{
 		elf_disconnect_session();
 	}
-
-	if(serverScript) elf_dec_ref((elf_object*)serverScript);
-	if(clientScript) elf_dec_ref((elf_object*)clientScript);
-
-	
-
 	if(NULL != server)
 	{
 		enet_host_destroy(server->host);
+		free(server);
 	}
 	if(NULL != client)
 	{
 		enet_host_destroy(client);
 	}
 
+	// lastly, deinitialise the enet library
 	enet_deinitialize();
 }
+
+/* 
+	End of File 
+*/
 

@@ -1577,8 +1577,6 @@ void elf_empty_gui(elf_gui *gui);
 /* <!> */ void elf_run_networking();
 unsigned char elf_create_session(const char* address, unsigned short port); // <mdoc> NETWORKING FUNCTIONS
 unsigned char elf_connect_session(const char* address, unsigned short port);
-void elf_set_server_script(elf_script* script);
-void elf_set_client_script(elf_script* script);
 unsigned char elf_disconnect_session();
 void elf_send_string_to_clients(const char* message);
 void elf_send_string_to_server(const char* message);

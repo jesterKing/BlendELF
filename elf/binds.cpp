@@ -4877,24 +4877,6 @@ ELF_API bool ELF_APIENTRY elfConnectSession(const char* address, unsigned short 
 {
 	return (bool)elf_connect_session(address, port);
 }
-ELF_API void ELF_APIENTRY elfSetServerScript(elf_handle script)
-{
-	if(!script.get() || elf_get_object_type(script.get()) != ELF_SCRIPT)
-	{
-		printf("SetServerScript() -> invalid handle\n");
-		return;
-	}
-	elf_set_server_script((elf_script*)script.get());
-}
-ELF_API void ELF_APIENTRY elfSetClientScript(elf_handle script)
-{
-	if(!script.get() || elf_get_object_type(script.get()) != ELF_SCRIPT)
-	{
-		printf("SetClientScript() -> invalid handle\n");
-		return;
-	}
-	elf_set_client_script((elf_script*)script.get());
-}
 ELF_API bool ELF_APIENTRY elfDisconnectSession()
 {
 	return (bool)elf_disconnect_session();
