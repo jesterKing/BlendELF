@@ -74,6 +74,8 @@ elf_script* elf_create_script_from_file(const char *file_path)
 		script = elf_create_script();
 		script->file_path = elf_create_string(file_path);
 		elf_set_script_text(script, text);
+
+		free(text);
 	}
 
 	fclose(file);

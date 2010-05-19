@@ -247,6 +247,7 @@ void elf_destroy_post_process(elf_post_process *post_process)
 	if(post_process->main_rt_color[1]) gfx_destroy_texture(post_process->main_rt_color[1]);
 	gfx_destroy_texture(post_process->main_rt_depth);
 
+	gfx_destroy_render_target(post_process->rt_high);
 	gfx_destroy_render_target(post_process->rt_med);
 	gfx_destroy_render_target(post_process->rt_low);
 	gfx_destroy_render_target(post_process->rt_tiny);
@@ -266,6 +267,7 @@ void elf_destroy_post_process(elf_post_process *post_process)
 	if(post_process->blur_shdr) gfx_destroy_shader_program(post_process->blur_shdr);
 	if(post_process->bloom_combine_shdr) gfx_destroy_shader_program(post_process->bloom_combine_shdr);
 	if(post_process->dof_combine_shdr) gfx_destroy_shader_program(post_process->dof_combine_shdr);
+	if(post_process->ssao_shdr) gfx_destroy_shader_program(post_process->ssao_shdr);
 	if(post_process->ssao_combine_shdr) gfx_destroy_shader_program(post_process->ssao_combine_shdr);
 	if(post_process->light_shaft_shdr) gfx_destroy_shader_program(post_process->light_shaft_shdr);
 

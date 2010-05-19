@@ -31,6 +31,7 @@ elf_scripting* elf_create_scripting()
 	{
 		elf_set_error(ELF_CANT_INITIALIZE, "error: failed to initialize lua\n");
 		elf_destroy_scripting(scripting);
+		return NULL;
 	}
 	luaL_openlibs(scripting->L);
 	luaopen_elf(scripting->L);
@@ -54,9 +55,16 @@ unsigned char elf_init_scripting()
 	}
 
 	scr = elf_create_scripting();
+	if(!scr) return ELF_FALSE;
+
 	elf_inc_ref((elf_object*)scr);
 
 	return ELF_TRUE;
+}
+
+void elf_update_scripting()
+{
+	if(scr) lua_gc(scr->L, LUA_GCCOLLECT, 0);
 }
 
 void elf_deinit_scripting()

@@ -1287,6 +1287,7 @@ elf_scripting* elf_create_scripting();
 void elf_destroy_scripting(elf_scripting *scripting);
 
 unsigned char elf_init_scripting();
+void elf_update_scripting();
 void elf_deinit_scripting();
 // !!>
 

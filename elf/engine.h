@@ -537,6 +537,8 @@ void elf_update_engine()
 	{
 		elf_start_timer(eng->time_sync_timer);
 	}
+
+	elf_update_scripting();
 }
 
 void elf_count_engine_fps()
