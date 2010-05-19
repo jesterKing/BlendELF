@@ -1,11 +1,6 @@
 
 #include "default.h"
 
-#include <FreeImage.h>
-
-#include <ft2build.h>
-#include FT_FREETYPE_H
-
 #include "gfx.h"
 #include "blendelf.h"
 #include "types.h"

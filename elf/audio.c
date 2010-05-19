@@ -1,11 +1,6 @@
 
 #include "default.h"
 
-#include <AL/alc.h>
-#include <AL/al.h>
-
-#include <vorbis/vorbisfile.h>
-
 #include "gfx.h"
 #include "blendelf.h"
 #include "types.h"

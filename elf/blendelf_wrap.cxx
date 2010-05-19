@@ -3789,6 +3789,23 @@ fail:
 }
 
 
+static int _wrap_elfGetPlatform(lua_State* L) {
+  int SWIG_arg = 0;
+  char *result = 0 ;
+  
+  SWIG_check_num_args("GetPlatform",0,0)
+  result = (char *)elfGetPlatform();
+  lua_pushstring(L,(const char*)result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfGetVersionMajor(lua_State* L) {
   int SWIG_arg = 0;
   int result;
@@ -17737,6 +17754,7 @@ static const struct luaL_reg swig_commands[] = {
     { "Init", _wrap_elfInit},
     { "InitWithConfig", _wrap_elfInitWithConfig},
     { "Deinit", _wrap_elfDeinit},
+    { "GetPlatform", _wrap_elfGetPlatform},
     { "GetVersionMajor", _wrap_elfGetVersionMajor},
     { "GetVersionMinor", _wrap_elfGetVersionMinor},
     { "GetVersionRelease", _wrap_elfGetVersionRelease},

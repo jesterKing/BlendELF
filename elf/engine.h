@@ -448,7 +448,7 @@ unsigned char elf_init(int width, int height,
 	return ELF_TRUE;
 }
 
-#if defined(__WIN32__) || defined(WIN32) || defined(__CYGWIN__)
+#ifdef ELF_WINDOWS
 	#ifndef ELF_PLAYER
 unsigned char elf_init_with_hwnd(int width, int height,
 	const char *title, unsigned char fullscreen, HWND hwnd)
@@ -605,6 +605,17 @@ void elf_deinit()
 	elf_deinit_objects();
 	elf_err_str = NULL;
 	elf_err_str_store = NULL;
+}
+
+const char* elf_get_platform()
+{
+#if defined(ELF_WINDOWS)
+	return "windows";
+#elif defined(ELF_MACOSX)
+	return "macosx";
+#else
+	return "linux";
+#endif
 }
 
 int elf_get_version_major()
@@ -1027,7 +1038,7 @@ void elf_append_folder_to_directory_item_list(elf_list *items, elf_directory_ite
 
 elf_directory* elf_read_directory(const char *path)
 {
-#if defined(__WIN32__) || defined(WIN32) || defined(__CYGWIN__)
+#ifdef ELF_WINDOWS
 	/*elf_directory *directory;
 	elf_directory_item *dir_item;
 	WIN32_FIND_DATA ffd;

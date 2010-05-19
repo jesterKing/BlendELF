@@ -18,10 +18,10 @@ int elf_net_event_timeout = 100;
 
 // global server variables
 elf_server* server = NULL;
-ELF_BOOL run_server = ELF_FALSE;
+unsigned char run_server = ELF_FALSE;
 
 // global client variables
-ELF_BOOL run_client = ELF_FALSE;
+unsigned char run_client = ELF_FALSE;
 
 ENetHost* client;
 ENetAddress clientAddress;
@@ -31,7 +31,7 @@ ENetEvent clientEvent;
 GLFWthread clientThread;
 
 /* initialises networking */
-ELF_BOOL elf_init_networking()
+unsigned char elf_init_networking()
 {
 	if(enet_initialize() != 0)
 	{
@@ -123,7 +123,7 @@ void GLFWCALL elf_run_client_networking(void* arg)
 }
 
 /* runs the engine as server by creating a new networking session */
-ELF_BOOL elf_create_session(const char* address, unsigned short port)
+unsigned char elf_create_session(const char* address, unsigned short port)
 {
 	// cannot initialise server if the engine is already hosting a session
 	if(NULL != server)
@@ -332,13 +332,13 @@ int elf_get_current_client()
 }
 
 /* gets a value indicating whether the engine is running in server mode */
-ELF_BOOL elf_is_server()
+unsigned char elf_is_server()
 {
 	return NULL == peer;
 }
 
 /* gets a value indicating whether the engine is running in client mode */
-ELF_BOOL elf_is_client()
+unsigned char elf_is_client()
 {
 	return NULL == server;
 }

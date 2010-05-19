@@ -6,16 +6,6 @@
 	Purpose:	Includes commonly used headers.
 */
 
-#define ELF_OS_LINUX	1
-#define ELF_OS_WINDOWS	2
-#define ELF_OS_MACOSX	3
-
-#if defined(__WIN32__) || defined(WIN32) || defined(_WIN32) || defined(__CYGWIN__)
-	#define ELF_BUILD_OS	ELF_OS_WINDOWS
-#else
-	#define ELF_BUILD_OS	ELF_OS_LINUX
-#endif
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -24,7 +14,7 @@
 #include <malloc.h>
 #include <sys/types.h>
 
-#if ELF_BUILD_OS == ELF_OS_WINDOWS
+#ifdef ELF_WINDOWS
 	// mbg: prevents windows.h from including winsock.h, this is later handled by enet 
 	#define _WINSOCKAPI_
 	#include <windows.h>
@@ -34,11 +24,28 @@
 #endif
 
 #include <GL/glfw.h>
-#include <GL/gl.h>
+#ifdef ELF_MACOSX
+	#include <OpenGL/gl.h>
+#else
+	#include <GL/gl.h>
+#endif
+
+#ifdef ELF_MACOSX
+	#include <OpenAL/alc.h>
+	#include <OpenAL/al.h>
+#else
+	#include <AL/alc.h>
+	#include <AL/al.h>
+#endif
+
+#include <vorbis/vorbisfile.h>
+
+#include <FreeImage.h>
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 #include <enet/enet.h>
-
-typedef unsigned char ELF_BOOL;
 
 /* 
 	End of File 

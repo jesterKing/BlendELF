@@ -366,6 +366,7 @@ ELF_API const char* ELF_APIENTRY elfGetGameConfigStart(elf_handle config);
 ELF_API bool ELF_APIENTRY elfInit(int width, int height, const char* title, bool fullscreen);
 ELF_API bool ELF_APIENTRY elfInitWithConfig(const char* file_path);
 ELF_API void ELF_APIENTRY elfDeinit();
+ELF_API const char* ELF_APIENTRY elfGetPlatform();
 ELF_API int ELF_APIENTRY elfGetVersionMajor();
 ELF_API int ELF_APIENTRY elfGetVersionMinor();
 ELF_API const char* ELF_APIENTRY elfGetVersionRelease();

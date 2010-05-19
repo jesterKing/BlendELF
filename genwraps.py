@@ -70,14 +70,11 @@ defs = """#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-#include <AL/alc.h>
-#include <AL/al.h>
-
 #include "gfx.h"
 #include "blendelf.h"
 #include "binds.h"
 
-#if defined(__WIN32__) || defined(WIN32) || defined(__CYGWIN__)
+#ifdef ELF_WINDOWS
 	#ifndef ELF_PLAYER
 ELF_API bool ELF_APIENTRY elfInitWithHWND(int width, int height, const char* title, bool fullscreen, HWND hwnd)
 {

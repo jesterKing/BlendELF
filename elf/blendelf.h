@@ -447,7 +447,7 @@ unsigned char elf_init_context(int width, int height,
 		const char *title, unsigned char fullscreen);
 void elf_close_window();
 
-#if defined(__WIN32__) || defined(WIN32) || defined(__CYGWIN__)
+#ifdef ELF_WINDOWS
 	#ifndef ELF_PLAYER
 		#include "windows.h"
 		unsigned char elf_init_context_with_hwnd(int width, int height, const char *title, unsigned char fullscreen, HWND hwnd);
@@ -498,7 +498,7 @@ void elf_destroy_engine(elf_engine *engine);
 unsigned char elf_init_engine();
 void elf_deinit_engine();
 
-#if defined(__WIN32__) || defined(WIN32) || defined(__CYGWIN__)
+#ifdef ELF_WINDOWS
 	#ifndef ELF_PLAYER
 		#include "windows.h"
 		unsigned char elf_init_with_hwnd(int width, int height, const char *title, unsigned char fullscreen, HWND hwnd);
@@ -517,6 +517,8 @@ const char* elf_get_game_config_start(elf_game_config *config);
 unsigned char elf_init(int width, int height, const char *title, unsigned char fullscreen);	// <mdoc> ENGINE FUNCTIONS
 unsigned char elf_init_with_config(const char *file_path);
 void elf_deinit();
+
+const char* elf_get_platform();
 
 int elf_get_version_major();
 int elf_get_version_minor();

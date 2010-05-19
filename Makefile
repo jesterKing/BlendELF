@@ -1,8 +1,8 @@
 #Makefile
 
-DEV_CFLAGS = -g -Wall -DELF_PLAYER
-STA_CFLAGS = -Wall -O2 -DELF_PLAYER
-SHR_CFLAGS = -fPIC -Wall -O2
+DEV_CFLAGS = -g -Wall -DELF_PLAYER -DELF_LINUX
+STA_CFLAGS = -Wall -O2 -DELF_PLAYER -DELF_LINUX
+SHR_CFLAGS = -fPIC -Wall -O2 -DELF_LINUX
 
 INCS = -Igfx -Ielf -I/usr/include/lua5.1 -I/usr/include/freetype2
 
