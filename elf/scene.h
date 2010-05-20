@@ -1414,7 +1414,6 @@ void elf_draw_scene_debug(elf_scene *scene)
 	scene->shader_params.render_params.depth_write = GFX_FALSE;
 	scene->shader_params.render_params.depth_test = GFX_FALSE;
 	scene->shader_params.render_params.blend_mode = GFX_ADD;
-	gfx_set_color(&scene->shader_params.material_params.color, 0.5, 0.5, 0.2, 1.0);
 	elf_set_camera(scene->cur_camera, &scene->shader_params);
 
 	for(lig = (elf_light*)elf_begin_list(scene->lights); lig != NULL;
@@ -1426,6 +1425,7 @@ void elf_draw_scene_debug(elf_scene *scene)
 	gfx_set_shader_params_default(&scene->shader_params);
 	scene->shader_params.render_params.depth_write = GFX_FALSE;
 	scene->shader_params.render_params.depth_test = GFX_FALSE;
+	scene->shader_params.render_params.blend_mode = GFX_ADD;
 	elf_set_camera(scene->cur_camera, &scene->shader_params);
 
 	for(cam = (elf_camera*)elf_begin_list(scene->cameras); cam != NULL;

@@ -352,6 +352,8 @@ void elf_recursive_reference_rotation(elf_actor *actor, float *ref, float *orien
 	float temp_qua2[4];
 	elf_actor *cactor;
 
+	actor->moved = ELF_TRUE;
+
 	elf_get_actor_position_(actor, temp_vec1);
 	elf_get_actor_orientation_(actor, temp_qua1);
 
@@ -378,8 +380,6 @@ void elf_recursive_reference_rotation(elf_actor *actor, float *ref, float *orien
 		elf_set_physics_object_orientation(actor->dobject, temp_qua2[0], temp_qua2[1], temp_qua2[2], temp_qua2[3]);
 	}
 
-	actor->moved = ELF_TRUE;
-
 	for(cactor = (elf_actor*)elf_begin_list(actor->children); cactor;
 		cactor = (elf_actor*)elf_next_in_list(actor->children))
 	{
@@ -397,6 +397,8 @@ void elf_set_actor_rotation(elf_actor *actor, float x, float y, float z)
 	float position[3];
 	elf_actor *cactor;
 
+	actor->moved = ELF_TRUE;
+
 	elf_get_actor_position_(actor, position);
 	elf_get_actor_rotation_(actor, rotation);
 
@@ -406,8 +408,6 @@ void elf_set_actor_rotation(elf_actor *actor, float x, float y, float z)
 
 	if(actor->object) elf_set_physics_object_orientation(actor->object, orient[0], orient[1], orient[2], orient[3]);
 	if(actor->dobject) elf_set_physics_object_orientation(actor->dobject, orient[0], orient[1], orient[2], orient[3]);
-
-	actor->moved = ELF_TRUE;
 
 	gfx_set_qua_rotation(x-rotation[0], y-rotation[1], z-rotation[2], orient);
 
@@ -431,6 +431,8 @@ void elf_set_actor_orientation(elf_actor *actor, float x, float y, float z, floa
 	float position[3];
 	elf_actor *cactor;
 
+	actor->moved = ELF_TRUE;
+
 	elf_get_actor_orientation_(actor, temp_qua1);
 	elf_get_actor_position_(actor, position);
 	gfx_qua_get_inverse(temp_qua1, temp_qua2);
@@ -446,8 +448,6 @@ void elf_set_actor_orientation(elf_actor *actor, float x, float y, float z, floa
 
 	if(actor->object) elf_set_physics_object_orientation(actor->object, x, y, z, w);
 	if(actor->dobject) elf_set_physics_object_orientation(actor->dobject, x, y, z, w);
-
-	actor->moved = ELF_TRUE;
 
 	for(cactor = (elf_actor*)elf_begin_list(actor->children); cactor;
 		cactor = (elf_actor*)elf_next_in_list(actor->children))
@@ -467,14 +467,14 @@ void elf_rotate_actor(elf_actor *actor, float x, float y, float z)
 	float position[3];
 	elf_actor *cactor;
 
+	actor->moved = ELF_TRUE;
+
 	gfx_rotate_transform(actor->transform, x*eng->sync, y*eng->sync, z*eng->sync);
 
 	gfx_get_transform_orientation(actor->transform, orient);
 
 	if(actor->object) elf_set_physics_object_orientation(actor->object, orient[0], orient[1], orient[2], orient[3]);
 	if(actor->dobject) elf_set_physics_object_orientation(actor->dobject, orient[0], orient[1], orient[2], orient[3]);
-
-	actor->moved = ELF_TRUE;
 
 	gfx_set_qua_rotation(x*eng->sync, y*eng->sync, z*eng->sync, orient);
 	elf_get_actor_position_(actor, position);
@@ -500,6 +500,8 @@ void elf_rotate_actor_local(elf_actor *actor, float x, float y, float z)
 	float position[3];
 	elf_actor *cactor;
 
+	actor->moved = ELF_TRUE;
+
 	elf_get_actor_position_(actor, position);
 	elf_get_actor_orientation_(actor, orient);
 
@@ -513,8 +515,6 @@ void elf_rotate_actor_local(elf_actor *actor, float x, float y, float z)
 
 	if(actor->object) elf_set_physics_object_orientation(actor->object, new_orient[0], new_orient[1], new_orient[2], new_orient[3]);
 	if(actor->dobject) elf_set_physics_object_orientation(actor->dobject, new_orient[0], new_orient[1], new_orient[2], new_orient[3]);
-
-	actor->moved = ELF_TRUE;
 
 	for(cactor = (elf_actor*)elf_begin_list(actor->children); cactor;
 		cactor = (elf_actor*)elf_next_in_list(actor->children))
@@ -560,6 +560,8 @@ void elf_move_actor_local(elf_actor *actor, float x, float y, float z)
 	float temp_vec2[3];
 	elf_actor *cactor;
 
+	actor->moved = ELF_TRUE;
+
 	elf_get_actor_orientation_(actor, orient);
 
 	temp_vec1[0] = x;
@@ -578,8 +580,6 @@ void elf_move_actor_local(elf_actor *actor, float x, float y, float z)
 
 	if(actor->object) elf_set_physics_object_position(actor->object, temp_vec1[0], temp_vec1[1], temp_vec1[2]);
 	if(actor->dobject) elf_set_physics_object_position(actor->dobject, temp_vec1[0], temp_vec1[1], temp_vec1[2]);
-
-	actor->moved = ELF_TRUE;
 
 	for(cactor = (elf_actor*)elf_begin_list(actor->children); cactor;
 		cactor = (elf_actor*)elf_next_in_list(actor->children))

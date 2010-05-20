@@ -312,13 +312,15 @@ struct elf_entity {
 	elf_frame_player *armature_player;
 	float prev_armature_frame;
 
+	elf_vec3f position;
 	elf_vec3f scale;
 	elf_vec3f bb_min;
 	elf_vec3f bb_max;
 	elf_vec3f bb_offset;
-	float bradius;
+	elf_vec3f bb_half_length;
+	elf_vec3f cull_aabb_min;
+	elf_vec3f cull_aabb_max;
 	float cull_radius;
-	elf_vec3f position;
 
 	gfx_query *query;
 	unsigned char visible;

@@ -936,6 +936,8 @@ elf_entity* elf_create_entity_from_pak(FILE *file, const char *name, elf_scene *
 void elf_update_entity(elf_entity *entity);
 void elf_entity_pre_draw(elf_entity *entity);
 void elf_destroy_entity(elf_entity *entity);
+void elf_calc_entity_aabb(elf_entity *entity);
+void elf_calc_entity_bounding_volumes(elf_entity *entity);
 // !!>
 
 elf_entity* elf_create_entity(const char *name);	// <mdoc> ENTITY FUNCTIONS

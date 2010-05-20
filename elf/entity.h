@@ -154,6 +154,11 @@ void elf_entity_pre_draw(elf_entity *entity)
 		elf_deform_entity_with_armature(entity->armature, entity, elf_get_frame_player_frame(entity->armature_player));
 		entity->prev_armature_frame = elf_get_frame_player_frame(entity->armature_player);
 	}
+
+	if(entity->moved)
+	{
+		elf_calc_entity_aabb(entity);
+	}
 }
 
 void elf_destroy_entity(elf_entity *entity)
@@ -174,6 +179,23 @@ void elf_destroy_entity(elf_entity *entity)
 	global_obj_count--;
 }
 
+void elf_calc_entity_aabb(elf_entity *entity)
+{
+	elf_vec3f position;
+
+	gfx_get_transform_position(entity->transform, &position.x);
+
+	entity->cull_aabb_min = entity->bb_min;
+	entity->cull_aabb_max = entity->bb_max;
+
+	entity->cull_aabb_min.x += position.x+entity->bb_offset.x;
+	entity->cull_aabb_min.y += position.y+entity->bb_offset.y;
+	entity->cull_aabb_min.z += position.z+entity->bb_offset.z;
+	entity->cull_aabb_max.x += position.x+entity->bb_offset.x;
+	entity->cull_aabb_max.y += position.y+entity->bb_offset.y;
+	entity->cull_aabb_max.z += position.z+entity->bb_offset.z;
+}
+
 void elf_calc_entity_bounding_volumes(elf_entity *entity)
 {
 	float length;
@@ -189,6 +211,7 @@ void elf_calc_entity_bounding_volumes(elf_entity *entity)
 
 	entity->bb_min = entity->model->bb_min;
 	entity->bb_max = entity->model->bb_max;
+
 	entity->bb_min.x *= entity->scale.x;
 	entity->bb_min.y *= entity->scale.y;
 	entity->bb_min.z *= entity->scale.z;
@@ -199,6 +222,19 @@ void elf_calc_entity_bounding_volumes(elf_entity *entity)
 	entity->bb_offset.x = (entity->bb_max.x+entity->bb_min.x)/2.0;
 	entity->bb_offset.y = (entity->bb_max.y+entity->bb_min.y)/2.0;
 	entity->bb_offset.z = (entity->bb_max.z+entity->bb_min.z)/2.0;
+
+	entity->bb_min.x += entity->bb_offset.x;
+	entity->bb_min.y += entity->bb_offset.y;
+	entity->bb_min.z += entity->bb_offset.z;
+	entity->bb_max.x += entity->bb_offset.x;
+	entity->bb_max.y += entity->bb_offset.y;
+	entity->bb_max.z += entity->bb_offset.z;
+
+	entity->bb_half_length.x = (entity->bb_max.x-entity->bb_min.x)/2.0;
+	entity->bb_half_length.y = (entity->bb_max.y-entity->bb_min.y)/2.0;
+	entity->bb_half_length.z = (entity->bb_max.z-entity->bb_min.z)/2.0;
+
+	elf_calc_entity_aabb(entity);
 
 	entity->cull_radius = entity->model->radius;
 
@@ -347,25 +383,19 @@ void elf_set_entity_physics(elf_entity *entity, int type, float mass)
 	switch(type)
 	{
 		case ELF_BOX:
-			entity->object = elf_create_physics_object_box(
-				(entity->model->bb_max.x-entity->model->bb_min.x)/2.0,
-				(entity->model->bb_max.y-entity->model->bb_min.y)/2.0,
-				(entity->model->bb_max.z-entity->model->bb_min.z)/2.0, mass,
+			entity->object = elf_create_physics_object_box(entity->bb_half_length.x,
+				entity->bb_half_length.y, entity->bb_half_length.z, mass,
 				entity->bb_offset.x, entity->bb_offset.y, entity->bb_offset.z);
 			break;
 		case ELF_SPHERE:
 		{
-			if(entity->model->bb_max.x-entity->model->bb_min.x >
-				entity->model->bb_max.y-entity->model->bb_min.y &&
-				entity->model->bb_max.x-entity->model->bb_min.x >
-				entity->model->bb_max.z-entity->model->bb_min.z)
-				radius = (entity->model->bb_max.x-entity->model->bb_min.x)/2.0;
-			else if(entity->model->bb_max.y-entity->model->bb_min.y >
-				entity->model->bb_max.x-entity->model->bb_min.x &&
-				entity->model->bb_max.y-entity->model->bb_min.y >
-				entity->model->bb_max.z-entity->model->bb_min.z)
-				radius = (entity->model->bb_max.y-entity->model->bb_min.y)/2.0;
-			else  radius = (entity->model->bb_max.z-entity->model->bb_min.z)/2.0;
+			if(entity->bb_half_length.x > entity->bb_half_length.y &&
+				entity->bb_half_length.x > entity->bb_half_length.z)
+				radius = entity->bb_half_length.x;
+			else if(entity->bb_half_length.y > entity->bb_half_length.x &&
+				entity->bb_half_length.y > entity->bb_half_length.z)
+				radius = entity->bb_half_length.y;
+			else  radius = entity->bb_half_length.z;
 
 			entity->object = elf_create_physics_object_sphere(radius, mass,
 				entity->bb_offset.x, entity->bb_offset.y, entity->bb_offset.z);
@@ -731,7 +761,7 @@ unsigned char elf_cull_entity(elf_entity *entity, elf_camera *camera)
 {
 	if(!entity->model || !entity->visible) return ELF_TRUE;
 
-	return !elf_sphere_inside_frustum(camera, &entity->position.x, entity->cull_radius);
+	return !elf_aabb_inside_frustum(camera, &entity->cull_aabb_min.x, &entity->cull_aabb_max.x);
 }
 
 unsigned char elf_get_entity_changed(elf_entity *entity)

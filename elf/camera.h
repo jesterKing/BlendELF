@@ -79,7 +79,7 @@ void elf_update_camera(elf_camera *camera)
 
 void elf_camera_pre_draw(elf_camera *camera)
 {
-	gfx_get_frustum(camera->projection_matrix, camera->modelview_matrix, camera->frustum);
+	gfx_get_frustum(camera->projection_matrix, elf_get_camera_modelview_matrix(camera), camera->frustum);
 	elf_get_actor_position_((elf_actor*)camera, &camera->position.x);
 }
 
@@ -203,21 +203,21 @@ unsigned char elf_aabb_inside_frustum(elf_camera *camera, float *min, float *max
 
 	for(i = 0; i < 6; i++)
 	{
-		if(camera->frustum[i][0]*min[0]+camera->frustum[i][1]*min[1]+camera->frustum[i][2]*max[2]+camera->frustum[i][3] > 0.0f)
+		if(camera->frustum[i][0]*min[0]+camera->frustum[i][1]*min[1]+camera->frustum[i][2]*max[2]+camera->frustum[i][3] > 0.0)
 			continue;
-		if(camera->frustum[i][0]*max[0]+camera->frustum[i][1]*min[1]+camera->frustum[i][2]*max[2]+camera->frustum[i][3] > 0.0f)
+		if(camera->frustum[i][0]*max[0]+camera->frustum[i][1]*min[1]+camera->frustum[i][2]*max[2]+camera->frustum[i][3] > 0.0)
 			continue;
-		if(camera->frustum[i][0]*max[0]+camera->frustum[i][1]*max[1]+camera->frustum[i][2]*max[2]+camera->frustum[i][3] > 0.0f)
+		if(camera->frustum[i][0]*max[0]+camera->frustum[i][1]*max[1]+camera->frustum[i][2]*max[2]+camera->frustum[i][3] > 0.0)
 			continue;
-		if(camera->frustum[i][0]*min[0]+camera->frustum[i][1]*max[1]+camera->frustum[i][2]*max[2]+camera->frustum[i][3] > 0.0f)
+		if(camera->frustum[i][0]*min[0]+camera->frustum[i][1]*max[1]+camera->frustum[i][2]*max[2]+camera->frustum[i][3] > 0.0)
 			continue;
-		if(camera->frustum[i][0]*min[0]+camera->frustum[i][1]*min[1]+camera->frustum[i][2]*min[2]+camera->frustum[i][3] > 0.0f)
+		if(camera->frustum[i][0]*min[0]+camera->frustum[i][1]*min[1]+camera->frustum[i][2]*min[2]+camera->frustum[i][3] > 0.0)
 			continue;
-		if(camera->frustum[i][0]*max[0]+camera->frustum[i][1]*min[1]+camera->frustum[i][2]*min[2]+camera->frustum[i][3] > 0.0f)
+		if(camera->frustum[i][0]*max[0]+camera->frustum[i][1]*min[1]+camera->frustum[i][2]*min[2]+camera->frustum[i][3] > 0.0)
 			continue;
-		if(camera->frustum[i][0]*max[0]+camera->frustum[i][1]*max[1]+camera->frustum[i][2]*min[2]+camera->frustum[i][3] > 0.0f)
+		if(camera->frustum[i][0]*max[0]+camera->frustum[i][1]*max[1]+camera->frustum[i][2]*min[2]+camera->frustum[i][3] > 0.0)
 			continue;
-		if(camera->frustum[i][0]*min[0]+camera->frustum[i][1]*max[1]+camera->frustum[i][2]*min[2]+camera->frustum[i][3] > 0.0f)
+		if(camera->frustum[i][0]*min[0]+camera->frustum[i][1]*max[1]+camera->frustum[i][2]*min[2]+camera->frustum[i][3] > 0.0)
 			continue;
 		return ELF_FALSE;
 	}
@@ -273,6 +273,7 @@ void elf_draw_camera_debug(elf_camera *camera, gfx_shader_params *shader_params)
 	max[0] = max[1] = max[2] = 0.35;
 
 	gfx_set_color(&shader_params->material_params.color, 0.2, 0.6, 0.2, 1.0);
+	shader_params->render_params.blend_mode = ELF_ADD;
 	gfx_set_shader_params(shader_params);
 	gfx_draw_bounding_box(min, max);
 
