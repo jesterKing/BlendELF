@@ -8,7 +8,11 @@
 #include <sys/types.h>
 
 #include <GL/glew.h>
-#include <GL/gl.h>
+#ifdef ELF_MACOSX
+	#include <OpenGL/gl.h>
+#else
+	#include <GL/gl.h>
+#endif
 
 #include "gfx.h"
 
