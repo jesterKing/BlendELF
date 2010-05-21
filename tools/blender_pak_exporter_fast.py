@@ -283,13 +283,13 @@ class Model:
 		# name
 		self.size_bytes += struct.calcsize('<64s')
 		# header
-		self.size_bytes += struct.calcsize('<IIIIBBBB')
+		self.size_bytes += struct.calcsize('<iiiiBBBB')
 		# frames
 		self.size_bytes += struct.calcsize('<fff')*len(self.verts)*1
 		# areas
 		self.indice_count = 0
 		for area in self.areas:
-			self.size_bytes += struct.calcsize('<I')
+			self.size_bytes += struct.calcsize('<i')
 			self.size_bytes += struct.calcsize('<I')*len(area.index)
 			self.indice_count += len(area.index)
 		# normals
@@ -319,10 +319,10 @@ class Model:
 		write_name_to_file(self.name, f)
 
 		# write header
-		f.write(struct.pack('<I', len(self.verts)))
-		f.write(struct.pack('<I', 1))
-		f.write(struct.pack('<I', self.indice_count))
-		f.write(struct.pack('<I', len(self.areas)))
+		f.write(struct.pack('<i', len(self.verts)))
+		f.write(struct.pack('<i', 1))
+		f.write(struct.pack('<i', self.indice_count))
+		f.write(struct.pack('<i', len(self.areas)))
 		f.write(struct.pack('<B', 255)) # normals
 		f.write(struct.pack('<B', 255)) # texcoords
 		if self.weights_and_boneids is True:
@@ -336,7 +336,7 @@ class Model:
 
 		# write the index
 		for area in self.areas:
-			f.write(struct.pack('<I', len(area.index)))
+			f.write(struct.pack('<i', len(area.index)))
 			for idx in area.index:
 				f.write(struct.pack('<I', idx))
 

@@ -37,10 +37,10 @@ elf_model* elf_create_model_from_pak(FILE *file, const char *name, elf_scene *sc
 	model->file_path = elf_create_string(elf_get_scene_file_path(scene));
 
 	// read header
-	fread((char*)&model->vertice_count, sizeof(unsigned int), 1, file);
-	fread((char*)&model->frame_count, sizeof(unsigned int), 1, file);
-	fread((char*)&model->indice_count, sizeof(unsigned int), 1, file);
-	fread((char*)&model->area_count, sizeof(unsigned int), 1, file);
+	fread((char*)&model->vertice_count, sizeof(int), 1, file);
+	fread((char*)&model->frame_count, sizeof(int), 1, file);
+	fread((char*)&model->indice_count, sizeof(int), 1, file);
+	fread((char*)&model->area_count, sizeof(int), 1, file);
 	fread((char*)&is_normals, sizeof(unsigned char), 1, file);
 	fread((char*)&is_tex_coords, sizeof(unsigned char), 1, file);
 	fread((char*)&is_weights_and_boneids, sizeof(unsigned char), 1, file);

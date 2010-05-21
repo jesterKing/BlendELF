@@ -279,10 +279,10 @@ struct elf_model {
 	ELF_OBJECT_HEADER;
 	char *name;
 	char *file_path;
-	unsigned int vertice_count;
-	unsigned int frame_count;
-	unsigned int area_count;
-	unsigned int indice_count;
+	int vertice_count;
+	int frame_count;
+	int area_count;
+	int indice_count;
 	elf_frame *frames;
 	gfx_vertex_array *vertex_array;
 	gfx_vertex_data *normals;
