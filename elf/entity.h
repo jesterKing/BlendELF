@@ -198,14 +198,15 @@ void elf_calc_entity_aabb(elf_entity *entity)
 
 void elf_calc_entity_bounding_volumes(elf_entity *entity)
 {
-	float length;
 	float max_scale;
 
 	if(!entity->model)
 	{
 		entity->bb_min.x = entity->bb_min.y = entity->bb_min.z = -0.2;
 		entity->bb_max.x = entity->bb_max.y = entity->bb_max.z = 0.2;
-		entity->cull_radius = 0.0;
+		entity->bb_offset.x = entity->bb_offset.y = entity->bb_offset.z = 0.0;
+		elf_calc_entity_aabb(entity);
+		entity->cull_radius = 0.2;
 		return;
 	}
 
@@ -236,15 +237,7 @@ void elf_calc_entity_bounding_volumes(elf_entity *entity)
 
 	elf_calc_entity_aabb(entity);
 
-	entity->cull_radius = entity->model->radius;
-
-	if(entity->armature)
-	{
-		length = elf_get_vec3f_length(entity->armature->bb_min);
-		if(length > entity->cull_radius) entity->cull_radius = length;
-		length = elf_get_vec3f_length(entity->armature->bb_max);
-		if(length > entity->cull_radius) entity->cull_radius = length;
-	}
+	entity->cull_radius = gfx_vec_length(&entity->bb_min.x);
 
 	max_scale = entity->scale.x;
 	if(entity->scale.y > max_scale) max_scale = entity->scale.y;
@@ -623,25 +616,13 @@ void elf_draw_entity_without_materials(elf_entity *entity, gfx_shader_params *sh
 
 void elf_draw_entity_bounding_box(elf_entity *entity, gfx_shader_params *shader_params)
 {
-	elf_vec3f bb_min;
-	elf_vec3f bb_max;
-
 	if(!entity->model || !entity->visible || !entity->model->vertex_array) return;
 
 	gfx_mul_matrix4_matrix4(gfx_get_transform_matrix(entity->transform),
 		shader_params->camera_matrix, shader_params->modelview_matrix);
 
 	gfx_set_shader_params(shader_params);
-	if(!entity->armature)
-	{
-		gfx_draw_bounding_box(&entity->model->bb_min.x, &entity->model->bb_max.x);
-	}
-	else
-	{
-		bb_min.x = bb_min.y = bb_min.z = -entity->cull_radius;
-		bb_max.x = bb_max.y = bb_max.z = entity->cull_radius;
-		gfx_draw_bounding_box(&bb_min.x, &bb_max.x);
-	}
+	gfx_draw_bounding_box(&entity->model->bb_min.x, &entity->model->bb_max.x);
 }
 
 void elf_draw_entity_debug(elf_entity *entity, gfx_shader_params *shader_params)
@@ -746,8 +727,8 @@ void elf_draw_entity_debug(elf_entity *entity, gfx_shader_params *shader_params)
 	vertex_buffer[70] = max[1];
 	vertex_buffer[71] = min[2];
 
-	if(!entity->selected) gfx_set_color(&shader_params->material_params.color, 0.2f, 0.2f, 0.3f, 1.0f);
-	else gfx_set_color(&shader_params->material_params.color, 1.0f, 0.0f, 0.0f, 1.0f);
+	if(!entity->selected) gfx_set_color(&shader_params->material_params.color, 0.2, 0.2, 0.3, 1.0);
+	else gfx_set_color(&shader_params->material_params.color, 1.0, 0.0, 0.0, 1.0);
 	gfx_set_shader_params(shader_params);
 	gfx_draw_lines(24, eng->lines);
 

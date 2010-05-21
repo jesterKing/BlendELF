@@ -295,7 +295,6 @@ struct elf_model {
 	elf_model_area *areas;
 	elf_vec3f bb_min;
 	elf_vec3f bb_max;
-	float radius;
 	unsigned char non_lit_flag;
 };
 

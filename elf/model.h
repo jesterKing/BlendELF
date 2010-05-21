@@ -168,9 +168,6 @@ elf_model* elf_create_model_from_pak(FILE *file, const char *name, elf_scene *sc
 		if(vertex_buffer[i+2] > model->bb_max.z) model->bb_max.z = vertex_buffer[i+2];
 	}
 
-	model->radius = elf_get_vec3f_length(model->bb_min);
-	if(elf_get_vec3f_length(model->bb_max) > model->radius) model->radius = elf_get_vec3f_length(model->bb_max);
-
 	model->vertex_array = gfx_create_vertex_array(GFX_TRUE);
 	gfx_inc_ref((gfx_object*)model->vertex_array);
 
