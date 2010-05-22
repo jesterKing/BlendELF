@@ -311,7 +311,7 @@ void elf_deform_entity_with_armature(elf_armature *armature, elf_entity *entity,
 
 	vertex_buffer = gfx_get_vertex_data_buffer(entity->vertices);
 	normal_buffer = gfx_get_vertex_data_buffer(entity->normals);
-	orig_vertex_buffer = gfx_get_vertex_data_buffer(model->frames[0].vertices);
+	orig_vertex_buffer = gfx_get_vertex_data_buffer(model->vertices);
 	orig_normal_buffer = gfx_get_vertex_data_buffer(model->normals);
 
 	for(i = 0; i < model->vertice_count; i++)

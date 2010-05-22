@@ -675,7 +675,7 @@ void elf_post_draw_entity(elf_entity *entity)
 {
 	if(entity->armature)
 	{
-		if(entity->vertices) gfx_set_vertex_array_data(entity->model->vertex_array, GFX_VERTEX, entity->model->frames[0].vertices);
+		if(entity->vertices) gfx_set_vertex_array_data(entity->model->vertex_array, GFX_VERTEX, entity->vertices);
 		if(entity->normals) gfx_set_vertex_array_data(entity->model->vertex_array, GFX_NORMAL, entity->model->normals);
 	}
 }

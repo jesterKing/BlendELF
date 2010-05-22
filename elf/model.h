@@ -72,14 +72,10 @@ elf_model* elf_create_model_from_pak(FILE *file, const char *name, elf_scene *sc
 	}
 
 	// read vertices
-	model->frames = (elf_frame*)malloc(sizeof(elf_frame)*model->frame_count);
-	for(i = 0; i < model->frame_count; i++)
-	{
-		model->frames[i].vertices = gfx_create_vertex_data(3*model->vertice_count, GFX_FLOAT, GFX_VERTEX_DATA_STATIC);
-		gfx_inc_ref((gfx_object*)model->frames[i].vertices);
+	model->vertices = gfx_create_vertex_data(3*model->vertice_count, GFX_FLOAT, GFX_VERTEX_DATA_STATIC);
+	gfx_inc_ref((gfx_object*)model->vertices);
 
-		fread((char*)gfx_get_vertex_data_buffer(model->frames[i].vertices), sizeof(float), 3*model->vertice_count, file);
-	}
+	fread((char*)gfx_get_vertex_data_buffer(model->vertices), sizeof(float), 3*model->vertice_count, file);
 
 	// read index
 	model->index = (unsigned int*)malloc(sizeof(unsigned int)*model->indice_count);
@@ -151,7 +147,7 @@ elf_model* elf_create_model_from_pak(FILE *file, const char *name, elf_scene *sc
 		}
 	}
 
-	vertex_buffer = gfx_get_vertex_data_buffer(model->frames[0].vertices);
+	vertex_buffer = gfx_get_vertex_data_buffer(model->vertices);
 
 	// get bounding box values
 	memcpy(&model->bb_min.x, vertex_buffer, sizeof(float)*3);
@@ -171,8 +167,8 @@ elf_model* elf_create_model_from_pak(FILE *file, const char *name, elf_scene *sc
 	model->vertex_array = gfx_create_vertex_array(GFX_TRUE);
 	gfx_inc_ref((gfx_object*)model->vertex_array);
 
-	gfx_set_vertex_array_data(model->vertex_array, GFX_VERTEX, model->frames[0].vertices);
-	if(is_normals > 0) gfx_set_vertex_array_data(model->vertex_array, GFX_NORMAL, model->normals);
+	gfx_set_vertex_array_data(model->vertex_array, GFX_VERTEX, model->vertices);
+	gfx_set_vertex_array_data(model->vertex_array, GFX_NORMAL, model->normals);
 	if(is_tex_coords > 0) gfx_set_vertex_array_data(model->vertex_array, GFX_TEX_COORD, model->tex_coords);
 
 	for(i = 0; i < model->area_count; i++)
@@ -205,11 +201,11 @@ void elf_generate_model_tangent_vectors(elf_model *model)
 	float dot;
 	int i, j;
 
-	if(!model->frames[0].vertices || !model->tex_coords || !model->index) return;
+	if(!model->vertices || !model->tex_coords || !model->index) return;
 
 	if(model->tangents) gfx_dec_ref((gfx_object*)model->tangents);
 
-	vertex_buffer = (float*)gfx_get_vertex_data_buffer(model->frames[0].vertices);
+	vertex_buffer = (float*)gfx_get_vertex_data_buffer(model->vertices);
 	tex_coord_buffer = (float*)gfx_get_vertex_data_buffer(model->tex_coords);
 
 	vertices = (float*)malloc(sizeof(float)*model->indice_count*3);
@@ -321,13 +317,7 @@ void elf_destroy_model(elf_model *model)
 	if(model->file_path) elf_destroy_string(model->file_path);
 
 	if(model->vertex_array) gfx_dec_ref((gfx_object*)model->vertex_array);
-
-	if(model->frames)
-	{
-		for(i = 0; i < model->frame_count; i++) gfx_dec_ref((gfx_object*)model->frames[i].vertices);
-		free(model->frames);
-	}
-
+	if(model->vertices) gfx_dec_ref((gfx_object*)model->vertices);
 	if(model->normals) gfx_dec_ref((gfx_object*)model->normals);
 	if(model->tex_coords) gfx_dec_ref((gfx_object*)model->tex_coords);
 	if(model->tangents) gfx_dec_ref((gfx_object*)model->tangents);
@@ -344,8 +334,8 @@ void elf_destroy_model(elf_model *model)
 		}
 		free(model->areas);
 	}
-	if(model->index) free(model->index);
 
+	if(model->index) free(model->index);
 	if(model->tri_mesh) elf_dec_ref((elf_object*)model->tri_mesh);
 
 	free(model);
@@ -385,7 +375,7 @@ elf_vec3f elf_get_model_bounding_box_max(elf_model *model)
 
 float* elf_get_model_vertices(elf_model *model)
 {
-	return (float*)gfx_get_vertex_data_buffer(model->frames[0].vertices);
+	return (float*)gfx_get_vertex_data_buffer(model->vertices);
 }
 
 float* elf_get_model_normals(elf_model *model)

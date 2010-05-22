@@ -264,10 +264,6 @@ struct elf_camera {
 	float modelview_matrix[16];
 };
 
-typedef struct elf_frame {
-	gfx_vertex_data *vertices;
-} elf_frame;
-
 typedef struct elf_model_area {
 	unsigned int indice_count;
 	gfx_vertex_data *index;
@@ -283,8 +279,8 @@ struct elf_model {
 	int frame_count;
 	int area_count;
 	int indice_count;
-	elf_frame *frames;
 	gfx_vertex_array *vertex_array;
+	gfx_vertex_data *vertices;
 	gfx_vertex_data *normals;
 	gfx_vertex_data *tex_coords;
 	gfx_vertex_data *tangents;
