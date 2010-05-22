@@ -179,21 +179,67 @@ void elf_destroy_entity(elf_entity *entity)
 	global_obj_count--;
 }
 
+void elf_eval_entity_aabb_corner(elf_entity *entity, elf_vec4f *orient, elf_vec3f *corner, elf_vec3f *result)
+{
+	corner->x += entity->bb_offset.x;
+	corner->y += entity->bb_offset.y;
+	corner->z += entity->bb_offset.z;
+	gfx_mul_qua_vec(&orient->x, &corner->x, &result->x);
+
+	if(result->x < entity->cull_aabb_min.x) entity->cull_aabb_min.x = result->x;
+	if(result->y < entity->cull_aabb_min.y) entity->cull_aabb_min.y = result->y;
+	if(result->z < entity->cull_aabb_min.z) entity->cull_aabb_min.z = result->z;
+	if(result->x > entity->cull_aabb_max.x) entity->cull_aabb_max.x = result->x;
+	if(result->y > entity->cull_aabb_max.y) entity->cull_aabb_max.y = result->y;
+	if(result->z > entity->cull_aabb_max.z) entity->cull_aabb_max.z = result->z;
+}
+
 void elf_calc_entity_aabb(elf_entity *entity)
 {
 	elf_vec3f position;
+	elf_vec4f orient;
+	elf_vec3f corner;
+	elf_vec3f result;
 
 	gfx_get_transform_position(entity->transform, &position.x);
+	gfx_get_transform_orientation(entity->transform, &orient.x);
 
-	entity->cull_aabb_min = entity->bb_min;
-	entity->cull_aabb_max = entity->bb_max;
+	corner = entity->bb_min;
+	corner.x += entity->bb_offset.x;
+	corner.y += entity->bb_offset.y;
+	corner.z += entity->bb_offset.z;
+	gfx_mul_qua_vec(&orient.x, &corner.x, &result.x);
+	
+	entity->cull_aabb_min = corner;
+	entity->cull_aabb_max = corner;
 
-	entity->cull_aabb_min.x += position.x+entity->bb_offset.x;
-	entity->cull_aabb_min.y += position.y+entity->bb_offset.y;
-	entity->cull_aabb_min.z += position.z+entity->bb_offset.z;
-	entity->cull_aabb_max.x += position.x+entity->bb_offset.x;
-	entity->cull_aabb_max.y += position.y+entity->bb_offset.y;
-	entity->cull_aabb_max.z += position.z+entity->bb_offset.z;
+	corner.x = entity->bb_min.x; corner.y = entity->bb_max.y; corner.z = entity->bb_min.z;
+	elf_eval_entity_aabb_corner(entity, &orient, &corner, &result);
+
+	corner.x = entity->bb_min.x; corner.y = entity->bb_max.y; corner.z = entity->bb_max.z;
+	elf_eval_entity_aabb_corner(entity, &orient, &corner, &result);
+
+	corner.x = entity->bb_min.x; corner.y = entity->bb_min.y; corner.z = entity->bb_max.z;
+	elf_eval_entity_aabb_corner(entity, &orient, &corner, &result);
+
+	corner.x = entity->bb_max.x; corner.y = entity->bb_min.y; corner.z = entity->bb_min.z;
+	elf_eval_entity_aabb_corner(entity, &orient, &corner, &result);
+
+	corner.x = entity->bb_max.x; corner.y = entity->bb_max.y; corner.z = entity->bb_min.z;
+	elf_eval_entity_aabb_corner(entity, &orient, &corner, &result);
+
+	corner.x = entity->bb_max.x; corner.y = entity->bb_max.y; corner.z = entity->bb_max.z;
+	elf_eval_entity_aabb_corner(entity, &orient, &corner, &result);
+
+	corner.x = entity->bb_max.x; corner.y = entity->bb_min.y; corner.z = entity->bb_max.z;
+	elf_eval_entity_aabb_corner(entity, &orient, &corner, &result);
+
+	entity->cull_aabb_min.x += position.x;
+	entity->cull_aabb_min.y += position.y;
+	entity->cull_aabb_min.z += position.z;
+	entity->cull_aabb_max.x += position.x;
+	entity->cull_aabb_max.y += position.y;
+	entity->cull_aabb_max.z += position.z;
 }
 
 void elf_calc_entity_bounding_volumes(elf_entity *entity)
