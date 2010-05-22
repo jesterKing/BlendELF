@@ -315,6 +315,8 @@ struct elf_entity {
 	elf_vec3f scale;
 	elf_vec3f bb_min;
 	elf_vec3f bb_max;
+	elf_vec3f arm_bb_min;
+	elf_vec3f arm_bb_max;
 	elf_vec3f bb_offset;
 	elf_vec3f bb_half_length;
 	elf_vec3f cull_aabb_min;
