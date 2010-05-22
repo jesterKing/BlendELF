@@ -125,8 +125,11 @@ elf_particles* elf_create_particles(const char *name, int max_count)
 
 void elf_init_new_particle(elf_particles *particles, elf_particle *particle)
 {
-	int num;
-	float *vertices;
+	static int num;
+	static float *vertices;
+	static elf_vec4f orient;
+	static elf_vec3f local_pos;
+	static elf_vec3f result;
 
 	particle->life_span = elf_random_float_range(particles->life_span_min, particles->life_span_max);
 	particle->fade_speed = elf_random_float_range(particles->fade_speed_min, particles->fade_speed_max);
@@ -134,17 +137,33 @@ void elf_init_new_particle(elf_particles *particles, elf_particle *particle)
 	particle->size_growth = elf_random_float_range(particles->size_growth_min, particles->size_growth_max);
 	particle->rotation = elf_random_float_range(particles->rotation_min, particles->rotation_max);
 	particle->rotation_growth = elf_random_float_range(particles->rotation_growth_min, particles->rotation_growth_max);
-	particle->position = elf_get_actor_position((elf_actor*)particles);
-	if(particles->model)
+	if(particles->model && elf_get_model_vertice_count(particles->model) > 0)
 	{
+		elf_get_actor_position_((elf_actor*)particles, &particle->position.x);
 		num = elf_random_int_range(0, elf_get_model_vertice_count(particles->model));
 		vertices = elf_get_model_vertices(particles->model);
 		particle->position.x += vertices[3*num];
 		particle->position.y += vertices[3*num+1];
 		particle->position.z += vertices[3*num+2];
 	}
+	else if(particles->entity && particles->entity->model && particles->entity->vertices &&
+		elf_get_model_vertice_count(particles->entity->model) > 0)
+	{
+		elf_get_actor_position_((elf_actor*)particles->entity, &particle->position.x);
+		num = elf_random_int_range(0, elf_get_model_vertice_count(particles->entity->model));
+		vertices = gfx_get_vertex_data_buffer(particles->entity->vertices);
+		local_pos.x = vertices[3*num];
+		local_pos.y = vertices[3*num+1];
+		local_pos.z = vertices[3*num+2];
+		elf_get_actor_orientation_((elf_actor*)particles->entity, &orient.x);
+		gfx_mul_qua_vec(&orient.x, &local_pos.x, &result.x);
+		particle->position.x += result.x;
+		particle->position.y += result.y;
+		particle->position.z += result.z;
+	}
 	else
 	{
+		elf_get_actor_position_((elf_actor*)particles, &particle->position.x);
 		particle->position.x += elf_random_float_range(particles->position_min.x, particles->position_max.x);
 		particle->position.y += elf_random_float_range(particles->position_min.y, particles->position_max.y);
 		particle->position.z += elf_random_float_range(particles->position_min.z, particles->position_max.z);
@@ -420,6 +439,7 @@ void elf_destroy_particles(elf_particles *particles)
 	elf_dec_ref((elf_object*)particles->particles);
 	if(particles->texture) elf_dec_ref((elf_object*)particles->texture);
 	if(particles->model) elf_dec_ref((elf_object*)particles->model);
+	if(particles->entity) elf_dec_ref((elf_object*)particles->entity);
 
 	gfx_dec_ref((gfx_object*)particles->vertex_array);
 	gfx_dec_ref((gfx_object*)particles->vertices);
@@ -541,9 +561,22 @@ void elf_set_particles_texture(elf_particles *particles, elf_texture *texture)
 
 void elf_set_particles_model(elf_particles *particles, elf_model *model)
 {
+	if(particles->entity) elf_dec_ref((elf_object*)particles->entity);
+	particles->entity = NULL;
+
 	if(particles->model) elf_dec_ref((elf_object*)particles->model);
 	particles->model = model;
 	if(particles->model) elf_inc_ref((elf_object*)particles->model);
+}
+
+void elf_set_particles_entity(elf_particles *particles, elf_entity *entity)
+{
+	if(particles->model) elf_dec_ref((elf_object*)particles->model);
+	particles->model = NULL;
+
+	if(particles->entity) elf_dec_ref((elf_object*)particles->entity);
+	particles->entity = entity;
+	if(particles->entity) elf_inc_ref((elf_object*)particles->entity);
 }
 
 void elf_set_particles_gravity(elf_particles *particles, float x, float y, float z)
@@ -661,6 +694,11 @@ elf_texture* elf_get_particles_texture(elf_particles *particles)
 elf_model* elf_get_particles_model(elf_particles *particles)
 {
 	return particles->model;
+}
+
+elf_entity* elf_get_particles_entity(elf_particles *particles)
+{
+	return particles->entity;
 }
 
 elf_vec3f elf_get_particles_gravity(elf_particles *particles)

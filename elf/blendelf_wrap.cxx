@@ -11300,6 +11300,40 @@ fail:
 }
 
 
+static int _wrap_elfSetParticlesEntity(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle arg2 ;
+  elf_handle *argp1 ;
+  elf_handle *argp2 ;
+  
+  SWIG_check_num_args("SetParticlesEntity",2,2)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetParticlesEntity",1,"handle");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("SetParticlesEntity",2,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("SetParticlesEntity",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("SetParticlesEntity",2,SWIGTYPE_p_elf_handle);
+  }
+  arg2 = *argp2;
+  
+  elfSetParticlesEntity(arg1,arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfSetParticlesGravity(lua_State* L) {
   int SWIG_arg = 0;
   elf_handle arg1 ;
@@ -11880,6 +11914,35 @@ static int _wrap_elfGetParticlesModel(lua_State* L) {
   arg1 = *argp1;
   
   result = elfGetParticlesModel(arg1);
+  {
+    elf_handle * resultptr = new elf_handle((const elf_handle &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_handle,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetParticlesEntity(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  elf_handle result;
+  
+  SWIG_check_num_args("GetParticlesEntity",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetParticlesEntity",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetParticlesEntity",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = elfGetParticlesEntity(arg1);
   {
     elf_handle * resultptr = new elf_handle((const elf_handle &) result);
     SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_handle,1); SWIG_arg++;
@@ -18032,6 +18095,7 @@ static const struct luaL_reg swig_commands[] = {
     { "SetParticlesDrawMode", _wrap_elfSetParticlesDrawMode},
     { "SetParticlesTexture", _wrap_elfSetParticlesTexture},
     { "SetParticlesModel", _wrap_elfSetParticlesModel},
+    { "SetParticlesEntity", _wrap_elfSetParticlesEntity},
     { "SetParticlesGravity", _wrap_elfSetParticlesGravity},
     { "SetParticlesSpawnDelay", _wrap_elfSetParticlesSpawnDelay},
     { "SetParticlesSize", _wrap_elfSetParticlesSize},
@@ -18051,6 +18115,7 @@ static const struct luaL_reg swig_commands[] = {
     { "GetParticlesDrawMode", _wrap_elfGetParticlesDrawMode},
     { "GetParticlesTexture", _wrap_elfGetParticlesTexture},
     { "GetParticlesModel", _wrap_elfGetParticlesModel},
+    { "GetParticlesEntity", _wrap_elfGetParticlesEntity},
     { "GetParticlesGravity", _wrap_elfGetParticlesGravity},
     { "GetParticlesSpawnDelay", _wrap_elfGetParticlesSpawnDelay},
     { "GetParticlesSizeMin", _wrap_elfGetParticlesSizeMin},

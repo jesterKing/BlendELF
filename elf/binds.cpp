@@ -2787,6 +2787,20 @@ ELF_API void ELF_APIENTRY elfSetParticlesModel(elf_handle particles, elf_handle 
 	}
 	elf_set_particles_model((elf_particles*)particles.get(), (elf_model*)model.get());
 }
+ELF_API void ELF_APIENTRY elfSetParticlesEntity(elf_handle particles, elf_handle entity)
+{
+	if(!particles.get() || elf_get_object_type(particles.get()) != ELF_PARTICLES)
+	{
+		elf_set_error_no_save(ELF_INVALID_HANDLE, "SetParticlesEntity() -> invalid handle\n");
+		return;
+	}
+	if(!entity.get() || elf_get_object_type(entity.get()) != ELF_ENTITY)
+	{
+		elf_set_error_no_save(ELF_INVALID_HANDLE, "SetParticlesEntity() -> invalid handle\n");
+		return;
+	}
+	elf_set_particles_entity((elf_particles*)particles.get(), (elf_entity*)entity.get());
+}
 ELF_API void ELF_APIENTRY elfSetParticlesGravity(elf_handle particles, float x, float y, float z)
 {
 	if(!particles.get() || elf_get_object_type(particles.get()) != ELF_PARTICLES)
@@ -2960,6 +2974,17 @@ ELF_API elf_handle ELF_APIENTRY elfGetParticlesModel(elf_handle particles)
 		return handle;
 	}
 	handle = (elf_object*)elf_get_particles_model((elf_particles*)particles.get());
+	return handle;
+}
+ELF_API elf_handle ELF_APIENTRY elfGetParticlesEntity(elf_handle particles)
+{
+	elf_handle handle;
+	if(!particles.get() || elf_get_object_type(particles.get()) != ELF_PARTICLES)
+	{
+		elf_set_error_no_save(ELF_INVALID_HANDLE, "GetParticlesEntity() -> invalid handle\n");
+		return handle;
+	}
+	handle = (elf_object*)elf_get_particles_entity((elf_particles*)particles.get());
 	return handle;
 }
 ELF_API elf_vec3f ELF_APIENTRY elfGetParticlesGravity(elf_handle particles)

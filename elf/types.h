@@ -402,6 +402,7 @@ struct elf_particles {
 	elf_list *particles;
 	elf_texture *texture;
 	elf_model *model;
+	elf_entity *entity;
 	gfx_vertex_array *vertex_array;
 	gfx_vertex_data *vertices;
 	gfx_vertex_data *tex_coords;
