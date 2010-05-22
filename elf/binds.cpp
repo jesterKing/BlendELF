@@ -1503,6 +1503,42 @@ ELF_API elf_vec4f ELF_APIENTRY elfGetActorOrientation(elf_handle actor)
 	_e_type = elf_get_actor_orientation((elf_actor*)actor.get());
 	return _e_type;
 }
+ELF_API void ELF_APIENTRY elfSetActorBoundingLengths(elf_handle actor, float x, float y, float z)
+{
+	if(!actor.get() || !elf_is_actor(actor.get()))
+	{
+		elf_set_error_no_save(ELF_INVALID_HANDLE, "SetActorBoundingLengths() -> invalid handle\n");
+		return;
+	}
+	elf_set_actor_bounding_lengths((elf_actor*)actor.get(), x, y, z);
+}
+ELF_API void ELF_APIENTRY elfSetActorBoundingOffset(elf_handle actor, float x, float y, float z)
+{
+	if(!actor.get() || !elf_is_actor(actor.get()))
+	{
+		elf_set_error_no_save(ELF_INVALID_HANDLE, "SetActorBoundingOffset() -> invalid handle\n");
+		return;
+	}
+	elf_set_actor_bounding_offset((elf_actor*)actor.get(), x, y, z);
+}
+ELF_API void ELF_APIENTRY elfSetActorPhysics(elf_handle actor, int shape, float mass)
+{
+	if(!actor.get() || !elf_is_actor(actor.get()))
+	{
+		elf_set_error_no_save(ELF_INVALID_HANDLE, "SetActorPhysics() -> invalid handle\n");
+		return;
+	}
+	elf_set_actor_physics((elf_actor*)actor.get(), shape, mass);
+}
+ELF_API void ELF_APIENTRY elfDisableActorPhysics(elf_handle actor)
+{
+	if(!actor.get() || !elf_is_actor(actor.get()))
+	{
+		elf_set_error_no_save(ELF_INVALID_HANDLE, "DisableActorPhysics() -> invalid handle\n");
+		return;
+	}
+	elf_disable_actor_physics((elf_actor*)actor.get());
+}
 ELF_API void ELF_APIENTRY elfSetActorAnisotropicFriction(elf_handle actor, float x, float y, float z)
 {
 	if(!actor.get() || !elf_is_actor(actor.get()))
@@ -1592,6 +1628,48 @@ ELF_API void ELF_APIENTRY elfSetActorAngularFactor(elf_handle actor, float x, fl
 		return;
 	}
 	elf_set_actor_angular_factor((elf_actor*)actor.get(), x, y, z);
+}
+ELF_API elf_vec3f ELF_APIENTRY elfGetActorBoundingLengths(elf_handle actor)
+{
+	elf_vec3f _e_type;
+	memset(&_e_type, 0x0, sizeof(elf_vec3f));
+	if(!actor.get() || !elf_is_actor(actor.get()))
+	{
+		elf_set_error_no_save(ELF_INVALID_HANDLE, "GetActorBoundingLengths() -> invalid handle\n");
+		return _e_type;
+	}
+	_e_type = elf_get_actor_bounding_lengths((elf_actor*)actor.get());
+	return _e_type;
+}
+ELF_API elf_vec3f ELF_APIENTRY elfGetActorBoundingOffset(elf_handle actor)
+{
+	elf_vec3f _e_type;
+	memset(&_e_type, 0x0, sizeof(elf_vec3f));
+	if(!actor.get() || !elf_is_actor(actor.get()))
+	{
+		elf_set_error_no_save(ELF_INVALID_HANDLE, "GetActorBoundingOffset() -> invalid handle\n");
+		return _e_type;
+	}
+	_e_type = elf_get_actor_bounding_offset((elf_actor*)actor.get());
+	return _e_type;
+}
+ELF_API int ELF_APIENTRY elfGetActorPhysicsShape(elf_handle actor)
+{
+	if(!actor.get() || !elf_is_actor(actor.get()))
+	{
+		elf_set_error_no_save(ELF_INVALID_HANDLE, "GetActorPhysicsShape() -> invalid handle\n");
+		return 0;
+	}
+	return elf_get_actor_physics_shape((elf_actor*)actor.get());
+}
+ELF_API float ELF_APIENTRY elfGetActorPhysicsMass(elf_handle actor)
+{
+	if(!actor.get() || !elf_is_actor(actor.get()))
+	{
+		elf_set_error_no_save(ELF_INVALID_HANDLE, "GetActorPhysicsMass() -> invalid handle\n");
+		return 0;
+	}
+	return elf_get_actor_physics_mass((elf_actor*)actor.get());
 }
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorLinearVelocity(elf_handle actor)
 {

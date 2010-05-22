@@ -19,6 +19,8 @@
 	elf_ipo *ipo; \
 	elf_frame_player *ipo_player; \
 	elf_list *properties; \
+	elf_vec3f pbb_lengths; \
+	elf_vec3f pbb_offset; \
 	unsigned char moved; \
 	unsigned char selected
 
@@ -311,10 +313,9 @@ struct elf_entity {
 	elf_vec3f scale;
 	elf_vec3f bb_min;
 	elf_vec3f bb_max;
+	elf_vec3f bb_offset;
 	elf_vec3f arm_bb_min;
 	elf_vec3f arm_bb_max;
-	elf_vec3f bb_offset;
-	elf_vec3f bb_half_length;
 	elf_vec3f cull_aabb_min;
 	elf_vec3f cull_aabb_max;
 	float cull_radius;

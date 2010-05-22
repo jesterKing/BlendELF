@@ -56,6 +56,8 @@ void elf_init_actor(elf_actor *actor, unsigned char camera)
 	elf_set_frame_player_user_data(actor->ipo_player, actor);
 	elf_set_frame_player_callback(actor->ipo_player, elf_actor_ipo_callback);
 
+	actor->pbb_lengths.x = actor->pbb_lengths.y = actor->pbb_lengths.z = 1.0;
+
 	actor->moved = ELF_TRUE;
 }
 
@@ -629,6 +631,124 @@ void elf_get_actor_orientation_(elf_actor *actor, float *params)
 	gfx_get_transform_orientation(actor->transform, params);
 }
 
+void elf_set_actor_bounding_lengths(elf_actor *actor, float x, float y, float z)
+{
+	actor->pbb_lengths.x = x;
+	actor->pbb_lengths.y = y;
+	actor->pbb_lengths.z = z;
+	if(actor->object)
+	{
+		elf_set_actor_physics(actor, elf_get_actor_physics_shape(actor),
+			elf_get_actor_physics_mass(actor));
+	}
+}
+
+void elf_set_actor_bounding_offset(elf_actor *actor, float x, float y, float z)
+{
+	actor->pbb_offset.x = x;
+	actor->pbb_offset.y = y;
+	actor->pbb_offset.z = z;
+	if(actor->object)
+	{
+		elf_set_actor_physics(actor, elf_get_actor_physics_shape(actor),
+			elf_get_actor_physics_mass(actor));
+	}
+}
+
+void elf_set_actor_physics(elf_actor *actor, int shape, float mass)
+{
+	float position[3];
+	float orient[4];
+	float scale[3];
+	float radius;
+	elf_joint *joint;
+	elf_entity *entity;
+
+	elf_disable_actor_physics(actor);
+
+	switch(shape)
+	{
+		case ELF_BOX:
+		{
+			actor->object = elf_create_physics_object_box(actor->pbb_lengths.x/2.0,
+				actor->pbb_lengths.y, actor->pbb_lengths.z/2.0, mass,
+				actor->pbb_offset.x, actor->pbb_offset.y, actor->pbb_offset.z);
+			break;
+		}
+		case ELF_SPHERE:
+		{
+			if(actor->pbb_lengths.x > actor->pbb_lengths.y && actor->pbb_lengths.x > actor->pbb_lengths.z)
+				radius = actor->pbb_lengths.x/2.0;
+			else if(actor->pbb_lengths.y > actor->pbb_lengths.x && actor->pbb_lengths.y > actor->pbb_lengths.z)
+				radius = actor->pbb_lengths.y/2.0;
+			else  radius = actor->pbb_lengths.z/2.0;
+
+			actor->object = elf_create_physics_object_sphere(radius, mass,
+				actor->pbb_offset.x, actor->pbb_offset.y, actor->pbb_offset.z);
+			break;
+		}
+		case ELF_MESH:
+		{
+			if(actor->type != ELF_ENTITY) return;
+			entity = (elf_entity*)actor;
+			if(!elf_get_model_indices(entity->model)) return;
+			if(!entity->model->tri_mesh)
+			{
+				entity->model->tri_mesh = elf_create_physics_tri_mesh(
+					elf_get_model_vertices(entity->model),
+					elf_get_model_indices(entity->model),
+					elf_get_model_indice_count(entity->model));
+				elf_inc_ref((elf_object*)entity->model->tri_mesh);
+			}
+			actor->object = elf_create_physics_object_mesh(entity->model->tri_mesh, mass);
+			break;
+		}
+		case ELF_CAPSULE:
+		{
+			if(actor->pbb_lengths.x > actor->pbb_lengths.y) radius = actor->pbb_lengths.x/2.0;
+			else radius = actor->pbb_lengths.y/2.0;
+
+			actor->object = elf_create_physics_object_capsule(actor->pbb_lengths.z, radius, mass,
+				actor->pbb_offset.x, actor->pbb_offset.y, actor->pbb_offset.z);
+			break;
+		}
+		default: return;
+	}
+
+	elf_set_physics_object_actor(actor->object, (elf_actor*)actor);
+	elf_inc_ref((elf_object*)actor->object);
+
+	gfx_get_transform_position(actor->transform, position);
+	gfx_get_transform_orientation(actor->transform, orient);
+	gfx_get_transform_scale(actor->transform, scale);
+
+	elf_set_physics_object_position(actor->object, position[0], position[1], position[2]);
+	elf_set_physics_object_orientation(actor->object, orient[0], orient[1], orient[2], orient[3]);
+	elf_set_physics_object_scale(actor->object, scale[0], scale[1], scale[2]);
+
+	if(actor->scene) elf_set_physics_object_world(actor->object, actor->scene->world);
+
+	// things are seriously going to blow up if we don't update the joints
+	// when a new physics object has been created
+	for(joint = (elf_joint*)elf_begin_list(actor->joints); joint;
+		joint = (elf_joint*)elf_next_in_list(actor->joints))
+	{
+		elf_set_joint_world(joint, NULL);
+		if(actor->scene) elf_set_joint_world(joint, actor->scene->world);
+	}
+}
+
+void elf_disable_actor_physics(elf_actor *actor)
+{
+	if(actor->object)
+	{
+		elf_set_physics_object_actor(actor->object, NULL);
+		elf_set_physics_object_world(actor->object, NULL);
+		elf_dec_ref((elf_object*)actor->object);
+		actor->object = NULL;
+	}
+}
+
 void elf_set_actor_anisotropic_friction(elf_actor *actor, float x, float y, float z)
 {
 	if(actor->object) elf_set_physics_object_anisotropic_friction(actor->object, x, y, z);
@@ -677,6 +797,28 @@ void elf_set_actor_linear_factor(elf_actor *actor, float x, float y, float z)
 void elf_set_actor_angular_factor(elf_actor *actor, float x, float y, float z)
 {
 	if(actor->object) elf_set_physics_object_angular_factor(actor->object, x, y, z);
+}
+
+elf_vec3f elf_get_actor_bounding_lengths(elf_actor *actor)
+{
+	return actor->pbb_lengths;
+}
+
+elf_vec3f elf_get_actor_bounding_offset(elf_actor *actor)
+{
+	return actor->pbb_offset;
+}
+
+int elf_get_actor_physics_shape(elf_actor *actor)
+{
+	if(actor->object) elf_get_physics_object_shape(actor->object);
+	return 0;
+}
+
+float elf_get_actor_physics_mass(elf_actor *actor)
+{
+	if(actor->object) elf_get_physics_object_mass(actor->object);
+	return 0.0;
 }
 
 elf_vec3f elf_get_actor_linear_velocity(elf_actor *actor)

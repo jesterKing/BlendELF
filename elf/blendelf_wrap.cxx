@@ -7452,6 +7452,130 @@ fail:
 }
 
 
+static int _wrap_elfSetActorBoundingLengths(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  float arg2 ;
+  float arg3 ;
+  float arg4 ;
+  elf_handle *argp1 ;
+  
+  SWIG_check_num_args("SetActorBoundingLengths",4,4)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetActorBoundingLengths",1,"handle");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("SetActorBoundingLengths",2,"float");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("SetActorBoundingLengths",3,"float");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("SetActorBoundingLengths",4,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("SetActorBoundingLengths",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (float)lua_tonumber(L, 2);
+  arg3 = (float)lua_tonumber(L, 3);
+  arg4 = (float)lua_tonumber(L, 4);
+  elfSetActorBoundingLengths(arg1,arg2,arg3,arg4);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfSetActorBoundingOffset(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  float arg2 ;
+  float arg3 ;
+  float arg4 ;
+  elf_handle *argp1 ;
+  
+  SWIG_check_num_args("SetActorBoundingOffset",4,4)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetActorBoundingOffset",1,"handle");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("SetActorBoundingOffset",2,"float");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("SetActorBoundingOffset",3,"float");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("SetActorBoundingOffset",4,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("SetActorBoundingOffset",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (float)lua_tonumber(L, 2);
+  arg3 = (float)lua_tonumber(L, 3);
+  arg4 = (float)lua_tonumber(L, 4);
+  elfSetActorBoundingOffset(arg1,arg2,arg3,arg4);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfSetActorPhysics(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  int arg2 ;
+  float arg3 ;
+  elf_handle *argp1 ;
+  
+  SWIG_check_num_args("SetActorPhysics",3,3)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetActorPhysics",1,"handle");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("SetActorPhysics",2,"int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("SetActorPhysics",3,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("SetActorPhysics",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  arg3 = (float)lua_tonumber(L, 3);
+  elfSetActorPhysics(arg1,arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfDisableActorPhysics(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  
+  SWIG_check_num_args("DisableActorPhysics",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("DisableActorPhysics",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("DisableActorPhysics",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  elfDisableActorPhysics(arg1);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfSetActorAnisotropicFriction(lua_State* L) {
   int SWIG_arg = 0;
   elf_handle arg1 ;
@@ -7770,6 +7894,116 @@ static int _wrap_elfSetActorAngularFactor(lua_State* L) {
   arg4 = (float)lua_tonumber(L, 4);
   elfSetActorAngularFactor(arg1,arg2,arg3,arg4);
   
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetActorBoundingLengths(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  elf_vec3f result;
+  
+  SWIG_check_num_args("GetActorBoundingLengths",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetActorBoundingLengths",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetActorBoundingLengths",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = elfGetActorBoundingLengths(arg1);
+  {
+    elf_vec3f * resultptr = new elf_vec3f((const elf_vec3f &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_vec3f,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetActorBoundingOffset(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  elf_vec3f result;
+  
+  SWIG_check_num_args("GetActorBoundingOffset",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetActorBoundingOffset",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetActorBoundingOffset",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = elfGetActorBoundingOffset(arg1);
+  {
+    elf_vec3f * resultptr = new elf_vec3f((const elf_vec3f &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_vec3f,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetActorPhysicsShape(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  int result;
+  
+  SWIG_check_num_args("GetActorPhysicsShape",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetActorPhysicsShape",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetActorPhysicsShape",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = (int)elfGetActorPhysicsShape(arg1);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetActorPhysicsMass(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  float result;
+  
+  SWIG_check_num_args("GetActorPhysicsMass",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetActorPhysicsMass",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetActorPhysicsMass",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = (float)elfGetActorPhysicsMass(arg1);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -17965,6 +18199,10 @@ static const struct luaL_reg swig_commands[] = {
     { "GetActorPosition", _wrap_elfGetActorPosition},
     { "GetActorRotation", _wrap_elfGetActorRotation},
     { "GetActorOrientation", _wrap_elfGetActorOrientation},
+    { "SetActorBoundingLengths", _wrap_elfSetActorBoundingLengths},
+    { "SetActorBoundingOffset", _wrap_elfSetActorBoundingOffset},
+    { "SetActorPhysics", _wrap_elfSetActorPhysics},
+    { "DisableActorPhysics", _wrap_elfDisableActorPhysics},
     { "SetActorAnisotropicFriction", _wrap_elfSetActorAnisotropicFriction},
     { "SetActorDamping", _wrap_elfSetActorDamping},
     { "SetActorSleepThresholds", _wrap_elfSetActorSleepThresholds},
@@ -17975,6 +18213,10 @@ static const struct luaL_reg swig_commands[] = {
     { "SetActorAngularVelocity", _wrap_elfSetActorAngularVelocity},
     { "SetActorLinearFactor", _wrap_elfSetActorLinearFactor},
     { "SetActorAngularFactor", _wrap_elfSetActorAngularFactor},
+    { "GetActorBoundingLengths", _wrap_elfGetActorBoundingLengths},
+    { "GetActorBoundingOffset", _wrap_elfGetActorBoundingOffset},
+    { "GetActorPhysicsShape", _wrap_elfGetActorPhysicsShape},
+    { "GetActorPhysicsMass", _wrap_elfGetActorPhysicsMass},
     { "GetActorLinearVelocity", _wrap_elfGetActorLinearVelocity},
     { "GetActorAngularVelocity", _wrap_elfGetActorAngularVelocity},
     { "GetActorLinearFactor", _wrap_elfGetActorLinearFactor},
@@ -18485,6 +18727,7 @@ static swig_lua_const_info swig_constants[] = {
 { SWIG_LUA_INT,     (char *)"BOX", (long) 0x0001, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"SPHERE", (long) 0x0002, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"MESH", (long) 0x0003, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"CAPSULE", (long) 0x0004, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"HINGE", (long) 0x0001, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"BALL", (long) 0x0002, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"CONE_TWIST", (long) 0x0003, 0, 0, 0},

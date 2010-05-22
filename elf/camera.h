@@ -32,6 +32,8 @@ elf_camera* elf_create_camera(const char *name)
 	elf_set_physics_object_actor(camera->dobject, (elf_actor*)camera);
 	elf_inc_ref((elf_object*)camera->dobject);
 
+	camera->pbb_lengths.x = camera->pbb_lengths.y = camera->pbb_lengths.z = 0.7;
+
 	if(name) camera->name = elf_create_string(name);
 	
 	global_obj_count++;

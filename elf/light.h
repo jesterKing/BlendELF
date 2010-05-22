@@ -32,6 +32,8 @@ elf_light* elf_create_light(const char *name)
 	elf_set_physics_object_actor(light->dobject, (elf_actor*)light);
 	elf_inc_ref((elf_object*)light->dobject);
 
+	light->pbb_lengths.x = light->pbb_lengths.y = light->pbb_lengths.z = 0.5;
+
 	if(name) light->name = elf_create_string(name);
 
 	global_obj_count++;

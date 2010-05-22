@@ -173,6 +173,7 @@ extern "C" {
 #define ELF_BOX						0x0001	// <mdoc> PHYSICS SHAPES <mdocc> The physics shapes used by elf.SetEntityPhysics
 #define ELF_SPHERE					0x0002
 #define ELF_MESH					0x0003
+#define ELF_CAPSULE					0x0004
 
 #define ELF_HINGE					0x0001	// <mdoc> JOINT TYPES <mdocc> The joint types returned by elf.GetJointType
 #define ELF_BALL					0x0002
@@ -264,9 +265,8 @@ extern "C" {
 #define ELF_QUA_Z					0x000B
 #define ELF_QUA_W					0x000C
 
-// mbg: networking stuff
-#define ELF_NET_NONE					0x0000
-#define ELF_NET_CONNECT					0x0001	// <mdoc> NETWORKING EVENTS
+#define ELF_NET_NONE					0x0000	// <mdoc> NETWORKING EVENTS
+#define ELF_NET_CONNECT					0x0001
 #define ELF_NET_RECEIVE					0x0002
 #define ELF_NET_DISCONNECT				0x0003
 
@@ -807,6 +807,11 @@ void elf_get_actor_rotation_(elf_actor *actor, float *params);
 void elf_get_actor_orientation_(elf_actor *actor, float *params);
 // !!>
 
+void elf_set_actor_bounding_lengths(elf_actor *actor, float x, float y, float z);
+void elf_set_actor_bounding_offset(elf_actor *actor, float x, float y, float z);
+void elf_set_actor_physics(elf_actor *actor, int shape, float mass);
+void elf_disable_actor_physics(elf_actor *actor);
+
 void elf_set_actor_anisotropic_friction(elf_actor *actor, float x, float y, float z);
 void elf_set_actor_damping(elf_actor *actor, float lin_damp, float ang_damp);
 void elf_set_actor_sleep_thresholds(elf_actor *actor, float lin_thrs, float ang_thrs);
@@ -817,6 +822,11 @@ void elf_set_actor_linear_velocity(elf_actor *actor, float x, float y, float z);
 void elf_set_actor_angular_velocity(elf_actor *actor, float x, float y, float z);
 void elf_set_actor_linear_factor(elf_actor *actor, float x, float y, float z);
 void elf_set_actor_angular_factor(elf_actor *actor, float x, float y, float z);
+
+elf_vec3f elf_get_actor_bounding_lengths(elf_actor *actor);
+elf_vec3f elf_get_actor_bounding_offset(elf_actor *actor);
+int elf_get_actor_physics_shape(elf_actor *actor);
+float elf_get_actor_physics_mass(elf_actor *actor);
 
 elf_vec3f elf_get_actor_linear_velocity(elf_actor *actor);
 elf_vec3f elf_get_actor_angular_velocity(elf_actor *actor);
@@ -1397,6 +1407,7 @@ elf_physics_object* elf_create_physics_object();
 elf_physics_object* elf_create_physics_object_mesh(elf_physics_tri_mesh *tri_mesh, float mass);
 elf_physics_object* elf_create_physics_object_sphere(float radius, float mass, float ox, float oy, float oz);
 elf_physics_object* elf_create_physics_object_box(float hx, float hy, float hz, float mass, float ox, float oy, float oz);
+elf_physics_object* elf_create_physics_object_capsule(float length, float radius, float mass, float ox, float oy, float oz);
 void elf_set_physics_object_world(elf_physics_object *object, elf_physics_world *world);
 void elf_destroy_physics_object(elf_physics_object *object);
 

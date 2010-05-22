@@ -22,6 +22,8 @@ elf_entity* elf_create_entity(const char *name)
 	elf_set_physics_object_actor(entity->dobject, (elf_actor*)entity);
 	elf_inc_ref((elf_object*)entity->dobject);
 
+	entity->pbb_lengths.x = entity->pbb_lengths.y = entity->pbb_lengths.z = 0.4;
+
 	entity->armature_player = elf_create_frame_player();
 	elf_inc_ref((elf_object*)entity->armature_player);
 
@@ -109,9 +111,9 @@ elf_entity* elf_create_entity_from_pak(FILE *file, const char *name, elf_scene *
 	fread((char*)&lin_damp, sizeof(float), 1, file);
 	fread((char*)&ang_damp, sizeof(float), 1, file);
 
-	if(shape == ELF_BOX || shape == ELF_SPHERE || shape == ELF_MESH)
+	if(shape == ELF_BOX || shape == ELF_SPHERE || shape == ELF_MESH || shape == ELF_CAPSULE)
 	{
-		elf_set_entity_physics(entity, shape, mass);
+		elf_set_actor_physics((elf_actor*)entity, shape, mass);
 		elf_set_actor_damping((elf_actor*)entity, lin_damp, ang_damp);
 	}
 
@@ -330,9 +332,9 @@ void elf_calc_entity_bounding_volumes(elf_entity *entity)
 	entity->bb_max.y += entity->bb_offset.y;
 	entity->bb_max.z += entity->bb_offset.z;
 
-	entity->bb_half_length.x = (entity->bb_max.x-entity->bb_min.x)/2.0;
-	entity->bb_half_length.y = (entity->bb_max.y-entity->bb_min.y)/2.0;
-	entity->bb_half_length.z = (entity->bb_max.z-entity->bb_min.z)/2.0;
+	entity->pbb_lengths.x = entity->model->bb_max.x-entity->model->bb_min.x;
+	entity->pbb_lengths.y = entity->model->bb_max.y-entity->model->bb_min.y;
+	entity->pbb_lengths.z = entity->model->bb_max.z-entity->model->bb_min.z;
 
 	elf_calc_entity_aabb(entity);
 
@@ -400,7 +402,12 @@ void elf_set_entity_model(elf_entity *entity, elf_model *model)
 	elf_set_entity_scale(entity, 1.0, 1.0, 1.0);
 	elf_calc_entity_bounding_volumes(entity);
 
-	if(entity->object) elf_set_entity_physics(entity, elf_get_physics_object_shape(entity->object), elf_get_physics_object_mass(entity->object));
+	if(entity->object)
+	{
+		elf_set_actor_physics((elf_actor*)entity, elf_get_actor_physics_shape((elf_actor*)entity),
+			elf_get_actor_physics_mass((elf_actor*)entity));
+	}
+
 	elf_reset_entity_debug_physics_object(entity);
 
 	entity->moved = ELF_TRUE;
@@ -465,86 +472,12 @@ unsigned char elf_get_entity_visible(elf_entity *entity)
 
 void elf_set_entity_physics(elf_entity *entity, int type, float mass)
 {
-	float position[3];
-	float orient[4];
-	float scale[3];
-	float radius;
-	elf_joint *joint;
-
-	if(!entity->model) return;
-
-	elf_disable_entity_physics(entity);
-
-	switch(type)
-	{
-		case ELF_BOX:
-			entity->object = elf_create_physics_object_box(entity->bb_half_length.x,
-				entity->bb_half_length.y, entity->bb_half_length.z, mass,
-				entity->bb_offset.x, entity->bb_offset.y, entity->bb_offset.z);
-			break;
-		case ELF_SPHERE:
-		{
-			if(entity->bb_half_length.x > entity->bb_half_length.y &&
-				entity->bb_half_length.x > entity->bb_half_length.z)
-				radius = entity->bb_half_length.x;
-			else if(entity->bb_half_length.y > entity->bb_half_length.x &&
-				entity->bb_half_length.y > entity->bb_half_length.z)
-				radius = entity->bb_half_length.y;
-			else  radius = entity->bb_half_length.z;
-
-			entity->object = elf_create_physics_object_sphere(radius, mass,
-				entity->bb_offset.x, entity->bb_offset.y, entity->bb_offset.z);
-			break;
-		}
-		case ELF_MESH:
-		{
-			if(!elf_get_model_indices(entity->model)) return;
-			if(!entity->model->tri_mesh)
-			{
-				entity->model->tri_mesh = elf_create_physics_tri_mesh(
-					elf_get_model_vertices(entity->model),
-					elf_get_model_indices(entity->model),
-					elf_get_model_indice_count(entity->model));
-				elf_inc_ref((elf_object*)entity->model->tri_mesh);
-			}
-			entity->object = elf_create_physics_object_mesh(entity->model->tri_mesh, mass);
-			break;
-		}
-		default: return;
-	}
-
-	elf_set_physics_object_actor(entity->object, (elf_actor*)entity);
-	elf_inc_ref((elf_object*)entity->object);
-
-	gfx_get_transform_position(entity->transform, position);
-	gfx_get_transform_orientation(entity->transform, orient);
-	gfx_get_transform_scale(entity->transform, scale);
-
-	elf_set_physics_object_position(entity->object, position[0], position[1], position[2]);
-	elf_set_physics_object_orientation(entity->object, orient[0], orient[1], orient[2], orient[3]);
-	elf_set_physics_object_scale(entity->object, scale[0], scale[1], scale[2]);
-
-	if(entity->scene) elf_set_physics_object_world(entity->object, entity->scene->world);
-
-	// things are seriously going to blow up if we don't update the joints
-	// when a new physics object has been created
-	for(joint = (elf_joint*)elf_begin_list(entity->joints); joint;
-		joint = (elf_joint*)elf_next_in_list(entity->joints))
-	{
-		elf_set_joint_world(joint, NULL);
-		if(entity->scene) elf_set_joint_world(joint, entity->scene->world);
-	}
+	elf_set_actor_physics((elf_actor*)entity, type, mass);
 }
 
 void elf_disable_entity_physics(elf_entity *entity)
 {
-	if(entity->object)
-	{
-		elf_set_physics_object_actor(entity->object, NULL);
-		elf_set_physics_object_world(entity->object, NULL);
-		elf_dec_ref((elf_object*)entity->object);
-		entity->object = NULL;
-	}
+	elf_disable_actor_physics((elf_actor*)entity);
 }
 
 void elf_reset_entity_debug_physics_object(elf_entity *entity)

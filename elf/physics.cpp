@@ -695,6 +695,43 @@ elf_physics_object* elf_create_physics_object_box(float hx, float hy, float hz, 
 	return object;
 }
 
+elf_physics_object* elf_create_physics_object_capsule(float length, float radius, float mass, float ox, float oy, float oz)
+{
+	elf_physics_object *object;
+
+	object = elf_create_physics_object();
+
+	object->shape = new btCapsuleShape(radius, length);
+	if(!elf_about_zero(ox) || !elf_about_zero(oy) || !elf_about_zero(oz))
+	{
+		btTransform localTrans;
+		localTrans.setOrigin(btVector3(ox, oy, oz));
+		localTrans.setRotation(btQuaternion(0.0, 0.0, 0.0, 1.0));
+		object->cshape = new btCompoundShape();
+		object->cshape->addChildShape(localTrans, object->shape);
+	}
+
+	object->shape_type = ELF_CAPSULE;
+
+	object->mass = mass;
+
+	btScalar bodyMass(mass);
+	btVector3 localInertia(0.0, 0.0, 0.0);
+
+	if(!elf_about_zero(mass)) object->shape->calculateLocalInertia(mass, localInertia);
+
+	btTransform startTransform;
+	startTransform.setOrigin(btVector3(0.0, 0.0, 0.0));
+	startTransform.setRotation(btQuaternion(0.0, 0.0, 0.0, 1.0));
+
+	object->motionState = new btDefaultMotionState(startTransform);
+	object->body = new btRigidBody(bodyMass, object->motionState, object->cshape ? object->cshape : object->shape, localInertia);
+
+	object->body->setUserPointer(object);
+
+	return object;
+}
+
 void elf_set_physics_object_world(elf_physics_object *object, elf_physics_world *world)
 {
 	if(object->world)

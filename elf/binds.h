@@ -157,6 +157,7 @@
 #define ELF_BOX 0x0001
 #define ELF_SPHERE 0x0002
 #define ELF_MESH 0x0003
+#define ELF_CAPSULE 0x0004
 #define ELF_HINGE 0x0001
 #define ELF_BALL 0x0002
 #define ELF_CONE_TWIST 0x0003
@@ -514,6 +515,10 @@ ELF_API void ELF_APIENTRY elfMoveActorLocal(elf_handle actor, float x, float y, 
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorPosition(elf_handle actor);
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorRotation(elf_handle actor);
 ELF_API elf_vec4f ELF_APIENTRY elfGetActorOrientation(elf_handle actor);
+ELF_API void ELF_APIENTRY elfSetActorBoundingLengths(elf_handle actor, float x, float y, float z);
+ELF_API void ELF_APIENTRY elfSetActorBoundingOffset(elf_handle actor, float x, float y, float z);
+ELF_API void ELF_APIENTRY elfSetActorPhysics(elf_handle actor, int shape, float mass);
+ELF_API void ELF_APIENTRY elfDisableActorPhysics(elf_handle actor);
 ELF_API void ELF_APIENTRY elfSetActorAnisotropicFriction(elf_handle actor, float x, float y, float z);
 ELF_API void ELF_APIENTRY elfSetActorDamping(elf_handle actor, float lin_damp, float ang_damp);
 ELF_API void ELF_APIENTRY elfSetActorSleepThresholds(elf_handle actor, float lin_thrs, float ang_thrs);
@@ -524,6 +529,10 @@ ELF_API void ELF_APIENTRY elfSetActorLinearVelocity(elf_handle actor, float x, f
 ELF_API void ELF_APIENTRY elfSetActorAngularVelocity(elf_handle actor, float x, float y, float z);
 ELF_API void ELF_APIENTRY elfSetActorLinearFactor(elf_handle actor, float x, float y, float z);
 ELF_API void ELF_APIENTRY elfSetActorAngularFactor(elf_handle actor, float x, float y, float z);
+ELF_API elf_vec3f ELF_APIENTRY elfGetActorBoundingLengths(elf_handle actor);
+ELF_API elf_vec3f ELF_APIENTRY elfGetActorBoundingOffset(elf_handle actor);
+ELF_API int ELF_APIENTRY elfGetActorPhysicsShape(elf_handle actor);
+ELF_API float ELF_APIENTRY elfGetActorPhysicsMass(elf_handle actor);
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorLinearVelocity(elf_handle actor);
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorAngularVelocity(elf_handle actor);
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorLinearFactor(elf_handle actor);
