@@ -157,6 +157,7 @@
 #define ELF_BOX 0x0001
 #define ELF_SPHERE 0x0002
 #define ELF_MESH 0x0003
+#define ELF_CAPSULE 0x0004
 #define ELF_HINGE 0x0001
 #define ELF_BALL 0x0002
 #define ELF_CONE_TWIST 0x0003
@@ -366,6 +367,7 @@ ELF_API const char* ELF_APIENTRY elfGetGameConfigStart(elf_handle config);
 ELF_API bool ELF_APIENTRY elfInit(int width, int height, const char* title, bool fullscreen);
 ELF_API bool ELF_APIENTRY elfInitWithConfig(const char* file_path);
 ELF_API void ELF_APIENTRY elfDeinit();
+ELF_API const char* ELF_APIENTRY elfGetPlatform();
 ELF_API int ELF_APIENTRY elfGetVersionMajor();
 ELF_API int ELF_APIENTRY elfGetVersionMinor();
 ELF_API const char* ELF_APIENTRY elfGetVersionRelease();
@@ -513,6 +515,10 @@ ELF_API void ELF_APIENTRY elfMoveActorLocal(elf_handle actor, float x, float y, 
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorPosition(elf_handle actor);
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorRotation(elf_handle actor);
 ELF_API elf_vec4f ELF_APIENTRY elfGetActorOrientation(elf_handle actor);
+ELF_API void ELF_APIENTRY elfSetActorBoundingLengths(elf_handle actor, float x, float y, float z);
+ELF_API void ELF_APIENTRY elfSetActorBoundingOffset(elf_handle actor, float x, float y, float z);
+ELF_API void ELF_APIENTRY elfSetActorPhysics(elf_handle actor, int shape, float mass);
+ELF_API void ELF_APIENTRY elfDisableActorPhysics(elf_handle actor);
 ELF_API void ELF_APIENTRY elfSetActorAnisotropicFriction(elf_handle actor, float x, float y, float z);
 ELF_API void ELF_APIENTRY elfSetActorDamping(elf_handle actor, float lin_damp, float ang_damp);
 ELF_API void ELF_APIENTRY elfSetActorSleepThresholds(elf_handle actor, float lin_thrs, float ang_thrs);
@@ -523,6 +529,10 @@ ELF_API void ELF_APIENTRY elfSetActorLinearVelocity(elf_handle actor, float x, f
 ELF_API void ELF_APIENTRY elfSetActorAngularVelocity(elf_handle actor, float x, float y, float z);
 ELF_API void ELF_APIENTRY elfSetActorLinearFactor(elf_handle actor, float x, float y, float z);
 ELF_API void ELF_APIENTRY elfSetActorAngularFactor(elf_handle actor, float x, float y, float z);
+ELF_API elf_vec3f ELF_APIENTRY elfGetActorBoundingLengths(elf_handle actor);
+ELF_API elf_vec3f ELF_APIENTRY elfGetActorBoundingOffset(elf_handle actor);
+ELF_API int ELF_APIENTRY elfGetActorPhysicsShape(elf_handle actor);
+ELF_API float ELF_APIENTRY elfGetActorPhysicsMass(elf_handle actor);
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorLinearVelocity(elf_handle actor);
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorAngularVelocity(elf_handle actor);
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorLinearFactor(elf_handle actor);
@@ -643,6 +653,7 @@ ELF_API void ELF_APIENTRY elfSetParticlesMaxCount(elf_handle particles, int max_
 ELF_API void ELF_APIENTRY elfSetParticlesDrawMode(elf_handle particles, int mode);
 ELF_API void ELF_APIENTRY elfSetParticlesTexture(elf_handle particles, elf_handle texture);
 ELF_API void ELF_APIENTRY elfSetParticlesModel(elf_handle particles, elf_handle model);
+ELF_API void ELF_APIENTRY elfSetParticlesEntity(elf_handle particles, elf_handle entity);
 ELF_API void ELF_APIENTRY elfSetParticlesGravity(elf_handle particles, float x, float y, float z);
 ELF_API void ELF_APIENTRY elfSetParticlesSpawnDelay(elf_handle particles, float delay);
 ELF_API void ELF_APIENTRY elfSetParticlesSize(elf_handle particles, float min, float max);
@@ -662,6 +673,7 @@ ELF_API int ELF_APIENTRY elfGetParticlesCount(elf_handle particles);
 ELF_API int ELF_APIENTRY elfGetParticlesDrawMode(elf_handle particles);
 ELF_API elf_handle ELF_APIENTRY elfGetParticlesTexture(elf_handle particles);
 ELF_API elf_handle ELF_APIENTRY elfGetParticlesModel(elf_handle particles);
+ELF_API elf_handle ELF_APIENTRY elfGetParticlesEntity(elf_handle particles);
 ELF_API elf_vec3f ELF_APIENTRY elfGetParticlesGravity(elf_handle particles);
 ELF_API float ELF_APIENTRY elfGetParticlesSpawnDelay(elf_handle particles);
 ELF_API float ELF_APIENTRY elfGetParticlesSizeMin(elf_handle particles);

@@ -220,6 +220,7 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apidefine">elf.BOX</div>
 <div class="apidefine">elf.SPHERE</div>
 <div class="apidefine">elf.MESH</div>
+<div class="apidefine">elf.CAPSULE</div>
 <div class="apitopic">JOINT TYPES</div>
 <div class="apiinfo">The joint types returned by elf.GetJointType</div>
 <div class="apidefine">elf.HINGE</div>
@@ -320,8 +321,8 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apidefine">elf.QUA_Y</div>
 <div class="apidefine">elf.QUA_Z</div>
 <div class="apidefine">elf.QUA_W</div>
-<div class="apidefine">elf.NET_NONE</div>
 <div class="apitopic">NETWORKING EVENTS</div>
+<div class="apidefine">elf.NET_NONE</div>
 <div class="apidefine">elf.NET_CONNECT</div>
 <div class="apidefine">elf.NET_RECEIVE</div>
 <div class="apidefine">elf.NET_DISCONNECT</div>
@@ -397,6 +398,7 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc"><span class="apikeytype">bool</span> elf.Init( <span class="apikeytype">int</span> width, <span class="apikeytype">int</span> height, <span class="apikeytype">string</span> title, <span class="apikeytype">bool</span> fullscreen )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.InitWithConfig( <span class="apikeytype">string</span> file_path )</div>
 <div class="apifunc">elf.Deinit(  )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetPlatform(  )</div>
 <div class="apifunc"><span class="apikeytype">int</span> elf.GetVersionMajor(  )</div>
 <div class="apifunc"><span class="apikeytype">int</span> elf.GetVersionMinor(  )</div>
 <div class="apifunc"><span class="apikeytype">string</span> elf.GetVersionRelease(  )</div>
@@ -550,6 +552,10 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorPosition( <span class="apiobjtype">object</span> actor )</div>
 <div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorRotation( <span class="apiobjtype">object</span> actor )</div>
 <div class="apifunc"><span class="apikeytype">elf_vec4f</span> elf.GetActorOrientation( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc">elf.SetActorBoundingLengths( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apifunc">elf.SetActorBoundingOffset( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apifunc">elf.SetActorPhysics( <span class="apiobjtype">object</span> actor, <span class="apikeytype">int</span> shape, <span class="apikeytype">float</span> mass )</div>
+<div class="apifunc">elf.DisableActorPhysics( <span class="apiobjtype">object</span> actor )</div>
 <div class="apifunc">elf.SetActorAnisotropicFriction( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
 <div class="apifunc">elf.SetActorDamping( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> lin_damp, <span class="apikeytype">float</span> ang_damp )</div>
 <div class="apifunc">elf.SetActorSleepThresholds( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> lin_thrs, <span class="apikeytype">float</span> ang_thrs )</div>
@@ -560,6 +566,10 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc">elf.SetActorAngularVelocity( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
 <div class="apifunc">elf.SetActorLinearFactor( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
 <div class="apifunc">elf.SetActorAngularFactor( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorBoundingLengths( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorBoundingOffset( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetActorPhysicsShape( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetActorPhysicsMass( <span class="apiobjtype">object</span> actor )</div>
 <div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorLinearVelocity( <span class="apiobjtype">object</span> actor )</div>
 <div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorAngularVelocity( <span class="apiobjtype">object</span> actor )</div>
 <div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorLinearFactor( <span class="apiobjtype">object</span> actor )</div>
@@ -687,6 +697,7 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc">elf.SetParticlesDrawMode( <span class="apiobjtype">object</span> particles, <span class="apikeytype">int</span> mode )</div>
 <div class="apifunc">elf.SetParticlesTexture( <span class="apiobjtype">object</span> particles, <span class="apiobjtype">object</span> texture )</div>
 <div class="apifunc">elf.SetParticlesModel( <span class="apiobjtype">object</span> particles, <span class="apiobjtype">object</span> model )</div>
+<div class="apifunc">elf.SetParticlesEntity( <span class="apiobjtype">object</span> particles, <span class="apiobjtype">object</span> entity )</div>
 <div class="apifunc">elf.SetParticlesGravity( <span class="apiobjtype">object</span> particles, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
 <div class="apifunc">elf.SetParticlesSpawnDelay( <span class="apiobjtype">object</span> particles, <span class="apikeytype">float</span> delay )</div>
 <div class="apifunc">elf.SetParticlesSize( <span class="apiobjtype">object</span> particles, <span class="apikeytype">float</span> min, <span class="apikeytype">float</span> max )</div>
@@ -706,6 +717,7 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc"><span class="apikeytype">int</span> elf.GetParticlesDrawMode( <span class="apiobjtype">object</span> particles )</div>
 <div class="apifunc"><span class="apiobjtype">object</span> elf.GetParticlesTexture( <span class="apiobjtype">object</span> particles )</div>
 <div class="apifunc"><span class="apiobjtype">object</span> elf.GetParticlesModel( <span class="apiobjtype">object</span> particles )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetParticlesEntity( <span class="apiobjtype">object</span> particles )</div>
 <div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetParticlesGravity( <span class="apiobjtype">object</span> particles )</div>
 <div class="apifunc"><span class="apikeytype">float</span> elf.GetParticlesSpawnDelay( <span class="apiobjtype">object</span> particles )</div>
 <div class="apifunc"><span class="apikeytype">float</span> elf.GetParticlesSizeMin( <span class="apiobjtype">object</span> particles )</div>
