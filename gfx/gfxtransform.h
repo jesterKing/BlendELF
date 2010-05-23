@@ -151,21 +151,21 @@ void gfx_recalc_transform_matrix(gfx_transform *transform)
 
 	if(transform->camera_mode == GFX_FALSE)
 	{
-		gfx_matrix4_set_identity(temp_matrix1);
+		gfx_matrix4_set_identity(transform->matrix);
 
-		temp_matrix1[12] = transform->position[0];
-		temp_matrix1[13] = transform->position[1];
-		temp_matrix1[14] = transform->position[2];
+		transform->matrix[12] = transform->position[0];
+		transform->matrix[13] = transform->position[1];
+		transform->matrix[14] = transform->position[2];
+		gfx_qua_get_inverse(transform->orient, inv_qua);
+		gfx_qua_to_matrix4(inv_qua, temp_matrix1);
+		gfx_mul_matrix4_matrix4(temp_matrix1, transform->matrix, temp_matrix2);
+
+		gfx_matrix4_set_identity(temp_matrix1);
 
 		temp_matrix1[0] = transform->scale[0];
 		temp_matrix1[5] = transform->scale[1];
 		temp_matrix1[10] = transform->scale[2];
-
-		gfx_qua_get_inverse(transform->orient, inv_qua);
-
-		gfx_qua_to_matrix4(inv_qua, temp_matrix2);
-
-		gfx_mul_matrix4_matrix4(temp_matrix2, temp_matrix1, transform->matrix);
+		gfx_mul_matrix4_matrix4(temp_matrix1, temp_matrix2, transform->matrix);
 	}
 	else
 	{
@@ -174,10 +174,6 @@ void gfx_recalc_transform_matrix(gfx_transform *transform)
 		temp_matrix1[12] = -transform->position[0];
 		temp_matrix1[13] = -transform->position[1];
 		temp_matrix1[14] = -transform->position[2];
-
-		temp_matrix1[0] = transform->scale[0];
-		temp_matrix1[5] = transform->scale[1];
-		temp_matrix1[10] = transform->scale[2];
 
 		gfx_qua_to_matrix4(transform->orient, temp_matrix2);
 
