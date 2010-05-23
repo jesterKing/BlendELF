@@ -46,25 +46,25 @@ elf_model* elf_create_model_from_pak(FILE *file, const char *name, elf_scene *sc
 	fread((char*)&is_weights_and_boneids, sizeof(unsigned char), 1, file);
 	fread((char*)&junk, sizeof(unsigned char), 1, file);
 
-	if((int)model->vertice_count < 3)
+	if(model->vertice_count < 3)
 	{
 		elf_set_error(ELF_INVALID_FILE, "error: invalid model \"%s\", invalid vertex count\n", name);
 		elf_destroy_model(model);
 		return NULL;
 	}
-	if((int)model->frame_count < 1)
+	if(model->frame_count < 1)
 	{
 		elf_set_error(ELF_INVALID_FILE, "error: invalid model \"%s\", invalid frame count\n", name);
 		elf_destroy_model(model);
 		return NULL;
 	}
-	if((int)model->indice_count < 3)
+	if(model->indice_count < 3)
 	{
 		elf_set_error(ELF_INVALID_FILE, "error: invalid model \"%s\", invalid indice count\n", name);
 		elf_destroy_model(model);
 		return NULL;
 	}
-	if((int)model->area_count < 1)
+	if(model->area_count < 1)
 	{
 		elf_set_error(ELF_INVALID_FILE, "error: invalid model \"%s\", invalid area count\n", name);
 		elf_destroy_model(model);
