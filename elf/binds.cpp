@@ -4887,12 +4887,6 @@ ELF_API void ELF_APIENTRY elfDisableLightShaft(elf_handle light)
 	}
 	elf_disable_light_shaft((elf_light*)light.get());
 }
-ELF_API elf_handle ELF_APIENTRY elfCreateBone(const char* name)
-{
-	elf_handle handle;
-	handle = (elf_object*)elf_create_bone(name);
-	return handle;
-}
 ELF_API elf_handle ELF_APIENTRY elfGetBoneArmature(elf_handle bone)
 {
 	elf_handle handle;
@@ -4912,6 +4906,149 @@ ELF_API elf_handle ELF_APIENTRY elfGetBoneArmature(elf_handle bone)
 	}
 	handle = (elf_object*)elf_get_bone_armature((elf_bone*)bone.get());
 	return handle;
+}
+ELF_API elf_handle ELF_APIENTRY elfGetBoneParent(elf_handle bone)
+{
+	elf_handle handle;
+	if(!bone.get() || elf_get_object_type(bone.get()) != ELF_BONE)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetBoneParent() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetBoneParent() -> invalid handle\n");
+		}
+		return handle;
+	}
+	handle = (elf_object*)elf_get_bone_parent((elf_bone*)bone.get());
+	return handle;
+}
+ELF_API elf_handle ELF_APIENTRY elfGetBoneChildByName(elf_handle bone, const char* name)
+{
+	elf_handle handle;
+	if(!bone.get() || elf_get_object_type(bone.get()) != ELF_BONE)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetBoneChildByName() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetBoneChildByName() -> invalid handle\n");
+		}
+		return handle;
+	}
+	handle = (elf_object*)elf_get_bone_child_by_name((elf_bone*)bone.get(), name);
+	return handle;
+}
+ELF_API elf_handle ELF_APIENTRY elfGetBoneChildById(elf_handle bone, int id)
+{
+	elf_handle handle;
+	if(!bone.get() || elf_get_object_type(bone.get()) != ELF_BONE)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetBoneChildById() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetBoneChildById() -> invalid handle\n");
+		}
+		return handle;
+	}
+	handle = (elf_object*)elf_get_bone_child_by_id((elf_bone*)bone.get(), id);
+	return handle;
+}
+ELF_API elf_handle ELF_APIENTRY elfGetBoneChildByIndex(elf_handle bone, int idx)
+{
+	elf_handle handle;
+	if(!bone.get() || elf_get_object_type(bone.get()) != ELF_BONE)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetBoneChildByIndex() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetBoneChildByIndex() -> invalid handle\n");
+		}
+		return handle;
+	}
+	handle = (elf_object*)elf_get_bone_child_by_index((elf_bone*)bone.get(), idx);
+	return handle;
+}
+ELF_API elf_vec3f ELF_APIENTRY elfGetBonePosition(elf_handle bone)
+{
+	elf_vec3f _e_type;
+	memset(&_e_type, 0x0, sizeof(elf_vec3f));
+	if(!bone.get() || elf_get_object_type(bone.get()) != ELF_BONE)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetBonePosition() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetBonePosition() -> invalid handle\n");
+		}
+		return _e_type;
+	}
+	_e_type = elf_get_bone_position((elf_bone*)bone.get());
+	return _e_type;
+}
+ELF_API elf_vec3f ELF_APIENTRY elfGetBoneRotation(elf_handle bone)
+{
+	elf_vec3f _e_type;
+	memset(&_e_type, 0x0, sizeof(elf_vec3f));
+	if(!bone.get() || elf_get_object_type(bone.get()) != ELF_BONE)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetBoneRotation() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetBoneRotation() -> invalid handle\n");
+		}
+		return _e_type;
+	}
+	_e_type = elf_get_bone_rotation((elf_bone*)bone.get());
+	return _e_type;
+}
+ELF_API elf_vec4f ELF_APIENTRY elfGetBoneOrientation(elf_handle bone)
+{
+	elf_vec4f _e_type;
+	memset(&_e_type, 0x0, sizeof(elf_vec4f));
+	if(!bone.get() || elf_get_object_type(bone.get()) != ELF_BONE)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetBoneOrientation() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetBoneOrientation() -> invalid handle\n");
+		}
+		return _e_type;
+	}
+	_e_type = elf_get_bone_orientation((elf_bone*)bone.get());
+	return _e_type;
 }
 ELF_API elf_handle ELF_APIENTRY elfCreateArmature(const char* name)
 {
@@ -4958,38 +5095,6 @@ ELF_API elf_handle ELF_APIENTRY elfGetBoneFromArmatureById(int id, elf_handle ar
 	}
 	handle = (elf_object*)elf_get_bone_from_armature_by_id(id, (elf_armature*)armature.get());
 	return handle;
-}
-ELF_API void ELF_APIENTRY elfAddRootBoneToArmature(elf_handle armature, elf_handle bone)
-{
-	if(!armature.get() || elf_get_object_type(armature.get()) != ELF_ARMATURE)
-	{
-		elf_script *script = elf_get_current_script();
-		if(script)
-		{
-			int line = elf_get_current_script_line();
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: AddRootBoneToArmature() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
-		}
-		else
-		{
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "AddRootBoneToArmature() -> invalid handle\n");
-		}
-		return;
-	}
-	if(!bone.get() || elf_get_object_type(bone.get()) != ELF_BONE)
-	{
-		elf_script *script = elf_get_current_script();
-		if(script)
-		{
-			int line = elf_get_current_script_line();
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: AddRootBoneToArmature() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
-		}
-		else
-		{
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "AddRootBoneToArmature() -> invalid handle\n");
-		}
-		return;
-	}
-	elf_add_root_bone_to_armature((elf_armature*)armature.get(), (elf_bone*)bone.get());
 }
 ELF_API elf_handle ELF_APIENTRY elfCreateParticles(const char* name, int max_count)
 {

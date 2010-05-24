@@ -1040,12 +1040,18 @@ unsigned char elf_get_light_changed(elf_light *light);
 //////////////////////////////// ARMATURE ////////////////////////////////
 
 // <!!
+elf_bone* elf_create_bone(const char *name);
 void elf_destroy_bone(elf_bone *bone);
 // !!>
 
-elf_bone* elf_create_bone(const char *name);	// <mdoc> BONE FUNCTIONS
-
-elf_armature* elf_get_bone_armature(elf_bone *bone);
+elf_armature* elf_get_bone_armature(elf_bone *bone);	// <mdoc> BONE FUNCTIONS
+elf_bone* elf_get_bone_parent(elf_bone *bone);
+elf_bone* elf_get_bone_child_by_name(elf_bone *bone, const char *name);
+elf_bone* elf_get_bone_child_by_id(elf_bone *bone, int id);
+elf_bone* elf_get_bone_child_by_index(elf_bone *bone, int idx);
+elf_vec3f elf_get_bone_position(elf_bone *bone);
+elf_vec3f elf_get_bone_rotation(elf_bone *bone);
+elf_vec4f elf_get_bone_orientation(elf_bone *bone);
 
 // <!!
 elf_armature* elf_create_armature_from_pak(FILE *file, const char *name, elf_scene *scene);
@@ -1058,9 +1064,9 @@ elf_armature* elf_create_armature(const char *name);	// <mdoc> ARMATURE FUNCTION
 elf_bone* elf_get_bone_from_armature_by_name(const char *name, elf_armature *armature);
 elf_bone* elf_get_bone_from_armature_by_id(int id, elf_armature *armature);
 
+// <!!
 void elf_add_root_bone_to_armature(elf_armature *armature, elf_bone *bone);
 
-// <!!
 void elf_deform_entity_with_armature(elf_armature *armature, elf_entity *entity, float frame);
 void elf_draw_armature_debug(elf_armature *armature, gfx_shader_params *shader_params);
 // !!>

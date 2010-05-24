@@ -11159,29 +11159,6 @@ fail:
 }
 
 
-static int _wrap_elfCreateBone(lua_State* L) {
-  int SWIG_arg = 0;
-  char *arg1 = (char *) 0 ;
-  elf_handle result;
-  
-  SWIG_check_num_args("CreateBone",1,1)
-  if(!lua_isstring(L,1)) SWIG_fail_arg("CreateBone",1,"char const *");
-  arg1 = (char *)lua_tostring(L, 1);
-  result = elfCreateBone((char const *)arg1);
-  {
-    elf_handle * resultptr = new elf_handle((const elf_handle &) result);
-    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_handle,1); SWIG_arg++;
-  }
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
 static int _wrap_elfGetBoneArmature(lua_State* L) {
   int SWIG_arg = 0;
   elf_handle arg1 ;
@@ -11200,6 +11177,218 @@ static int _wrap_elfGetBoneArmature(lua_State* L) {
   {
     elf_handle * resultptr = new elf_handle((const elf_handle &) result);
     SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_handle,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetBoneParent(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  elf_handle result;
+  
+  SWIG_check_num_args("GetBoneParent",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetBoneParent",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetBoneParent",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = elfGetBoneParent(arg1);
+  {
+    elf_handle * resultptr = new elf_handle((const elf_handle &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_handle,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetBoneChildByName(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  char *arg2 = (char *) 0 ;
+  elf_handle *argp1 ;
+  elf_handle result;
+  
+  SWIG_check_num_args("GetBoneChildByName",2,2)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetBoneChildByName",1,"handle");
+  if(!lua_isstring(L,2)) SWIG_fail_arg("GetBoneChildByName",2,"char const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetBoneChildByName",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  result = elfGetBoneChildByName(arg1,(char const *)arg2);
+  {
+    elf_handle * resultptr = new elf_handle((const elf_handle &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_handle,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetBoneChildById(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  int arg2 ;
+  elf_handle *argp1 ;
+  elf_handle result;
+  
+  SWIG_check_num_args("GetBoneChildById",2,2)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetBoneChildById",1,"handle");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("GetBoneChildById",2,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetBoneChildById",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  result = elfGetBoneChildById(arg1,arg2);
+  {
+    elf_handle * resultptr = new elf_handle((const elf_handle &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_handle,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetBoneChildByIndex(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  int arg2 ;
+  elf_handle *argp1 ;
+  elf_handle result;
+  
+  SWIG_check_num_args("GetBoneChildByIndex",2,2)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetBoneChildByIndex",1,"handle");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("GetBoneChildByIndex",2,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetBoneChildByIndex",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  result = elfGetBoneChildByIndex(arg1,arg2);
+  {
+    elf_handle * resultptr = new elf_handle((const elf_handle &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_handle,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetBonePosition(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  elf_vec3f result;
+  
+  SWIG_check_num_args("GetBonePosition",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetBonePosition",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetBonePosition",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = elfGetBonePosition(arg1);
+  {
+    elf_vec3f * resultptr = new elf_vec3f((const elf_vec3f &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_vec3f,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetBoneRotation(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  elf_vec3f result;
+  
+  SWIG_check_num_args("GetBoneRotation",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetBoneRotation",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetBoneRotation",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = elfGetBoneRotation(arg1);
+  {
+    elf_vec3f * resultptr = new elf_vec3f((const elf_vec3f &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_vec3f,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetBoneOrientation(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  elf_vec4f result;
+  
+  SWIG_check_num_args("GetBoneOrientation",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetBoneOrientation",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetBoneOrientation",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = elfGetBoneOrientation(arg1);
+  {
+    elf_vec4f * resultptr = new elf_vec4f((const elf_vec4f &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_vec4f,1); SWIG_arg++;
   }
   return SWIG_arg;
   
@@ -11288,40 +11477,6 @@ static int _wrap_elfGetBoneFromArmatureById(lua_State* L) {
     elf_handle * resultptr = new elf_handle((const elf_handle &) result);
     SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_handle,1); SWIG_arg++;
   }
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_elfAddRootBoneToArmature(lua_State* L) {
-  int SWIG_arg = 0;
-  elf_handle arg1 ;
-  elf_handle arg2 ;
-  elf_handle *argp1 ;
-  elf_handle *argp2 ;
-  
-  SWIG_check_num_args("AddRootBoneToArmature",2,2)
-  if(!lua_isuserdata(L,1)) SWIG_fail_arg("AddRootBoneToArmature",1,"handle");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("AddRootBoneToArmature",2,"handle");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("AddRootBoneToArmature",1,SWIGTYPE_p_elf_handle);
-  }
-  arg1 = *argp1;
-  
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("AddRootBoneToArmature",2,SWIGTYPE_p_elf_handle);
-  }
-  arg2 = *argp2;
-  
-  elfAddRootBoneToArmature(arg1,arg2);
-  
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -18325,12 +18480,17 @@ static const struct luaL_reg swig_commands[] = {
     { "SetLightCone", _wrap_elfSetLightCone},
     { "SetLightShaft", _wrap_elfSetLightShaft},
     { "DisableLightShaft", _wrap_elfDisableLightShaft},
-    { "CreateBone", _wrap_elfCreateBone},
     { "GetBoneArmature", _wrap_elfGetBoneArmature},
+    { "GetBoneParent", _wrap_elfGetBoneParent},
+    { "GetBoneChildByName", _wrap_elfGetBoneChildByName},
+    { "GetBoneChildById", _wrap_elfGetBoneChildById},
+    { "GetBoneChildByIndex", _wrap_elfGetBoneChildByIndex},
+    { "GetBonePosition", _wrap_elfGetBonePosition},
+    { "GetBoneRotation", _wrap_elfGetBoneRotation},
+    { "GetBoneOrientation", _wrap_elfGetBoneOrientation},
     { "CreateArmature", _wrap_elfCreateArmature},
     { "GetBoneFromArmatureByName", _wrap_elfGetBoneFromArmatureByName},
     { "GetBoneFromArmatureById", _wrap_elfGetBoneFromArmatureById},
-    { "AddRootBoneToArmature", _wrap_elfAddRootBoneToArmature},
     { "CreateParticles", _wrap_elfCreateParticles},
     { "GetParticlesName", _wrap_elfGetParticlesName},
     { "GetParticlesFilePath", _wrap_elfGetParticlesFilePath},

@@ -29,6 +29,72 @@ void elf_destroy_bone(elf_bone *bone)
 	global_obj_count--;
 }
 
+elf_armature* elf_get_bone_armature(elf_bone *bone)
+{
+	return bone->armature;
+}
+
+elf_bone* elf_get_bone_parent(elf_bone *bone)
+{
+	return bone->parent;
+}
+
+elf_bone* elf_get_bone_child_by_name(elf_bone *bone, const char *name)
+{
+	elf_bone *cbone;
+
+	for(cbone = (elf_bone*)elf_begin_list(bone->children); cbone;
+		cbone = (elf_bone*)elf_next_in_list(bone->children))
+	{
+		if(!strcmp(cbone->name, name))
+		{
+			return cbone;
+		}
+	}
+
+	return NULL;
+}
+
+elf_bone* elf_get_bone_child_by_id(elf_bone *bone, int id)
+{
+	elf_bone *cbone;
+
+	for(cbone = (elf_bone*)elf_begin_list(bone->children); cbone;
+		cbone = (elf_bone*)elf_next_in_list(bone->children))
+	{
+		if(cbone->id == id)
+		{
+			return cbone;
+		}
+	}
+
+	return NULL;
+}
+
+elf_bone* elf_get_bone_child_by_index(elf_bone *bone, int idx)
+{
+	return (elf_bone*)elf_get_item_from_list(bone->children, idx);
+}
+
+elf_vec3f elf_get_bone_position(elf_bone *bone)
+{
+	return bone->cur_pos;
+}
+
+elf_vec3f elf_get_bone_rotation(elf_bone *bone)
+{
+	elf_vec3f result;
+
+	gfx_qua_to_euler(&bone->cur_qua.x, &result.x);
+
+	return result;
+}
+
+elf_vec4f elf_get_bone_orientation(elf_bone *bone)
+{
+	return bone->qua;
+}
+
 void elf_set_bone_armature(elf_bone *bone, elf_armature *armature)
 {
 	elf_bone *cbone;
@@ -40,11 +106,6 @@ void elf_set_bone_armature(elf_bone *bone, elf_armature *armature)
 	{
 		elf_set_bone_armature(cbone, armature);
 	}
-}
-
-elf_armature* elf_get_bone_armature(elf_bone *bone)
-{
-	return bone->armature;
 }
 
 int elf_get_bone_max_id(elf_bone *bone)
