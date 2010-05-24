@@ -75,8 +75,9 @@ int main()
 	script = elf_create_script_from_file("init.lua");
 	if(script)
 	{
+		elf_inc_ref((elf_object*)script);
 		elf_run_script(script);
-		elf_destroy_script(script);
+		elf_dec_ref((elf_object*)script);
 	}
 	else
 	{

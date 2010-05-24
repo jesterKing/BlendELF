@@ -14463,31 +14463,6 @@ fail:
 }
 
 
-static int _wrap_elfRunScript(lua_State* L) {
-  int SWIG_arg = 0;
-  elf_handle arg1 ;
-  elf_handle *argp1 ;
-  
-  SWIG_check_num_args("RunScript",1,1)
-  if(!lua_isuserdata(L,1)) SWIG_fail_arg("RunScript",1,"handle");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("RunScript",1,SWIGTYPE_p_elf_handle);
-  }
-  arg1 = *argp1;
-  
-  elfRunScript(arg1);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
 static int _wrap_elfIsScriptError(lua_State* L) {
   int SWIG_arg = 0;
   elf_handle arg1 ;
@@ -14523,6 +14498,32 @@ static int _wrap_elfRunString(lua_State* L) {
   if(!lua_isstring(L,1)) SWIG_fail_arg("RunString",1,"char const *");
   arg1 = (char *)lua_tostring(L, 1);
   result = (bool)elfRunString((char const *)arg1);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfRunScript(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  bool result;
+  
+  SWIG_check_num_args("RunScript",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("RunScript",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("RunScript",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = (bool)elfRunScript(arg1);
   lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
   return SWIG_arg;
   
@@ -18433,9 +18434,9 @@ static const struct luaL_reg swig_commands[] = {
     { "GetScriptName", _wrap_elfGetScriptName},
     { "GetScriptFilePath", _wrap_elfGetScriptFilePath},
     { "SetScriptText", _wrap_elfSetScriptText},
-    { "RunScript", _wrap_elfRunScript},
     { "IsScriptError", _wrap_elfIsScriptError},
     { "RunString", _wrap_elfRunString},
+    { "RunScript", _wrap_elfRunScript},
     { "SetAudioVolume", _wrap_elfSetAudioVolume},
     { "GetAudioVolume", _wrap_elfGetAudioVolume},
     { "SetAudioRolloff", _wrap_elfSetAudioRolloff},
@@ -18819,11 +18820,13 @@ static swig_lua_const_info swig_constants[] = {
 { SWIG_LUA_INT,     (char *)"CANT_OPEN_DIRECTORY", (long) 0x0003, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"CANT_INITIALIZE", (long) 0x0004, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"CANT_RUN_STRING", (long) 0x0005, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"CANT_CREATE", (long) 0x0006, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"INVALID_SIZE", (long) 0x0007, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"UNKNOWN_FORMAT", (long) 0x0008, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"UNKNOWN_TYPE", (long) 0x0009, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"INVALID_HANDLE", (long) 0x000A, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"CANT_RUN_SCRIPT", (long) 0x0006, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"CANT_CREATE", (long) 0x0007, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"INVALID_SIZE", (long) 0x0008, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"UNKNOWN_FORMAT", (long) 0x0009, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"UNKNOWN_TYPE", (long) 0x000A, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"INVALID_HANDLE", (long) 0x000B, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"MISSING_FEATURE", (long) 0x000C, 0, 0, 0},
     {0,0,0,0,0,0}
 };
 

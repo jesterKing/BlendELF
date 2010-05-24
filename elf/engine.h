@@ -39,6 +39,7 @@ void elf_write_to_log(const char *fmt, ...)
 			{
 				case 's':
 					s = va_arg(list, char*);
+					if(s == NULL) continue;
 					printf("%s", s);
 					if(file) fprintf(file, "%s", s);
 					continue;
@@ -93,6 +94,7 @@ void elf_set_error(int code, const char *fmt, ...)
 			{
 				case 's':
 					s = va_arg(list, char*);
+					if(s == NULL) continue;
 					printf("%s", s);
 					if(file) fprintf(file, "%s", s);
 
@@ -167,6 +169,7 @@ void elf_set_error_no_save(int code, const char *fmt, ...)
 			{
 				case 's':
 					s = va_arg(list, char*);
+					if(s == NULL) continue;
 					printf("%s", s);
 
 					tmp_str = elf_merge_strings(err_str, s);

@@ -109,13 +109,6 @@ void elf_set_script_text(elf_script *script, const char *text)
 	script->error = ELF_FALSE;
 }
 
-void elf_run_script(elf_script *script)
-{
-	if(!script->text || !strlen(script->text) || script->error) return;
-
-	script->error = elf_run_string(script->text);
-}
-
 unsigned char elf_is_script_error(elf_script *script)
 {
 	return script->error;

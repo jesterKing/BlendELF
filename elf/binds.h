@@ -249,11 +249,13 @@
 #define ELF_CANT_OPEN_DIRECTORY 0x0003
 #define ELF_CANT_INITIALIZE 0x0004
 #define ELF_CANT_RUN_STRING 0x0005
-#define ELF_CANT_CREATE 0x0006
-#define ELF_INVALID_SIZE 0x0007
-#define ELF_UNKNOWN_FORMAT 0x0008
-#define ELF_UNKNOWN_TYPE 0x0009
-#define ELF_INVALID_HANDLE 0x000A
+#define ELF_CANT_RUN_SCRIPT 0x0006
+#define ELF_CANT_CREATE 0x0007
+#define ELF_INVALID_SIZE 0x0008
+#define ELF_UNKNOWN_FORMAT 0x0009
+#define ELF_UNKNOWN_TYPE 0x000A
+#define ELF_INVALID_HANDLE 0x000B
+#define ELF_MISSING_FEATURE 0x000C
 #if defined(__WIN32__) || defined(WIN32) || defined(__CYGWIN__)
 	#ifndef ELF_PLAYER
 		#define ELF_APIENTRY __stdcall
@@ -749,9 +751,9 @@ ELF_API elf_handle ELF_APIENTRY elfCreateScriptFromFile(const char* file_path);
 ELF_API const char* ELF_APIENTRY elfGetScriptName(elf_handle script);
 ELF_API const char* ELF_APIENTRY elfGetScriptFilePath(elf_handle script);
 ELF_API void ELF_APIENTRY elfSetScriptText(elf_handle script, const char* text);
-ELF_API void ELF_APIENTRY elfRunScript(elf_handle script);
 ELF_API bool ELF_APIENTRY elfIsScriptError(elf_handle script);
 ELF_API bool ELF_APIENTRY elfRunString(const char* str);
+ELF_API bool ELF_APIENTRY elfRunScript(elf_handle script);
 ELF_API void ELF_APIENTRY elfSetAudioVolume(float volume);
 ELF_API float ELF_APIENTRY elfGetAudioVolume();
 ELF_API void ELF_APIENTRY elfSetAudioRolloff(float rolloff);

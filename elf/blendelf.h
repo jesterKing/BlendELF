@@ -279,11 +279,13 @@ extern "C" {
 #define ELF_CANT_OPEN_DIRECTORY				0x0003
 #define ELF_CANT_INITIALIZE				0x0004
 #define ELF_CANT_RUN_STRING				0x0005
-#define ELF_CANT_CREATE					0x0006
-#define ELF_INVALID_SIZE				0x0007
-#define ELF_UNKNOWN_FORMAT				0x0008
-#define ELF_UNKNOWN_TYPE				0x0009
-#define ELF_INVALID_HANDLE				0x000A
+#define ELF_CANT_RUN_SCRIPT				0x0006
+#define ELF_CANT_CREATE					0x0007
+#define ELF_INVALID_SIZE				0x0008
+#define ELF_UNKNOWN_FORMAT				0x0009
+#define ELF_UNKNOWN_TYPE				0x000A
+#define ELF_INVALID_HANDLE				0x000B
+#define ELF_MISSING_FEATURE				0x000C
 
 typedef struct elf_vec2i				elf_vec2i;
 typedef struct elf_vec2f				elf_vec2f;
@@ -1293,7 +1295,6 @@ const char* elf_get_script_name(elf_script *script);
 const char* elf_get_script_file_path(elf_script *script);
 
 void elf_set_script_text(elf_script *script, const char *text);
-void elf_run_script(elf_script *script);
 unsigned char elf_is_script_error(elf_script *script);
 
 //////////////////////////////// SCRIPTING ////////////////////////////////
@@ -1305,9 +1306,13 @@ void elf_destroy_scripting(elf_scripting *scripting);
 unsigned char elf_init_scripting();
 void elf_update_scripting();
 void elf_deinit_scripting();
+
+int elf_get_current_script_line();
+elf_script* elf_get_current_script();
 // !!>
 
 unsigned char elf_run_string(const char *str);
+unsigned char elf_run_script(elf_script *script);
 
 //////////////////////////////// AUDIO ////////////////////////////////
 
