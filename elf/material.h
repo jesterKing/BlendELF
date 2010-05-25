@@ -12,7 +12,8 @@ elf_material* elf_create_material(const char *name)
 	{
 		material->textures[i] = NULL;
 		material->texture_types[i] = GFX_COLOR_MAP;
-		material->texture_parallax_scales[i] = 0.25f;
+		material->texture_parallax_scales[i] = 0.25;
+		material->texture_alpha_tests[i] = 0.99;
 	}
 
 	material->diffuse_color.r = material->diffuse_color.g = material->diffuse_color.b = material->diffuse_color.a = 1.0;
@@ -141,6 +142,13 @@ void elf_set_material_texture_parallax_scale(elf_material *material, int slot, f
 	material->texture_parallax_scales[slot] = scale;
 }
 
+void elf_set_material_texture_alpha_test(elf_material *material, int slot, float test)
+{
+	if(slot < 0 || slot > GFX_MAX_TEXTURES-1) return;
+
+	material->texture_alpha_tests[slot] = test;
+}
+
 void elf_set_material_diffuse_color(elf_material *material, float r, float g, float b, float a)
 {
 	material->diffuse_color.r = r;
@@ -201,9 +209,16 @@ int elf_get_material_texture_type(elf_material *material, int slot)
 
 float elf_get_material_texture_parallax_scale(elf_material *material, int slot)
 {
-	if(slot < 0 || slot > GFX_MAX_TEXTURES-1) return 0.0f;
+	if(slot < 0 || slot > GFX_MAX_TEXTURES-1) return 0.0;
 
 	return material->texture_parallax_scales[slot];
+}
+
+float elf_get_material_texture_alpha_texture(elf_material *material, int slot)
+{
+	if(slot < 0 || slot > GFX_MAX_TEXTURES-1) return 0.0;
+
+	return material->texture_alpha_tests[slot];
 }
 
 elf_color elf_get_material_diffuse_color(elf_material *material)
@@ -266,7 +281,7 @@ void elf_set_material_alpha_textures(elf_material *material, gfx_shader_params *
 				if(format == GFX_RGBA || format == GFX_COMPRESSED_RGBA || format == GFX_BGRA || format == GFX_LUMINANCE_ALPHA)
 				{
 					shader_params->render_params.alpha_test = ELF_TRUE;
-					shader_params->render_params.alpha_threshold = 0.99;
+					shader_params->render_params.alpha_threshold = material->texture_alpha_tests[i];
 					shader_params->texture_params[i].type = material->texture_types[i];
 					shader_params->texture_params[i].texture = material->textures[i]->texture;
 					shader_params->texture_params[i].parallax_scale = material->texture_parallax_scales[i]*0.05;
@@ -312,7 +327,7 @@ void elf_set_material(elf_material *material, gfx_shader_params *shader_params)
 				if(format == GFX_RGBA || format == GFX_COMPRESSED_RGBA || format == GFX_BGRA || format == GFX_LUMINANCE_ALPHA)
 				{
 					shader_params->render_params.alpha_test = ELF_TRUE;
-					shader_params->render_params.alpha_threshold = 0.99;
+					shader_params->render_params.alpha_threshold = material->texture_alpha_tests[i];
 				}
 			}
 			else

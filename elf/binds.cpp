@@ -1464,6 +1464,24 @@ ELF_API void ELF_APIENTRY elfSetMaterialTextureParallaxScale(elf_handle material
 	}
 	elf_set_material_texture_parallax_scale((elf_material*)material.get(), slot, scale);
 }
+ELF_API void ELF_APIENTRY elfSetMaterialTextureAlphaTest(elf_handle material, int slot, float test)
+{
+	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetMaterialTextureAlphaTest() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetMaterialTextureAlphaTest() -> invalid handle\n");
+		}
+		return;
+	}
+	elf_set_material_texture_alpha_test((elf_material*)material.get(), slot, test);
+}
 ELF_API void ELF_APIENTRY elfSetMaterialDiffuseColor(elf_handle material, float r, float g, float b, float a)
 {
 	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
@@ -1645,6 +1663,24 @@ ELF_API float ELF_APIENTRY elfGetMaterialTextureParallaxScale(elf_handle materia
 		return 0;
 	}
 	return elf_get_material_texture_parallax_scale((elf_material*)material.get(), slot);
+}
+ELF_API float ELF_APIENTRY elfGetMaterialTextureAlphaTexture(elf_handle material, int slot)
+{
+	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetMaterialTextureAlphaTexture() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetMaterialTextureAlphaTexture() -> invalid handle\n");
+		}
+		return 0;
+	}
+	return elf_get_material_texture_alpha_texture((elf_material*)material.get(), slot);
 }
 ELF_API elf_color ELF_APIENTRY elfGetMaterialDiffuseColor(elf_handle material)
 {

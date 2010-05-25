@@ -5921,6 +5921,37 @@ fail:
 }
 
 
+static int _wrap_elfSetMaterialTextureAlphaTest(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  int arg2 ;
+  float arg3 ;
+  elf_handle *argp1 ;
+  
+  SWIG_check_num_args("SetMaterialTextureAlphaTest",3,3)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetMaterialTextureAlphaTest",1,"handle");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("SetMaterialTextureAlphaTest",2,"int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("SetMaterialTextureAlphaTest",3,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("SetMaterialTextureAlphaTest",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  arg3 = (float)lua_tonumber(L, 3);
+  elfSetMaterialTextureAlphaTest(arg1,arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfSetMaterialDiffuseColor(lua_State* L) {
   int SWIG_arg = 0;
   elf_handle arg1 ;
@@ -6219,6 +6250,35 @@ static int _wrap_elfGetMaterialTextureParallaxScale(lua_State* L) {
   
   arg2 = (int)lua_tonumber(L, 2);
   result = (float)elfGetMaterialTextureParallaxScale(arg1,arg2);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetMaterialTextureAlphaTexture(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  int arg2 ;
+  elf_handle *argp1 ;
+  float result;
+  
+  SWIG_check_num_args("GetMaterialTextureAlphaTexture",2,2)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetMaterialTextureAlphaTexture",1,"handle");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("GetMaterialTextureAlphaTexture",2,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetMaterialTextureAlphaTexture",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  result = (float)elfGetMaterialTextureAlphaTexture(arg1,arg2);
   lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
   return SWIG_arg;
   
@@ -18304,6 +18364,7 @@ static const struct luaL_reg swig_commands[] = {
     { "SetMaterialTexture", _wrap_elfSetMaterialTexture},
     { "SetMaterialTextureType", _wrap_elfSetMaterialTextureType},
     { "SetMaterialTextureParallaxScale", _wrap_elfSetMaterialTextureParallaxScale},
+    { "SetMaterialTextureAlphaTest", _wrap_elfSetMaterialTextureAlphaTest},
     { "SetMaterialDiffuseColor", _wrap_elfSetMaterialDiffuseColor},
     { "SetMaterialSpecularColor", _wrap_elfSetMaterialSpecularColor},
     { "SetMaterialAmbientColor", _wrap_elfSetMaterialAmbientColor},
@@ -18314,6 +18375,7 @@ static const struct luaL_reg swig_commands[] = {
     { "GetMaterialTexture", _wrap_elfGetMaterialTexture},
     { "GetMaterialTextureType", _wrap_elfGetMaterialTextureType},
     { "GetMaterialTextureParallaxScale", _wrap_elfGetMaterialTextureParallaxScale},
+    { "GetMaterialTextureAlphaTexture", _wrap_elfGetMaterialTextureAlphaTexture},
     { "GetMaterialDiffuseColor", _wrap_elfGetMaterialDiffuseColor},
     { "GetMaterialSpecularColor", _wrap_elfGetMaterialSpecularColor},
     { "GetMaterialAmbientColor", _wrap_elfGetMaterialAmbientColor},

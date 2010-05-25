@@ -712,6 +712,7 @@ elf_material* elf_create_material(const char *name);	// <mdoc> MATERIAL FUNCTION
 void elf_set_material_texture(elf_material *material, int slot, elf_texture *texture);
 void elf_set_material_texture_type(elf_material *material, int slot, int type);
 void elf_set_material_texture_parallax_scale(elf_material *material, int slot, float scale);
+void elf_set_material_texture_alpha_test(elf_material *material, int slot, float test);
 void elf_set_material_diffuse_color(elf_material *material, float r, float g, float b, float a);
 void elf_set_material_specular_color(elf_material *material, float r, float g, float b, float a);
 void elf_set_material_ambient_color(elf_material *material, float r, float g, float b, float a);
@@ -723,6 +724,7 @@ const char* elf_get_material_file_path(elf_material *material);
 elf_texture* elf_get_material_texture(elf_material *material, int slot);
 int elf_get_material_texture_type(elf_material *material, int slot);
 float elf_get_material_texture_parallax_scale(elf_material *material, int slot);
+float elf_get_material_texture_alpha_texture(elf_material *material, int slot);
 elf_color elf_get_material_diffuse_color(elf_material *material);
 elf_color elf_get_material_specular_color(elf_material *material);
 elf_color elf_get_material_ambient_color(elf_material *material);

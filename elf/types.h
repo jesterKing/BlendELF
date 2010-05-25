@@ -209,6 +209,7 @@ struct elf_material {
 	unsigned char non_lit_flag;
 	int texture_types[GFX_MAX_TEXTURES];
 	float texture_parallax_scales[GFX_MAX_TEXTURES];
+	float texture_alpha_tests[GFX_MAX_TEXTURES];
 	elf_texture *textures[GFX_MAX_TEXTURES];
 };
 
