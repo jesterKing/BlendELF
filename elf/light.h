@@ -22,7 +22,7 @@ elf_light* elf_create_light(const char *name)
 
 	elf_set_light_color(light, 1.0, 1.0, 1.0, 1.0);
 
-	light->shadow_camera = elf_create_camera(NULL);
+	light->shadow_camera = elf_create_camera("elf_shadow_camera");
 	elf_set_camera_viewport(light->shadow_camera, 0, 0, 512, 512);
 	elf_set_camera_perspective(light->shadow_camera, (light->inner_cone+light->outer_cone)*2, 1.0, 1.0, light->distance+(1.0/light->fade_speed));
 
@@ -210,6 +210,7 @@ void elf_set_light_cone(elf_light *light, float inner_cone, float outer_cone)
 	light->outer_cone = outer_cone;
 	if(light->inner_cone < 0.0) light->inner_cone = 0.0;
 	if(light->outer_cone < 0.0) light->outer_cone = 0.0;
+	elf_set_camera_perspective(light->shadow_camera, (light->inner_cone+light->outer_cone)*2, 1.0, 1.0, light->distance+(1.0/(light->fade_speed)));
 }
 
 void elf_set_light_shaft(elf_light *light, float size, float intensity, float fade_off)

@@ -1231,8 +1231,8 @@ void elf_draw_scene(elf_scene *scene)
 			gfx_set_shader_params_default(&scene->shader_params);
 			scene->shader_params.render_params.color_write = GFX_FALSE;
 			scene->shader_params.render_params.alpha_write = GFX_FALSE;
-			scene->shader_params.render_params.offset_bias = 2.0f;
-			scene->shader_params.render_params.offset_scale = 4.0f;
+			scene->shader_params.render_params.offset_bias = 2.0;
+			scene->shader_params.render_params.offset_scale = 4.0;
 			elf_set_camera(light->shadow_camera, &scene->shader_params);
 			gfx_set_shader_params(&scene->shader_params);
 

@@ -12,21 +12,21 @@ elf_camera* elf_create_camera(const char *name)
 	camera->mode = ELF_PERSPECTIVE;
 	camera->viewp_x = 0;
 	camera->viewp_y = 0;
-	camera->viewp_width = elf_get_window_width();
-	camera->viewp_height = elf_get_window_height();
+	camera->viewp_width = -1;
+	camera->viewp_height = -1;
 	camera->fov = 35.0;
-	camera->aspect = ((float)elf_get_window_width()/(float)elf_get_window_height() >= 1.0) ?
-		(float)elf_get_window_width()/(float)elf_get_window_height() :
-		(float)elf_get_window_height()/(float)elf_get_window_width();
+	camera->aspect = -1.0;
 	camera->ortho_x = 0;
 	camera->ortho_y = 0;
-	camera->ortho_width = elf_get_window_width();
-	camera->ortho_height = elf_get_window_height();
-	camera->clip_far = 1.0;
-	camera->clip_near = 100.0;
+	camera->ortho_width = -1;
+	camera->ortho_height = -1;
+	camera->clip_near = 1.0;
+	camera->clip_far = 100.0;
 
 	gfx_matrix4_set_identity(camera->projection_matrix);
 	gfx_matrix4_set_identity(camera->modelview_matrix);
+
+	elf_set_camera_perspective(camera, camera->fov, camera->aspect, camera->clip_near, camera->clip_far);
 
 	camera->dobject = elf_create_physics_object_box(0.35, 0.35, 0.35, 0.0, 0.0, 0.0, 0.0);
 	elf_set_physics_object_actor(camera->dobject, (elf_actor*)camera);
@@ -64,12 +64,7 @@ elf_camera* elf_create_camera_from_pak(FILE *file, const char *name, elf_scene *
 	fread((char*)&clip_near, sizeof(float), 1, file);
 	fread((char*)&clip_far, sizeof(float), 1, file);
 
-	elf_set_camera_viewport(camera, 0, 0, elf_get_window_width(), elf_get_window_height());
-	elf_set_camera_perspective(camera, fov,
-		((float)elf_get_window_width()/(float)elf_get_window_height() >= 1.0) ?
-		(float)elf_get_window_width()/(float)elf_get_window_height() :
-		(float)elf_get_window_height()/(float)elf_get_window_width(),
-		clip_near, clip_far);
+	elf_set_camera_perspective(camera, fov, -1.0, clip_near, clip_far);
 
 	return camera;
 }
@@ -77,6 +72,9 @@ elf_camera* elf_create_camera_from_pak(FILE *file, const char *name, elf_scene *
 void elf_update_camera(elf_camera *camera)
 {
 	elf_update_actor((elf_actor*)camera);
+
+	if(camera->mode == ELF_PERSPECTIVE)
+		elf_set_camera_perspective(camera, camera->fov, camera->aspect, camera->clip_near, camera->clip_far);
 }
 
 void elf_camera_pre_draw(elf_camera *camera)
@@ -96,8 +94,6 @@ void elf_destroy_camera(elf_camera *camera)
 
 void elf_set_camera_viewport(elf_camera *camera, int x, int y, int width, int height)
 {
-	if(width < 0) width = 0;
-	if(height < 0) height = 0;
 	camera->viewp_x = x;
 	camera->viewp_y = y;
 	camera->viewp_width = width;
@@ -116,15 +112,19 @@ void elf_set_camera_perspective(elf_camera *camera, float fov, float aspect, flo
 	camera->far_plane_height = 2 * (float)tan(camera->fov * GFX_PI_DIV_180 / 2) * camera->clip_far;
 	camera->far_plane_width = camera->far_plane_height * camera->aspect;
 
-	gfx_get_perspective_projection_matrix(camera->fov, camera->aspect,
+	if(aspect <= 0.0)
+	{
+		if((float)elf_get_window_width()/(float)elf_get_window_height() >= 1.0)
+			aspect = (float)elf_get_window_width()/(float)elf_get_window_height();
+		else aspect = (float)elf_get_window_height()/(float)elf_get_window_width();
+	}
+
+	gfx_get_perspective_projection_matrix(camera->fov, aspect,
 		camera->clip_near, camera->clip_far, camera->projection_matrix);
 }
 
 void elf_set_camera_orthographic(elf_camera *camera, int x, int y, int width, int height, float clip_near, float clip_far)
 {
-	if(width < 0) width = 0;
-	if(height < 0) height = 0;
-
 	camera->mode = ELF_ORTHOGRAPHIC;
 
 	camera->ortho_x = x;
@@ -137,9 +137,12 @@ void elf_set_camera_orthographic(elf_camera *camera, int x, int y, int width, in
 	camera->far_plane_height = height;
 	camera->far_plane_width = width;
 
+	if(width <= 0) width = elf_get_window_width();
+	if(height <= 0) height = elf_get_window_height();
+
 	gfx_get_orthographic_projection_matrix(
-		(float)camera->ortho_x, (float)(camera->ortho_x+camera->ortho_width),
-		(float)camera->ortho_y, (float)(camera->ortho_y+camera->ortho_height),
+		(float)camera->ortho_x, (float)(camera->ortho_x+width),
+		(float)camera->ortho_y, (float)(camera->ortho_y+height),
 		(float)camera->clip_near, camera->clip_far, camera->projection_matrix);
 }
 
@@ -150,7 +153,38 @@ float elf_get_camera_fov(elf_camera *camera)
 
 float elf_get_camera_aspect(elf_camera *camera)
 {
-	return camera->aspect;
+	float aspect = camera->aspect;
+
+	if(aspect <= 0.0)
+	{
+		if((float)elf_get_window_width()/(float)elf_get_window_height() >= 1.0)
+			aspect = (float)elf_get_window_width()/(float)elf_get_window_height();
+		else aspect = (float)elf_get_window_height()/(float)elf_get_window_width();
+	}
+
+	return aspect;
+}
+
+elf_vec2i elf_get_camera_viewport_size(elf_camera *camera)
+{
+	elf_vec2i size;
+
+	size.x = camera->viewp_width;
+	size.y = camera->viewp_height;
+	if(size.x <= 0.0) size.x = elf_get_window_width();
+	if(size.y <= 0.0) size.x = elf_get_window_height();
+
+	return size;
+}
+
+elf_vec2i elf_get_camera_viewport_offset(elf_camera *camera)
+{
+	elf_vec2i offset;
+
+	offset.x = camera->viewp_x;
+	offset.y = camera->viewp_y;
+
+	return offset;
 }
 
 elf_vec2f elf_get_camera_clip(elf_camera *camera)
@@ -169,6 +203,8 @@ elf_vec2f elf_get_camera_far_plane_size(elf_camera *camera)
 
 	size.x = camera->far_plane_width;
 	size.y = camera->far_plane_height;
+	if(size.x <= 0.0) size.x = elf_get_window_width();
+	if(size.y <= 0.0) size.x = elf_get_window_height();
 
 	return size;
 }
@@ -186,7 +222,14 @@ float* elf_get_camera_modelview_matrix(elf_camera *camera)
 
 void elf_set_camera(elf_camera *camera, gfx_shader_params *shader_params)
 {
-	gfx_set_viewport(camera->viewp_x, camera->viewp_y, camera->viewp_width, camera->viewp_height);
+	int viewp_width, viewp_height;
+
+	viewp_width = camera->viewp_width;
+	viewp_height = camera->viewp_height;
+	if(camera->viewp_width <= 0) viewp_width = elf_get_window_width();
+	if(camera->viewp_height <= 0) viewp_height = elf_get_window_height();
+
+	gfx_set_viewport(camera->viewp_x, camera->viewp_y, viewp_width, viewp_height);
 
 	memcpy(shader_params->projection_matrix, camera->projection_matrix, sizeof(float)*16);
 	memcpy(camera->modelview_matrix, gfx_get_transform_matrix(camera->transform), sizeof(float)*16);
@@ -195,8 +238,8 @@ void elf_set_camera(elf_camera *camera, gfx_shader_params *shader_params)
 
 	shader_params->clip_start = camera->clip_near;
 	shader_params->clip_end = camera->clip_far;
-	shader_params->viewport_width = camera->viewp_width;
-	shader_params->viewport_height = camera->viewp_height;
+	shader_params->viewport_width = viewp_width;
+	shader_params->viewport_height = viewp_height;
 }
 
 unsigned char elf_aabb_inside_frustum(elf_camera *camera, float *min, float *max)

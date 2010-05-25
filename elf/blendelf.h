@@ -281,11 +281,12 @@ extern "C" {
 #define ELF_CANT_RUN_STRING				0x0005
 #define ELF_CANT_RUN_SCRIPT				0x0006
 #define ELF_CANT_CREATE					0x0007
-#define ELF_INVALID_SIZE				0x0008
-#define ELF_UNKNOWN_FORMAT				0x0009
-#define ELF_UNKNOWN_TYPE				0x000A
-#define ELF_INVALID_HANDLE				0x000B
-#define ELF_MISSING_FEATURE				0x000C
+#define ELF_CANT_RESIZE					0x0008
+#define ELF_INVALID_SIZE				0x0009
+#define ELF_UNKNOWN_FORMAT				0x000A
+#define ELF_UNKNOWN_TYPE				0x000B
+#define ELF_INVALID_HANDLE				0x000C
+#define ELF_MISSING_FEATURE				0x000D
 
 typedef struct elf_vec2i				elf_vec2i;
 typedef struct elf_vec2f				elf_vec2f;
@@ -449,6 +450,8 @@ unsigned char elf_init_context(int width, int height,
 		const char *title, unsigned char fullscreen);
 void elf_close_window();
 
+unsigned char elf_resize_context(int width, int height);
+
 #ifdef ELF_WINDOWS
 	#ifndef ELF_PLAYER
 		#include "windows.h"
@@ -519,6 +522,8 @@ const char* elf_get_game_config_start(elf_game_config *config);
 unsigned char elf_init(int width, int height, const char *title, unsigned char fullscreen);	// <mdoc> ENGINE FUNCTIONS
 unsigned char elf_init_with_config(const char *file_path);
 void elf_deinit();
+
+void elf_resize_window(int width, int height);
 
 const char* elf_get_platform();
 
@@ -896,6 +901,8 @@ void elf_set_camera_viewport(elf_camera *camera, int x, int y, int width, int he
 void elf_set_camera_perspective(elf_camera *camera, float fov, float aspect, float clip_near, float clip_far);
 void elf_set_camera_orthographic(elf_camera *camera, int x, int y, int width, int height, float clip_near, float clip_far);
 
+elf_vec2i elf_get_camera_viewport_size(elf_camera *camera);
+elf_vec2i elf_get_camera_viewport_offset(elf_camera *camera);
 float elf_get_camera_fov(elf_camera *camera);
 float elf_get_camera_aspect(elf_camera *camera);
 elf_vec2f elf_get_camera_clip(elf_camera *camera);
@@ -1262,6 +1269,8 @@ elf_script* elf_get_script_from_pak(const char *name, elf_pak *pak);
 // <!!
 elf_post_process* elf_create_post_process();
 void elf_destroy_post_process(elf_post_process *post_process);
+
+void elf_init_post_process_buffers(elf_post_process *post_process);
 
 void elf_begin_post_process(elf_post_process *post_process, elf_scene *scene);
 void elf_end_post_process(elf_post_process *post_process, elf_scene *scene);

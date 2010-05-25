@@ -642,6 +642,8 @@ struct elf_gui {
 	elf_gui_object *target;
 	elf_text_field *active_text_field;
 
+	unsigned char update_size;
+
 	int cur_key;
 	float key_step;
 	unsigned char key_repeat;

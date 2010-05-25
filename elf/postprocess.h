@@ -189,41 +189,7 @@ elf_post_process* elf_create_post_process()
 	memset(post_process, 0x0, sizeof(elf_post_process));
 	post_process->type = ELF_POST_PROCESS;
 
-	post_process->buffer_width = elf_get_window_width()/4;
-	post_process->buffer_height = elf_get_window_height()/4;
-
-	post_process->main_rt_color[0] = gfx_create_2d_texture(
-			elf_get_window_width(), elf_get_window_height(), 0.0f,
-			GFX_CLAMP, GFX_LINEAR, GFX_RGBA, GFX_RGBA, GFX_UBYTE, NULL);
-	post_process->main_rt_depth = gfx_create_2d_texture(
-			elf_get_window_width(), elf_get_window_height(), 0.0f,
-			GFX_CLAMP, GFX_LINEAR, GFX_DEPTH_COMPONENT, GFX_DEPTH_COMPONENT, GFX_UBYTE, NULL);
-	post_process->main_rt = gfx_create_render_target(elf_get_window_width(), elf_get_window_height());
-
-	gfx_set_render_target_color_texture(post_process->main_rt, 0, post_process->main_rt_color[0]);
-	gfx_set_render_target_depth_texture(post_process->main_rt, post_process->main_rt_depth);
-
-	post_process->rt_tex_high_1 = gfx_create_2d_texture(post_process->buffer_width*2, post_process->buffer_height*2, 0.0f, GFX_CLAMP, GFX_LINEAR, GFX_RGB, GFX_RGB, GFX_UBYTE, NULL);
-	post_process->rt_tex_high_2 = gfx_create_2d_texture(post_process->buffer_width*2, post_process->buffer_height*2, 0.0f, GFX_CLAMP, GFX_LINEAR, GFX_RGB, GFX_RGB, GFX_UBYTE, NULL);
-	post_process->rt_tex_high_depth = gfx_create_2d_texture(post_process->buffer_width*2, post_process->buffer_height*2, 0.0f, GFX_CLAMP, GFX_LINEAR, GFX_DEPTH_COMPONENT, GFX_DEPTH_COMPONENT, GFX_UBYTE, NULL);
-	post_process->rt_tex_med_1 = gfx_create_2d_texture(post_process->buffer_width, post_process->buffer_height, 0.0f, GFX_CLAMP, GFX_LINEAR, GFX_RGB, GFX_RGB, GFX_UBYTE, NULL);
-	post_process->rt_tex_med_2 = gfx_create_2d_texture(post_process->buffer_width, post_process->buffer_height, 0.0f, GFX_CLAMP, GFX_LINEAR, GFX_RGB, GFX_RGB, GFX_UBYTE, NULL);
-	post_process->rt_tex_med_3 = gfx_create_2d_texture(post_process->buffer_width, post_process->buffer_height, 0.0f, GFX_CLAMP, GFX_LINEAR, GFX_RGB, GFX_RGB, GFX_UBYTE, NULL);
-	post_process->rt_tex_low_1 = gfx_create_2d_texture(post_process->buffer_width/2, post_process->buffer_height/2, 0.0f, GFX_CLAMP, GFX_LINEAR, GFX_RGB, GFX_RGB, GFX_UBYTE, NULL);
-	post_process->rt_tex_low_2 = gfx_create_2d_texture(post_process->buffer_width/2, post_process->buffer_height/2, 0.0f, GFX_CLAMP, GFX_LINEAR, GFX_RGB, GFX_RGB, GFX_UBYTE, NULL);
-	post_process->rt_tex_tiny_1 = gfx_create_2d_texture(post_process->buffer_width/4, post_process->buffer_height/4, 0.0f, GFX_CLAMP, GFX_LINEAR, GFX_RGB, GFX_RGB, GFX_UBYTE, NULL);
-	post_process->rt_tex_tiny_2 = gfx_create_2d_texture(post_process->buffer_width/4, post_process->buffer_height/4, 0.0f, GFX_CLAMP, GFX_LINEAR, GFX_RGB, GFX_RGB, GFX_UBYTE, NULL);
-
-	post_process->rt_high = gfx_create_render_target(post_process->buffer_width*2, post_process->buffer_height*2);
-	post_process->rt_med = gfx_create_render_target(post_process->buffer_width, post_process->buffer_height);
-	post_process->rt_low = gfx_create_render_target(post_process->buffer_width/2, post_process->buffer_height/2);
-	post_process->rt_tiny = gfx_create_render_target(post_process->buffer_width/4, post_process->buffer_height/4);
-
-	gfx_set_render_target_color_texture(post_process->rt_high, 0, post_process->rt_tex_high_1);
-	gfx_set_render_target_depth_texture(post_process->rt_high, post_process->rt_tex_high_depth);
-	gfx_set_render_target_color_texture(post_process->rt_med, 0, post_process->rt_tex_med_1);
-	gfx_set_render_target_color_texture(post_process->rt_low, 0, post_process->rt_tex_low_1);
-	gfx_set_render_target_color_texture(post_process->rt_tiny, 0, post_process->rt_tex_tiny_1);
+	elf_init_post_process_buffers(post_process);
 
 	post_process->hipass_shdr = gfx_create_shader_program(vert_shader, hipass_shader);
 	post_process->blur_shdr = gfx_create_shader_program(vert_shader, blur_shader);
@@ -274,6 +240,74 @@ void elf_destroy_post_process(elf_post_process *post_process)
 	gfx_destroy_transform(post_process->light_shaft_transform);
 
 	free(post_process);
+}
+
+void elf_init_post_process_buffers(elf_post_process *post_process)
+{
+
+	if(post_process->main_rt) gfx_destroy_render_target(post_process->main_rt);
+	if(post_process->main_rt_color[0]) gfx_destroy_texture(post_process->main_rt_color[0]);
+	if(post_process->main_rt_color[1]) gfx_destroy_texture(post_process->main_rt_color[1]);
+	if(post_process->main_rt_depth) gfx_destroy_texture(post_process->main_rt_depth);
+
+	if(post_process->rt_high) gfx_destroy_render_target(post_process->rt_high);
+	if(post_process->rt_med) gfx_destroy_render_target(post_process->rt_med);
+	if(post_process->rt_low) gfx_destroy_render_target(post_process->rt_low);
+	if(post_process->rt_tiny) gfx_destroy_render_target(post_process->rt_tiny);
+
+	if(post_process->rt_tex_high_1) gfx_destroy_texture(post_process->rt_tex_high_1);
+	if(post_process->rt_tex_high_2) gfx_destroy_texture(post_process->rt_tex_high_2);
+	if(post_process->rt_tex_high_depth) gfx_destroy_texture(post_process->rt_tex_high_depth);
+	if(post_process->rt_tex_med_1) gfx_destroy_texture(post_process->rt_tex_med_1);
+	if(post_process->rt_tex_med_2) gfx_destroy_texture(post_process->rt_tex_med_2);
+	if(post_process->rt_tex_med_3) gfx_destroy_texture(post_process->rt_tex_med_3);
+	if(post_process->rt_tex_low_1) gfx_destroy_texture(post_process->rt_tex_low_1);
+	if(post_process->rt_tex_low_2) gfx_destroy_texture(post_process->rt_tex_low_2);
+	if(post_process->rt_tex_tiny_1) gfx_destroy_texture(post_process->rt_tex_tiny_1);
+	if(post_process->rt_tex_tiny_2) gfx_destroy_texture(post_process->rt_tex_tiny_2);
+
+	post_process->buffer_width = elf_get_window_width()/4;
+	post_process->buffer_height = elf_get_window_height()/4;
+
+	post_process->main_rt_color[0] = gfx_create_2d_texture(
+			elf_get_window_width(), elf_get_window_height(), 0.0f,
+			GFX_CLAMP, GFX_LINEAR, GFX_RGBA, GFX_RGBA, GFX_UBYTE, NULL);
+	post_process->main_rt_depth = gfx_create_2d_texture(
+			elf_get_window_width(), elf_get_window_height(), 0.0f,
+			GFX_CLAMP, GFX_LINEAR, GFX_DEPTH_COMPONENT, GFX_DEPTH_COMPONENT, GFX_UBYTE, NULL);
+	post_process->main_rt = gfx_create_render_target(elf_get_window_width(), elf_get_window_height());
+
+	gfx_set_render_target_color_texture(post_process->main_rt, 0, post_process->main_rt_color[0]);
+	gfx_set_render_target_depth_texture(post_process->main_rt, post_process->main_rt_depth);
+
+	post_process->rt_tex_high_1 = gfx_create_2d_texture(post_process->buffer_width*2, post_process->buffer_height*2, 0.0, GFX_CLAMP, GFX_LINEAR, GFX_RGB, GFX_RGB, GFX_UBYTE, NULL);
+	post_process->rt_tex_high_2 = gfx_create_2d_texture(post_process->buffer_width*2, post_process->buffer_height*2, 0.0, GFX_CLAMP, GFX_LINEAR, GFX_RGB, GFX_RGB, GFX_UBYTE, NULL);
+	post_process->rt_tex_high_depth = gfx_create_2d_texture(post_process->buffer_width*2, post_process->buffer_height*2, 0.0, GFX_CLAMP, GFX_LINEAR, GFX_DEPTH_COMPONENT, GFX_DEPTH_COMPONENT, GFX_UBYTE, NULL);
+	post_process->rt_tex_med_1 = gfx_create_2d_texture(post_process->buffer_width, post_process->buffer_height, 0.0, GFX_CLAMP, GFX_LINEAR, GFX_RGB, GFX_RGB, GFX_UBYTE, NULL);
+	post_process->rt_tex_med_2 = gfx_create_2d_texture(post_process->buffer_width, post_process->buffer_height, 0.0, GFX_CLAMP, GFX_LINEAR, GFX_RGB, GFX_RGB, GFX_UBYTE, NULL);
+	post_process->rt_tex_med_3 = gfx_create_2d_texture(post_process->buffer_width, post_process->buffer_height, 0.0, GFX_CLAMP, GFX_LINEAR, GFX_RGB, GFX_RGB, GFX_UBYTE, NULL);
+	post_process->rt_tex_low_1 = gfx_create_2d_texture(post_process->buffer_width/2, post_process->buffer_height/2, 0.0, GFX_CLAMP, GFX_LINEAR, GFX_RGB, GFX_RGB, GFX_UBYTE, NULL);
+	post_process->rt_tex_low_2 = gfx_create_2d_texture(post_process->buffer_width/2, post_process->buffer_height/2, 0.0, GFX_CLAMP, GFX_LINEAR, GFX_RGB, GFX_RGB, GFX_UBYTE, NULL);
+	post_process->rt_tex_tiny_1 = gfx_create_2d_texture(post_process->buffer_width/4, post_process->buffer_height/4, 0.0, GFX_CLAMP, GFX_LINEAR, GFX_RGB, GFX_RGB, GFX_UBYTE, NULL);
+	post_process->rt_tex_tiny_2 = gfx_create_2d_texture(post_process->buffer_width/4, post_process->buffer_height/4, 0.0, GFX_CLAMP, GFX_LINEAR, GFX_RGB, GFX_RGB, GFX_UBYTE, NULL);
+
+	post_process->rt_high = gfx_create_render_target(post_process->buffer_width*2, post_process->buffer_height*2);
+	post_process->rt_med = gfx_create_render_target(post_process->buffer_width, post_process->buffer_height);
+	post_process->rt_low = gfx_create_render_target(post_process->buffer_width/2, post_process->buffer_height/2);
+	post_process->rt_tiny = gfx_create_render_target(post_process->buffer_width/4, post_process->buffer_height/4);
+
+	gfx_set_render_target_color_texture(post_process->rt_high, 0, post_process->rt_tex_high_1);
+	gfx_set_render_target_depth_texture(post_process->rt_high, post_process->rt_tex_high_depth);
+	gfx_set_render_target_color_texture(post_process->rt_med, 0, post_process->rt_tex_med_1);
+	gfx_set_render_target_color_texture(post_process->rt_low, 0, post_process->rt_tex_low_1);
+	gfx_set_render_target_color_texture(post_process->rt_tiny, 0, post_process->rt_tex_tiny_1);
+
+	if(!post_process->main_rt_color[1] && (int)post_process->bloom+(int)post_process->dof+(int)post_process->ssao > 1)
+	{
+		post_process->main_rt_color[1] = gfx_create_2d_texture(
+			elf_get_window_width(), elf_get_window_height(), 0.0f,
+			GFX_CLAMP, GFX_LINEAR, GFX_RGBA, GFX_RGBA, GFX_UBYTE, NULL);
+	}
 }
 
 void elf_begin_post_process(elf_post_process *post_process, elf_scene *scene)

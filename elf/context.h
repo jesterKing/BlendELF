@@ -154,7 +154,7 @@ unsigned char elf_init_context_with_hwnd(int width, int height,
 	ctx->title = elf_create_string(title);
 
 	glfwInit();
-	glfwOpenWindowHint(GLFW_WINDOW_NO_RESIZE, GL_TRUE);
+	//glfwOpenWindowHint(GLFW_WINDOW_NO_RESIZE, GL_TRUE);
 
 	if(!glfwOpenWindowWithHWND(width, height, 8, 8, 8, 0, 24, 0,
 		(fullscreen == ELF_FALSE) ? GLFW_WINDOW : GLFW_FULLSCREEN, hwnd))
@@ -184,6 +184,18 @@ HWND elf_get_window_hwnd()
 }
 	#endif
 #endif
+
+unsigned char elf_resize_context(int width, int height)
+{
+	if(width <= 0 || height <= 0 || (width == ctx->width &&
+		height == ctx->height)) return ELF_FALSE;
+
+	glfwSetWindowSize(width, height);
+	ctx->width = width;
+	ctx->height = height;
+
+	return ELF_FALSE;
+}
 
 void elf_set_title(const char *title)
 {

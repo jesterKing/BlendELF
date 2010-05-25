@@ -661,6 +661,10 @@ ELF_API void ELF_APIENTRY elfDeinit()
 {
 	elf_deinit();
 }
+ELF_API void ELF_APIENTRY elfResizeWindow(int width, int height)
+{
+	elf_resize_window(width, height);
+}
 ELF_API const char* ELF_APIENTRY elfGetPlatform()
 {
 	return elf_get_platform();
@@ -3780,6 +3784,48 @@ ELF_API void ELF_APIENTRY elfSetCameraOrthographic(elf_handle camera, int x, int
 		return;
 	}
 	elf_set_camera_orthographic((elf_camera*)camera.get(), x, y, width, height, clip_near, clip_far);
+}
+ELF_API elf_vec2i ELF_APIENTRY elfGetCameraViewportSize(elf_handle camera)
+{
+	elf_vec2i _e_type;
+	memset(&_e_type, 0x0, sizeof(elf_vec2i));
+	if(!camera.get() || elf_get_object_type(camera.get()) != ELF_CAMERA)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetCameraViewportSize() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetCameraViewportSize() -> invalid handle\n");
+		}
+		return _e_type;
+	}
+	_e_type = elf_get_camera_viewport_size((elf_camera*)camera.get());
+	return _e_type;
+}
+ELF_API elf_vec2i ELF_APIENTRY elfGetCameraViewportOffset(elf_handle camera)
+{
+	elf_vec2i _e_type;
+	memset(&_e_type, 0x0, sizeof(elf_vec2i));
+	if(!camera.get() || elf_get_object_type(camera.get()) != ELF_CAMERA)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetCameraViewportOffset() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetCameraViewportOffset() -> invalid handle\n");
+		}
+		return _e_type;
+	}
+	_e_type = elf_get_camera_viewport_offset((elf_camera*)camera.get());
+	return _e_type;
 }
 ELF_API float ELF_APIENTRY elfGetCameraFov(elf_handle camera)
 {

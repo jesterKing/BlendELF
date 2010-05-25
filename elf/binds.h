@@ -251,11 +251,12 @@
 #define ELF_CANT_RUN_STRING 0x0005
 #define ELF_CANT_RUN_SCRIPT 0x0006
 #define ELF_CANT_CREATE 0x0007
-#define ELF_INVALID_SIZE 0x0008
-#define ELF_UNKNOWN_FORMAT 0x0009
-#define ELF_UNKNOWN_TYPE 0x000A
-#define ELF_INVALID_HANDLE 0x000B
-#define ELF_MISSING_FEATURE 0x000C
+#define ELF_CANT_RESIZE 0x0008
+#define ELF_INVALID_SIZE 0x0009
+#define ELF_UNKNOWN_FORMAT 0x000A
+#define ELF_UNKNOWN_TYPE 0x000B
+#define ELF_INVALID_HANDLE 0x000C
+#define ELF_MISSING_FEATURE 0x000D
 #if defined(__WIN32__) || defined(WIN32) || defined(__CYGWIN__)
 	#ifndef ELF_PLAYER
 		#define ELF_APIENTRY __stdcall
@@ -369,6 +370,7 @@ ELF_API const char* ELF_APIENTRY elfGetGameConfigStart(elf_handle config);
 ELF_API bool ELF_APIENTRY elfInit(int width, int height, const char* title, bool fullscreen);
 ELF_API bool ELF_APIENTRY elfInitWithConfig(const char* file_path);
 ELF_API void ELF_APIENTRY elfDeinit();
+ELF_API void ELF_APIENTRY elfResizeWindow(int width, int height);
 ELF_API const char* ELF_APIENTRY elfGetPlatform();
 ELF_API int ELF_APIENTRY elfGetVersionMajor();
 ELF_API int ELF_APIENTRY elfGetVersionMinor();
@@ -584,6 +586,8 @@ ELF_API elf_handle ELF_APIENTRY elfCreateCamera(const char* name);
 ELF_API void ELF_APIENTRY elfSetCameraViewport(elf_handle camera, int x, int y, int width, int height);
 ELF_API void ELF_APIENTRY elfSetCameraPerspective(elf_handle camera, float fov, float aspect, float clip_near, float clip_far);
 ELF_API void ELF_APIENTRY elfSetCameraOrthographic(elf_handle camera, int x, int y, int width, int height, float clip_near, float clip_far);
+ELF_API elf_vec2i ELF_APIENTRY elfGetCameraViewportSize(elf_handle camera);
+ELF_API elf_vec2i ELF_APIENTRY elfGetCameraViewportOffset(elf_handle camera);
 ELF_API float ELF_APIENTRY elfGetCameraFov(elf_handle camera);
 ELF_API float ELF_APIENTRY elfGetCameraAspect(elf_handle camera);
 ELF_API elf_vec2f ELF_APIENTRY elfGetCameraClip(elf_handle camera);

@@ -1261,6 +1261,7 @@ elf_gui* elf_create_gui()
 	gui->root = gui;
 
 	gui->pos.x = gui->pos.y = 0;
+	gui->update_size = ELF_TRUE;
 	gui->width = elf_get_window_width();
 	gui->height = elf_get_window_height();
 
@@ -1470,6 +1471,13 @@ void elf_update_gui(elf_gui *gui, float step)
 	elf_text_list *text_list;
 	int i;
 
+	if(gui->update_size)
+	{
+		gui->width = elf_get_window_width();
+		gui->height = elf_get_window_height();
+		elf_recalc_gui_object((elf_gui_object*)gui);
+	}
+
 	elf_reset_gui_object_events((elf_gui_object*)gui);
 
 	mouse_force = elf_get_mouse_force();
@@ -1538,14 +1546,14 @@ void elf_update_gui(elf_gui *gui, float step)
 				if(slider->width > slider->height)
 				{
 					slider->value = (float)(mouse_position.x-slider->pos.x)/((float)slider->width);
-					if(slider->value < 0.0f) slider->value = 0.0f;
-					if(slider->value > 1.0f) slider->value = 1.0f;
+					if(slider->value < 0.0) slider->value = 0.0;
+					if(slider->value > 1.0) slider->value = 1.0;
 				}
 				else
 				{
 					slider->value = (float)((elf_get_window_height()-mouse_position.y)-slider->pos.y)/((float)slider->height);
-					if(slider->value < 0.0f) slider->value = 0.0f;
-					if(slider->value > 1.0f) slider->value = 1.0f;
+					if(slider->value < 0.0) slider->value = 0.0;
+					if(slider->value > 1.0) slider->value = 1.0;
 				}
 
 				slider->event = ELF_VALUE_CHANGED;
@@ -1646,14 +1654,14 @@ void elf_update_gui(elf_gui *gui, float step)
 				if(slider->width > slider->height)
 				{
 					slider->value = (float)(mouse_position.x-slider->pos.x)/((float)slider->width);
-					if(slider->value < 0.0f) slider->value = 0.0f;
-					if(slider->value > 1.0f) slider->value = 1.0f;
+					if(slider->value < 0.0) slider->value = 0.0;
+					if(slider->value > 1.0) slider->value = 1.0;
 				}
 				else
 				{
 					slider->value = (float)((elf_get_window_height()-mouse_position.y)-slider->pos.y)/((float)slider->height);
-					if(slider->value < 0.0f) slider->value = 0.0f;
-					if(slider->value > 1.0f) slider->value = 1.0f;
+					if(slider->value < 0.0) slider->value = 0.0;
+					if(slider->value > 1.0) slider->value = 1.0;
 				}
 
 				slider->event = ELF_VALUE_CHANGED;
@@ -1771,7 +1779,7 @@ void elf_draw_gui(elf_gui *gui)
 	gui->shader_params.render_params.blend_mode = GFX_TRANSPARENT;
 	gfx_set_viewport(gui->pos.x, gui->pos.y, gui->width, gui->height);
 	gfx_get_orthographic_projection_matrix((float)gui->pos.x, (float)gui->width, (float)gui->pos.x, (float)gui->height,
-		-1.0f, 1.0f, gui->shader_params.projection_matrix);
+		-1.0, 1.0, gui->shader_params.projection_matrix);
 
 	for(object = (elf_gui_object*)elf_begin_list(gui->children); object;
 		object = (elf_gui_object*)elf_next_in_list(gui->children))
@@ -1784,14 +1792,14 @@ void elf_draw_gui(elf_gui *gui)
 			elf_draw_text_field((elf_text_field*)object, &area, &gui->shader_params);
 			gfx_set_viewport(gui->pos.x, gui->pos.y, gui->width, gui->height);
 			gfx_get_orthographic_projection_matrix((float)gui->pos.x, (float)gui->pos.x+gui->width, (float)gui->pos.y, (float)gui->pos.y+gui->height,
-				-1.0f, 1.0f, gui->shader_params.projection_matrix);
+				-1.0, 1.0, gui->shader_params.projection_matrix);
 		}
 		else if(object->type == ELF_TEXT_LIST)
 		{
 			elf_draw_text_list((elf_text_list*)object, &area, &gui->shader_params);
 			gfx_set_viewport(gui->pos.x, gui->pos.y, gui->width, gui->height);
 			gfx_get_orthographic_projection_matrix((float)gui->pos.x, (float)gui->pos.x+gui->width, (float)gui->pos.y, (float)gui->pos.y+gui->height,
-				-1.0f, 1.0f, gui->shader_params.projection_matrix);
+				-1.0, 1.0, gui->shader_params.projection_matrix);
 		}
 		else if(object->type == ELF_SLIDER) elf_draw_slider((elf_slider*)object, &gui->shader_params);
 		else if(object->type == ELF_CHECK_BOX) elf_draw_check_box((elf_check_box*)object, &gui->shader_params);
@@ -1804,7 +1812,7 @@ void elf_draw_gui(elf_gui *gui)
 		elf_draw_screen((elf_screen*)object, &area, &gui->shader_params);
 		gfx_set_viewport(gui->pos.x, gui->pos.y, gui->width, gui->height);
 		gfx_get_orthographic_projection_matrix((float)gui->pos.x, (float)gui->pos.x+gui->width, (float)gui->pos.y, (float)gui->pos.y+gui->height,
-			-1.0f, 1.0f, gui->shader_params.projection_matrix);
+			-1.0, 1.0, gui->shader_params.projection_matrix);
 	}
 
 	// reset state just to be sure...

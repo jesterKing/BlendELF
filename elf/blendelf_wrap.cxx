@@ -3789,6 +3789,28 @@ fail:
 }
 
 
+static int _wrap_elfResizeWindow(lua_State* L) {
+  int SWIG_arg = 0;
+  int arg1 ;
+  int arg2 ;
+  
+  SWIG_check_num_args("ResizeWindow",2,2)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("ResizeWindow",1,"int");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("ResizeWindow",2,"int");
+  arg1 = (int)lua_tonumber(L, 1);
+  arg2 = (int)lua_tonumber(L, 2);
+  elfResizeWindow(arg1,arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfGetPlatform(lua_State* L) {
   int SWIG_arg = 0;
   char *result = 0 ;
@@ -9513,6 +9535,64 @@ static int _wrap_elfSetCameraOrthographic(lua_State* L) {
   arg7 = (float)lua_tonumber(L, 7);
   elfSetCameraOrthographic(arg1,arg2,arg3,arg4,arg5,arg6,arg7);
   
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetCameraViewportSize(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  elf_vec2i result;
+  
+  SWIG_check_num_args("GetCameraViewportSize",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetCameraViewportSize",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetCameraViewportSize",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = elfGetCameraViewportSize(arg1);
+  {
+    elf_vec2i * resultptr = new elf_vec2i((const elf_vec2i &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_vec2i,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetCameraViewportOffset(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  elf_vec2i result;
+  
+  SWIG_check_num_args("GetCameraViewportOffset",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetCameraViewportOffset",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetCameraViewportOffset",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = elfGetCameraViewportOffset(arg1);
+  {
+    elf_vec2i * resultptr = new elf_vec2i((const elf_vec2i &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_vec2i,1); SWIG_arg++;
+  }
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -18267,6 +18347,7 @@ static const struct luaL_reg swig_commands[] = {
     { "Init", _wrap_elfInit},
     { "InitWithConfig", _wrap_elfInitWithConfig},
     { "Deinit", _wrap_elfDeinit},
+    { "ResizeWindow", _wrap_elfResizeWindow},
     { "GetPlatform", _wrap_elfGetPlatform},
     { "GetVersionMajor", _wrap_elfGetVersionMajor},
     { "GetVersionMinor", _wrap_elfGetVersionMinor},
@@ -18482,6 +18563,8 @@ static const struct luaL_reg swig_commands[] = {
     { "SetCameraViewport", _wrap_elfSetCameraViewport},
     { "SetCameraPerspective", _wrap_elfSetCameraPerspective},
     { "SetCameraOrthographic", _wrap_elfSetCameraOrthographic},
+    { "GetCameraViewportSize", _wrap_elfGetCameraViewportSize},
+    { "GetCameraViewportOffset", _wrap_elfGetCameraViewportOffset},
     { "GetCameraFov", _wrap_elfGetCameraFov},
     { "GetCameraAspect", _wrap_elfGetCameraAspect},
     { "GetCameraClip", _wrap_elfGetCameraClip},
@@ -19044,11 +19127,12 @@ static swig_lua_const_info swig_constants[] = {
 { SWIG_LUA_INT,     (char *)"CANT_RUN_STRING", (long) 0x0005, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"CANT_RUN_SCRIPT", (long) 0x0006, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"CANT_CREATE", (long) 0x0007, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"INVALID_SIZE", (long) 0x0008, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"UNKNOWN_FORMAT", (long) 0x0009, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"UNKNOWN_TYPE", (long) 0x000A, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"INVALID_HANDLE", (long) 0x000B, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"MISSING_FEATURE", (long) 0x000C, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"CANT_RESIZE", (long) 0x0008, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"INVALID_SIZE", (long) 0x0009, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"UNKNOWN_FORMAT", (long) 0x000A, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"UNKNOWN_TYPE", (long) 0x000B, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"INVALID_HANDLE", (long) 0x000C, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"MISSING_FEATURE", (long) 0x000D, 0, 0, 0},
     {0,0,0,0,0,0}
 };
 

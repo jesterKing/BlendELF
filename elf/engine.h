@@ -610,6 +610,17 @@ void elf_deinit()
 	elf_err_str_store = NULL;
 }
 
+void elf_resize_window(int width, int height)
+{
+	elf_set_error(ELF_MISSING_FEATURE, "error: resizing not yet in a usable state\n");
+
+	/*if(width <= 0 || height <= 0 || (width == elf_get_window_width() &&
+		height == elf_get_window_height())) return;
+
+	elf_resize_context(width, height);
+	elf_init_post_process_buffers(eng->post_process);*/
+}
+
 const char* elf_get_platform()
 {
 #if defined(ELF_WINDOWS)
