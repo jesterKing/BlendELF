@@ -14,7 +14,7 @@ int luaopen_elf(lua_State* L);
 struct elf_scripting {
 	ELF_OBJECT_HEADER;
 	struct lua_State *L;
-	elf_script *cur_script;
+	elf_list *cur_scripts;
 };
 
 elf_scripting *scr = NULL;
@@ -37,12 +37,17 @@ elf_scripting* elf_create_scripting()
 	luaL_openlibs(scripting->L);
 	luaopen_elf(scripting->L);
 
+	scripting->cur_scripts = elf_create_list();
+	elf_inc_ref((elf_object*)scripting->cur_scripts);
+
 	return scripting;
 }
 
 void elf_destroy_scripting(elf_scripting *scripting)
 {
 	if(scripting->L) lua_close(scripting->L);
+
+	elf_dec_ref((elf_object*)scripting->cur_scripts);
 
 	free(scripting);
 }
@@ -91,7 +96,8 @@ int elf_get_current_script_line()
 
 elf_script* elf_get_current_script()
 {
-	return scr->cur_script;
+	if(!scr) return NULL;
+	return (elf_script*)elf_rbegin_list(scr->cur_scripts);
 }
 
 unsigned char elf_run_string(const char *str)
@@ -114,12 +120,10 @@ unsigned char elf_run_string(const char *str)
 unsigned char elf_run_script(elf_script *script)
 {
 	int err;
-
+	
 	if(!scr || !script->text || script->error) return ELF_FALSE;
 
-	if(scr->cur_script) elf_dec_ref((elf_object*)scr->cur_script);
-	scr->cur_script = script;
-	elf_inc_ref((elf_object*)scr->cur_script);
+	elf_append_to_list(scr->cur_scripts, (elf_object*)script);
 
 	err = 0;
 	err = luaL_dostring(scr->L, script->text);
@@ -128,13 +132,13 @@ unsigned char elf_run_script(elf_script *script)
 		elf_set_error(ELF_CANT_RUN_SCRIPT, "error: can't run script \"%s\"\n%s\n", script->name, lua_tostring(scr->L, -1));
 
 		script->error = ELF_TRUE;
-		elf_dec_ref((elf_object*)scr->cur_script);
-		scr->cur_script = NULL;
+		elf_rbegin_list(scr->cur_scripts);
+		elf_remove_from_list(scr->cur_scripts, (elf_object*)script);
 		return ELF_FALSE;
 	}
 
-	elf_dec_ref((elf_object*)scr->cur_script);
-	scr->cur_script = NULL;
+	elf_rbegin_list(scr->cur_scripts);
+	elf_remove_from_list(scr->cur_scripts, (elf_object*)script);
 	return ELF_TRUE;
 }
 
