@@ -1200,6 +1200,7 @@ void elf_draw_scene(elf_scene *scene)
 	int i, j;
 	elf_vec3f lpos;
 	elf_vec3f epos;
+	elf_vec3f spos;
 	elf_vec3f dvec;
 	float dist, att;
 	unsigned char found;
@@ -1478,7 +1479,31 @@ void elf_draw_scene(elf_scene *scene)
 			i < scene->sprite_queue_count && spr != NULL;
 			i++, spr = (elf_sprite*)elf_next_in_list(scene->sprite_queue))
 		{
-			elf_draw_sprite(spr, &scene->shader_params);
+			//elf_draw_sprite(spr, &scene->shader_params);
+
+			spos = elf_get_actor_position((elf_actor*)spr);
+			if(light->light_type == ELF_SPOT_LIGHT)
+			{
+				if(!elf_cull_sprite(spr, light->shadow_camera))
+				{
+					elf_draw_sprite(spr, &scene->shader_params);
+				}
+			}
+			else if(light->light_type == ELF_POINT_LIGHT)
+			{
+				dvec = elf_sub_vec3f_vec3f(spos, lpos);
+				dist = elf_get_vec3f_length(dvec);
+				dist -= spr->cull_radius;
+				att = 1.0-elf_float_max(dist-light->distance, 0.0)*light->fade_speed;
+				if(att > 0.0)
+				{
+					elf_draw_sprite(spr, &scene->shader_params);
+				}
+			}
+			else
+			{
+				elf_draw_sprite(spr, &scene->shader_params);
+			}
 		}
 	}
 
