@@ -6157,7 +6157,7 @@ ELF_API elf_handle ELF_APIENTRY elfGetSpriteMaterial(elf_handle sprite)
 	handle = (elf_object*)elf_get_sprite_material((elf_sprite*)sprite.get());
 	return handle;
 }
-ELF_API void ELF_APIENTRY elfSetSpriteScale(elf_handle sprite, float x, float y, float z)
+ELF_API void ELF_APIENTRY elfSetSpriteScale(elf_handle sprite, float x, float y)
 {
 	if(!sprite.get() || elf_get_object_type(sprite.get()) != ELF_SPRITE)
 	{
@@ -6173,12 +6173,12 @@ ELF_API void ELF_APIENTRY elfSetSpriteScale(elf_handle sprite, float x, float y,
 		}
 		return;
 	}
-	elf_set_sprite_scale((elf_sprite*)sprite.get(), x, y, z);
+	elf_set_sprite_scale((elf_sprite*)sprite.get(), x, y);
 }
-ELF_API elf_vec3f ELF_APIENTRY elfGetSpriteScale(elf_handle sprite)
+ELF_API elf_vec2f ELF_APIENTRY elfGetSpriteScale(elf_handle sprite)
 {
-	elf_vec3f _e_type;
-	memset(&_e_type, 0x0, sizeof(elf_vec3f));
+	elf_vec2f _e_type;
+	memset(&_e_type, 0x0, sizeof(elf_vec2f));
 	if(!sprite.get() || elf_get_object_type(sprite.get()) != ELF_SPRITE)
 	{
 		elf_script *script = elf_get_current_script();

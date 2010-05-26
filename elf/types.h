@@ -441,8 +441,9 @@ struct elf_sprite {
 	elf_frame_player *frame_player;
 
 	elf_vec3f position;
-	elf_vec2f texture_scale;
-	elf_vec3f scale;
+	elf_vec2f scale;
+	elf_vec2f tex_size;
+	elf_vec3f real_scale;
 	float cull_radius;
 
 	gfx_query *query;

@@ -586,7 +586,7 @@ void elf_move_actor_local(elf_actor *actor, float x, float y, float z)
 	for(cactor = (elf_actor*)elf_begin_list(actor->children); cactor;
 		cactor = (elf_actor*)elf_next_in_list(actor->children))
 	{
-		if(!cactor->object || elf_get_physics_object_mass(cactor->object) < 0.00001)
+		if(!cactor->object || elf_get_physics_object_mass(cactor->object) < 0.0001)
 		{
 			elf_move_actor(cactor, temp_vec2[0], temp_vec2[1], temp_vec2[2]);
 		}

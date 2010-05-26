@@ -13118,14 +13118,12 @@ static int _wrap_elfSetSpriteScale(lua_State* L) {
   elf_handle arg1 ;
   float arg2 ;
   float arg3 ;
-  float arg4 ;
   elf_handle *argp1 ;
   
-  SWIG_check_num_args("SetSpriteScale",4,4)
+  SWIG_check_num_args("SetSpriteScale",3,3)
   if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetSpriteScale",1,"handle");
   if(!lua_isnumber(L,2)) SWIG_fail_arg("SetSpriteScale",2,"float");
   if(!lua_isnumber(L,3)) SWIG_fail_arg("SetSpriteScale",3,"float");
-  if(!lua_isnumber(L,4)) SWIG_fail_arg("SetSpriteScale",4,"float");
   
   if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
     SWIG_fail_ptr("SetSpriteScale",1,SWIGTYPE_p_elf_handle);
@@ -13134,8 +13132,7 @@ static int _wrap_elfSetSpriteScale(lua_State* L) {
   
   arg2 = (float)lua_tonumber(L, 2);
   arg3 = (float)lua_tonumber(L, 3);
-  arg4 = (float)lua_tonumber(L, 4);
-  elfSetSpriteScale(arg1,arg2,arg3,arg4);
+  elfSetSpriteScale(arg1,arg2,arg3);
   
   return SWIG_arg;
   
@@ -13151,7 +13148,7 @@ static int _wrap_elfGetSpriteScale(lua_State* L) {
   int SWIG_arg = 0;
   elf_handle arg1 ;
   elf_handle *argp1 ;
-  elf_vec3f result;
+  elf_vec2f result;
   
   SWIG_check_num_args("GetSpriteScale",1,1)
   if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetSpriteScale",1,"handle");
@@ -13163,8 +13160,8 @@ static int _wrap_elfGetSpriteScale(lua_State* L) {
   
   result = elfGetSpriteScale(arg1);
   {
-    elf_vec3f * resultptr = new elf_vec3f((const elf_vec3f &) result);
-    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_vec3f,1); SWIG_arg++;
+    elf_vec2f * resultptr = new elf_vec2f((const elf_vec2f &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_vec2f,1); SWIG_arg++;
   }
   return SWIG_arg;
   

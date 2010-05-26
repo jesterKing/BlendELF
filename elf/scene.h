@@ -249,6 +249,12 @@ void elf_update_scene(elf_scene *scene, float sync)
 	{
 		elf_light_pre_draw(light);
 	}
+
+	for(spr = (elf_sprite*)elf_begin_list(scene->sprites); spr != NULL;
+		spr = (elf_sprite*)elf_next_in_list(scene->sprites))
+	{
+		elf_sprite_pre_draw(spr);
+	}
 }
 
 void elf_destroy_scene(elf_scene *scene)
@@ -1567,6 +1573,7 @@ void elf_draw_scene_debug(elf_scene *scene)
 	elf_entity *ent;
 	elf_light *lig;
 	elf_camera *cam;
+	elf_sprite *spr;
 
 	if(!scene->cur_camera) return;
 
@@ -1580,6 +1587,18 @@ void elf_draw_scene_debug(elf_scene *scene)
 		ent = (elf_entity*)elf_next_in_list(scene->entities))
 	{
 		elf_draw_entity_debug(ent, &scene->shader_params);
+	}
+
+	gfx_set_shader_params_default(&scene->shader_params);
+	scene->shader_params.render_params.depth_write = GFX_FALSE;
+	scene->shader_params.render_params.depth_test = GFX_FALSE;
+	scene->shader_params.render_params.blend_mode = GFX_ADD;
+	elf_set_camera(scene->cur_camera, &scene->shader_params);
+
+	for(spr = (elf_sprite*)elf_begin_list(scene->sprites); spr != NULL;
+		spr = (elf_sprite*)elf_next_in_list(scene->sprites))
+	{
+		elf_draw_sprite_debug(spr, &scene->shader_params);
 	}
 
 	gfx_set_shader_params_default(&scene->shader_params);

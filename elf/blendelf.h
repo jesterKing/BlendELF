@@ -1153,6 +1153,7 @@ void elf_draw_particles(elf_particles *particles, elf_camera *camera, gfx_shader
 
 // <!!
 void elf_update_sprite(elf_sprite *sprite);
+void elf_sprite_pre_draw(elf_sprite *sprite);
 void elf_destroy_sprite(elf_sprite *sprite);
 // !!>
 
@@ -1161,14 +1162,15 @@ elf_sprite* elf_create_sprite(const char *name);
 void elf_set_sprite_material(elf_sprite *sprite, elf_material *material);
 elf_material* elf_get_sprite_material(elf_sprite *sprite);
 
-void elf_set_sprite_scale(elf_sprite *sprite, float x, float y, float z);
-elf_vec3f elf_get_sprite_scale(elf_sprite *sprite);
+void elf_set_sprite_scale(elf_sprite *sprite, float x, float y);
+elf_vec2f elf_get_sprite_scale(elf_sprite *sprite);
 
 // <!!
 unsigned char elf_cull_sprite(elf_sprite *sprite, elf_camera *camera);
 void elf_draw_sprite(elf_sprite *sprite, gfx_shader_params *shader_params);
 void elf_draw_sprite_without_materials(elf_sprite *sprite, gfx_shader_params *shader_params);
 void elf_draw_sprite_ambient(elf_sprite *sprite, gfx_shader_params *shader_params);
+void elf_draw_sprite_debug(elf_sprite *sprite, gfx_shader_params *shader_params);
 // !!>
 
 //////////////////////////////// SCENE ////////////////////////////////
