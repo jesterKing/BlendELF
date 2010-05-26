@@ -13027,6 +13027,155 @@ fail:
 }
 
 
+static int _wrap_elfCreateSprite(lua_State* L) {
+  int SWIG_arg = 0;
+  char *arg1 = (char *) 0 ;
+  elf_handle result;
+  
+  SWIG_check_num_args("CreateSprite",1,1)
+  if(!lua_isstring(L,1)) SWIG_fail_arg("CreateSprite",1,"char const *");
+  arg1 = (char *)lua_tostring(L, 1);
+  result = elfCreateSprite((char const *)arg1);
+  {
+    elf_handle * resultptr = new elf_handle((const elf_handle &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_handle,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfSetSpriteMaterial(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle arg2 ;
+  elf_handle *argp1 ;
+  elf_handle *argp2 ;
+  
+  SWIG_check_num_args("SetSpriteMaterial",2,2)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetSpriteMaterial",1,"handle");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("SetSpriteMaterial",2,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("SetSpriteMaterial",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("SetSpriteMaterial",2,SWIGTYPE_p_elf_handle);
+  }
+  arg2 = *argp2;
+  
+  elfSetSpriteMaterial(arg1,arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetSpriteMaterial(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  elf_handle result;
+  
+  SWIG_check_num_args("GetSpriteMaterial",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetSpriteMaterial",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetSpriteMaterial",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = elfGetSpriteMaterial(arg1);
+  {
+    elf_handle * resultptr = new elf_handle((const elf_handle &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_handle,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfSetSpriteScale(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  float arg2 ;
+  float arg3 ;
+  float arg4 ;
+  elf_handle *argp1 ;
+  
+  SWIG_check_num_args("SetSpriteScale",4,4)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetSpriteScale",1,"handle");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("SetSpriteScale",2,"float");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("SetSpriteScale",3,"float");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("SetSpriteScale",4,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("SetSpriteScale",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (float)lua_tonumber(L, 2);
+  arg3 = (float)lua_tonumber(L, 3);
+  arg4 = (float)lua_tonumber(L, 4);
+  elfSetSpriteScale(arg1,arg2,arg3,arg4);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetSpriteScale(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  elf_vec3f result;
+  
+  SWIG_check_num_args("GetSpriteScale",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetSpriteScale",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetSpriteScale",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = elfGetSpriteScale(arg1);
+  {
+    elf_vec3f * resultptr = new elf_vec3f((const elf_vec3f &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_vec3f,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfCreateSceneFromFile(lua_State* L) {
   int SWIG_arg = 0;
   char *arg1 = (char *) 0 ;
@@ -13361,6 +13510,32 @@ fail:
 }
 
 
+static int _wrap_elfGetSceneSpriteCount(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  int result;
+  
+  SWIG_check_num_args("GetSceneSpriteCount",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetSceneSpriteCount",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetSceneSpriteCount",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = (int)elfGetSceneSpriteCount(arg1);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfAddCameraToScene(lua_State* L) {
   int SWIG_arg = 0;
   elf_handle arg1 ;
@@ -13486,6 +13661,40 @@ static int _wrap_elfAddParticlesToScene(lua_State* L) {
   arg2 = *argp2;
   
   elfAddParticlesToScene(arg1,arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfAddSpriteToScene(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle arg2 ;
+  elf_handle *argp1 ;
+  elf_handle *argp2 ;
+  
+  SWIG_check_num_args("AddSpriteToScene",2,2)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("AddSpriteToScene",1,"handle");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("AddSpriteToScene",2,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("AddSpriteToScene",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("AddSpriteToScene",2,SWIGTYPE_p_elf_handle);
+  }
+  arg2 = *argp2;
+  
+  elfAddSpriteToScene(arg1,arg2);
   
   return SWIG_arg;
   
@@ -13908,6 +14117,38 @@ fail:
 }
 
 
+static int _wrap_elfGetSpriteByIndex(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  int arg2 ;
+  elf_handle *argp1 ;
+  elf_handle result;
+  
+  SWIG_check_num_args("GetSpriteByIndex",2,2)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetSpriteByIndex",1,"handle");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("GetSpriteByIndex",2,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetSpriteByIndex",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  result = elfGetSpriteByIndex(arg1,arg2);
+  {
+    elf_handle * resultptr = new elf_handle((const elf_handle &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_handle,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfGetTextureByName(lua_State* L) {
   int SWIG_arg = 0;
   elf_handle arg1 ;
@@ -14182,6 +14423,38 @@ static int _wrap_elfGetParticlesByName(lua_State* L) {
   
   arg2 = (char *)lua_tostring(L, 2);
   result = elfGetParticlesByName(arg1,(char const *)arg2);
+  {
+    elf_handle * resultptr = new elf_handle((const elf_handle &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_handle,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetSpriteByName(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  char *arg2 = (char *) 0 ;
+  elf_handle *argp1 ;
+  elf_handle result;
+  
+  SWIG_check_num_args("GetSpriteByName",2,2)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetSpriteByName",1,"handle");
+  if(!lua_isstring(L,2)) SWIG_fail_arg("GetSpriteByName",2,"char const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetSpriteByName",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  result = elfGetSpriteByName(arg1,(char const *)arg2);
   {
     elf_handle * resultptr = new elf_handle((const elf_handle &) result);
     SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_handle,1); SWIG_arg++;
@@ -14589,6 +14862,41 @@ static int _wrap_elfRemoveParticlesByObject(lua_State* L) {
   arg2 = *argp2;
   
   result = (bool)elfRemoveParticlesByObject(arg1,arg2);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfRemoveSpriteByObject(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle arg2 ;
+  elf_handle *argp1 ;
+  elf_handle *argp2 ;
+  bool result;
+  
+  SWIG_check_num_args("RemoveSpriteByObject",2,2)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("RemoveSpriteByObject",1,"handle");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("RemoveSpriteByObject",2,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("RemoveSpriteByObject",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("RemoveSpriteByObject",2,SWIGTYPE_p_elf_handle);
+  }
+  arg2 = *argp2;
+  
+  result = (bool)elfRemoveSpriteByObject(arg1,arg2);
   lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
   return SWIG_arg;
   
@@ -18684,6 +18992,11 @@ static const struct luaL_reg swig_commands[] = {
     { "GetParticlesVelocityMax", _wrap_elfGetParticlesVelocityMax},
     { "GetParticlesColorMin", _wrap_elfGetParticlesColorMin},
     { "GetParticlesColorMax", _wrap_elfGetParticlesColorMax},
+    { "CreateSprite", _wrap_elfCreateSprite},
+    { "SetSpriteMaterial", _wrap_elfSetSpriteMaterial},
+    { "GetSpriteMaterial", _wrap_elfGetSpriteMaterial},
+    { "SetSpriteScale", _wrap_elfSetSpriteScale},
+    { "GetSpriteScale", _wrap_elfGetSpriteScale},
     { "CreateSceneFromFile", _wrap_elfCreateSceneFromFile},
     { "SetSceneAmbientColor", _wrap_elfSetSceneAmbientColor},
     { "GetSceneAmbientColor", _wrap_elfGetSceneAmbientColor},
@@ -18696,10 +19009,12 @@ static const struct luaL_reg swig_commands[] = {
     { "GetSceneLightCount", _wrap_elfGetSceneLightCount},
     { "GetSceneArmatureCount", _wrap_elfGetSceneArmatureCount},
     { "GetSceneParticlesCount", _wrap_elfGetSceneParticlesCount},
+    { "GetSceneSpriteCount", _wrap_elfGetSceneSpriteCount},
     { "AddCameraToScene", _wrap_elfAddCameraToScene},
     { "AddEntityToScene", _wrap_elfAddEntityToScene},
     { "AddLightToScene", _wrap_elfAddLightToScene},
     { "AddParticlesToScene", _wrap_elfAddParticlesToScene},
+    { "AddSpriteToScene", _wrap_elfAddSpriteToScene},
     { "SetSceneActiveCamera", _wrap_elfSetSceneActiveCamera},
     { "GetSceneActiveCamera", _wrap_elfGetSceneActiveCamera},
     { "GetSceneRayCastResult", _wrap_elfGetSceneRayCastResult},
@@ -18711,6 +19026,7 @@ static const struct luaL_reg swig_commands[] = {
     { "GetLightByIndex", _wrap_elfGetLightByIndex},
     { "GetArmatureByIndex", _wrap_elfGetArmatureByIndex},
     { "GetParticlesByIndex", _wrap_elfGetParticlesByIndex},
+    { "GetSpriteByIndex", _wrap_elfGetSpriteByIndex},
     { "GetTextureByName", _wrap_elfGetTextureByName},
     { "GetMaterialByName", _wrap_elfGetMaterialByName},
     { "GetModelByName", _wrap_elfGetModelByName},
@@ -18720,6 +19036,7 @@ static const struct luaL_reg swig_commands[] = {
     { "GetLightByName", _wrap_elfGetLightByName},
     { "GetArmatureByName", _wrap_elfGetArmatureByName},
     { "GetParticlesByName", _wrap_elfGetParticlesByName},
+    { "GetSpriteByName", _wrap_elfGetSpriteByName},
     { "GetActorByName", _wrap_elfGetActorByName},
     { "RemoveCameraByName", _wrap_elfRemoveCameraByName},
     { "RemoveEntityByName", _wrap_elfRemoveEntityByName},
@@ -18733,6 +19050,7 @@ static const struct luaL_reg swig_commands[] = {
     { "RemoveEntityByObject", _wrap_elfRemoveEntityByObject},
     { "RemoveLightByObject", _wrap_elfRemoveLightByObject},
     { "RemoveParticlesByObject", _wrap_elfRemoveParticlesByObject},
+    { "RemoveSpriteByObject", _wrap_elfRemoveSpriteByObject},
     { "RemoveActorByObject", _wrap_elfRemoveActorByObject},
     { "CreateScript", _wrap_elfCreateScript},
     { "CreateScriptFromFile", _wrap_elfCreateScriptFromFile},
@@ -19027,7 +19345,8 @@ static swig_lua_const_info swig_constants[] = {
 { SWIG_LUA_INT,     (char *)"CLIENT", (long) 0x0041, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"SCRIPTING", (long) 0x0042, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"PHYSICS_TRI_MESH", (long) 0x0043, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"OBJECT_TYPE_COUNT", (long) 0x0044, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"SPRITE", (long) 0x0044, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"OBJECT_TYPE_COUNT", (long) 0x0045, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"PERSPECTIVE", (long) 0x0000, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"ORTHOGRAPHIC", (long) 0x0001, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"BOX", (long) 0x0001, 0, 0, 0},

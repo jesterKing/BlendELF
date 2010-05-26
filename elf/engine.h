@@ -360,6 +360,8 @@ const char* elf_get_game_config_start(elf_game_config *config)
 elf_engine* elf_create_engine()
 {
 	elf_engine *engine;
+	gfx_vertex_data *vertex_data;
+	float *vertex_buffer;
 
 	if(!gfx_init()) return NULL;
 
@@ -390,12 +392,142 @@ elf_engine* elf_create_engine()
 	engine->lines = gfx_create_vertex_data(256, GFX_FLOAT, GFX_VERTEX_DATA_DYNAMIC);
 	gfx_inc_ref((gfx_object*)engine->lines);
 
+	engine->sprite_vertex_array = gfx_create_vertex_array(GFX_FALSE);
+	gfx_inc_ref((gfx_object*)engine->sprite_vertex_array);
+
+	vertex_data = gfx_create_vertex_data(36, GFX_FLOAT, GFX_VERTEX_DATA_DYNAMIC);
+
+	vertex_buffer = gfx_get_vertex_data_buffer(vertex_data);
+
+	vertex_buffer[0] = -0.5;
+	vertex_buffer[1] = 0.5;
+	vertex_buffer[2] = 0.0;
+	vertex_buffer[3] = -0.5;
+	vertex_buffer[4] = -0.5;
+	vertex_buffer[5] = 0.0;
+	vertex_buffer[6] = 0.5;
+	vertex_buffer[7] = -0.5;
+	vertex_buffer[8] = 0.0;
+
+	vertex_buffer[9] = -0.5;
+	vertex_buffer[10] = 0.5;
+	vertex_buffer[11] = 0.0;
+	vertex_buffer[12] = 0.5;
+	vertex_buffer[13] = -0.5;
+	vertex_buffer[14] = 0.0;
+	vertex_buffer[15] = 0.5;
+	vertex_buffer[16] = 0.5;
+	vertex_buffer[17] = 0.0;
+
+	vertex_buffer[18] = 0.5;
+	vertex_buffer[19] = 0.5;
+	vertex_buffer[20] = 0.0;
+	vertex_buffer[21] = 0.5;
+	vertex_buffer[22] = -0.5;
+	vertex_buffer[23] = 0.0;
+	vertex_buffer[24] = -0.5;
+	vertex_buffer[25] = -0.5;
+	vertex_buffer[26] = 0.0;
+
+	vertex_buffer[27] = 0.5;
+	vertex_buffer[28] = 0.5;
+	vertex_buffer[29] = 0.0;
+	vertex_buffer[30] = -0.5;
+	vertex_buffer[31] = -0.5;
+	vertex_buffer[32] = 0.0;
+	vertex_buffer[33] = -0.5;
+	vertex_buffer[34] = 0.5;
+	vertex_buffer[35] = 0.0;
+
+	gfx_set_vertex_array_data(engine->sprite_vertex_array, GFX_VERTEX, vertex_data);
+
+	vertex_data = gfx_create_vertex_data(24, GFX_FLOAT, GFX_VERTEX_DATA_DYNAMIC);
+
+	vertex_buffer = gfx_get_vertex_data_buffer(vertex_data);
+
+	vertex_buffer[0] = 0.0;
+	vertex_buffer[1] = 1.0;
+	vertex_buffer[2] = 0.0;
+	vertex_buffer[3] = 0.0;
+	vertex_buffer[4] = 1.0;
+	vertex_buffer[5] = 0.0;
+
+	vertex_buffer[6] = 0.0;
+	vertex_buffer[7] = 1.0;
+	vertex_buffer[8] = 1.0;
+	vertex_buffer[9] = 0.0;
+	vertex_buffer[10] = 1.0;
+	vertex_buffer[11] = 1.0;
+
+	vertex_buffer[12] = 0.0;
+	vertex_buffer[13] = 1.0;
+	vertex_buffer[14] = 0.0;
+	vertex_buffer[15] = 0.0;
+	vertex_buffer[16] = 1.0;
+	vertex_buffer[17] = 0.0;
+
+	vertex_buffer[18] = 0.0;
+	vertex_buffer[19] = 1.0;
+	vertex_buffer[20] = 1.0;
+	vertex_buffer[21] = 0.0;
+	vertex_buffer[22] = 1.0;
+	vertex_buffer[23] = 1.0;
+
+	gfx_set_vertex_array_data(engine->sprite_vertex_array, GFX_TEX_COORD, vertex_data);
+
+	vertex_data = gfx_create_vertex_data(36, GFX_FLOAT, GFX_VERTEX_DATA_DYNAMIC);
+
+	vertex_buffer = gfx_get_vertex_data_buffer(vertex_data);
+
+	vertex_buffer[0] = 0.0;
+	vertex_buffer[1] = 0.0;
+	vertex_buffer[2] = 1.0;
+	vertex_buffer[3] = 0.0;
+	vertex_buffer[4] = 0.0;
+	vertex_buffer[5] = 1.0;
+	vertex_buffer[6] = 0.0;
+	vertex_buffer[7] = 0.0;
+	vertex_buffer[8] = 1.0;
+
+	vertex_buffer[9] = 0.0;
+	vertex_buffer[10] = 0.0;
+	vertex_buffer[11] = 1.0;
+	vertex_buffer[12] = 0.0;
+	vertex_buffer[13] = 0.0;
+	vertex_buffer[14] = 1.0;
+	vertex_buffer[15] = 0.0;
+	vertex_buffer[16] = 0.0;
+	vertex_buffer[17] = 1.0;
+
+	vertex_buffer[18] = 0.0;
+	vertex_buffer[19] = 0.0;
+	vertex_buffer[20] = -1.0;
+	vertex_buffer[21] = 0.0;
+	vertex_buffer[22] = 0.0;
+	vertex_buffer[23] = -1.0;
+	vertex_buffer[24] = 0.0;
+	vertex_buffer[25] = 0.0;
+	vertex_buffer[26] = -1.0;
+
+	vertex_buffer[27] = 0.0;
+	vertex_buffer[28] = 0.0;
+	vertex_buffer[29] = -1.0;
+	vertex_buffer[30] = 0.0;
+	vertex_buffer[31] = 0.0;
+	vertex_buffer[32] = -1.0;
+	vertex_buffer[33] = 0.0;
+	vertex_buffer[34] = 0.0;
+	vertex_buffer[35] = -1.0;
+
+	gfx_set_vertex_array_data(engine->sprite_vertex_array, GFX_NORMAL, vertex_data);
+
 	return engine;
 }
 
 void elf_destroy_engine(elf_engine *engine)
 {
 	gfx_dec_ref((gfx_object*)engine->lines);
+	gfx_dec_ref((gfx_object*)engine->sprite_vertex_array);
 
 	if(engine->scene) elf_dec_ref((elf_object*)engine->scene);
 	if(engine->gui) elf_dec_ref((elf_object*)engine->gui);

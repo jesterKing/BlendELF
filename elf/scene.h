@@ -70,7 +70,9 @@ elf_scene* elf_create_scene()
 	scene->lights = elf_create_list();
 	scene->armatures = elf_create_list();
 	scene->particles = elf_create_list();
+	scene->sprites = elf_create_list();
 	scene->entity_queue = elf_create_list();
+	scene->sprite_queue = elf_create_list();
 
 	elf_inc_ref((elf_object*)scene->models);
 	elf_inc_ref((elf_object*)scene->scripts);
@@ -81,7 +83,9 @@ elf_scene* elf_create_scene()
 	elf_inc_ref((elf_object*)scene->lights);
 	elf_inc_ref((elf_object*)scene->armatures);
 	elf_inc_ref((elf_object*)scene->particles);
+	elf_inc_ref((elf_object*)scene->sprites);
 	elf_inc_ref((elf_object*)scene->entity_queue);
+	elf_inc_ref((elf_object*)scene->sprite_queue);
 
 	gfx_set_shader_params_default(&scene->shader_params);
 
@@ -173,6 +177,7 @@ void elf_update_scene(elf_scene *scene, float sync)
 	elf_entity *ent;
 	elf_light *light;
 	elf_particles *par;
+	elf_sprite *spr;
 	float position[3];
 	float orient[4];
 	float vec_z[3] = {0.0, 0.0, -1.0};
@@ -220,6 +225,12 @@ void elf_update_scene(elf_scene *scene, float sync)
 		elf_update_particles(par, sync);
 	}
 
+	for(spr = (elf_sprite*)elf_begin_list(scene->sprites); spr != NULL;
+		spr = (elf_sprite*)elf_next_in_list(scene->sprites))
+	{
+		elf_update_sprite(spr);
+	}
+
 	// pre draw pass
 	for(cam = (elf_camera*)elf_begin_list(scene->cameras); cam != NULL;
 		cam = (elf_camera*)elf_next_in_list(scene->cameras))
@@ -248,6 +259,7 @@ void elf_destroy_scene(elf_scene *scene)
 	if(scene->file_path) elf_destroy_string(scene->file_path);
 
 	if(scene->entity_queue) elf_dec_ref((elf_object*)scene->entity_queue);
+	if(scene->sprite_queue) elf_dec_ref((elf_object*)scene->sprite_queue);
 
 	for(actor = (elf_actor*)elf_begin_list(scene->cameras); actor;
 		actor = (elf_actor*)elf_next_in_list(scene->cameras)) elf_remove_actor(actor);
@@ -257,6 +269,8 @@ void elf_destroy_scene(elf_scene *scene)
 		actor = (elf_actor*)elf_next_in_list(scene->lights)) elf_remove_actor(actor);
 	for(actor = (elf_actor*)elf_begin_list(scene->particles); actor;
 		actor = (elf_actor*)elf_next_in_list(scene->particles)) elf_remove_actor(actor);
+	for(actor = (elf_actor*)elf_begin_list(scene->sprites); actor;
+		actor = (elf_actor*)elf_next_in_list(scene->sprites)) elf_remove_actor(actor);
 
 	if(scene->models) elf_dec_ref((elf_object*)scene->models);
 	if(scene->scripts) elf_dec_ref((elf_object*)scene->scripts);
@@ -267,6 +281,7 @@ void elf_destroy_scene(elf_scene *scene)
 	if(scene->lights) elf_dec_ref((elf_object*)scene->lights);
 	if(scene->armatures) elf_dec_ref((elf_object*)scene->armatures);
 	if(scene->particles) elf_dec_ref((elf_object*)scene->particles);
+	if(scene->sprites) elf_dec_ref((elf_object*)scene->sprites);
 
 	elf_destroy_physics_world(scene->world);
 	elf_destroy_physics_world(scene->dworld);
@@ -338,6 +353,11 @@ int elf_get_scene_particles_count(elf_scene *scene)
 	return elf_get_list_length(scene->particles);
 }
 
+int elf_get_scene_sprite_count(elf_scene *scene)
+{
+	return elf_get_list_length(scene->sprites);
+}
+
 void elf_set_actor_scene(elf_scene *scene, elf_actor *actor)
 {
 	elf_joint *joint;
@@ -390,6 +410,13 @@ void elf_add_particles_to_scene(elf_scene *scene, elf_particles *particles)
 	if(!particles) return;
 	elf_set_actor_scene(scene, (elf_actor*)particles);
 	elf_append_to_list(scene->particles, (elf_object*)particles);
+}
+
+void elf_add_sprite_to_scene(elf_scene *scene, elf_sprite *sprite)
+{
+	if(!sprite) return;
+	elf_set_actor_scene(scene, (elf_actor*)sprite);
+	elf_append_to_list(scene->sprites, (elf_object*)sprite);
 }
 
 void elf_set_scene_active_camera(elf_scene *scene, elf_camera *camera)
@@ -445,6 +472,11 @@ elf_armature* elf_get_armature_by_index(elf_scene *scene, int idx)
 elf_particles* elf_get_particles_by_index(elf_scene *scene, int idx)
 {
 	return (elf_particles*)elf_get_item_from_list(scene->particles, idx);
+}
+
+elf_sprite* elf_get_sprite_by_index(elf_scene *scene, int idx)
+{
+	return (elf_sprite*)elf_get_item_from_list(scene->sprites, idx);
 }
 
 elf_texture *elf_get_texture_by_name(elf_scene *scene, const char *name)
@@ -577,6 +609,19 @@ elf_particles *elf_get_particles_by_name(elf_scene *scene, const char *name)
 		particles = (elf_particles*)elf_next_in_list(scene->particles))
 	{
 		if(!strcmp(particles->name, name)) return particles;
+	}
+
+	return NULL;
+}
+
+elf_sprite *elf_get_sprite_by_name(elf_scene *scene, const char *name)
+{
+	elf_sprite *sprite;
+
+	for(sprite = (elf_sprite*)elf_begin_list(scene->sprites); sprite;
+		sprite = (elf_sprite*)elf_next_in_list(scene->sprites))
+	{
+		if(!strcmp(sprite->name, name)) return sprite;
 	}
 
 	return NULL;
@@ -843,6 +888,19 @@ elf_particles *elf_get_or_load_particles_by_name(elf_scene *scene, const char *n
 	return NULL;
 }
 
+elf_sprite *elf_get_or_load_sprite_by_name(elf_scene *scene, const char *name)
+{
+	elf_sprite *sprite;
+
+	for(sprite = (elf_sprite*)elf_begin_list(scene->sprites); sprite;
+		sprite = (elf_sprite*)elf_next_in_list(scene->sprites))
+	{
+		if(!strcmp(sprite->name, name)) return sprite;
+	}
+
+	return NULL;
+}
+
 elf_actor *elf_get_or_load_actor_by_name(elf_scene *scene, const char *name)
 {
 	elf_actor *actor;
@@ -1050,6 +1108,27 @@ unsigned char elf_remove_particles_by_index(elf_scene *scene, int idx)
 	return ELF_FALSE;
 }
 
+unsigned char elf_remove_sprite_by_index(elf_scene *scene, int idx)
+{
+	elf_sprite *spr;
+	int i;
+
+	if(idx < 0 || idx > elf_get_list_length(scene->sprites)-1) return ELF_FALSE;
+
+	for(i = 0, spr = (elf_sprite*)elf_begin_list(scene->sprites); spr != NULL;
+		spr = (elf_sprite*)elf_next_in_list(scene->sprites), i++)
+	{
+		if(i == idx)
+		{
+			elf_remove_actor((elf_actor*)spr);
+			elf_remove_from_list(scene->sprites, (elf_object*)spr);
+			return ELF_TRUE;
+		}
+	}
+
+	return ELF_FALSE;
+}
+
 unsigned char elf_remove_camera_by_object(elf_scene *scene, elf_camera *camera)
 {
 	elf_remove_actor((elf_actor*)camera);
@@ -1075,6 +1154,12 @@ unsigned char elf_remove_particles_by_object(elf_scene *scene, elf_particles *pa
 	return elf_remove_from_list(scene->particles, (elf_object*)particles);
 }
 
+unsigned char elf_remove_sprite_by_object(elf_scene *scene, elf_sprite *sprite)
+{
+	elf_remove_actor((elf_actor*)sprite);
+	return elf_remove_from_list(scene->sprites, (elf_object*)sprite);
+}
+
 unsigned char elf_remove_actor_by_object(elf_scene *scene, elf_actor *actor)
 {
 	unsigned char result;
@@ -1087,6 +1172,8 @@ unsigned char elf_remove_actor_by_object(elf_scene *scene, elf_actor *actor)
 	if(result) return result;
 	result = elf_remove_particles_by_object(scene, (elf_particles*)actor);
 	if(result) return result;
+	result = elf_remove_sprite_by_object(scene, (elf_sprite*)actor);
+	if(result) return result;
 
 	return ELF_FALSE;
 }
@@ -1095,6 +1182,7 @@ void elf_draw_scene(elf_scene *scene)
 {
 	elf_light *light;
 	elf_entity *ent;
+	elf_sprite *spr;
 	elf_particles *par;
 	float bias[16] = {0.5, 0.0, 0.0, 0.0,
 			0.0, 0.5, 0.0, 0.0,
@@ -1147,6 +1235,33 @@ void elf_draw_scene(elf_scene *scene)
 		}
 	}
 
+	scene->sprite_queue_count = 0;
+	elf_begin_list(scene->sprite_queue);
+
+	for(spr = (elf_sprite*)elf_begin_list(scene->sprites); spr != NULL;
+		spr = (elf_sprite*)elf_next_in_list(scene->sprites))
+	{
+		if(!elf_cull_sprite(spr, scene->cur_camera))
+		{
+			if(scene->sprite_queue_count < elf_get_list_length(scene->sprite_queue))
+			{
+				elf_set_list_cur_ptr(scene->sprite_queue, (elf_object*)spr);
+				elf_next_in_list(scene->sprite_queue);
+			}
+			else
+			{
+				elf_append_to_list(scene->sprite_queue, (elf_object*)spr);
+			}
+			scene->sprite_queue_count++;
+			elf_draw_sprite_without_materials(spr, &scene->shader_params);
+			spr->culled = ELF_FALSE;
+		}
+		else
+		{
+			spr->culled = ELF_TRUE;
+		}
+	}
+
 	// initiate occlusion queries
 	if(eng->occlusion_culling)
 	{
@@ -1157,8 +1272,8 @@ void elf_draw_scene(elf_scene *scene)
 		scene->shader_params.render_params.color_write = GFX_FALSE;
 		scene->shader_params.render_params.alpha_write = GFX_FALSE;
 		scene->shader_params.render_params.cull_face = GFX_FALSE;
-		scene->shader_params.render_params.offset_bias = -1.0f;
-		scene->shader_params.render_params.offset_scale = -1.0f;
+		scene->shader_params.render_params.offset_bias = -1.0;
+		scene->shader_params.render_params.offset_scale = -1.0;
 
 		for(i = 0, ent = (elf_entity*)elf_begin_list(scene->entity_queue);
 			i < scene->entity_queue_count && ent != NULL;
@@ -1169,8 +1284,8 @@ void elf_draw_scene(elf_scene *scene)
 			gfx_end_query(ent->query);
 		}
 
-		scene->shader_params.render_params.offset_bias = 0.0f;
-		scene->shader_params.render_params.offset_scale = 0.0f;
+		scene->shader_params.render_params.offset_bias = 0.0;
+		scene->shader_params.render_params.offset_scale = 0.0;
 	}
 
 	eng->ambient_color = scene->ambient_color;
@@ -1192,6 +1307,13 @@ void elf_draw_scene(elf_scene *scene)
 			i++, ent = (elf_entity*)elf_next_in_list(scene->entity_queue))
 		{
 			elf_draw_entity_ambient(ent, &scene->shader_params);
+		}
+
+		for(i = 0, spr = (elf_sprite*)elf_begin_list(scene->sprite_queue);
+			i < scene->sprite_queue_count && spr != NULL;
+			i++, spr = (elf_sprite*)elf_next_in_list(scene->sprite_queue))
+		{
+			elf_draw_sprite_ambient(spr, &scene->shader_params);
 		}
 	}
 
@@ -1222,6 +1344,18 @@ void elf_draw_scene(elf_scene *scene)
 					break;
 				}
 			}
+
+			for(i = 0, spr = (elf_sprite*)elf_begin_list(scene->sprite_queue);
+				i < scene->sprite_queue_count && spr != NULL;
+				i++, spr = (elf_sprite*)elf_next_in_list(scene->sprite_queue))
+			{
+				if(!elf_cull_sprite(spr, light->shadow_camera))
+				{
+					found = ELF_TRUE;
+					break;
+				}
+			}
+
 			if(!found) continue;
 		}
 
@@ -1245,6 +1379,15 @@ void elf_draw_scene(elf_scene *scene)
 				if(!elf_cull_entity(ent, light->shadow_camera))
 				{
 					elf_draw_entity_without_materials(ent, &scene->shader_params);
+				}
+			}
+
+			for(spr = (elf_sprite*)elf_begin_list(scene->sprites); spr != NULL;
+				spr = (elf_sprite*)elf_next_in_list(scene->sprites))
+			{
+				if(!elf_cull_sprite(spr, light->shadow_camera))
+				{
+					elf_draw_sprite_without_materials(spr, &scene->shader_params);
 				}
 			}
 
@@ -1324,6 +1467,13 @@ void elf_draw_scene(elf_scene *scene)
 				ent->culled = ELF_TRUE;
 			}
 		}
+
+		for(i = 0, spr = (elf_sprite*)elf_begin_list(scene->sprite_queue);
+			i < scene->sprite_queue_count && spr != NULL;
+			i++, spr = (elf_sprite*)elf_next_in_list(scene->sprite_queue))
+		{
+			elf_draw_sprite(spr, &scene->shader_params);
+		}
 	}
 
 	// render particles
@@ -1377,6 +1527,20 @@ void elf_draw_scene(elf_scene *scene)
 				}
 			}
 		}
+
+		for(i = 0, spr = (elf_sprite*)elf_begin_list(scene->sprite_queue);
+			i < scene->sprite_queue_count && spr != NULL;
+			i++, spr = (elf_sprite*)elf_next_in_list(scene->sprite_queue))
+		{
+			if(spr->material && spr->visible)
+			{
+				gfx_mul_matrix4_matrix4(gfx_get_transform_matrix(spr->transform),
+					scene->shader_params.camera_matrix, scene->shader_params.modelview_matrix);
+
+				gfx_set_shader_params(&scene->shader_params);
+				gfx_draw_vertex_array(eng->sprite_vertex_array, 4, GFX_TRIANGLES);
+			}
+		}
 	}
 
 	// reset state just to be sure...
@@ -1384,10 +1548,17 @@ void elf_draw_scene(elf_scene *scene)
 	gfx_set_shader_params(&scene->shader_params);
 
 	// keep the query lists compact
+
 	if(elf_get_list_length(scene->entity_queue) > scene->entity_queue_count)
 	{
 		ent = (elf_entity*)elf_rbegin_list(scene->entity_queue);
 		if(ent) elf_remove_from_list(scene->entity_queue, (elf_object*)ent);
+	}
+
+	if(elf_get_list_length(scene->sprite_queue) > scene->sprite_queue_count)
+	{
+		spr = (elf_sprite*)elf_rbegin_list(scene->sprite_queue);
+		if(spr) elf_remove_from_list(scene->sprite_queue, (elf_object*)spr);
 	}
 }
 

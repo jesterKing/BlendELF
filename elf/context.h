@@ -154,7 +154,7 @@ unsigned char elf_init_context_with_hwnd(int width, int height,
 	ctx->title = elf_create_string(title);
 
 	glfwInit();
-	//glfwOpenWindowHint(GLFW_WINDOW_NO_RESIZE, GL_TRUE);
+	glfwOpenWindowHint(GLFW_WINDOW_NO_RESIZE, GL_TRUE);
 
 	if(!glfwOpenWindowWithHWND(width, height, 8, 8, 8, 0, 24, 0,
 		(fullscreen == ELF_FALSE) ? GLFW_WINDOW : GLFW_FULLSCREEN, hwnd))

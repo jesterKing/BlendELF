@@ -109,6 +109,7 @@ void elf_dec_ref(elf_object *obj)
 			case ELF_PROPERTY: elf_destroy_property((elf_property*)obj); break;
 			case ELF_SCRIPTING: elf_destroy_scripting((elf_scripting*)obj); break;
 			case ELF_PHYSICS_TRI_MESH: elf_destroy_physics_tri_mesh((elf_physics_tri_mesh*)obj); break;
+			case ELF_SPRITE: elf_destroy_sprite((elf_sprite*)obj); break;
 			case ELF_LIST: elf_destroy_list((elf_list*)obj); break;
 			default: elf_set_error(ELF_UNKNOWN_TYPE, "error: can not destroy unknown type\n"); break;
 		}
@@ -138,8 +139,8 @@ int elf_get_global_obj_count()
 unsigned char elf_is_actor(elf_object *obj)
 {
 	if(obj->type == ELF_CAMERA || obj->type == ELF_ENTITY ||
-		obj->type == ELF_LIGHT || obj->type == ELF_ARMATURE ||
-		obj->type == ELF_BONE || obj->type == ELF_PARTICLES) return ELF_TRUE;
+		obj->type == ELF_LIGHT || obj->type == ELF_PARTICLES ||
+		obj->type == ELF_SPRITE) return ELF_TRUE;
 	return ELF_FALSE;
 }
 

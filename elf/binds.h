@@ -151,7 +151,8 @@
 #define ELF_CLIENT 0x0041
 #define ELF_SCRIPTING 0x0042
 #define ELF_PHYSICS_TRI_MESH 0x0043
-#define ELF_OBJECT_TYPE_COUNT 0x0044
+#define ELF_SPRITE 0x0044
+#define ELF_OBJECT_TYPE_COUNT 0x0045
 #define ELF_PERSPECTIVE 0x0000
 #define ELF_ORTHOGRAPHIC 0x0001
 #define ELF_BOX 0x0001
@@ -707,6 +708,11 @@ ELF_API elf_vec3f ELF_APIENTRY elfGetParticlesVelocityMin(elf_handle particles);
 ELF_API elf_vec3f ELF_APIENTRY elfGetParticlesVelocityMax(elf_handle particles);
 ELF_API elf_color ELF_APIENTRY elfGetParticlesColorMin(elf_handle particles);
 ELF_API elf_color ELF_APIENTRY elfGetParticlesColorMax(elf_handle particles);
+ELF_API elf_handle ELF_APIENTRY elfCreateSprite(const char* name);
+ELF_API void ELF_APIENTRY elfSetSpriteMaterial(elf_handle sprite, elf_handle material);
+ELF_API elf_handle ELF_APIENTRY elfGetSpriteMaterial(elf_handle sprite);
+ELF_API void ELF_APIENTRY elfSetSpriteScale(elf_handle sprite, float x, float y, float z);
+ELF_API elf_vec3f ELF_APIENTRY elfGetSpriteScale(elf_handle sprite);
 ELF_API elf_handle ELF_APIENTRY elfCreateSceneFromFile(const char* file_path);
 ELF_API void ELF_APIENTRY elfSetSceneAmbientColor(elf_handle scene, float r, float g, float b, float a);
 ELF_API elf_color ELF_APIENTRY elfGetSceneAmbientColor(elf_handle scene);
@@ -719,10 +725,12 @@ ELF_API int ELF_APIENTRY elfGetSceneEntityCount(elf_handle scene);
 ELF_API int ELF_APIENTRY elfGetSceneLightCount(elf_handle scene);
 ELF_API int ELF_APIENTRY elfGetSceneArmatureCount(elf_handle scene);
 ELF_API int ELF_APIENTRY elfGetSceneParticlesCount(elf_handle scene);
+ELF_API int ELF_APIENTRY elfGetSceneSpriteCount(elf_handle scene);
 ELF_API void ELF_APIENTRY elfAddCameraToScene(elf_handle scene, elf_handle camera);
 ELF_API void ELF_APIENTRY elfAddEntityToScene(elf_handle scene, elf_handle entity);
 ELF_API void ELF_APIENTRY elfAddLightToScene(elf_handle scene, elf_handle light);
 ELF_API void ELF_APIENTRY elfAddParticlesToScene(elf_handle scene, elf_handle particles);
+ELF_API void ELF_APIENTRY elfAddSpriteToScene(elf_handle scene, elf_handle sprite);
 ELF_API void ELF_APIENTRY elfSetSceneActiveCamera(elf_handle scene, elf_handle camera);
 ELF_API elf_handle ELF_APIENTRY elfGetSceneActiveCamera(elf_handle scene);
 ELF_API elf_handle ELF_APIENTRY elfGetSceneRayCastResult(elf_handle scene, float x, float y, float z, float dx, float dy, float dz);
@@ -734,6 +742,7 @@ ELF_API elf_handle ELF_APIENTRY elfGetEntityByIndex(elf_handle scene, int idx);
 ELF_API elf_handle ELF_APIENTRY elfGetLightByIndex(elf_handle scene, int idx);
 ELF_API elf_handle ELF_APIENTRY elfGetArmatureByIndex(elf_handle scene, int idx);
 ELF_API elf_handle ELF_APIENTRY elfGetParticlesByIndex(elf_handle scene, int idx);
+ELF_API elf_handle ELF_APIENTRY elfGetSpriteByIndex(elf_handle scene, int idx);
 ELF_API elf_handle ELF_APIENTRY elfGetTextureByName(elf_handle scene, const char* name);
 ELF_API elf_handle ELF_APIENTRY elfGetMaterialByName(elf_handle scene, const char* name);
 ELF_API elf_handle ELF_APIENTRY elfGetModelByName(elf_handle scene, const char* name);
@@ -743,6 +752,7 @@ ELF_API elf_handle ELF_APIENTRY elfGetEntityByName(elf_handle scene, const char*
 ELF_API elf_handle ELF_APIENTRY elfGetLightByName(elf_handle scene, const char* name);
 ELF_API elf_handle ELF_APIENTRY elfGetArmatureByName(elf_handle scene, const char* name);
 ELF_API elf_handle ELF_APIENTRY elfGetParticlesByName(elf_handle scene, const char* name);
+ELF_API elf_handle ELF_APIENTRY elfGetSpriteByName(elf_handle scene, const char* name);
 ELF_API elf_handle ELF_APIENTRY elfGetActorByName(elf_handle scene, const char* name);
 ELF_API bool ELF_APIENTRY elfRemoveCameraByName(elf_handle scene, const char* name);
 ELF_API bool ELF_APIENTRY elfRemoveEntityByName(elf_handle scene, const char* name);
@@ -756,6 +766,7 @@ ELF_API bool ELF_APIENTRY elfRemoveCameraByObject(elf_handle scene, elf_handle c
 ELF_API bool ELF_APIENTRY elfRemoveEntityByObject(elf_handle scene, elf_handle entity);
 ELF_API bool ELF_APIENTRY elfRemoveLightByObject(elf_handle scene, elf_handle light);
 ELF_API bool ELF_APIENTRY elfRemoveParticlesByObject(elf_handle scene, elf_handle particles);
+ELF_API bool ELF_APIENTRY elfRemoveSpriteByObject(elf_handle scene, elf_handle sprite);
 ELF_API bool ELF_APIENTRY elfRemoveActorByObject(elf_handle scene, elf_handle actor);
 ELF_API elf_handle ELF_APIENTRY elfCreateScript();
 ELF_API elf_handle ELF_APIENTRY elfCreateScriptFromFile(const char* file_path);

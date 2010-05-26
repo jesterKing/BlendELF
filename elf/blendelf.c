@@ -43,6 +43,7 @@ int elf_err_code = 0;
 #include "sst.h"
 #include "resources.h"
 #include "particles.h"
+#include "sprite.h"
 
 #ifdef ELF_PLAYER
 

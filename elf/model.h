@@ -423,7 +423,7 @@ void elf_draw_model(elf_list *materials, elf_model *model, gfx_shader_params *sh
 				if(!material->lighting)
 				{
 					if(material->non_lit_flag == eng->non_lit_flag && model->non_lit_flag == eng->non_lit_flag && *non_lit_flag == eng->non_lit_flag) continue;
-					material->non_lit_flag = model->non_lit_flag = *non_lit_flag = eng->non_lit_flag;
+					material->non_lit_flag = eng->non_lit_flag;
 
 					shader_params->light_params.type = GFX_NONE;
 				}
@@ -435,6 +435,8 @@ void elf_draw_model(elf_list *materials, elf_model *model, gfx_shader_params *sh
 			gfx_draw_vertex_index(model->areas[i].vertex_index, GFX_TRIANGLES);
 		}
 	}
+
+	model->non_lit_flag = *non_lit_flag = eng->non_lit_flag;
 }
 
 void elf_draw_model_ambient(elf_list *materials, elf_model *model, gfx_shader_params *shader_params)

@@ -131,6 +131,7 @@ struct elf_engine {
 	elf_color ambient_color;
 
 	gfx_vertex_data *lines;
+	gfx_vertex_array *sprite_vertex_array;
 
 	elf_scene *scene;
 	elf_gui *gui;
@@ -433,6 +434,23 @@ struct elf_particles {
 	elf_color color_max;
 };
 
+struct elf_sprite {
+	ELF_ACTOR_HEADER;
+
+	elf_material *material;
+	elf_frame_player *frame_player;
+
+	elf_vec3f position;
+	elf_vec2f texture_scale;
+	elf_vec3f scale;
+	float cull_radius;
+
+	gfx_query *query;
+	unsigned char visible;
+	unsigned char culled;
+	unsigned char non_lit_flag;
+};
+
 struct elf_scene {
 	ELF_OBJECT_HEADER;
 	char *name;
@@ -448,9 +466,13 @@ struct elf_scene {
 	elf_list *lights;
 	elf_list *armatures;
 	elf_list *particles;
+	elf_list *sprites;
 
 	elf_list *entity_queue;
 	int entity_queue_count;
+
+	elf_list *sprite_queue;
+	int sprite_queue_count;
 
 	elf_physics_world *world;
 	elf_physics_world *dworld;

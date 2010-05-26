@@ -165,7 +165,8 @@ extern "C" {
 #define ELF_CLIENT					0x0041
 #define ELF_SCRIPTING					0x0042
 #define ELF_PHYSICS_TRI_MESH				0x0043
-#define ELF_OBJECT_TYPE_COUNT				0x0044	// <mdoc> NUMBER OF OBJECT TYPES
+#define ELF_SPRITE					0x0044
+#define ELF_OBJECT_TYPE_COUNT				0x0045	// <mdoc> NUMBER OF OBJECT TYPES
 
 #define ELF_PERSPECTIVE					0x0000	// <mdoc> CAMERA MODE <mdocc> The camera modes used by camera internal functions
 #define ELF_ORTHOGRAPHIC				0x0001
@@ -352,6 +353,7 @@ typedef struct elf_property				elf_property;
 typedef struct elf_server				elf_server;
 typedef struct elf_client				elf_client;
 typedef struct elf_scripting				elf_scripting;
+typedef struct elf_sprite				elf_sprite;
 
 // <!!
 struct elf_vec2i {
@@ -1147,6 +1149,28 @@ elf_color elf_get_particles_color_max(elf_particles *particles);
 void elf_draw_particles(elf_particles *particles, elf_camera *camera, gfx_shader_params *shader_params);
 // !!>
 
+//////////////////////////////// SPRITE ////////////////////////////////
+
+// <!!
+void elf_update_sprite(elf_sprite *sprite);
+void elf_destroy_sprite(elf_sprite *sprite);
+// !!>
+
+elf_sprite* elf_create_sprite(const char *name);
+
+void elf_set_sprite_material(elf_sprite *sprite, elf_material *material);
+elf_material* elf_get_sprite_material(elf_sprite *sprite);
+
+void elf_set_sprite_scale(elf_sprite *sprite, float x, float y, float z);
+elf_vec3f elf_get_sprite_scale(elf_sprite *sprite);
+
+// <!!
+unsigned char elf_cull_sprite(elf_sprite *sprite, elf_camera *camera);
+void elf_draw_sprite(elf_sprite *sprite, gfx_shader_params *shader_params);
+void elf_draw_sprite_without_materials(elf_sprite *sprite, gfx_shader_params *shader_params);
+void elf_draw_sprite_ambient(elf_sprite *sprite, gfx_shader_params *shader_params);
+// !!>
+
 //////////////////////////////// SCENE ////////////////////////////////
 
 // <!!
@@ -1172,11 +1196,13 @@ int elf_get_scene_entity_count(elf_scene *scene);
 int elf_get_scene_light_count(elf_scene *scene);
 int elf_get_scene_armature_count(elf_scene *scene);
 int elf_get_scene_particles_count(elf_scene *scene);
+int elf_get_scene_sprite_count(elf_scene *scene);
 
 void elf_add_camera_to_scene(elf_scene *scene, elf_camera *camera);
 void elf_add_entity_to_scene(elf_scene *scene, elf_entity *entity);
 void elf_add_light_to_scene(elf_scene *scene, elf_light *light);
 void elf_add_particles_to_scene(elf_scene *scene, elf_particles *particles);
+void elf_add_sprite_to_scene(elf_scene *scene, elf_sprite *sprite);
 
 void elf_set_scene_active_camera(elf_scene *scene, elf_camera *camera);
 elf_camera* elf_get_scene_active_camera(elf_scene *scene);
@@ -1190,6 +1216,7 @@ elf_entity* elf_get_entity_by_index(elf_scene *scene, int idx);
 elf_light* elf_get_light_by_index(elf_scene *scene, int idx);
 elf_armature* elf_get_armature_by_index(elf_scene *scene, int idx);
 elf_particles* elf_get_particles_by_index(elf_scene *scene, int idx);
+elf_sprite* elf_get_sprite_by_index(elf_scene *scene, int idx);
 
 elf_texture *elf_get_texture_by_name(elf_scene *scene, const char *name);
 elf_material *elf_get_material_by_name(elf_scene *scene, const char *name);
@@ -1200,6 +1227,7 @@ elf_entity* elf_get_entity_by_name(elf_scene *scene, const char *name);
 elf_light* elf_get_light_by_name(elf_scene *scene, const char *name);
 elf_armature* elf_get_armature_by_name(elf_scene *scene, const char *name);
 elf_particles* elf_get_particles_by_name(elf_scene *scene, const char *name);
+elf_sprite* elf_get_sprite_by_name(elf_scene *scene, const char *name);
 elf_actor *elf_get_actor_by_name(elf_scene *scene, const char *name);
 
 // <!!
@@ -1209,6 +1237,7 @@ elf_script* elf_get_or_load_script_by_name(elf_scene *scene, const char *name);
 elf_camera* elf_get_or_load_camera_by_name(elf_scene *scene, const char *name);
 elf_entity* elf_get_or_load_entity_by_name(elf_scene *scene, const char *name);
 elf_particles *elf_get_or_load_particles_by_name(elf_scene *scene, const char *name);
+elf_sprite *elf_get_or_load_sprite_by_name(elf_scene *scene, const char *name);
 elf_light* elf_get_or_load_light_by_name(elf_scene *scene, const char *name);
 elf_armature* elf_get_or_load_armature_by_name(elf_scene *scene, const char *name);
 elf_material *elf_get_or_load_material_by_name(elf_scene *scene, const char *name);
@@ -1228,6 +1257,7 @@ unsigned char elf_remove_camera_by_object(elf_scene *scene, elf_camera *camera);
 unsigned char elf_remove_entity_by_object(elf_scene *scene, elf_entity *entity);
 unsigned char elf_remove_light_by_object(elf_scene *scene, elf_light *light);
 unsigned char elf_remove_particles_by_object(elf_scene *scene, elf_particles *particles);
+unsigned char elf_remove_sprite_by_object(elf_scene *scene, elf_sprite *sprite);
 unsigned char elf_remove_actor_by_object(elf_scene *scene, elf_actor *actor);
 
 // <!!
