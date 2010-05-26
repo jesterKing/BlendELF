@@ -170,6 +170,7 @@ apiheader = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://
 <a href="http://blendelf.com/index.html#Demos">Demos</a> | 
 <a href="http://blendelf.com/index.html#Features">Features</a> | 
 <a href="http://blendelf.com/index.html#Devkit">Get Development Kit</a> | 
+<a href="http://github.com/centralnoise/BlendELF">Source</a> |
 <a href="http://blendelf.com/index.html#Documentation">Documentation</a> | 
 <a href="http://blendelf.com/index.html#License">License</a> | 
 <a href="http://blendelf.com/index.html#IRC">IRC</a> | 
@@ -277,7 +278,8 @@ elfobjs = ['elf_object',
 	'elf_sound',
 	'elf_audio_source',
 	'elf_property',
-	'elf_client']
+	'elf_client',
+	'elf_sprite']
 
 defines = []
 functions = []
