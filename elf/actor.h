@@ -1179,6 +1179,10 @@ void elf_remove_actor_properties(elf_actor *actor)
 	elf_inc_ref((elf_object*)actor->properties);
 }
 
+void elf_direct_actor_at(elf_actor *actor, elf_vec3f at, int axis)
+{
+}
+
 void elf_set_actor_selected(elf_actor *actor, unsigned char selected)
 {
 	actor->selected = !selected == ELF_FALSE;

@@ -258,6 +258,12 @@
 #define ELF_UNKNOWN_TYPE 0x000B
 #define ELF_INVALID_HANDLE 0x000C
 #define ELF_MISSING_FEATURE 0x000D
+#define ELF_X_PLUS 0x0001
+#define ELF_X_MINUS 0x0002
+#define ELF_Y_PLUS 0x0003
+#define ELF_Y_MINUS 0x0004
+#define ELF_Z_PLUS 0x0005
+#define ELF_Z_MINUS 0x0000
 #if defined(__WIN32__) || defined(WIN32) || defined(__CYGWIN__)
 	#ifndef ELF_PLAYER
 		#define ELF_APIENTRY __stdcall
@@ -710,9 +716,11 @@ ELF_API elf_color ELF_APIENTRY elfGetParticlesColorMin(elf_handle particles);
 ELF_API elf_color ELF_APIENTRY elfGetParticlesColorMax(elf_handle particles);
 ELF_API elf_handle ELF_APIENTRY elfCreateSprite(const char* name);
 ELF_API void ELF_APIENTRY elfSetSpriteMaterial(elf_handle sprite, elf_handle material);
-ELF_API elf_handle ELF_APIENTRY elfGetSpriteMaterial(elf_handle sprite);
 ELF_API void ELF_APIENTRY elfSetSpriteScale(elf_handle sprite, float x, float y);
+ELF_API void ELF_APIENTRY elfSetSpriteFaceCamera(elf_handle sprite, bool face_camera);
+ELF_API elf_handle ELF_APIENTRY elfGetSpriteMaterial(elf_handle sprite);
 ELF_API elf_vec2f ELF_APIENTRY elfGetSpriteScale(elf_handle sprite);
+ELF_API bool ELF_APIENTRY elfGetSpriteFaceCamera(elf_handle sprite);
 ELF_API elf_handle ELF_APIENTRY elfCreateSceneFromFile(const char* file_path);
 ELF_API void ELF_APIENTRY elfSetSceneAmbientColor(elf_handle scene, float r, float g, float b, float a);
 ELF_API elf_color ELF_APIENTRY elfGetSceneAmbientColor(elf_handle scene);

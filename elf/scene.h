@@ -253,7 +253,7 @@ void elf_update_scene(elf_scene *scene, float sync)
 	for(spr = (elf_sprite*)elf_begin_list(scene->sprites); spr != NULL;
 		spr = (elf_sprite*)elf_next_in_list(scene->sprites))
 	{
-		elf_sprite_pre_draw(spr);
+		elf_sprite_pre_draw(spr, scene->cur_camera);
 	}
 }
 
@@ -1479,8 +1479,6 @@ void elf_draw_scene(elf_scene *scene)
 			i < scene->sprite_queue_count && spr != NULL;
 			i++, spr = (elf_sprite*)elf_next_in_list(scene->sprite_queue))
 		{
-			//elf_draw_sprite(spr, &scene->shader_params);
-
 			spos = elf_get_actor_position((elf_actor*)spr);
 			if(light->light_type == ELF_SPOT_LIGHT)
 			{
@@ -1569,7 +1567,7 @@ void elf_draw_scene(elf_scene *scene)
 					scene->shader_params.camera_matrix, scene->shader_params.modelview_matrix);
 
 				gfx_set_shader_params(&scene->shader_params);
-				gfx_draw_vertex_array(eng->sprite_vertex_array, 4, GFX_TRIANGLES);
+				gfx_draw_vertex_array(eng->sprite_vertex_array, 12, GFX_TRIANGLES);
 			}
 		}
 	}

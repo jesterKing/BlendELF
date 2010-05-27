@@ -37,9 +37,17 @@ void elf_update_sprite(elf_sprite *sprite)
 	elf_update_actor((elf_actor*)sprite);
 }
 
-void elf_sprite_pre_draw(elf_sprite *sprite)
+void elf_sprite_pre_draw(elf_sprite *sprite, elf_camera *camera)
 {
+	elf_vec4f orient;
+
 	elf_get_actor_position_((elf_actor*)sprite, &sprite->position.x);
+
+	if(sprite->face_camera && camera)
+	{
+		elf_get_actor_orientation_((elf_actor*)camera, &orient.x);
+		elf_set_actor_orientation((elf_actor*)sprite, orient.x, orient.y, orient.z, orient.w);
+	}
 }
 
 void elf_destroy_sprite(elf_sprite *sprite)
@@ -141,11 +149,6 @@ void elf_set_sprite_material(elf_sprite *sprite, elf_material *material)
 	elf_reset_sprite_debug_physics_object(sprite);
 }
 
-elf_material* elf_get_sprite_material(elf_sprite *sprite)
-{
-	return sprite->material;
-}
-
 void elf_set_sprite_scale(elf_sprite *sprite, float x, float y)
 {
 	sprite->scale.x = x; sprite->scale.y = y;
@@ -158,9 +161,24 @@ void elf_set_sprite_scale(elf_sprite *sprite, float x, float y)
 	if(sprite->dobject) elf_set_physics_object_scale(sprite->dobject, sprite->scale.x, sprite->scale.y, 1.0);
 }
 
+void elf_set_sprite_face_camera(elf_sprite *sprite, unsigned char face_camera)
+{
+	sprite->face_camera = !face_camera == ELF_FALSE;
+}
+
+elf_material* elf_get_sprite_material(elf_sprite *sprite)
+{
+	return sprite->material;
+}
+
 elf_vec2f elf_get_sprite_scale(elf_sprite *sprite)
 {
 	return sprite->scale;
+}
+
+unsigned char elf_get_sprite_face_camera(elf_sprite *sprite)
+{
+	return sprite->face_camera;
 }
 
 unsigned char elf_cull_sprite(elf_sprite *sprite, elf_camera *camera)

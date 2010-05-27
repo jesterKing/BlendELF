@@ -440,6 +440,8 @@ struct elf_sprite {
 	elf_material *material;
 	elf_frame_player *frame_player;
 
+	unsigned char face_camera;
+
 	elf_vec3f position;
 	elf_vec2f scale;
 	elf_vec2f tex_size;

@@ -13084,35 +13084,6 @@ fail:
 }
 
 
-static int _wrap_elfGetSpriteMaterial(lua_State* L) {
-  int SWIG_arg = 0;
-  elf_handle arg1 ;
-  elf_handle *argp1 ;
-  elf_handle result;
-  
-  SWIG_check_num_args("GetSpriteMaterial",1,1)
-  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetSpriteMaterial",1,"handle");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("GetSpriteMaterial",1,SWIGTYPE_p_elf_handle);
-  }
-  arg1 = *argp1;
-  
-  result = elfGetSpriteMaterial(arg1);
-  {
-    elf_handle * resultptr = new elf_handle((const elf_handle &) result);
-    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_handle,1); SWIG_arg++;
-  }
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
 static int _wrap_elfSetSpriteScale(lua_State* L) {
   int SWIG_arg = 0;
   elf_handle arg1 ;
@@ -13144,6 +13115,63 @@ fail:
 }
 
 
+static int _wrap_elfSetSpriteFaceCamera(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  bool arg2 ;
+  elf_handle *argp1 ;
+  
+  SWIG_check_num_args("SetSpriteFaceCamera",2,2)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetSpriteFaceCamera",1,"handle");
+  if(!lua_isboolean(L,2)) SWIG_fail_arg("SetSpriteFaceCamera",2,"bool");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("SetSpriteFaceCamera",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (lua_toboolean(L, 2)!=0);
+  elfSetSpriteFaceCamera(arg1,arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetSpriteMaterial(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  elf_handle result;
+  
+  SWIG_check_num_args("GetSpriteMaterial",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetSpriteMaterial",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetSpriteMaterial",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = elfGetSpriteMaterial(arg1);
+  {
+    elf_handle * resultptr = new elf_handle((const elf_handle &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_handle,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfGetSpriteScale(lua_State* L) {
   int SWIG_arg = 0;
   elf_handle arg1 ;
@@ -13163,6 +13191,32 @@ static int _wrap_elfGetSpriteScale(lua_State* L) {
     elf_vec2f * resultptr = new elf_vec2f((const elf_vec2f &) result);
     SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_vec2f,1); SWIG_arg++;
   }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetSpriteFaceCamera(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  bool result;
+  
+  SWIG_check_num_args("GetSpriteFaceCamera",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetSpriteFaceCamera",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetSpriteFaceCamera",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = (bool)elfGetSpriteFaceCamera(arg1);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -18991,9 +19045,11 @@ static const struct luaL_reg swig_commands[] = {
     { "GetParticlesColorMax", _wrap_elfGetParticlesColorMax},
     { "CreateSprite", _wrap_elfCreateSprite},
     { "SetSpriteMaterial", _wrap_elfSetSpriteMaterial},
-    { "GetSpriteMaterial", _wrap_elfGetSpriteMaterial},
     { "SetSpriteScale", _wrap_elfSetSpriteScale},
+    { "SetSpriteFaceCamera", _wrap_elfSetSpriteFaceCamera},
+    { "GetSpriteMaterial", _wrap_elfGetSpriteMaterial},
     { "GetSpriteScale", _wrap_elfGetSpriteScale},
+    { "GetSpriteFaceCamera", _wrap_elfGetSpriteFaceCamera},
     { "CreateSceneFromFile", _wrap_elfCreateSceneFromFile},
     { "SetSceneAmbientColor", _wrap_elfSetSceneAmbientColor},
     { "GetSceneAmbientColor", _wrap_elfGetSceneAmbientColor},
@@ -19449,6 +19505,12 @@ static swig_lua_const_info swig_constants[] = {
 { SWIG_LUA_INT,     (char *)"UNKNOWN_TYPE", (long) 0x000B, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"INVALID_HANDLE", (long) 0x000C, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"MISSING_FEATURE", (long) 0x000D, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"X_PLUS", (long) 0x0001, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"X_MINUS", (long) 0x0002, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"Y_PLUS", (long) 0x0003, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"Y_MINUS", (long) 0x0004, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"Z_PLUS", (long) 0x0005, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"Z_MINUS", (long) 0x0000, 0, 0, 0},
     {0,0,0,0,0,0}
 };
 

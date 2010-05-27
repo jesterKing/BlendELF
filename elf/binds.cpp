@@ -6137,6 +6137,42 @@ ELF_API void ELF_APIENTRY elfSetSpriteMaterial(elf_handle sprite, elf_handle mat
 	}
 	elf_set_sprite_material((elf_sprite*)sprite.get(), (elf_material*)material.get());
 }
+ELF_API void ELF_APIENTRY elfSetSpriteScale(elf_handle sprite, float x, float y)
+{
+	if(!sprite.get() || elf_get_object_type(sprite.get()) != ELF_SPRITE)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetSpriteScale() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetSpriteScale() -> invalid handle\n");
+		}
+		return;
+	}
+	elf_set_sprite_scale((elf_sprite*)sprite.get(), x, y);
+}
+ELF_API void ELF_APIENTRY elfSetSpriteFaceCamera(elf_handle sprite, bool face_camera)
+{
+	if(!sprite.get() || elf_get_object_type(sprite.get()) != ELF_SPRITE)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetSpriteFaceCamera() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetSpriteFaceCamera() -> invalid handle\n");
+		}
+		return;
+	}
+	elf_set_sprite_face_camera((elf_sprite*)sprite.get(), face_camera);
+}
 ELF_API elf_handle ELF_APIENTRY elfGetSpriteMaterial(elf_handle sprite)
 {
 	elf_handle handle;
@@ -6156,24 +6192,6 @@ ELF_API elf_handle ELF_APIENTRY elfGetSpriteMaterial(elf_handle sprite)
 	}
 	handle = (elf_object*)elf_get_sprite_material((elf_sprite*)sprite.get());
 	return handle;
-}
-ELF_API void ELF_APIENTRY elfSetSpriteScale(elf_handle sprite, float x, float y)
-{
-	if(!sprite.get() || elf_get_object_type(sprite.get()) != ELF_SPRITE)
-	{
-		elf_script *script = elf_get_current_script();
-		if(script)
-		{
-			int line = elf_get_current_script_line();
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetSpriteScale() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
-		}
-		else
-		{
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetSpriteScale() -> invalid handle\n");
-		}
-		return;
-	}
-	elf_set_sprite_scale((elf_sprite*)sprite.get(), x, y);
 }
 ELF_API elf_vec2f ELF_APIENTRY elfGetSpriteScale(elf_handle sprite)
 {
@@ -6195,6 +6213,24 @@ ELF_API elf_vec2f ELF_APIENTRY elfGetSpriteScale(elf_handle sprite)
 	}
 	_e_type = elf_get_sprite_scale((elf_sprite*)sprite.get());
 	return _e_type;
+}
+ELF_API bool ELF_APIENTRY elfGetSpriteFaceCamera(elf_handle sprite)
+{
+	if(!sprite.get() || elf_get_object_type(sprite.get()) != ELF_SPRITE)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetSpriteFaceCamera() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetSpriteFaceCamera() -> invalid handle\n");
+		}
+		return false;
+	}
+	return (bool)elf_get_sprite_face_camera((elf_sprite*)sprite.get());
 }
 ELF_API elf_handle ELF_APIENTRY elfCreateSceneFromFile(const char* file_path)
 {

@@ -687,8 +687,8 @@ void elf_set_post_process_bloom(elf_post_process *post_process, float threshold)
 {
 	post_process->bloom = ELF_TRUE;
 	post_process->bloom_threshold = threshold;
-	if(post_process->bloom_threshold < 0.00001) post_process->bloom_threshold = 0.00001;
-	if(post_process->bloom_threshold > 0.99999) post_process->bloom_threshold = 0.99999;
+	if(post_process->bloom_threshold < 0.0001) post_process->bloom_threshold = 0.0001;
+	if(post_process->bloom_threshold > 0.9999) post_process->bloom_threshold = 0.9999;
 	if(!post_process->main_rt_color[1] && (int)post_process->bloom+(int)post_process->dof+(int)post_process->ssao > 1)
 	{
 		post_process->main_rt_color[1] = gfx_create_2d_texture(

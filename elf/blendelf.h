@@ -289,6 +289,13 @@ extern "C" {
 #define ELF_INVALID_HANDLE				0x000C
 #define ELF_MISSING_FEATURE				0x000D
 
+#define ELF_X_PLUS					0x0001	// <mdoc> AXIS TYPES <mdocc> axis codes used by elf.DirectActorAt
+#define ELF_X_MINUS					0x0002
+#define ELF_Y_PLUS					0x0003
+#define ELF_Y_MINUS					0x0004
+#define ELF_Z_PLUS					0x0005
+#define ELF_Z_MINUS					0x0000
+
 typedef struct elf_vec2i				elf_vec2i;
 typedef struct elf_vec2f				elf_vec2f;
 typedef struct elf_vec3f				elf_vec3f;
@@ -885,6 +892,8 @@ unsigned char elf_remove_actor_property_by_index(elf_actor *actor, int idx);
 unsigned char elf_remove_actor_property_by_object(elf_actor *actor, elf_property *property);
 void elf_remove_actor_properties(elf_actor *actor);
 
+/* <!> */ void elf_direct_actor_at(elf_actor *actor, elf_vec3f at, int axis);
+
 void elf_set_actor_selected(elf_actor *actor, unsigned char selected);
 unsigned char elf_get_actor_selected(elf_actor *actor);
 
@@ -1153,17 +1162,19 @@ void elf_draw_particles(elf_particles *particles, elf_camera *camera, gfx_shader
 
 // <!!
 void elf_update_sprite(elf_sprite *sprite);
-void elf_sprite_pre_draw(elf_sprite *sprite);
+void elf_sprite_pre_draw(elf_sprite *sprite, elf_camera *camera);
 void elf_destroy_sprite(elf_sprite *sprite);
 // !!>
 
 elf_sprite* elf_create_sprite(const char *name);
 
 void elf_set_sprite_material(elf_sprite *sprite, elf_material *material);
-elf_material* elf_get_sprite_material(elf_sprite *sprite);
-
 void elf_set_sprite_scale(elf_sprite *sprite, float x, float y);
+void elf_set_sprite_face_camera(elf_sprite *sprite, unsigned char face_camera);
+
+elf_material* elf_get_sprite_material(elf_sprite *sprite);
 elf_vec2f elf_get_sprite_scale(elf_sprite *sprite);
+unsigned char elf_get_sprite_face_camera(elf_sprite *sprite);
 
 // <!!
 unsigned char elf_cull_sprite(elf_sprite *sprite, elf_camera *camera);
