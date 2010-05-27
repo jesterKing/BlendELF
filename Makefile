@@ -6,7 +6,7 @@ SHR_CFLAGS = -fPIC -Wall -O2 -DELF_LINUX
 
 INCS = -Igfx -Ielf -I/usr/include/lua5.1 -I/usr/include/freetype2
 
-BLENDELF_LIBS = -lGL -lGLU -lGLEW -lglfw -lXxf86vm -lXrandr -lXrender -pthread \
+BLENDELF_LIBS = -lGL -lGLEW -lglfw -lXxf86vm -lXrandr -lXrender -pthread \
 	-lfreeimage -lvorbisfile -lvorbis -logg -lopenal -llua5.1 -lfreetype \
 	-lBulletDynamics -lLinearMath -lBulletCollision -lenet
 
@@ -37,7 +37,7 @@ static:
 	gcc -c elf/blendelf.c $(STA_CFLAGS) $(INCS)
 	gcc -c gfx/gfx.c $(STA_CFLAGS) $(INCS)
 	gcc -c elf/audio.c $(STA_CFLAGS) $(INCS)
-	gcc -c elf/scripting.c $(DEV_CFLAGS) $(INCS)
+	gcc -c elf/scripting.c $(STA_CFLAGS) $(INCS)
 	gcc -c elf/network.c $(STA_CFLAGS) $(INCS)
 	g++ -c elf/physics.cpp $(STA_CFLAGS) $(INCS)
 	g++ -c elf/binds.cpp $(STA_CFLAGS) $(INCS)
@@ -50,7 +50,7 @@ shared:
 	gcc -c -fPIC elf/blendelf.c $(SHR_CFLAGS) $(INCS)
 	gcc -c -fPIC gfx/gfx.c $(SHR_CFLAGS) $(INCS)
 	gcc -c -fPIC elf/audio.c $(SHR_CFLAGS) $(INCS)
-	gcc -c -fPIC elf/scripting.c $(DEV_CFLAGS) $(INCS)
+	gcc -c -fPIC elf/scripting.c $(SHR_CFLAGS) $(INCS)
 	gcc -c -fPIC elf/network.c $(SHR_CFLAGS) $(INCS)
 	g++ -c -fPIC elf/physics.cpp $(SHR_CFLAGS) $(INCS)
 	g++ -c -fPIC elf/binds.cpp $(SHR_CFLAGS) $(INCS)
