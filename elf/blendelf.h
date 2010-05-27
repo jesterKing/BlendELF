@@ -649,6 +649,8 @@ int elf_random_int_range(int min, int max);
 elf_resources* elf_create_resources();
 void elf_update_resources(elf_resources *resources);
 void elf_destroy_resources(elf_resources *resources);
+void elf_init_resources();
+void elf_deinit_resources();
 // !!>
 
 //////////////////////////////// TIMER ////////////////////////////////

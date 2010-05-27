@@ -41,7 +41,6 @@ int elf_err_code = 0;
 #include "font.h"
 #include "gui.h"
 #include "sst.h"
-#include "resources.h"
 #include "particles.h"
 #include "sprite.h"
 

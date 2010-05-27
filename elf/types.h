@@ -150,6 +150,7 @@ struct elf_game_config {
 
 struct elf_resources {
 	ELF_OBJECT_HEADER;
+	char *root;
 	elf_list *textures;
 	elf_list *models;
 };

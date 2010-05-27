@@ -13,6 +13,7 @@
 #include <math.h>
 #include <malloc.h>
 #include <sys/types.h>
+#include <unistd.h>
 
 #ifdef ELF_WINDOWS
 	// mbg: prevents windows.h from including winsock.h, this is later handled by enet 

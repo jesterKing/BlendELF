@@ -363,8 +363,6 @@ elf_engine* elf_create_engine()
 	gfx_vertex_data *vertex_data;
 	float *vertex_buffer;
 
-	if(!gfx_init()) return NULL;
-
 	engine = (elf_engine*)malloc(sizeof(elf_engine));
 	memset(engine, 0x0, sizeof(elf_engine));
 	engine->type = ELF_ENGINE;
@@ -575,10 +573,15 @@ unsigned char elf_init(int width, int height,
 
 	elf_init_objects();
 	if(!elf_init_context(width, height, title, fullscreen)) return ELF_FALSE;
-	if(!elf_init_audio());
-	if(!elf_init_engine()) return ELF_FALSE;
-	if(!elf_init_scripting()) return ELF_FALSE;
-	if(!elf_init_networking()) return ELF_FALSE;
+	if(!gfx_init())
+	{
+		elf_deinit_context();
+		return ELF_FALSE;
+	}
+	elf_init_audio();
+	elf_init_engine();
+	elf_init_scripting();
+	elf_init_networking();
 
 	return ELF_TRUE;
 }
@@ -590,10 +593,15 @@ unsigned char elf_init_with_hwnd(int width, int height,
 {
 	elf_init_objects();
 	if(!elf_init_context_with_hwnd(width, height, title, fullscreen, hwnd)) return ELF_FALSE;
-	if(!elf_init_audio());
-	if(!elf_init_engine()) return ELF_FALSE;
-	if(!elf_init_scripting()) return ELF_FALSE;
-	if(!elf_init_networking()) return ELF_FALSE;
+	if(!gfx_init())
+	{
+		elf_deinit_context();
+		return ELF_FALSE;
+	}
+	elf_init_audio();
+	elf_init_engine();
+	elf_init_scripting();
+	elf_init_networking();
 
 	return ELF_TRUE;
 }
@@ -732,6 +740,7 @@ void elf_deinit()
 {
 	elf_deinit_networking();
 	elf_deinit_scripting();
+	elf_deinit_resources();
 	elf_deinit_engine();
 	elf_deinit_audio();
 	elf_deinit_context();
