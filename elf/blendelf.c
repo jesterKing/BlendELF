@@ -19,7 +19,6 @@ int elf_err_code = 0;
 #include "str.h"
 #include "list.h"
 #include "context.h"
-#include "renderfactory.h"
 #include "engine.h"
 #include "frameplayer.h"
 #include "timer.h"
