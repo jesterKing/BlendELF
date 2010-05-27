@@ -99,7 +99,6 @@ void elf_dec_ref(elf_object *obj)
 			case ELF_PHYSICS_OBJECT: elf_destroy_physics_object((elf_physics_object*)obj); break;
 			case ELF_PHYSICS_WORLD: elf_destroy_physics_world((elf_physics_world*)obj); break;
 			case ELF_JOINT: elf_destroy_joint((elf_joint*)obj); break;
-			case ELF_RESOURCES: elf_destroy_resources((elf_resources*)obj); break;
 			case ELF_PARTICLE: elf_destroy_particle((elf_particle*)obj); break;
 			case ELF_PARTICLES: elf_destroy_particles((elf_particles*)obj); break;
 			case ELF_BEZIER_POINT: elf_destroy_bezier_point((elf_bezier_point*)obj); break;

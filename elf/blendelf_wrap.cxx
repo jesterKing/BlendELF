@@ -3811,6 +3811,23 @@ fail:
 }
 
 
+static int _wrap_elfGetCurrentWorkingDirectory(lua_State* L) {
+  int SWIG_arg = 0;
+  char *result = 0 ;
+  
+  SWIG_check_num_args("GetCurrentWorkingDirectory",0,0)
+  result = (char *)elfGetCurrentWorkingDirectory();
+  lua_pushstring(L,(const char*)result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfGetPlatform(lua_State* L) {
   int SWIG_arg = 0;
   char *result = 0 ;
@@ -18707,6 +18724,7 @@ static const struct luaL_reg swig_commands[] = {
     { "InitWithConfig", _wrap_elfInitWithConfig},
     { "Deinit", _wrap_elfDeinit},
     { "ResizeWindow", _wrap_elfResizeWindow},
+    { "GetCurrentWorkingDirectory", _wrap_elfGetCurrentWorkingDirectory},
     { "GetPlatform", _wrap_elfGetPlatform},
     { "GetVersionMajor", _wrap_elfGetVersionMajor},
     { "GetVersionMinor", _wrap_elfGetVersionMinor},
@@ -19386,20 +19404,19 @@ static swig_lua_const_info swig_constants[] = {
 { SWIG_LUA_INT,     (char *)"PHYSICS_OBJECT", (long) 0x0035, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"PHYSICS_WORLD", (long) 0x0036, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"JOINT", (long) 0x0037, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"RESOURCES", (long) 0x0038, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"PARTICLE", (long) 0x0039, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"PARTICLES", (long) 0x003A, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"GAME_CONFIG", (long) 0x003B, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"BEZIER_POINT", (long) 0x003C, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"BEZIER_CURVE", (long) 0x003D, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"IPO", (long) 0x003E, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"FRAME_PLAYER", (long) 0x003F, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"PROPERTY", (long) 0x0040, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"CLIENT", (long) 0x0041, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"SCRIPTING", (long) 0x0042, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"PHYSICS_TRI_MESH", (long) 0x0043, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"SPRITE", (long) 0x0044, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"OBJECT_TYPE_COUNT", (long) 0x0045, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"PARTICLE", (long) 0x0038, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"PARTICLES", (long) 0x0039, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"GAME_CONFIG", (long) 0x003A, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"BEZIER_POINT", (long) 0x003B, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"BEZIER_CURVE", (long) 0x003C, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"IPO", (long) 0x003D, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"FRAME_PLAYER", (long) 0x003E, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"PROPERTY", (long) 0x004F, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"CLIENT", (long) 0x0040, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"SCRIPTING", (long) 0x0041, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"PHYSICS_TRI_MESH", (long) 0x0042, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"SPRITE", (long) 0x0043, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"OBJECT_TYPE_COUNT", (long) 0x0044, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"PERSPECTIVE", (long) 0x0000, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"ORTHOGRAPHIC", (long) 0x0001, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"BOX", (long) 0x0001, 0, 0, 0},

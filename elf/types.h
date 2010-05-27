@@ -103,7 +103,8 @@ struct elf_context {
 
 struct elf_engine {
 	ELF_OBJECT_HEADER;
-	struct lua_State *L;
+
+	char *cwd;
 
 	unsigned char free_run;
 

@@ -665,6 +665,10 @@ ELF_API void ELF_APIENTRY elfResizeWindow(int width, int height)
 {
 	elf_resize_window(width, height);
 }
+ELF_API const char* ELF_APIENTRY elfGetCurrentWorkingDirectory()
+{
+	return elf_get_current_working_directory();
+}
 ELF_API const char* ELF_APIENTRY elfGetPlatform()
 {
 	return elf_get_platform();

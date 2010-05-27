@@ -139,20 +139,19 @@
 #define ELF_PHYSICS_OBJECT 0x0035
 #define ELF_PHYSICS_WORLD 0x0036
 #define ELF_JOINT 0x0037
-#define ELF_RESOURCES 0x0038
-#define ELF_PARTICLE 0x0039
-#define ELF_PARTICLES 0x003A
-#define ELF_GAME_CONFIG 0x003B
-#define ELF_BEZIER_POINT 0x003C
-#define ELF_BEZIER_CURVE 0x003D
-#define ELF_IPO 0x003E
-#define ELF_FRAME_PLAYER 0x003F
-#define ELF_PROPERTY 0x0040
-#define ELF_CLIENT 0x0041
-#define ELF_SCRIPTING 0x0042
-#define ELF_PHYSICS_TRI_MESH 0x0043
-#define ELF_SPRITE 0x0044
-#define ELF_OBJECT_TYPE_COUNT 0x0045
+#define ELF_PARTICLE 0x0038
+#define ELF_PARTICLES 0x0039
+#define ELF_GAME_CONFIG 0x003A
+#define ELF_BEZIER_POINT 0x003B
+#define ELF_BEZIER_CURVE 0x003C
+#define ELF_IPO 0x003D
+#define ELF_FRAME_PLAYER 0x003E
+#define ELF_PROPERTY 0x004F
+#define ELF_CLIENT 0x0040
+#define ELF_SCRIPTING 0x0041
+#define ELF_PHYSICS_TRI_MESH 0x0042
+#define ELF_SPRITE 0x0043
+#define ELF_OBJECT_TYPE_COUNT 0x0044
 #define ELF_PERSPECTIVE 0x0000
 #define ELF_ORTHOGRAPHIC 0x0001
 #define ELF_BOX 0x0001
@@ -378,6 +377,7 @@ ELF_API bool ELF_APIENTRY elfInit(int width, int height, const char* title, bool
 ELF_API bool ELF_APIENTRY elfInitWithConfig(const char* file_path);
 ELF_API void ELF_APIENTRY elfDeinit();
 ELF_API void ELF_APIENTRY elfResizeWindow(int width, int height);
+ELF_API const char* ELF_APIENTRY elfGetCurrentWorkingDirectory();
 ELF_API const char* ELF_APIENTRY elfGetPlatform();
 ELF_API int ELF_APIENTRY elfGetVersionMajor();
 ELF_API int ELF_APIENTRY elfGetVersionMinor();

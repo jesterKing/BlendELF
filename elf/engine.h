@@ -367,6 +367,8 @@ elf_engine* elf_create_engine()
 	memset(engine, 0x0, sizeof(elf_engine));
 	engine->type = ELF_ENGINE;
 
+	engine->cwd = elf_create_string("");
+
 	engine->fps_timer = elf_create_timer();
 	engine->fps_limit_timer = elf_create_timer();
 	engine->time_sync_timer = elf_create_timer();
@@ -524,6 +526,8 @@ elf_engine* elf_create_engine()
 
 void elf_destroy_engine(elf_engine *engine)
 {
+	if(engine->cwd) elf_destroy_string(engine->cwd);
+
 	gfx_dec_ref((gfx_object*)engine->lines);
 	gfx_dec_ref((gfx_object*)engine->sprite_vertex_array);
 
@@ -740,7 +744,6 @@ void elf_deinit()
 {
 	elf_deinit_networking();
 	elf_deinit_scripting();
-	elf_deinit_resources();
 	elf_deinit_engine();
 	elf_deinit_audio();
 	elf_deinit_context();
@@ -760,6 +763,34 @@ void elf_resize_window(int width, int height)
 
 	elf_resize_context(width, height);
 	elf_init_post_process_buffers(eng->post_process);*/
+}
+
+char* elf_get_directory_from_path(const char *file_path)
+{
+	int idx;
+
+	if(strlen(file_path) < 1) return elf_create_string("");
+
+	idx = elf_rfind_chars_from_string(file_path, "/\\");
+	if(idx < 1)
+	{
+		return elf_create_string("");
+	}
+	else
+	{
+		return elf_sub_string((char*)file_path, 0, idx+1);
+	}
+}
+
+void elf_set_current_working_directory(const char *dir_path)
+{
+	if(eng->cwd) elf_destroy_string(eng->cwd);
+	eng->cwd = elf_create_string(dir_path);
+}
+
+const char* elf_get_current_working_directory()
+{
+	return eng->cwd;
 }
 
 const char* elf_get_platform()

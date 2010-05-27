@@ -207,6 +207,22 @@ int elf_rfind_char_from_string(const char *str, char chr)
 	return result;
 }
 
+int elf_rfind_chars_from_string(const char *str, char *chrs)
+{
+	int i;
+	int result = -1;
+
+	for(i = 0; i < strlen(chrs); i++)
+	{
+		for(result = strlen(str)-1; result > -1; result--)
+		{
+			if(str[result] == chrs[i]) return result;
+		}
+	}
+
+	return result;
+}
+
 char* elf_get_file_folder(const char *file_path)
 {
 	char *str;

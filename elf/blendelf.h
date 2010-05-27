@@ -153,20 +153,19 @@ extern "C" {
 #define ELF_PHYSICS_OBJECT				0x0035
 #define ELF_PHYSICS_WORLD				0x0036
 #define ELF_JOINT					0x0037
-#define ELF_RESOURCES					0x0038
-#define ELF_PARTICLE					0x0039
-#define ELF_PARTICLES					0x003A
-#define ELF_GAME_CONFIG					0x003B
-#define ELF_BEZIER_POINT				0x003C
-#define ELF_BEZIER_CURVE				0x003D
-#define ELF_IPO						0x003E
-#define ELF_FRAME_PLAYER				0x003F
-#define ELF_PROPERTY					0x0040
-#define ELF_CLIENT					0x0041
-#define ELF_SCRIPTING					0x0042
-#define ELF_PHYSICS_TRI_MESH				0x0043
-#define ELF_SPRITE					0x0044
-#define ELF_OBJECT_TYPE_COUNT				0x0045	// <mdoc> NUMBER OF OBJECT TYPES
+#define ELF_PARTICLE					0x0038
+#define ELF_PARTICLES					0x0039
+#define ELF_GAME_CONFIG					0x003A
+#define ELF_BEZIER_POINT				0x003B
+#define ELF_BEZIER_CURVE				0x003C
+#define ELF_IPO						0x003D
+#define ELF_FRAME_PLAYER				0x003E
+#define ELF_PROPERTY					0x004F
+#define ELF_CLIENT					0x0040
+#define ELF_SCRIPTING					0x0041
+#define ELF_PHYSICS_TRI_MESH				0x0042
+#define ELF_SPRITE					0x0043
+#define ELF_OBJECT_TYPE_COUNT				0x0044	// <mdoc> NUMBER OF OBJECT TYPES
 
 #define ELF_PERSPECTIVE					0x0000	// <mdoc> CAMERA MODE <mdocc> The camera modes used by camera internal functions
 #define ELF_ORTHOGRAPHIC				0x0001
@@ -426,6 +425,7 @@ char* elf_sub_string(char *str, int start, int len);
 unsigned char elf_is_char_number(char c);
 unsigned char elf_is_string_number(const char *str);
 int elf_rfind_char_from_string(const char *str, char chr);
+int elf_rfind_chars_from_string(const char *str, char *chrs);
 // !!>
 
 //////////////////////////////// LIST ////////////////////////////////
@@ -533,6 +533,10 @@ unsigned char elf_init_with_config(const char *file_path);
 void elf_deinit();
 
 void elf_resize_window(int width, int height);
+
+/* <!> */ char* elf_get_directory_from_path(const char *file_path);
+/* <!> */ void elf_set_current_working_directory(const char *dir_path);
+const char* elf_get_current_working_directory();
 
 const char* elf_get_platform();
 
@@ -642,16 +646,6 @@ float elf_random_float();
 float elf_random_float_range(float min, float max);
 int elf_random_int();
 int elf_random_int_range(int min, int max);
-
-//////////////////////////////// RESOURCES ////////////////////////////////
-
-// <!!
-elf_resources* elf_create_resources();
-void elf_update_resources(elf_resources *resources);
-void elf_destroy_resources(elf_resources *resources);
-void elf_init_resources();
-void elf_deinit_resources();
-// !!>
 
 //////////////////////////////// TIMER ////////////////////////////////
 
