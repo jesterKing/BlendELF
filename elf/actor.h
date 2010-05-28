@@ -39,12 +39,10 @@ void elf_init_actor(elf_actor *actor, unsigned char camera)
 	else actor->transform = gfx_create_camera_transform();
 
 	actor->joints = elf_create_list();
-	actor->children = elf_create_list();
 	actor->sources = elf_create_list();
 	actor->properties = elf_create_list();
 
 	elf_inc_ref((elf_object*)actor->joints);
-	elf_inc_ref((elf_object*)actor->children);
 	elf_inc_ref((elf_object*)actor->sources);
 	elf_inc_ref((elf_object*)actor->properties);
 
@@ -68,7 +66,6 @@ void elf_read_actor_header(elf_actor *actor, FILE *file, elf_scene *scene)
 	char script_name[64];
 	float position[3];
 	float rotation[3];
-	elf_actor *parent;
 	elf_script *script;
 	int i, j;
 	elf_bezier_point *point;
@@ -89,14 +86,7 @@ void elf_read_actor_header(elf_actor *actor, FILE *file, elf_scene *scene)
 	elf_set_actor_position(actor, position[0], position[1], position[2]);
 	elf_set_actor_rotation(actor, rotation[0], rotation[1], rotation[2]);
 
-	parent = NULL;
 	script = NULL;
-
-	if(scene && strlen(parent_name) > 0)
-	{
-		parent = elf_get_or_load_actor_by_name(scene, parent_name);
-		if(parent) elf_set_actor_parent(actor, parent);
-	}
 
 	if(scene && strlen(script_name) > 0)
 	{
@@ -135,8 +125,6 @@ void elf_update_actor(elf_actor *actor)
 	static float position[3];
 	static float orient[4];
 	static elf_audio_source *source;
-
-	actor->moved = ELF_FALSE;
 
 	if(actor->object && !elf_is_physics_object_static(actor->object))
 	{
@@ -196,6 +184,15 @@ void elf_update_actor(elf_actor *actor)
 	elf_update_frame_player(actor->ipo_player);
 }
 
+void elf_actor_pre_draw(elf_actor *actor)
+{
+}
+
+void elf_actor_post_draw(elf_actor *actor)
+{
+	actor->moved = ELF_FALSE;
+}
+
 void elf_clean_actor(elf_actor *actor)
 {
 	elf_joint *joint;
@@ -217,11 +214,6 @@ void elf_clean_actor(elf_actor *actor)
 	}
 	if(actor->script) elf_dec_ref((elf_object*)actor->script);
 
-	//elf_set_actor_parent(actor, NULL); -- doesn't make sense to call this here
-	//elf_clean_actor doesn't have any chance of being called if the actor still
-	//exists in the parents child list, thus having a reference count greater than 0
-	elf_remove_actor_children(actor);
-
 	for(joint = (elf_joint*)elf_begin_list(actor->joints); joint;
 		joint = (elf_joint*)elf_next_in_list(actor->joints))
 	{
@@ -232,7 +224,6 @@ void elf_clean_actor(elf_actor *actor)
 	}
 
 	elf_dec_ref((elf_object*)actor->joints);
-	elf_dec_ref((elf_object*)actor->children);
 	elf_dec_ref((elf_object*)actor->sources);
 	elf_dec_ref((elf_object*)actor->properties);
 
@@ -250,59 +241,6 @@ const char* elf_get_actor_file_path(elf_actor *actor)
 	return actor->file_path;
 }
 
-elf_actor* elf_get_actor_parent(elf_actor *actor)
-{
-	return actor->parent;
-}
-
-void elf_set_actor_parent(elf_actor *actor, elf_actor *parent)
-{
-	if(actor->parent) elf_remove_from_list(actor->parent->children, (elf_object*)actor);
-	actor->parent = parent;
-	if(actor->parent) elf_append_to_list(actor->parent->children, (elf_object*)actor);
-}
-
-int elf_get_actor_child_count(elf_actor *actor)
-{
-	return elf_get_list_length(actor->children);
-}
-
-elf_actor* elf_get_actor_child_by_name(elf_actor *actor, const char *name)
-{
-	elf_actor *cactor;
-
-	for(cactor = (elf_actor*)elf_begin_list(actor->children); cactor;
-			cactor = (elf_actor*)elf_next_in_list(actor->children))
-	{
-			if(!strcmp(cactor->name, name)) return cactor;
-	}
-
-	return NULL;
-}
-
-elf_actor* elf_get_actor_child_by_index(elf_actor *actor, int idx)
-{
-	int i;
-	elf_actor *cactor;
-
-	if(idx < 0 || idx < elf_get_list_length(actor->children)-1) return NULL;
-
-	for(i = 0, cactor = (elf_actor*)elf_begin_list(actor->children); cactor;
-			i++, cactor = (elf_actor*)elf_next_in_list(actor->children))
-	{
-			if(idx == i) return cactor;
-	}
-
-	return NULL;
-}
-
-void elf_remove_actor_children(elf_actor* actor)
-{
-	elf_dec_ref((elf_object*)actor->children);
-	actor->children = elf_create_list();
-	elf_inc_ref((elf_object*)actor->children);
-}
-
 elf_script* elf_get_actor_script(elf_actor *actor)
 {
 	return actor->script;
@@ -317,26 +255,7 @@ void elf_set_actor_script(elf_actor *actor, elf_script *script)
 
 void elf_set_actor_position(elf_actor *actor, float x, float y, float z)
 {
-	elf_actor *cactor;
-	float position[3];
-	float disp[3];
-
 	actor->moved = ELF_TRUE;
-
-	elf_get_actor_position_(actor, position);
-
-	for(cactor = (elf_actor*)elf_begin_list(actor->children); cactor;
-		cactor = (elf_actor*)elf_next_in_list(actor->children))
-	{
-		if(!cactor->object || elf_get_physics_object_mass(cactor->object) < 0.00001)
-		{
-			elf_get_actor_position_(cactor, disp);
-			disp[0] -= position[0];
-			disp[1] -= position[1];
-			disp[2] -= position[2];
-			elf_set_actor_position(cactor, x+disp[0], y+disp[1], z+disp[2]);
-		}
-	}
 
 	gfx_set_transform_position(actor->transform, x, y, z);
 
@@ -346,119 +265,29 @@ void elf_set_actor_position(elf_actor *actor, float x, float y, float z)
 	if(actor->type == ELF_LIGHT) elf_set_actor_position((elf_actor*)((elf_light*)actor)->shadow_camera, x, y, z);
 }
 
-void elf_recursive_reference_rotation(elf_actor *actor, float *ref, float *orient)
-{
-	float temp_vec1[3];
-	float temp_vec2[3];
-	float temp_qua1[4];
-	float temp_qua2[4];
-	elf_actor *cactor;
-
-	actor->moved = ELF_TRUE;
-
-	elf_get_actor_position_(actor, temp_vec1);
-	elf_get_actor_orientation_(actor, temp_qua1);
-
-	temp_vec1[0] -= ref[0];
-	temp_vec1[1] -= ref[1];
-	temp_vec1[2] -= ref[2];
-
-	gfx_mul_qua_vec(orient, temp_vec1, temp_vec2);
-	gfx_mul_qua_qua(orient, temp_qua1, temp_qua2);
-
-	gfx_set_transform_position(actor->transform, ref[0]+temp_vec2[0],
-		ref[1]+temp_vec2[1], ref[2]+temp_vec2[2]);
-	gfx_set_transform_orientation(actor->transform, temp_qua2[0],
-		temp_qua2[1], temp_qua2[2], temp_qua2[3]);
-
-	if(actor->object)
-	{
-		elf_set_physics_object_position(actor->object, ref[0]+temp_vec2[0], ref[1]+temp_vec2[1], ref[2]+temp_vec2[2]);
-		elf_set_physics_object_orientation(actor->object, temp_qua2[0], temp_qua2[1], temp_qua2[2], temp_qua2[3]);
-	}
-	if(actor->dobject)
-	{
-		elf_set_physics_object_position(actor->dobject, ref[0]+temp_vec2[0], ref[1]+temp_vec2[1], ref[2]+temp_vec2[2]);
-		elf_set_physics_object_orientation(actor->dobject, temp_qua2[0], temp_qua2[1], temp_qua2[2], temp_qua2[3]);
-	}
-
-	for(cactor = (elf_actor*)elf_begin_list(actor->children); cactor;
-		cactor = (elf_actor*)elf_next_in_list(actor->children))
-	{
-		if(!cactor->object || elf_get_physics_object_mass(cactor->object) < 0.00001)
-		{
-			elf_recursive_reference_rotation(cactor, ref, orient);
-		}
-	}
-}
-
 void elf_set_actor_rotation(elf_actor *actor, float x, float y, float z)
 {
 	float orient[4];
-	float rotation[3];
-	float position[3];
-	elf_actor *cactor;
 
 	actor->moved = ELF_TRUE;
 
-	elf_get_actor_position_(actor, position);
-	elf_get_actor_rotation_(actor, rotation);
-
-	gfx_set_qua_rotation(x, y, z, orient);
-
-	gfx_set_transform_orientation(actor->transform, orient[0], orient[1], orient[2], orient[3]);
+	gfx_set_transform_rotation(actor->transform, x, y, z);
+	gfx_get_transform_orientation(actor->transform, orient);
 
 	if(actor->object) elf_set_physics_object_orientation(actor->object, orient[0], orient[1], orient[2], orient[3]);
 	if(actor->dobject) elf_set_physics_object_orientation(actor->dobject, orient[0], orient[1], orient[2], orient[3]);
-
-	gfx_set_qua_rotation(x-rotation[0], y-rotation[1], z-rotation[2], orient);
-
-	for(cactor = (elf_actor*)elf_begin_list(actor->children); cactor;
-		cactor = (elf_actor*)elf_next_in_list(actor->children))
-	{
-		if(!cactor->object || elf_get_physics_object_mass(cactor->object) < 0.00001)
-		{
-			elf_recursive_reference_rotation(cactor, position, orient);
-		}
-	}
 
 	if(actor->type == ELF_LIGHT) elf_set_actor_rotation((elf_actor*)((elf_light*)actor)->shadow_camera, x, y, z);
 }
 
 void elf_set_actor_orientation(elf_actor *actor, float x, float y, float z, float w)
 {
-	float diff_qua[4];
-	float temp_qua1[4];
-	float temp_qua2[4];
-	float position[3];
-	elf_actor *cactor;
-
 	actor->moved = ELF_TRUE;
-
-	elf_get_actor_orientation_(actor, temp_qua1);
-	elf_get_actor_position_(actor, position);
-	gfx_qua_get_inverse(temp_qua1, temp_qua2);
-
-	temp_qua1[0] = x;
-	temp_qua1[1] = y;
-	temp_qua1[2] = z;
-	temp_qua1[3] = w;
-
-	gfx_mul_qua_qua(temp_qua1, temp_qua2, diff_qua);
 
 	gfx_set_transform_orientation(actor->transform, x, y, z, w);
 
 	if(actor->object) elf_set_physics_object_orientation(actor->object, x, y, z, w);
 	if(actor->dobject) elf_set_physics_object_orientation(actor->dobject, x, y, z, w);
-
-	for(cactor = (elf_actor*)elf_begin_list(actor->children); cactor;
-		cactor = (elf_actor*)elf_next_in_list(actor->children))
-	{
-		if(!cactor->object || elf_get_physics_object_mass(cactor->object) < 0.00001)
-		{
-			elf_recursive_reference_rotation(cactor, position, diff_qua);
-		}
-	}
 
 	if(actor->type == ELF_LIGHT) elf_set_actor_orientation((elf_actor*)((elf_light*)actor)->shadow_camera, x, y, z, w);
 }
@@ -466,29 +295,14 @@ void elf_set_actor_orientation(elf_actor *actor, float x, float y, float z, floa
 void elf_rotate_actor(elf_actor *actor, float x, float y, float z)
 {
 	float orient[4];
-	float position[3];
-	elf_actor *cactor;
 
 	actor->moved = ELF_TRUE;
 
 	gfx_rotate_transform(actor->transform, x*eng->sync, y*eng->sync, z*eng->sync);
-
 	gfx_get_transform_orientation(actor->transform, orient);
 
 	if(actor->object) elf_set_physics_object_orientation(actor->object, orient[0], orient[1], orient[2], orient[3]);
 	if(actor->dobject) elf_set_physics_object_orientation(actor->dobject, orient[0], orient[1], orient[2], orient[3]);
-
-	gfx_set_qua_rotation(x*eng->sync, y*eng->sync, z*eng->sync, orient);
-	elf_get_actor_position_(actor, position);
-
-	for(cactor = (elf_actor*)elf_begin_list(actor->children); cactor;
-		cactor = (elf_actor*)elf_next_in_list(actor->children))
-	{
-		if(!cactor->object || elf_get_physics_object_mass(cactor->object) < 0.00001)
-		{
-			elf_recursive_reference_rotation(cactor, position, orient);
-		}
-	}
 
 	if(actor->type == ELF_LIGHT) elf_rotate_actor((elf_actor*)((elf_light*)actor)->shadow_camera, x, y, z);
 }
@@ -496,43 +310,20 @@ void elf_rotate_actor(elf_actor *actor, float x, float y, float z)
 void elf_rotate_actor_local(elf_actor *actor, float x, float y, float z)
 {
 	float orient[4];
-	float new_orient[4];
-	float temp_qua1[4];
-	float diff_qua[4];
-	float position[3];
-	elf_actor *cactor;
 
 	actor->moved = ELF_TRUE;
 
-	elf_get_actor_position_(actor, position);
-	elf_get_actor_orientation_(actor, orient);
+	gfx_rotate_transform_local(actor->transform, x*eng->sync, y*eng->sync, z*eng->sync);
+	gfx_get_transform_orientation(actor->transform, orient);
 
-	memcpy(new_orient, orient, sizeof(float)*4);
-	gfx_rotate_qua_local(x*eng->sync, y*eng->sync, z*eng->sync, new_orient);
-
-	gfx_qua_get_inverse(orient, temp_qua1);
-	gfx_mul_qua_qua(new_orient, temp_qua1, diff_qua);
-
-	gfx_set_transform_orientation(actor->transform, new_orient[0], new_orient[1], new_orient[2], new_orient[3]);
-
-	if(actor->object) elf_set_physics_object_orientation(actor->object, new_orient[0], new_orient[1], new_orient[2], new_orient[3]);
-	if(actor->dobject) elf_set_physics_object_orientation(actor->dobject, new_orient[0], new_orient[1], new_orient[2], new_orient[3]);
-
-	for(cactor = (elf_actor*)elf_begin_list(actor->children); cactor;
-		cactor = (elf_actor*)elf_next_in_list(actor->children))
-	{
-		if(!cactor->object || elf_get_physics_object_mass(cactor->object) < 0.00001)
-		{
-			elf_recursive_reference_rotation(cactor, position, diff_qua);
-		}
-	}
+	if(actor->object) elf_set_physics_object_orientation(actor->object, orient[0], orient[1], orient[2], orient[3]);
+	if(actor->dobject) elf_set_physics_object_orientation(actor->dobject, orient[0], orient[1], orient[2], orient[3]);
 
 	if(actor->type == ELF_LIGHT) elf_rotate_actor_local((elf_actor*)((elf_light*)actor)->shadow_camera, x, y, z);
 }
 
 void elf_move_actor(elf_actor *actor, float x, float y, float z)
 {
-	elf_actor *cactor;
 	float position[3];
 
 	actor->moved = ELF_TRUE;
@@ -543,54 +334,20 @@ void elf_move_actor(elf_actor *actor, float x, float y, float z)
 	if(actor->object) elf_set_physics_object_position(actor->object, position[0], position[1], position[2]);
 	if(actor->dobject) elf_set_physics_object_position(actor->dobject, position[0], position[1], position[2]);
 
-	for(cactor = (elf_actor*)elf_begin_list(actor->children); cactor;
-		cactor = (elf_actor*)elf_next_in_list(actor->children))
-	{
-		if(!cactor->object || elf_get_physics_object_mass(cactor->object) < 0.00001)
-		{
-			elf_move_actor(cactor, x, y, z);
-		}
-	}
-
 	if(actor->type == ELF_LIGHT) elf_move_actor((elf_actor*)((elf_light*)actor)->shadow_camera, x, y, z);
 }
 
 void elf_move_actor_local(elf_actor *actor, float x, float y, float z)
 {
-	float orient[4];
-	float temp_vec1[3];
-	float temp_vec2[3];
-	elf_actor *cactor;
+	float position[3];
 
 	actor->moved = ELF_TRUE;
 
-	elf_get_actor_orientation_(actor, orient);
+	gfx_move_transform_local(actor->transform, x*eng->sync, y*eng->sync, z*eng->sync);
+	gfx_get_transform_position(actor->transform, position);
 
-	temp_vec1[0] = x;
-	temp_vec1[1] = y;
-	temp_vec1[2] = z;
-
-	gfx_mul_qua_vec(orient, temp_vec1, temp_vec2);
-
-	elf_get_actor_position_(actor, temp_vec1);
-
-	temp_vec1[0] = temp_vec1[0]+temp_vec2[0]*eng->sync;
-	temp_vec1[1] = temp_vec1[1]+temp_vec2[1]*eng->sync;
-	temp_vec1[2] = temp_vec1[2]+temp_vec2[2]*eng->sync;
-
-	gfx_set_transform_position(actor->transform, temp_vec1[0], temp_vec1[1], temp_vec1[2]);
-
-	if(actor->object) elf_set_physics_object_position(actor->object, temp_vec1[0], temp_vec1[1], temp_vec1[2]);
-	if(actor->dobject) elf_set_physics_object_position(actor->dobject, temp_vec1[0], temp_vec1[1], temp_vec1[2]);
-
-	for(cactor = (elf_actor*)elf_begin_list(actor->children); cactor;
-		cactor = (elf_actor*)elf_next_in_list(actor->children))
-	{
-		if(!cactor->object || elf_get_physics_object_mass(cactor->object) < 0.0001)
-		{
-			elf_move_actor(cactor, temp_vec2[0], temp_vec2[1], temp_vec2[2]);
-		}
-	}
+	if(actor->object) elf_set_physics_object_position(actor->object, position[0], position[1], position[2]);
+	if(actor->dobject) elf_set_physics_object_position(actor->dobject, position[0], position[1], position[2]);
 
 	if(actor->type == ELF_LIGHT) elf_move_actor_local((elf_actor*)((elf_light*)actor)->shadow_camera, x, y, z);
 }
@@ -1014,19 +771,6 @@ unsigned char elf_remove_actor_joint_by_object(elf_actor *actor, elf_joint *join
 void elf_set_actor_ipo_frame(elf_actor *actor, float frame)
 {
 	elf_set_frame_player_frame(actor->ipo_player, frame);
-}
-
-void elf_set_actor_hierarchy_ipo_frame(elf_actor *actor, float frame)
-{
-	elf_actor *cactor;
-
-	elf_set_frame_player_frame(actor->ipo_player, frame);
-
-	for(cactor = (elf_actor*)elf_begin_list(actor->children); cactor;
-		cactor = (elf_actor*)elf_next_in_list(actor->children))
-	{
-		elf_set_actor_hierarchy_ipo_frame(cactor, frame);
-	}
 }
 
 void elf_play_actor_ipo(elf_actor *actor, float start, float end, float speed)

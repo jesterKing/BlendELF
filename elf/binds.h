@@ -510,12 +510,6 @@ ELF_API void ELF_APIENTRY elfSetPropertyString(elf_handle property, const char* 
 ELF_API void ELF_APIENTRY elfSetPropertyBool(elf_handle property, bool bval);
 ELF_API const char* ELF_APIENTRY elfGetActorName(elf_handle actor);
 ELF_API const char* ELF_APIENTRY elfGetActorFilePath(elf_handle actor);
-ELF_API elf_handle ELF_APIENTRY elfGetActorParent(elf_handle actor);
-ELF_API void ELF_APIENTRY elfSetActorParent(elf_handle actor, elf_handle parent);
-ELF_API int ELF_APIENTRY elfGetActorChildCount(elf_handle actor);
-ELF_API elf_handle ELF_APIENTRY elfGetActorChildByName(elf_handle actor, const char* name);
-ELF_API elf_handle ELF_APIENTRY elfGetActorChildByIndex(elf_handle actor, int idx);
-ELF_API void ELF_APIENTRY elfRemoveActorChildren(elf_handle actor);
 ELF_API elf_handle ELF_APIENTRY elfGetActorScript(elf_handle actor);
 ELF_API void ELF_APIENTRY elfSetActorScript(elf_handle actor, elf_handle script);
 ELF_API void ELF_APIENTRY elfSetActorPosition(elf_handle actor, float x, float y, float z);
@@ -565,7 +559,6 @@ ELF_API bool ELF_APIENTRY elfRemoveActorJointByName(elf_handle actor, const char
 ELF_API bool ELF_APIENTRY elfRemoveActorJointByIndex(elf_handle actor, int idx);
 ELF_API bool ELF_APIENTRY elfRemoveActorJointByObject(elf_handle actor, elf_handle joint);
 ELF_API void ELF_APIENTRY elfSetActorIpoFrame(elf_handle actor, float frame);
-ELF_API void ELF_APIENTRY elfSetActorHierarchyIpoFrame(elf_handle actor, float frame);
 ELF_API void ELF_APIENTRY elfPlayActorIpo(elf_handle actor, float start, float end, float speed);
 ELF_API void ELF_APIENTRY elfLoopActorIpo(elf_handle actor, float start, float end, float speed);
 ELF_API void ELF_APIENTRY elfStopActorIpo(elf_handle actor);

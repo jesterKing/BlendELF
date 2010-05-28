@@ -41,6 +41,8 @@ void elf_sprite_pre_draw(elf_sprite *sprite, elf_camera *camera)
 {
 	elf_vec4f orient;
 
+	elf_actor_pre_draw((elf_actor*)sprite);
+
 	elf_get_actor_position_((elf_actor*)sprite, &sprite->position.x);
 
 	if(sprite->face_camera && camera)
@@ -48,6 +50,11 @@ void elf_sprite_pre_draw(elf_sprite *sprite, elf_camera *camera)
 		elf_get_actor_orientation_((elf_actor*)camera, &orient.x);
 		elf_set_actor_orientation((elf_actor*)sprite, orient.x, orient.y, orient.z, orient.w);
 	}
+}
+
+void elf_sprite_post_draw(elf_sprite *sprite)
+{
+	elf_actor_post_draw((elf_actor*)sprite);
 }
 
 void elf_destroy_sprite(elf_sprite *sprite)

@@ -148,6 +148,8 @@ void elf_update_entity(elf_entity *entity)
 
 void elf_entity_pre_draw(elf_entity *entity)
 {
+	elf_actor_pre_draw((elf_actor*)entity);
+
 	gfx_get_transform_position(entity->transform, &entity->position.x);
 
 	if(entity->armature && fabs(elf_get_frame_player_frame(entity->armature_player)-entity->prev_armature_frame) > 0.0001 &&
@@ -161,6 +163,11 @@ void elf_entity_pre_draw(elf_entity *entity)
 	{
 		elf_calc_entity_aabb(entity);
 	}
+}
+
+void elf_entity_post_draw(elf_entity *entity)
+{
+	elf_actor_post_draw((elf_actor*)entity);
 }
 
 void elf_destroy_entity(elf_entity *entity)

@@ -13,8 +13,6 @@
 	elf_physics_object *dobject; \
 	elf_list *joints; \
 	elf_script *script; \
-	elf_actor *parent; \
-	elf_list *children; \
 	elf_list *sources; \
 	elf_ipo *ipo; \
 	elf_frame_player *ipo_player; \

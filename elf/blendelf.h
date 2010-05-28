@@ -789,17 +789,13 @@ void elf_set_property_bool(elf_property *property, unsigned char bval);
 void elf_init_actor(elf_actor *actor, unsigned char camera);
 void elf_read_actor_header(elf_actor *actor, FILE *file, elf_scene *scene);
 void elf_update_actor(elf_actor *actor);
+void elf_actor_pre_draw(elf_actor *actor);
+void elf_actor_post_draw(elf_actor *actor);
 void elf_clean_actor(elf_actor *actor);
 // !!>
 
 const char* elf_get_actor_name(elf_actor *actor);	// <mdoc> ACTOR FUNCTIONS <mdocc> Actor functions can be performed on all actor types. [Camera|Entity|Light|Armature]
 const char* elf_get_actor_file_path(elf_actor *actor);
-elf_actor* elf_get_actor_parent(elf_actor *actor);
-void elf_set_actor_parent(elf_actor *actor, elf_actor *parent);
-int elf_get_actor_child_count(elf_actor *actor);
-elf_actor* elf_get_actor_child_by_name(elf_actor *actor, const char *name);
-elf_actor* elf_get_actor_child_by_index(elf_actor *actor, int idx);
-void elf_remove_actor_children(elf_actor *actor);
 
 elf_script* elf_get_actor_script(elf_actor *actor);
 void elf_set_actor_script(elf_actor *actor, elf_script *script);
@@ -863,7 +859,6 @@ unsigned char elf_remove_actor_joint_by_index(elf_actor *actor, int idx);
 unsigned char elf_remove_actor_joint_by_object(elf_actor *actor, elf_joint *joint);
 
 void elf_set_actor_ipo_frame(elf_actor *actor, float frame);
-void elf_set_actor_hierarchy_ipo_frame(elf_actor *actor, float frame);
 void elf_play_actor_ipo(elf_actor *actor, float start, float end, float speed);
 void elf_loop_actor_ipo(elf_actor *actor, float start, float end, float speed);
 void elf_stop_actor_ipo(elf_actor *actor);
@@ -899,6 +894,7 @@ unsigned char elf_get_actor_selected(elf_actor *actor);
 elf_camera* elf_create_camera_from_pak(FILE *file, const char *name, elf_scene *scene);
 void elf_update_camera(elf_camera *camera);
 void elf_camera_pre_draw(elf_camera *camera);
+void elf_camear_post_draw(elf_camera *camera);
 void elf_destroy_camera(elf_camera *camera);
 // !!>
 
@@ -963,6 +959,7 @@ void elf_draw_model_bouding_box(elf_model *model, gfx_shader_params *shader_para
 elf_entity* elf_create_entity_from_pak(FILE *file, const char *name, elf_scene *scene);
 void elf_update_entity(elf_entity *entity);
 void elf_entity_pre_draw(elf_entity *entity);
+void elf_entity_post_draw(elf_entity *entity);
 void elf_destroy_entity(elf_entity *entity);
 void elf_calc_entity_aabb(elf_entity *entity);
 void elf_calc_entity_bounding_volumes(elf_entity *entity);
@@ -1020,6 +1017,7 @@ unsigned char elf_get_entity_changed(elf_entity *entity);
 elf_light* elf_create_light_from_pak(FILE *file, const char *name, elf_scene *scene);
 void elf_update_light(elf_light *light);
 void elf_light_pre_draw(elf_light *light);
+void elf_light_post_draw(elf_light *light);
 void elf_destroy_light(elf_light *light);
 // !!>
 
@@ -1159,6 +1157,7 @@ void elf_draw_particles(elf_particles *particles, elf_camera *camera, gfx_shader
 // <!!
 void elf_update_sprite(elf_sprite *sprite);
 void elf_sprite_pre_draw(elf_sprite *sprite, elf_camera *camera);
+void elf_sprite_post_draw(elf_sprite *sprite);
 void elf_destroy_sprite(elf_sprite *sprite);
 // !!>
 
@@ -1186,6 +1185,8 @@ void elf_draw_sprite_debug(elf_sprite *sprite, gfx_shader_params *shader_params)
 elf_scene* elf_create_scene();
 elf_scene *elf_create_scene_from_pak(elf_pak *pak);
 void elf_update_scene(elf_scene *scene, float sync);
+void elf_scene_pre_draw(elf_scene *scene);
+void elf_scene_post_draw(elf_scene *scene);
 void elf_destroy_scene(elf_scene *scene);
 // !!>
 

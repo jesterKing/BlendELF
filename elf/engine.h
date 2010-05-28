@@ -724,7 +724,13 @@ unsigned char elf_run()
 	if(eng->scene && eng->post_process) elf_begin_post_process(eng->post_process, eng->scene);
 	else gfx_clear_buffers(0.0, 0.0, 0.0, 0.0, 1.0);
 
-	if(eng->scene) elf_draw_scene(eng->scene);
+	if(eng->scene)
+	{
+		elf_scene_pre_draw(eng->scene);
+		elf_draw_scene(eng->scene);
+		elf_scene_post_draw(eng->scene);
+	}
+
 	if(eng->scene && eng->post_process) elf_end_post_process(eng->post_process, eng->scene);
 	if(eng->scene && eng->debug_draw) elf_draw_scene_debug(eng->scene);
 	if(eng->gui) elf_draw_gui(eng->gui);

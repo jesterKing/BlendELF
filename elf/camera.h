@@ -79,8 +79,15 @@ void elf_update_camera(elf_camera *camera)
 
 void elf_camera_pre_draw(elf_camera *camera)
 {
+	elf_actor_pre_draw((elf_actor*)camera);
+
 	gfx_get_frustum(camera->projection_matrix, elf_get_camera_modelview_matrix(camera), camera->frustum);
 	elf_get_actor_position_((elf_actor*)camera, &camera->position.x);
+}
+
+void elf_camera_post_draw(elf_camera *camera)
+{
+	elf_actor_post_draw((elf_actor*)camera);
 }
 
 void elf_destroy_camera(elf_camera *camera)

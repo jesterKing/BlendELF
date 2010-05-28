@@ -85,7 +85,14 @@ void elf_update_light(elf_light *light)
 
 void elf_light_pre_draw(elf_light *light)
 {
+	elf_actor_pre_draw((elf_actor*)light);
+
 	elf_camera_pre_draw(light->shadow_camera);
+}
+
+void elf_light_post_draw(elf_light *light)
+{
+	elf_actor_post_draw((elf_actor*)light);
 }
 
 void elf_destroy_light(elf_light *light)

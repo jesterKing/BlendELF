@@ -230,8 +230,15 @@ void elf_update_scene(elf_scene *scene, float sync)
 	{
 		elf_update_sprite(spr);
 	}
+}
 
-	// pre draw pass
+void elf_scene_pre_draw(elf_scene *scene)
+{
+	elf_camera *cam;
+	elf_entity *ent;
+	elf_light *light;
+	elf_sprite *spr;
+
 	for(cam = (elf_camera*)elf_begin_list(scene->cameras); cam != NULL;
 		cam = (elf_camera*)elf_next_in_list(scene->cameras))
 	{
@@ -254,6 +261,38 @@ void elf_update_scene(elf_scene *scene, float sync)
 		spr = (elf_sprite*)elf_next_in_list(scene->sprites))
 	{
 		elf_sprite_pre_draw(spr, scene->cur_camera);
+	}
+}
+
+void elf_scene_post_draw(elf_scene *scene)
+{
+	elf_camera *cam;
+	elf_entity *ent;
+	elf_light *light;
+	elf_sprite *spr;
+
+	for(cam = (elf_camera*)elf_begin_list(scene->cameras); cam != NULL;
+		cam = (elf_camera*)elf_next_in_list(scene->cameras))
+	{
+		elf_camera_post_draw(cam);
+	}
+
+	for(ent = (elf_entity*)elf_begin_list(scene->entities); ent != NULL;
+		ent = (elf_entity*)elf_next_in_list(scene->entities))
+	{
+		elf_entity_post_draw(ent);
+	}
+
+	for(light = (elf_light*)elf_begin_list(scene->lights); light != NULL;
+		light = (elf_light*)elf_next_in_list(scene->lights))
+	{
+		elf_light_post_draw(light);
+	}
+
+	for(spr = (elf_sprite*)elf_begin_list(scene->sprites); spr != NULL;
+		spr = (elf_sprite*)elf_next_in_list(scene->sprites))
+	{
+		elf_sprite_post_draw(spr);
 	}
 }
 
@@ -367,7 +406,6 @@ int elf_get_scene_sprite_count(elf_scene *scene)
 void elf_set_actor_scene(elf_scene *scene, elf_actor *actor)
 {
 	elf_joint *joint;
-	elf_actor *cact;
 
 	if(actor->scene) elf_remove_actor_by_object(actor->scene, actor);
 
@@ -375,12 +413,6 @@ void elf_set_actor_scene(elf_scene *scene, elf_actor *actor)
 
 	if(actor->object) elf_set_physics_object_world(actor->object, scene->world);
 	if(actor->dobject) elf_set_physics_object_world(actor->dobject, scene->dworld);
-
-	for(cact = (elf_actor*)elf_begin_list(actor->children); cact;
-		cact = (elf_actor*)elf_next_in_list(actor->children))
-	{
-		elf_set_actor_scene(scene, cact);
-	}
 
 	for(joint = (elf_joint*)elf_begin_list(actor->joints); joint;
 		joint = (elf_joint*)elf_next_in_list(actor->joints))
@@ -927,8 +959,6 @@ void elf_remove_actor(elf_actor *actor)
 {
 	elf_joint *joint;
 
-	elf_set_actor_parent(actor, NULL);
-	elf_remove_actor_children(actor);
 	actor->scene = NULL;
 
 	if(actor->object)

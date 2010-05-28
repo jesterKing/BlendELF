@@ -6982,184 +6982,6 @@ fail:
 }
 
 
-static int _wrap_elfGetActorParent(lua_State* L) {
-  int SWIG_arg = 0;
-  elf_handle arg1 ;
-  elf_handle *argp1 ;
-  elf_handle result;
-  
-  SWIG_check_num_args("GetActorParent",1,1)
-  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetActorParent",1,"handle");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("GetActorParent",1,SWIGTYPE_p_elf_handle);
-  }
-  arg1 = *argp1;
-  
-  result = elfGetActorParent(arg1);
-  {
-    elf_handle * resultptr = new elf_handle((const elf_handle &) result);
-    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_handle,1); SWIG_arg++;
-  }
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_elfSetActorParent(lua_State* L) {
-  int SWIG_arg = 0;
-  elf_handle arg1 ;
-  elf_handle arg2 ;
-  elf_handle *argp1 ;
-  elf_handle *argp2 ;
-  
-  SWIG_check_num_args("SetActorParent",2,2)
-  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetActorParent",1,"handle");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("SetActorParent",2,"handle");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("SetActorParent",1,SWIGTYPE_p_elf_handle);
-  }
-  arg1 = *argp1;
-  
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("SetActorParent",2,SWIGTYPE_p_elf_handle);
-  }
-  arg2 = *argp2;
-  
-  elfSetActorParent(arg1,arg2);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_elfGetActorChildCount(lua_State* L) {
-  int SWIG_arg = 0;
-  elf_handle arg1 ;
-  elf_handle *argp1 ;
-  int result;
-  
-  SWIG_check_num_args("GetActorChildCount",1,1)
-  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetActorChildCount",1,"handle");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("GetActorChildCount",1,SWIGTYPE_p_elf_handle);
-  }
-  arg1 = *argp1;
-  
-  result = (int)elfGetActorChildCount(arg1);
-  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_elfGetActorChildByName(lua_State* L) {
-  int SWIG_arg = 0;
-  elf_handle arg1 ;
-  char *arg2 = (char *) 0 ;
-  elf_handle *argp1 ;
-  elf_handle result;
-  
-  SWIG_check_num_args("GetActorChildByName",2,2)
-  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetActorChildByName",1,"handle");
-  if(!lua_isstring(L,2)) SWIG_fail_arg("GetActorChildByName",2,"char const *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("GetActorChildByName",1,SWIGTYPE_p_elf_handle);
-  }
-  arg1 = *argp1;
-  
-  arg2 = (char *)lua_tostring(L, 2);
-  result = elfGetActorChildByName(arg1,(char const *)arg2);
-  {
-    elf_handle * resultptr = new elf_handle((const elf_handle &) result);
-    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_handle,1); SWIG_arg++;
-  }
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_elfGetActorChildByIndex(lua_State* L) {
-  int SWIG_arg = 0;
-  elf_handle arg1 ;
-  int arg2 ;
-  elf_handle *argp1 ;
-  elf_handle result;
-  
-  SWIG_check_num_args("GetActorChildByIndex",2,2)
-  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetActorChildByIndex",1,"handle");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("GetActorChildByIndex",2,"int");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("GetActorChildByIndex",1,SWIGTYPE_p_elf_handle);
-  }
-  arg1 = *argp1;
-  
-  arg2 = (int)lua_tonumber(L, 2);
-  result = elfGetActorChildByIndex(arg1,arg2);
-  {
-    elf_handle * resultptr = new elf_handle((const elf_handle &) result);
-    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_handle,1); SWIG_arg++;
-  }
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_elfRemoveActorChildren(lua_State* L) {
-  int SWIG_arg = 0;
-  elf_handle arg1 ;
-  elf_handle *argp1 ;
-  
-  SWIG_check_num_args("RemoveActorChildren",1,1)
-  if(!lua_isuserdata(L,1)) SWIG_fail_arg("RemoveActorChildren",1,"handle");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("RemoveActorChildren",1,SWIGTYPE_p_elf_handle);
-  }
-  arg1 = *argp1;
-  
-  elfRemoveActorChildren(arg1);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
 static int _wrap_elfGetActorScript(lua_State* L) {
   int SWIG_arg = 0;
   elf_handle arg1 ;
@@ -8730,34 +8552,6 @@ static int _wrap_elfSetActorIpoFrame(lua_State* L) {
   
   arg2 = (float)lua_tonumber(L, 2);
   elfSetActorIpoFrame(arg1,arg2);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_elfSetActorHierarchyIpoFrame(lua_State* L) {
-  int SWIG_arg = 0;
-  elf_handle arg1 ;
-  float arg2 ;
-  elf_handle *argp1 ;
-  
-  SWIG_check_num_args("SetActorHierarchyIpoFrame",2,2)
-  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetActorHierarchyIpoFrame",1,"handle");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("SetActorHierarchyIpoFrame",2,"float");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("SetActorHierarchyIpoFrame",1,SWIGTYPE_p_elf_handle);
-  }
-  arg1 = *argp1;
-  
-  arg2 = (float)lua_tonumber(L, 2);
-  elfSetActorHierarchyIpoFrame(arg1,arg2);
   
   return SWIG_arg;
   
@@ -18857,12 +18651,6 @@ static const struct luaL_reg swig_commands[] = {
     { "SetPropertyBool", _wrap_elfSetPropertyBool},
     { "GetActorName", _wrap_elfGetActorName},
     { "GetActorFilePath", _wrap_elfGetActorFilePath},
-    { "GetActorParent", _wrap_elfGetActorParent},
-    { "SetActorParent", _wrap_elfSetActorParent},
-    { "GetActorChildCount", _wrap_elfGetActorChildCount},
-    { "GetActorChildByName", _wrap_elfGetActorChildByName},
-    { "GetActorChildByIndex", _wrap_elfGetActorChildByIndex},
-    { "RemoveActorChildren", _wrap_elfRemoveActorChildren},
     { "GetActorScript", _wrap_elfGetActorScript},
     { "SetActorScript", _wrap_elfSetActorScript},
     { "SetActorPosition", _wrap_elfSetActorPosition},
@@ -18912,7 +18700,6 @@ static const struct luaL_reg swig_commands[] = {
     { "RemoveActorJointByIndex", _wrap_elfRemoveActorJointByIndex},
     { "RemoveActorJointByObject", _wrap_elfRemoveActorJointByObject},
     { "SetActorIpoFrame", _wrap_elfSetActorIpoFrame},
-    { "SetActorHierarchyIpoFrame", _wrap_elfSetActorHierarchyIpoFrame},
     { "PlayActorIpo", _wrap_elfPlayActorIpo},
     { "LoopActorIpo", _wrap_elfLoopActorIpo},
     { "StopActorIpo", _wrap_elfStopActorIpo},
