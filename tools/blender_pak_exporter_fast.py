@@ -753,7 +753,7 @@ class Armature:
 		data = obj.data
 
 		action = obj.getAction()
-		if len(action.getFrameNumbers()) > 0:
+		if action != None and len(action.getFrameNumbers()) > 0:
 			frame_numbers = action.getFrameNumbers()
 			for num in frame_numbers:
 				if num > self.frame_count: self.frame_count = num
