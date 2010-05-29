@@ -545,6 +545,7 @@ class Entity:
 		try:
 			prop = obj.getProperty('shape')
 			if prop.getType() == 'STRING':
+				if prop.getData() == 'CAPSULE': self.shape = 4
 				if prop.getData() == 'MESH': self.shape = 3
 				if prop.getData() == 'SPHERE': self.shape = 2
 				if prop.getData() == 'BOX': self.shape = 1
@@ -749,7 +750,6 @@ class Armature:
 	def load(self, obj):
 		self.name = obj.name
 
-		ipos = obj.getAction().getAllChannelIpos()
 		data = obj.data
 
 		action = obj.getAction()
