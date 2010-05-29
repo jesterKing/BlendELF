@@ -688,8 +688,16 @@ void elf_draw_entity_debug(elf_entity *entity, gfx_shader_params *shader_params)
 	gfx_mul_matrix4_matrix4(gfx_get_transform_matrix(entity->transform),
 		shader_params->camera_matrix, shader_params->modelview_matrix);
 
-	memcpy(min, &entity->model->bb_min.x, sizeof(float)*3);
-	memcpy(max, &entity->model->bb_max.x, sizeof(float)*3);
+	if(entity->model)
+	{
+		memcpy(min, &entity->model->bb_min.x, sizeof(float)*3);
+		memcpy(max, &entity->model->bb_max.x, sizeof(float)*3);
+	}
+	else
+	{
+		min[0] = min[1] = min[2] = -0.2;
+		max[0] = max[1] = max[2] = 0.2;
+	}
 
 	gfx_set_color(&shader_params->material_params.color, 0.04, 0.04, 0.06, 1.0);
 	gfx_set_shader_params(shader_params);
