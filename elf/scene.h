@@ -187,7 +187,7 @@ void elf_update_scene(elf_scene *scene, float sync)
 	if(sync > 0.0)
 	{
 		elf_update_physics_world(scene->world, sync);
-		//elf_update_physics_world(scene->dworld, sync);
+		elf_update_physics_world(scene->dworld, sync);
 	}
 
 	if(scene->cur_camera)

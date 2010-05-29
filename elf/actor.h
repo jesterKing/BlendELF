@@ -428,7 +428,7 @@ void elf_set_actor_physics(elf_actor *actor, int shape, float mass)
 		case ELF_BOX:
 		{
 			actor->object = elf_create_physics_object_box(actor->pbb_lengths.x/2.0,
-				actor->pbb_lengths.y, actor->pbb_lengths.z/2.0, mass,
+				actor->pbb_lengths.y/2.0, actor->pbb_lengths.z/2.0, mass,
 				actor->pbb_offset.x, actor->pbb_offset.y, actor->pbb_offset.z);
 			break;
 		}
