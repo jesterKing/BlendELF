@@ -336,6 +336,8 @@ void elf_destroy_model(elf_model *model)
 	}
 
 	if(model->index) free(model->index);
+	if(model->weights) free(model->weights);
+	if(model->boneids) free(model->boneids);
 	if(model->tri_mesh) elf_dec_ref((elf_object*)model->tri_mesh);
 
 	free(model);
