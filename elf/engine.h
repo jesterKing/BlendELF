@@ -387,7 +387,7 @@ elf_engine* elf_create_engine()
 	engine->shadow_target = gfx_create_render_target(1024, 1024);
 	gfx_set_render_target_depth_texture(engine->shadow_target, engine->shadow_map);
 	engine->texture_anisotropy = 1.0;
-	engine->occlusion_culling = ELF_TRUE;
+	engine->occlusion_culling = ELF_FALSE;
 
 	engine->lines = gfx_create_vertex_data(256, GFX_FLOAT, GFX_VERTEX_DATA_DYNAMIC);
 	gfx_inc_ref((gfx_object*)engine->lines);

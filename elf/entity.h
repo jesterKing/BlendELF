@@ -190,9 +190,9 @@ void elf_destroy_entity(elf_entity *entity)
 
 void elf_eval_entity_aabb_corner(elf_entity *entity, elf_vec4f *orient, elf_vec3f *corner, elf_vec3f *result)
 {
-	corner->x += entity->bb_offset.x;
-	corner->y += entity->bb_offset.y;
-	corner->z += entity->bb_offset.z;
+	corner->x -= entity->bb_offset.x;
+	corner->y -= entity->bb_offset.y;
+	corner->z -= entity->bb_offset.z;
 	gfx_mul_qua_vec(&orient->x, &corner->x, &result->x);
 
 	if(result->x < entity->cull_aabb_min.x) entity->cull_aabb_min.x = result->x;
@@ -226,9 +226,9 @@ void elf_calc_entity_aabb(elf_entity *entity)
 	gfx_get_transform_orientation(entity->transform, &orient.x);
 
 	corner = entity->bb_min;
-	corner.x += entity->bb_offset.x;
-	corner.y += entity->bb_offset.y;
-	corner.z += entity->bb_offset.z;
+	corner.x -= entity->bb_offset.x;
+	corner.y -= entity->bb_offset.y;
+	corner.z -= entity->bb_offset.z;
 	gfx_mul_qua_vec(&orient.x, &corner.x, &result.x);
 	
 	entity->cull_aabb_min = corner;
