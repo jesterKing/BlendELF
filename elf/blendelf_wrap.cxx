@@ -11736,6 +11736,34 @@ fail:
 }
 
 
+static int _wrap_elfSetParticlesSpawn(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  bool arg2 ;
+  elf_handle *argp1 ;
+  
+  SWIG_check_num_args("SetParticlesSpawn",2,2)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetParticlesSpawn",1,"handle");
+  if(!lua_isboolean(L,2)) SWIG_fail_arg("SetParticlesSpawn",2,"bool");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("SetParticlesSpawn",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (lua_toboolean(L, 2)!=0);
+  elfSetParticlesSpawn(arg1,arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfSetParticlesSize(lua_State* L) {
   int SWIG_arg = 0;
   elf_handle arg1 ;
@@ -12342,6 +12370,32 @@ static int _wrap_elfGetParticlesSpawnDelay(lua_State* L) {
   
   result = (float)elfGetParticlesSpawnDelay(arg1);
   lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetParticlesSpawn(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  bool result;
+  
+  SWIG_check_num_args("GetParticlesSpawn",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetParticlesSpawn",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetParticlesSpawn",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = (bool)elfGetParticlesSpawn(arg1);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -18810,6 +18864,7 @@ static const struct luaL_reg swig_commands[] = {
     { "SetParticlesEntity", _wrap_elfSetParticlesEntity},
     { "SetParticlesGravity", _wrap_elfSetParticlesGravity},
     { "SetParticlesSpawnDelay", _wrap_elfSetParticlesSpawnDelay},
+    { "SetParticlesSpawn", _wrap_elfSetParticlesSpawn},
     { "SetParticlesSize", _wrap_elfSetParticlesSize},
     { "SetParticlesSizeGrowth", _wrap_elfSetParticlesSizeGrowth},
     { "SetParticlesRotation", _wrap_elfSetParticlesRotation},
@@ -18830,6 +18885,7 @@ static const struct luaL_reg swig_commands[] = {
     { "GetParticlesEntity", _wrap_elfGetParticlesEntity},
     { "GetParticlesGravity", _wrap_elfGetParticlesGravity},
     { "GetParticlesSpawnDelay", _wrap_elfGetParticlesSpawnDelay},
+    { "GetParticlesSpawn", _wrap_elfGetParticlesSpawn},
     { "GetParticlesSizeMin", _wrap_elfGetParticlesSizeMin},
     { "GetParticlesSizeMax", _wrap_elfGetParticlesSizeMax},
     { "GetParticlesSizeGrowthMin", _wrap_elfGetParticlesSizeGrowthMin},

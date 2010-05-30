@@ -412,6 +412,7 @@ struct elf_particles {
 	gfx_vertex_data *colors;
 
 	float spawn_delay;
+	unsigned char spawn;
 	float cur_time;
 	elf_vec3f gravity;
 	float size_min;

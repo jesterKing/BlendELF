@@ -5246,6 +5246,24 @@ ELF_API void ELF_APIENTRY elfSetParticlesSpawnDelay(elf_handle particles, float 
 	}
 	elf_set_particles_spawn_delay((elf_particles*)particles.get(), delay);
 }
+ELF_API void ELF_APIENTRY elfSetParticlesSpawn(elf_handle particles, bool spawn)
+{
+	if(!particles.get() || elf_get_object_type(particles.get()) != ELF_PARTICLES)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetParticlesSpawn() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetParticlesSpawn() -> invalid handle\n");
+		}
+		return;
+	}
+	elf_set_particles_spawn((elf_particles*)particles.get(), spawn);
+}
 ELF_API void ELF_APIENTRY elfSetParticlesSize(elf_handle particles, float min, float max)
 {
 	if(!particles.get() || elf_get_object_type(particles.get()) != ELF_PARTICLES)
@@ -5614,6 +5632,24 @@ ELF_API float ELF_APIENTRY elfGetParticlesSpawnDelay(elf_handle particles)
 		return 0;
 	}
 	return elf_get_particles_spawn_delay((elf_particles*)particles.get());
+}
+ELF_API bool ELF_APIENTRY elfGetParticlesSpawn(elf_handle particles)
+{
+	if(!particles.get() || elf_get_object_type(particles.get()) != ELF_PARTICLES)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetParticlesSpawn() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetParticlesSpawn() -> invalid handle\n");
+		}
+		return false;
+	}
+	return (bool)elf_get_particles_spawn((elf_particles*)particles.get());
 }
 ELF_API float ELF_APIENTRY elfGetParticlesSizeMin(elf_handle particles)
 {

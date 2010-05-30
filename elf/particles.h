@@ -40,6 +40,7 @@ elf_particles* elf_create_particles(const char *name, int max_count)
 
 	particles->draw_mode = ELF_ADD;
 	particles->spawn_delay = 0.02;
+	particles->spawn = ELF_TRUE;
 	particles->size_min = 1.0;
 	particles->size_max = 1.0;
 	particles->size_growth_min = 0.0;
@@ -197,7 +198,7 @@ void elf_update_particles(elf_particles *particles, float sync)
 	{
 		if(particle->life_span < 0.0 || particle->color.a < 0.0)
 		{
-			if(spawn_count > 0)
+			if(spawn_count > 0 && particles->spawn)
 			{
 				elf_init_new_particle(particles, particle);
 				spawn_count--;
@@ -221,13 +222,16 @@ void elf_update_particles(elf_particles *particles, float sync)
 	}
 
 	// spawn particles
-	for(i = 0; i < spawn_count; i++)
+	if(particles->spawn)
 	{
-		particle = elf_create_particle();
+		for(i = 0; i < spawn_count; i++)
+		{
+			particle = elf_create_particle();
 
-		elf_init_new_particle(particles, particle);
+			elf_init_new_particle(particles, particle);
 
-		elf_append_to_list(particles->particles, (elf_object*)particle);
+			elf_append_to_list(particles->particles, (elf_object*)particle);
+		}
 	}
 }
 
@@ -591,6 +595,11 @@ void elf_set_particles_spawn_delay(elf_particles *particles, float delay)
 	particles->spawn_delay = delay;
 }
 
+void elf_set_particles_spawn(elf_particles *particles, unsigned char spawn)
+{
+	particles->spawn = !spawn == ELF_FALSE;
+}
+
 void elf_set_particles_size(elf_particles *particles, float min, float max)
 {
 	particles->size_min = min;
@@ -709,6 +718,11 @@ elf_vec3f elf_get_particles_gravity(elf_particles *particles)
 float elf_get_particles_spawn_delay(elf_particles *particles)
 {
 	return particles->spawn_delay;
+}
+
+unsigned char elf_get_particles_spawn(elf_particles *particles)
+{
+	return particles->spawn;
 }
 
 float elf_get_particles_size_min(elf_particles *particles)

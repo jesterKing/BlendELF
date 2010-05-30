@@ -1106,6 +1106,7 @@ void elf_set_particles_model(elf_particles *particles, elf_model *model);
 void elf_set_particles_entity(elf_particles *particles, elf_entity *entity);
 void elf_set_particles_gravity(elf_particles *particles, float x, float y, float z);
 void elf_set_particles_spawn_delay(elf_particles *particles, float delay);
+void elf_set_particles_spawn(elf_particles *particles, unsigned char spawn);
 
 void elf_set_particles_size(elf_particles *particles, float min, float max);
 void elf_set_particles_size_growth(elf_particles *particles, float min, float max);
@@ -1128,6 +1129,7 @@ elf_model* elf_get_particles_model(elf_particles *particles);
 elf_entity* elf_get_particles_entity(elf_particles *particles);
 elf_vec3f elf_get_particles_gravity(elf_particles *particles);
 float elf_get_particles_spawn_delay(elf_particles *particles);
+unsigned char elf_get_particles_spawn(elf_particles *particles);
 
 float elf_get_particles_size_min(elf_particles *particles);
 float elf_get_particles_size_max(elf_particles *particles);
