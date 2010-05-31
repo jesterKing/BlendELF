@@ -16722,6 +16722,35 @@ fail:
 }
 
 
+static int _wrap_elfGetPictureScale(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  elf_vec2f result;
+  
+  SWIG_check_num_args("GetPictureScale",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetPictureScale",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetPictureScale",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = elfGetPictureScale(arg1);
+  {
+    elf_vec2f * resultptr = new elf_vec2f((const elf_vec2f &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_vec2f,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfSetPictureTexture(lua_State* L) {
   int SWIG_arg = 0;
   elf_handle arg1 ;
@@ -16745,6 +16774,37 @@ static int _wrap_elfSetPictureTexture(lua_State* L) {
   arg2 = *argp2;
   
   elfSetPictureTexture(arg1,arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfSetPictureScale(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  float arg2 ;
+  float arg3 ;
+  elf_handle *argp1 ;
+  
+  SWIG_check_num_args("SetPictureScale",3,3)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetPictureScale",1,"handle");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("SetPictureScale",2,"float");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("SetPictureScale",3,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("SetPictureScale",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (float)lua_tonumber(L, 2);
+  arg3 = (float)lua_tonumber(L, 3);
+  elfSetPictureScale(arg1,arg2,arg3);
   
   return SWIG_arg;
   
@@ -19034,7 +19094,9 @@ static const struct luaL_reg swig_commands[] = {
     { "SetButtonOnTexture", _wrap_elfSetButtonOnTexture},
     { "CreatePicture", _wrap_elfCreatePicture},
     { "GetPictureTexture", _wrap_elfGetPictureTexture},
+    { "GetPictureScale", _wrap_elfGetPictureScale},
     { "SetPictureTexture", _wrap_elfSetPictureTexture},
+    { "SetPictureScale", _wrap_elfSetPictureScale},
     { "CreateTextField", _wrap_elfCreateTextField},
     { "GetTextFieldTexture", _wrap_elfGetTextFieldTexture},
     { "GetTextFieldFont", _wrap_elfGetTextFieldFont},

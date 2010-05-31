@@ -8525,6 +8525,27 @@ ELF_API elf_handle ELF_APIENTRY elfGetPictureTexture(elf_handle picture)
 	handle = (elf_object*)elf_get_picture_texture((elf_picture*)picture.get());
 	return handle;
 }
+ELF_API elf_vec2f ELF_APIENTRY elfGetPictureScale(elf_handle picture)
+{
+	elf_vec2f _e_type;
+	memset(&_e_type, 0x0, sizeof(elf_vec2f));
+	if(!picture.get() || elf_get_object_type(picture.get()) != ELF_PICTURE)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetPictureScale() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetPictureScale() -> invalid handle\n");
+		}
+		return _e_type;
+	}
+	_e_type = elf_get_picture_scale((elf_picture*)picture.get());
+	return _e_type;
+}
 ELF_API void ELF_APIENTRY elfSetPictureTexture(elf_handle picture, elf_handle texture)
 {
 	if(!picture.get() || elf_get_object_type(picture.get()) != ELF_PICTURE)
@@ -8556,6 +8577,24 @@ ELF_API void ELF_APIENTRY elfSetPictureTexture(elf_handle picture, elf_handle te
 		return;
 	}
 	elf_set_picture_texture((elf_picture*)picture.get(), (elf_texture*)texture.get());
+}
+ELF_API void ELF_APIENTRY elfSetPictureScale(elf_handle picture, float x, float y)
+{
+	if(!picture.get() || elf_get_object_type(picture.get()) != ELF_PICTURE)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetPictureScale() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetPictureScale() -> invalid handle\n");
+		}
+		return;
+	}
+	elf_set_picture_scale((elf_picture*)picture.get(), x, y);
 }
 ELF_API elf_handle ELF_APIENTRY elfCreateTextField(const char* name)
 {

@@ -839,7 +839,9 @@ ELF_API void ELF_APIENTRY elfSetButtonOverTexture(elf_handle button, elf_handle 
 ELF_API void ELF_APIENTRY elfSetButtonOnTexture(elf_handle button, elf_handle on);
 ELF_API elf_handle ELF_APIENTRY elfCreatePicture(const char* name);
 ELF_API elf_handle ELF_APIENTRY elfGetPictureTexture(elf_handle picture);
+ELF_API elf_vec2f ELF_APIENTRY elfGetPictureScale(elf_handle picture);
 ELF_API void ELF_APIENTRY elfSetPictureTexture(elf_handle picture, elf_handle texture);
+ELF_API void ELF_APIENTRY elfSetPictureScale(elf_handle picture, float x, float y);
 ELF_API elf_handle ELF_APIENTRY elfCreateTextField(const char* name);
 ELF_API elf_handle ELF_APIENTRY elfGetTextFieldTexture(elf_handle text_field);
 ELF_API elf_handle ELF_APIENTRY elfGetTextFieldFont(elf_handle text_field);

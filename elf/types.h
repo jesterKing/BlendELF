@@ -616,6 +616,7 @@ struct elf_button {
 struct elf_picture {
 	ELF_GUI_OBJECT_HEADER;
 	elf_texture *texture;
+	elf_vec2f scale;
 };
 
 struct elf_text_field {

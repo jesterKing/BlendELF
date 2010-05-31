@@ -279,6 +279,7 @@ elf_picture* elf_create_picture(const char *name)
 	picture->type = ELF_PICTURE;
 
 	picture->color.r = picture->color.g = picture->color.b = picture->color.a = 1.0;
+	picture->scale.x = picture->scale.y = 1.0;
 	picture->visible = ELF_TRUE;
 
 	if(name) picture->name = elf_create_string(name);
@@ -312,17 +313,12 @@ void elf_draw_picture(elf_picture *picture, gfx_shader_params *shader_params)
 	shader_params->texture_params[0].texture = NULL;
 }
 
-elf_texture* elf_get_picture_texture(elf_picture *picture)
-{
-	return picture->texture;
-}
-
 void elf_recalc_picture(elf_picture *picture)
 {
 	if(picture->texture)
 	{
-		picture->width = elf_get_texture_width(picture->texture);
-		picture->height = elf_get_texture_height(picture->texture);
+		picture->width = elf_get_texture_width(picture->texture)*picture->scale.x;
+		picture->height = elf_get_texture_height(picture->texture)*picture->scale.y;
 	}
 	else
 	{
@@ -331,11 +327,28 @@ void elf_recalc_picture(elf_picture *picture)
 	}
 }
 
+elf_texture* elf_get_picture_texture(elf_picture *picture)
+{
+	return picture->texture;
+}
+
+elf_vec2f elf_get_picture_scale(elf_picture *picture)
+{
+	return picture->scale;
+}
+
 void elf_set_picture_texture(elf_picture *picture, elf_texture *texture)
 {
 	if(picture->texture) elf_dec_ref((elf_object*)picture->texture);
 	picture->texture = texture;
 	if(picture->texture) elf_inc_ref((elf_object*)picture->texture);
+	elf_recalc_gui_object((elf_gui_object*)picture);
+}
+
+void elf_set_picture_scale(elf_picture *picture, float x, float y)
+{
+	picture->scale.x = x;
+	picture->scale.y = y;
 	elf_recalc_gui_object((elf_gui_object*)picture);
 }
 

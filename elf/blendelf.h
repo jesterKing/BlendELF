@@ -1588,8 +1588,10 @@ void elf_recalc_picture(elf_picture *picture);
 elf_picture* elf_create_picture(const char *name);	// <mdoc> PICTURE FUNCTIONS
 
 elf_texture* elf_get_picture_texture(elf_picture *picture);
+elf_vec2f elf_get_picture_scale(elf_picture *picture);
 
 void elf_set_picture_texture(elf_picture *picture, elf_texture *texture);
+void elf_set_picture_scale(elf_picture *picture, float x, float y);
 
 // <!!
 void elf_destroy_text_field(elf_text_field *text_field);
