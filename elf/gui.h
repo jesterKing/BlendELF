@@ -762,7 +762,7 @@ void elf_draw_screen(elf_screen *screen, elf_area *area, gfx_shader_params *shad
 
 	gfx_set_viewport(x, y, width, height);
 	gfx_get_orthographic_projection_matrix((float)x, (float)x+width, (float)y, (float)y+height,
-		-1.0f, 1.0f, shader_params->projection_matrix);
+		-1.0, 1.0, shader_params->projection_matrix);
 
 	for(object = (elf_gui_object*)elf_begin_list(screen->children); object;
 		object = (elf_gui_object*)elf_next_in_list(screen->children))
@@ -775,14 +775,14 @@ void elf_draw_screen(elf_screen *screen, elf_area *area, gfx_shader_params *shad
 			elf_draw_text_field((elf_text_field*)object, area, shader_params);
 			gfx_set_viewport(x, y, width, height);
 			gfx_get_orthographic_projection_matrix((float)x, (float)x+width, (float)y, (float)y+height,
-				-1.0f, 1.0f, shader_params->projection_matrix);
+				-1.0, 1.0, shader_params->projection_matrix);
 		}
 		else if(object->type == ELF_TEXT_LIST)
 		{
 			elf_draw_text_list((elf_text_list*)object, area, shader_params);
 			gfx_set_viewport(x, y, width, height);
 			gfx_get_orthographic_projection_matrix((float)x, (float)x+width, (float)y, (float)y+height,
-				-1.0f, 1.0f, shader_params->projection_matrix);
+				-1.0, 1.0, shader_params->projection_matrix);
 		}
 		else if(object->type == ELF_SLIDER) elf_draw_slider((elf_slider*)object, shader_params);
 		else if(object->type == ELF_CHECK_BOX) elf_draw_check_box((elf_check_box*)object, shader_params);
@@ -795,7 +795,7 @@ void elf_draw_screen(elf_screen *screen, elf_area *area, gfx_shader_params *shad
 		elf_draw_screen((elf_screen*)object, area, shader_params);
 		gfx_set_viewport(x, y, width, height);
 		gfx_get_orthographic_projection_matrix((float)x, (float)x+width, (float)y, (float)y+height,
-			-1.0f, 1.0f, shader_params->projection_matrix);
+			-1.0, 1.0, shader_params->projection_matrix);
 	}
 }
 
@@ -1223,6 +1223,15 @@ void elf_recalc_gui_object(elf_gui_object *object)
 			elf_recalc_gui_object(obj);
 		}
 	}
+
+	if(object->screens)
+	{
+		for(obj = (elf_gui_object*)elf_begin_list(object->screens); obj;
+			obj = (elf_gui_object*)elf_next_in_list(object->screens))
+		{
+			elf_recalc_gui_object(obj);
+		}
+	}
 }
 
 void elf_clear_gui_object_root(elf_gui_object *object)
@@ -1353,7 +1362,7 @@ elf_gui_object* elf_trace_top_object(elf_gui_object *object, unsigned char click
 	}
 
 	if(mouse_pos.x >= object->pos.x && mouse_pos.x <= object->pos.x+object->width &&
-		mouse_pos.y >= object->pos.y && mouse_pos.y <= object->pos.x+object->height)
+		mouse_pos.y >= object->pos.y && mouse_pos.y <= object->pos.y+object->height)
 	{
 		return object;
 	}
