@@ -897,7 +897,7 @@ void elf_draw_text_list(elf_text_list *text_list, elf_area *area, gfx_shader_par
 
 	gfx_set_viewport(x, y, width, height);
 	gfx_get_orthographic_projection_matrix((float)x, (float)x+width, (float)y, (float)y+height,
-		-1.0f, 1.0f, shader_params->projection_matrix);
+		-1.0, 1.0, shader_params->projection_matrix);
 	gfx_set_color(&shader_params->material_params.color, text_list->color.r,
 		text_list->color.g, text_list->color.b, text_list->color.a);
 
@@ -1274,6 +1274,8 @@ elf_gui* elf_create_gui()
 	memset(gui, 0x0, sizeof(elf_gui));
 	gui->type = ELF_GUI;
 
+	gui->visible = ELF_TRUE;
+
 	gui->children = elf_create_list();
 	gui->screens = elf_create_list();
 
@@ -1319,6 +1321,8 @@ elf_gui_object* elf_trace_top_object(elf_gui_object *object, unsigned char click
 	elf_gui_object *result;
 	elf_vec2i mouse_pos;
 
+	if(!object->visible) return ELF_FALSE;
+
 	mouse_pos = elf_get_mouse_position();
 	mouse_pos.y = elf_get_window_height()-mouse_pos.y;
 
@@ -1329,7 +1333,8 @@ elf_gui_object* elf_trace_top_object(elf_gui_object *object, unsigned char click
 			cobject = (elf_gui_object*)elf_rnext_in_list(object->screens))
 		{
 			if(mouse_pos.x >= cobject->pos.x && mouse_pos.x <= cobject->pos.x+cobject->width &&
-				mouse_pos.y >= cobject->pos.y && mouse_pos.y <= cobject->pos.y+cobject->height)
+				mouse_pos.y >= cobject->pos.y && mouse_pos.y <= cobject->pos.y+cobject->height &&
+				cobject->visible)
 			{
 				if(click)
 				{
@@ -1352,7 +1357,8 @@ elf_gui_object* elf_trace_top_object(elf_gui_object *object, unsigned char click
 			cobject = (elf_gui_object*)elf_rnext_in_list(object->children))
 		{
 			if(mouse_pos.x >= cobject->pos.x && mouse_pos.x <= cobject->pos.x+cobject->width &&
-				mouse_pos.y >= cobject->pos.y && mouse_pos.y <= cobject->pos.y+cobject->height)
+				mouse_pos.y >= cobject->pos.y && mouse_pos.y <= cobject->pos.y+cobject->height &&
+				cobject->visible)
 			{
 				result = elf_trace_top_object(cobject, click);
 				if(result) return result;
@@ -1789,6 +1795,8 @@ void elf_draw_gui(elf_gui *gui)
 {
 	elf_gui_object *object;
 	elf_area area;
+
+	if(!gui->visible) return;
 
 	area.pos.x = gui->pos.x;
 	area.pos.y = gui->pos.y;
