@@ -6210,6 +6210,42 @@ ELF_API elf_vec3f ELF_APIENTRY elfGetSceneGravity(elf_handle scene)
 	_e_type = elf_get_scene_gravity((elf_scene*)scene.get());
 	return _e_type;
 }
+ELF_API void ELF_APIENTRY elfSetScenePhysics(elf_handle scene, bool physics)
+{
+	if(!scene.get() || elf_get_object_type(scene.get()) != ELF_SCENE)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetScenePhysics() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetScenePhysics() -> invalid handle\n");
+		}
+		return;
+	}
+	elf_set_scene_physics((elf_scene*)scene.get(), physics);
+}
+ELF_API bool ELF_APIENTRY elfGetScenePhysics(elf_handle scene)
+{
+	if(!scene.get() || elf_get_object_type(scene.get()) != ELF_SCENE)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetScenePhysics() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetScenePhysics() -> invalid handle\n");
+		}
+		return false;
+	}
+	return (bool)elf_get_scene_physics((elf_scene*)scene.get());
+}
 ELF_API const char* ELF_APIENTRY elfGetSceneName(elf_handle scene)
 {
 	if(!scene.get() || elf_get_object_type(scene.get()) != ELF_SCENE)

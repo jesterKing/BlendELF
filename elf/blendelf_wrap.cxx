@@ -13244,6 +13244,60 @@ fail:
 }
 
 
+static int _wrap_elfSetScenePhysics(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  bool arg2 ;
+  elf_handle *argp1 ;
+  
+  SWIG_check_num_args("SetScenePhysics",2,2)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetScenePhysics",1,"handle");
+  if(!lua_isboolean(L,2)) SWIG_fail_arg("SetScenePhysics",2,"bool");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("SetScenePhysics",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (lua_toboolean(L, 2)!=0);
+  elfSetScenePhysics(arg1,arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetScenePhysics(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  bool result;
+  
+  SWIG_check_num_args("GetScenePhysics",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetScenePhysics",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetScenePhysics",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = (bool)elfGetScenePhysics(arg1);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfGetSceneName(lua_State* L) {
   int SWIG_arg = 0;
   elf_handle arg1 ;
@@ -18976,6 +19030,8 @@ static const struct luaL_reg swig_commands[] = {
     { "GetSceneAmbientColor", _wrap_elfGetSceneAmbientColor},
     { "SetSceneGravity", _wrap_elfSetSceneGravity},
     { "GetSceneGravity", _wrap_elfGetSceneGravity},
+    { "SetScenePhysics", _wrap_elfSetScenePhysics},
+    { "GetScenePhysics", _wrap_elfGetScenePhysics},
     { "GetSceneName", _wrap_elfGetSceneName},
     { "GetSceneFilePath", _wrap_elfGetSceneFilePath},
     { "GetSceneCameraCount", _wrap_elfGetSceneCameraCount},

@@ -460,6 +460,7 @@ struct elf_scene {
 	char *name;
 	char *file_path;
 	elf_color ambient_color;
+	unsigned char physics;
 
 	elf_list *models;
 	elf_list *scripts;

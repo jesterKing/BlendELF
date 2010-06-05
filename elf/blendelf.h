@@ -1200,6 +1200,9 @@ elf_color elf_get_scene_ambient_color(elf_scene *scene);
 void elf_set_scene_gravity(elf_scene *scene, float x, float y, float z);
 elf_vec3f elf_get_scene_gravity(elf_scene *scene);
 
+void elf_set_scene_physics(elf_scene *scene, unsigned char physics);
+unsigned char elf_get_scene_physics(elf_scene *scene);
+
 const char* elf_get_scene_name(elf_scene *scene);
 const char* elf_get_scene_file_path(elf_scene *scene);
 

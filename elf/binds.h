@@ -721,6 +721,8 @@ ELF_API void ELF_APIENTRY elfSetSceneAmbientColor(elf_handle scene, float r, flo
 ELF_API elf_color ELF_APIENTRY elfGetSceneAmbientColor(elf_handle scene);
 ELF_API void ELF_APIENTRY elfSetSceneGravity(elf_handle scene, float x, float y, float z);
 ELF_API elf_vec3f ELF_APIENTRY elfGetSceneGravity(elf_handle scene);
+ELF_API void ELF_APIENTRY elfSetScenePhysics(elf_handle scene, bool physics);
+ELF_API bool ELF_APIENTRY elfGetScenePhysics(elf_handle scene);
 ELF_API const char* ELF_APIENTRY elfGetSceneName(elf_handle scene);
 ELF_API const char* ELF_APIENTRY elfGetSceneFilePath(elf_handle scene);
 ELF_API int ELF_APIENTRY elfGetSceneCameraCount(elf_handle scene);

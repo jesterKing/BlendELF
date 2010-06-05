@@ -92,6 +92,8 @@ elf_scene* elf_create_scene()
 	scene->world = elf_create_physics_world();
 	scene->dworld = elf_create_physics_world();
 
+	scene->physics = ELF_TRUE;
+
 	scene->dof_depth_write = gfx_create_shader_program(dof_depth_write_vert, dof_depth_write_frag);
 	scene->dof_depth_write_alpha = gfx_create_shader_program(dof_depth_write_alpha_vert, dof_depth_write_alpha_frag);
 
@@ -186,7 +188,7 @@ void elf_update_scene(elf_scene *scene, float sync)
 
 	if(sync > 0.0)
 	{
-		elf_update_physics_world(scene->world, sync);
+		if(scene->physics) elf_update_physics_world(scene->world, sync);
 		elf_update_physics_world(scene->dworld, sync);
 	}
 
@@ -361,6 +363,16 @@ void elf_set_scene_gravity(elf_scene *scene, float x, float y, float z)
 elf_vec3f elf_get_scene_gravity(elf_scene *scene)
 {
 	return elf_get_physics_world_gravity(scene->world);
+}
+
+void elf_set_scene_physics(elf_scene *scene, unsigned char physics)
+{
+	scene->physics = !physics == ELF_FALSE;
+}
+
+unsigned char elf_get_scene_physics(elf_scene *scene)
+{
+	return scene->physics;
 }
 
 const char* elf_get_scene_name(elf_scene *scene)
