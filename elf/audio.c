@@ -234,6 +234,11 @@ void elf_update_audio()
 	for(source = (elf_audio_source*)elf_begin_list(audio_device->sources); source;
 		source = (elf_audio_source*)elf_next_in_list(audio_device->sources))
 	{
+		if(source->sound->streamed && !source->paused)
+		{
+			elf_stream_audio_source(source);
+		}
+
 		if(elf_get_object_ref_count((elf_object*)source) < 2 &&
 			!elf_is_sound_playing(source) &&
 			!elf_is_sound_paused(source))
@@ -246,11 +251,6 @@ void elf_update_audio()
 			{
 				elf_remove_from_list(audio_device->sources, (elf_object*)source);
 			}
-		}
-
-		if(source->sound->streamed && !source->paused)
-		{
-			elf_stream_audio_source(source);
 		}
 	}
 }
