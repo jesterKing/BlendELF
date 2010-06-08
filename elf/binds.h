@@ -878,6 +878,7 @@ ELF_API void ELF_APIENTRY elfSetTextListFont(elf_handle text_list, elf_handle fo
 ELF_API void ELF_APIENTRY elfSetTextListSelectionColor(elf_handle text_list, float r, float g, float b, float a);
 ELF_API void ELF_APIENTRY elfSetTextListSize(elf_handle text_list, int rows, int width);
 ELF_API void ELF_APIENTRY elfAddTextListItem(elf_handle text_list, const char* text);
+ELF_API void ELF_APIENTRY elfSetTextListItem(elf_handle text_list, int idx, const char* text);
 ELF_API bool ELF_APIENTRY elfRemoveTextListItem(elf_handle text_list, int idx);
 ELF_API void ELF_APIENTRY elfRemoveTextListItems(elf_handle text_list);
 ELF_API void ELF_APIENTRY elfSetTextListOffset(elf_handle text_list, int offset);

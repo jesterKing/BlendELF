@@ -17858,6 +17858,37 @@ fail:
 }
 
 
+static int _wrap_elfSetTextListItem(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  int arg2 ;
+  char *arg3 = (char *) 0 ;
+  elf_handle *argp1 ;
+  
+  SWIG_check_num_args("SetTextListItem",3,3)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetTextListItem",1,"handle");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("SetTextListItem",2,"int");
+  if(!lua_isstring(L,3)) SWIG_fail_arg("SetTextListItem",3,"char const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("SetTextListItem",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  arg3 = (char *)lua_tostring(L, 3);
+  elfSetTextListItem(arg1,arg2,(char const *)arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfRemoveTextListItem(lua_State* L) {
   int SWIG_arg = 0;
   elf_handle arg1 ;
@@ -19187,6 +19218,7 @@ static const struct luaL_reg swig_commands[] = {
     { "SetTextListSelectionColor", _wrap_elfSetTextListSelectionColor},
     { "SetTextListSize", _wrap_elfSetTextListSize},
     { "AddTextListItem", _wrap_elfAddTextListItem},
+    { "SetTextListItem", _wrap_elfSetTextListItem},
     { "RemoveTextListItem", _wrap_elfRemoveTextListItem},
     { "RemoveTextListItems", _wrap_elfRemoveTextListItems},
     { "SetTextListOffset", _wrap_elfSetTextListOffset},

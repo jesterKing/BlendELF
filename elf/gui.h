@@ -582,7 +582,7 @@ elf_slider* elf_create_slider(const char *name)
 
 	slider->color.r = slider->color.g = slider->color.b = slider->color.a = 1.0; 
 	slider->visible = ELF_TRUE;
-	slider->value = 1.0f;
+	slider->value = 1.0;
 
 	if(name) slider->name = elf_create_string(name);
 
@@ -682,8 +682,8 @@ void elf_set_slider_slider_texture(elf_slider *slider, elf_texture *slider_textu
 void elf_set_slider_value(elf_slider *slider, float value)
 {
 	slider->value = value;
-	if(slider->value < 0.0f) slider->value = 0.0f;
-	if(slider->value > 1.0f) slider->value = 1.0f;
+	if(slider->value < 0.0) slider->value = 0.0;
+	if(slider->value > 1.0) slider->value = 1.0;
 }
 
 elf_screen* elf_create_screen(const char *name)
@@ -753,7 +753,7 @@ void elf_draw_screen(elf_screen *screen, elf_area *area, gfx_shader_params *shad
 			height -= (y+height)-(area->pos.y+area->size.y);
 	}
 
-	gfx_set_color(&shader_params->material_params.color, 1.0, 1.0, 1.0, 1.0);
+	gfx_set_color(&shader_params->material_params.color, screen->color.r, screen->color.g, screen->color.b, screen->color.a);
 
 	shader_params->texture_params[0].texture = screen->texture->texture;
 	gfx_set_shader_params(shader_params);
@@ -1039,6 +1039,18 @@ void elf_add_text_list_item(elf_text_list *text_list, const char *text)
 	str_obj->str = elf_create_string(text);
 
 	elf_append_to_list(text_list->items, (elf_object*)str_obj);
+}
+
+void elf_set_text_list_item(elf_text_list *text_list, int idx, const char *text)
+{
+	elf_string *str_obj;
+
+	str_obj = (elf_string*)elf_get_item_from_list(text_list->items, idx);
+	if(str_obj)
+	{
+		if(str_obj->str) elf_destroy_string(str_obj->str);
+		str_obj->str = elf_create_string(text);
+	}
 }
 
 unsigned char elf_remove_text_list_item(elf_text_list *text_list, int idx)

@@ -1664,6 +1664,7 @@ void elf_set_text_list_font(elf_text_list *text_list, elf_font *font);
 void elf_set_text_list_selection_color(elf_text_list *text_list, float r, float g, float b, float a);
 void elf_set_text_list_size(elf_text_list *text_list, int rows, int width);
 void elf_add_text_list_item(elf_text_list *text_list, const char *text);
+void elf_set_text_list_item(elf_text_list *text_list, int idx, const char *text);
 unsigned char elf_remove_text_list_item(elf_text_list *text_list, int idx);
 void elf_remove_text_list_items(elf_text_list *text_list);
 void elf_set_text_list_offset(elf_text_list *text_list, int offset);

@@ -721,6 +721,8 @@ ELF_API void ELF_APIENTRY elfSetSceneAmbientColor(elf_handle scene, float r, flo
 ELF_API elf_color ELF_APIENTRY elfGetSceneAmbientColor(elf_handle scene);
 ELF_API void ELF_APIENTRY elfSetSceneGravity(elf_handle scene, float x, float y, float z);
 ELF_API elf_vec3f ELF_APIENTRY elfGetSceneGravity(elf_handle scene);
+ELF_API void ELF_APIENTRY elfSetScenePhysics(elf_handle scene, bool physics);
+ELF_API bool ELF_APIENTRY elfGetScenePhysics(elf_handle scene);
 ELF_API const char* ELF_APIENTRY elfGetSceneName(elf_handle scene);
 ELF_API const char* ELF_APIENTRY elfGetSceneFilePath(elf_handle scene);
 ELF_API int ELF_APIENTRY elfGetSceneCameraCount(elf_handle scene);
@@ -876,6 +878,7 @@ ELF_API void ELF_APIENTRY elfSetTextListFont(elf_handle text_list, elf_handle fo
 ELF_API void ELF_APIENTRY elfSetTextListSelectionColor(elf_handle text_list, float r, float g, float b, float a);
 ELF_API void ELF_APIENTRY elfSetTextListSize(elf_handle text_list, int rows, int width);
 ELF_API void ELF_APIENTRY elfAddTextListItem(elf_handle text_list, const char* text);
+ELF_API void ELF_APIENTRY elfSetTextListItem(elf_handle text_list, int idx, const char* text);
 ELF_API bool ELF_APIENTRY elfRemoveTextListItem(elf_handle text_list, int idx);
 ELF_API void ELF_APIENTRY elfRemoveTextListItems(elf_handle text_list);
 ELF_API void ELF_APIENTRY elfSetTextListOffset(elf_handle text_list, int offset);

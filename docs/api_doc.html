@@ -769,6 +769,8 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc"><span class="apikeytype">elf_color</span> elf.GetSceneAmbientColor( <span class="apiobjtype">object</span> scene )</div>
 <div class="apifunc">elf.SetSceneGravity( <span class="apiobjtype">object</span> scene, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
 <div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetSceneGravity( <span class="apiobjtype">object</span> scene )</div>
+<div class="apifunc">elf.SetScenePhysics( <span class="apiobjtype">object</span> scene, <span class="apikeytype">bool</span> physics )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.GetScenePhysics( <span class="apiobjtype">object</span> scene )</div>
 <div class="apifunc"><span class="apikeytype">string</span> elf.GetSceneName( <span class="apiobjtype">object</span> scene )</div>
 <div class="apifunc"><span class="apikeytype">string</span> elf.GetSceneFilePath( <span class="apiobjtype">object</span> scene )</div>
 <div class="apifunc"><span class="apikeytype">int</span> elf.GetSceneCameraCount( <span class="apiobjtype">object</span> scene )</div>
@@ -938,6 +940,7 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc">elf.SetTextListSelectionColor( <span class="apiobjtype">object</span> text_list, <span class="apikeytype">float</span> r, <span class="apikeytype">float</span> g, <span class="apikeytype">float</span> b, <span class="apikeytype">float</span> a )</div>
 <div class="apifunc">elf.SetTextListSize( <span class="apiobjtype">object</span> text_list, <span class="apikeytype">int</span> rows, <span class="apikeytype">int</span> width )</div>
 <div class="apifunc">elf.AddTextListItem( <span class="apiobjtype">object</span> text_list, <span class="apikeytype">string</span> text )</div>
+<div class="apifunc">elf.SetTextListItem( <span class="apiobjtype">object</span> text_list, <span class="apikeytype">int</span> idx, <span class="apikeytype">string</span> text )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveTextListItem( <span class="apiobjtype">object</span> text_list, <span class="apikeytype">int</span> idx )</div>
 <div class="apifunc">elf.RemoveTextListItems( <span class="apiobjtype">object</span> text_list )</div>
 <div class="apifunc">elf.SetTextListOffset( <span class="apiobjtype">object</span> text_list, <span class="apikeytype">int</span> offset )</div>

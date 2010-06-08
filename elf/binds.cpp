@@ -9301,6 +9301,24 @@ ELF_API void ELF_APIENTRY elfAddTextListItem(elf_handle text_list, const char* t
 	}
 	elf_add_text_list_item((elf_text_list*)text_list.get(), text);
 }
+ELF_API void ELF_APIENTRY elfSetTextListItem(elf_handle text_list, int idx, const char* text)
+{
+	if(!text_list.get() || elf_get_object_type(text_list.get()) != ELF_TEXT_LIST)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetTextListItem() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetTextListItem() -> invalid handle\n");
+		}
+		return;
+	}
+	elf_set_text_list_item((elf_text_list*)text_list.get(), idx, text);
+}
 ELF_API bool ELF_APIENTRY elfRemoveTextListItem(elf_handle text_list, int idx)
 {
 	if(!text_list.get() || elf_get_object_type(text_list.get()) != ELF_TEXT_LIST)
