@@ -29,6 +29,8 @@ elf_entity* elf_create_entity(const char *name)
 
 	if(name) entity->name = elf_create_string(name);
 
+	entity->id = ++entity_id_counter;
+
 	global_obj_count++;
 
 	return entity;

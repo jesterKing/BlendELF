@@ -179,6 +179,8 @@ elf_armature* elf_create_armature(const char *name)
 
 	if(name) armature->name = elf_create_string(name);
 
+	armature->id = ++armature_id_counter;
+
 	global_obj_count++;
 
 	return armature;

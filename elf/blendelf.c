@@ -8,14 +8,29 @@
 elf_context *ctx = NULL;
 elf_engine *eng = NULL;
 elf_resources *res = NULL;
+
+int scene_id_counter = 0;
+int script_id_counter = 0;
+int texture_id_counter = 0;
+int material_id_counter = 0;
+int model_id_counter = 0;
+int camera_id_counter = 0;
+int entity_id_counter = 0;
+int light_id_counter = 0;
+int armature_id_counter = 0;
+int particles_id_counter = 0;
+int sprite_id_counter = 0;
+
 int global_ref_count;
 int global_ref_count_table[ELF_OBJECT_TYPE_COUNT];
 int global_obj_count;
+
 char* elf_err_str = NULL;
 char* elf_err_str_store = NULL;
 int elf_err_code = 0;
 
 #include "object.h"
+#include "resource.h"
 #include "str.h"
 #include "list.h"
 #include "context.h"

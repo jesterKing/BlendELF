@@ -35,6 +35,8 @@ elf_camera* elf_create_camera(const char *name)
 	camera->pbb_lengths.x = camera->pbb_lengths.y = camera->pbb_lengths.z = 0.7;
 
 	if(name) camera->name = elf_create_string(name);
+
+	camera->id = ++camera_id_counter;
 	
 	global_obj_count++;
 

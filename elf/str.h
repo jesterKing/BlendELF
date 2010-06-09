@@ -195,6 +195,21 @@ unsigned char elf_is_string_number(const char *str)
 	return ELF_TRUE;
 }
 
+unsigned char elf_is_string_positive_int(const char *str)
+{
+	char num_chars[11] = "0123456789";
+	int i;
+
+	num_chars[10] = '\0';
+
+	for(i = 0; i < (int)strlen(str); i++)
+	{
+		if(!strchr(num_chars, str[i])) return ELF_FALSE;
+	}
+
+	return ELF_TRUE;
+}
+
 int elf_rfind_char_from_string(const char *str, char chr)
 {
 	int result = -1;

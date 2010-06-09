@@ -6132,6 +6132,24 @@ ELF_API elf_handle ELF_APIENTRY elfCreateSceneFromFile(const char* file_path)
 	handle = (elf_object*)elf_create_scene_from_file(file_path);
 	return handle;
 }
+ELF_API bool ELF_APIENTRY elfSaveScene(elf_handle scene, const char* file_path)
+{
+	if(!scene.get() || elf_get_object_type(scene.get()) != ELF_SCENE)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SaveScene() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SaveScene() -> invalid handle\n");
+		}
+		return false;
+	}
+	return (bool)elf_save_scene((elf_scene*)scene.get(), file_path);
+}
 ELF_API void ELF_APIENTRY elfSetSceneAmbientColor(elf_handle scene, float r, float g, float b, float a)
 {
 	if(!scene.get() || elf_get_object_type(scene.get()) != ELF_SCENE)

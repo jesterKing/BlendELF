@@ -7,7 +7,25 @@ elf_script* elf_create_script()
 	memset(script, 0x0, sizeof(elf_script));
 	script->type = ELF_SCRIPT;
 
+	script->id = ++script_id_counter;
+
+	global_obj_count++;
+
 	return script;
+}
+
+int elf_get_script_size_bytes(elf_script *script)
+{
+	int size_bytes;
+
+	size_bytes = 0;
+
+	size_bytes += sizeof(int);	// magic
+	size_bytes += sizeof(char)*64;	// name
+	size_bytes += sizeof(int);	// length
+	if(script->text) size_bytes += sizeof(char)*strlen(script->text);	// text
+
+	return size_bytes;
 }
 
 elf_script* elf_create_script_from_pak(FILE *file, const char *name, elf_scene *scene)
@@ -88,6 +106,9 @@ void elf_destroy_script(elf_script *script)
 	if(script->name) elf_destroy_string(script->name);
 	if(script->file_path) elf_destroy_string(script->file_path);
 	if(script->text) elf_destroy_string(script->text);
+
+	global_obj_count--;
+
 	free(script);
 }
 

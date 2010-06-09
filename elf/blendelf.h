@@ -302,6 +302,7 @@ typedef struct elf_vec4f				elf_vec4f;
 typedef struct elf_color				elf_color;
 
 typedef struct elf_object				elf_object;
+typedef struct elf_resource				elf_resource;
 typedef struct elf_gui_object				elf_gui_object;
 typedef struct elf_list					elf_list;
 typedef struct elf_key_event				elf_key_event;
@@ -424,6 +425,7 @@ char* elf_merge_strings3(const char *str1, const char *str2, const char *str3);
 char* elf_sub_string(char *str, int start, int len);
 unsigned char elf_is_char_number(char c);
 unsigned char elf_is_string_number(const char *str);
+unsigned char elf_is_string_positive_int(const char *str);
 int elf_rfind_char_from_string(const char *str, char chr);
 int elf_rfind_chars_from_string(const char *str, char *chrs);
 // !!>
@@ -1185,6 +1187,7 @@ void elf_draw_sprite_debug(elf_sprite *sprite, gfx_shader_params *shader_params)
 
 // <!!
 elf_scene* elf_create_scene();
+int elf_get_scene_size_bytes(elf_scene *scene);
 elf_scene *elf_create_scene_from_pak(elf_pak *pak);
 void elf_update_scene(elf_scene *scene, float sync);
 void elf_scene_pre_draw(elf_scene *scene);
@@ -1193,6 +1196,7 @@ void elf_destroy_scene(elf_scene *scene);
 // !!>
 
 elf_scene* elf_create_scene_from_file(const char *file_path);	// <mdoc> SCENE FUNCTIONS
+unsigned char elf_save_scene(elf_scene *scene, const char *file_path);
 
 void elf_set_scene_ambient_color(elf_scene *scene, float r, float g, float b, float a);
 elf_color elf_get_scene_ambient_color(elf_scene *scene);
@@ -1346,6 +1350,7 @@ unsigned char elf_is_post_process_light_shafts(elf_post_process *post_process);
 //////////////////////////////// SCRIPT ////////////////////////////////
 
 // <!!
+int elf_get_script_size_bytes(elf_script *script);
 elf_script* elf_create_script_from_pak(FILE *file, const char *file_path, elf_scene *scene);
 void elf_destroy_script(elf_script *script);
 // !!>

@@ -27,6 +27,8 @@ elf_sprite* elf_create_sprite(const char *name)
 
 	if(name) sprite->name = elf_create_string(name);
 
+	sprite->id = sprite_id_counter++;
+
 	global_obj_count++;
 
 	return sprite;

@@ -26,6 +26,8 @@ elf_material* elf_create_material(const char *name)
 
 	global_obj_count++;
 
+	material->id = ++material_id_counter;
+
 	return material;
 }
 

@@ -119,6 +119,10 @@ elf_particles* elf_create_particles(const char *name, int max_count)
 		color_buffer[k+23] = 1.0;
 	}
 
+	if(name) particles->name = elf_create_string(name);
+
+	particles->id = ++particles_id_counter;
+
 	global_obj_count++;
 
 	return particles;

@@ -28,6 +28,8 @@ elf_model* elf_create_model_from_pak(FILE *file, const char *name, elf_scene *sc
 	memset(model, 0x0, sizeof(elf_model));
 	model->type = ELF_MODEL;
 
+	model->id = ++model_id_counter;
+
 	global_obj_count++;
 
 	// read name

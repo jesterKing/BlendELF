@@ -717,6 +717,7 @@ ELF_API elf_handle ELF_APIENTRY elfGetSpriteMaterial(elf_handle sprite);
 ELF_API elf_vec2f ELF_APIENTRY elfGetSpriteScale(elf_handle sprite);
 ELF_API bool ELF_APIENTRY elfGetSpriteFaceCamera(elf_handle sprite);
 ELF_API elf_handle ELF_APIENTRY elfCreateSceneFromFile(const char* file_path);
+ELF_API bool ELF_APIENTRY elfSaveScene(elf_handle scene, const char* file_path);
 ELF_API void ELF_APIENTRY elfSetSceneAmbientColor(elf_handle scene, float r, float g, float b, float a);
 ELF_API elf_color ELF_APIENTRY elfGetSceneAmbientColor(elf_handle scene);
 ELF_API void ELF_APIENTRY elfSetSceneGravity(elf_handle scene, float x, float y, float z);

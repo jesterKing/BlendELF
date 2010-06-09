@@ -3,9 +3,13 @@
 	int type; \
 	int ref_count
 
-#define ELF_ACTOR_HEADER \
+#define ELF_RESOURCE_HEADER \
 	ELF_OBJECT_HEADER; \
-	char *name; \
+	int id; \
+	char *name
+
+#define ELF_ACTOR_HEADER \
+	ELF_RESOURCE_HEADER; \
 	char *file_path; \
 	elf_scene *scene; \
 	gfx_transform *transform; \
@@ -39,6 +43,10 @@
 
 struct elf_object {
 	ELF_OBJECT_HEADER;
+};
+
+struct elf_resource {
+	ELF_RESOURCE_HEADER;
 };
 
 struct elf_string {
@@ -192,15 +200,13 @@ struct elf_image {
 };
 
 struct elf_texture {
-	ELF_OBJECT_HEADER;
-	char *name;
+	ELF_RESOURCE_HEADER;
 	char *file_path;
 	gfx_texture *texture;
 };
 
 struct elf_material {
-	ELF_OBJECT_HEADER;
-	char *name;
+	ELF_RESOURCE_HEADER;
 	char *file_path;
 	elf_color diffuse_color;
 	elf_color ambient_color;
@@ -276,8 +282,7 @@ typedef struct elf_model_area {
 } elf_model_area;
 
 struct elf_model {
-	ELF_OBJECT_HEADER;
-	char *name;
+	ELF_RESOURCE_HEADER;
 	char *file_path;
 	int vertice_count;
 	int frame_count;
@@ -358,8 +363,8 @@ typedef struct elf_bone_frame {
 struct elf_bone {
 	ELF_OBJECT_HEADER;
 	char *name;
-	elf_bone *parent;
 	int id;
+	elf_bone *parent;
 	elf_vec3f pos;
 	elf_vec4f qua;
 	elf_vec3f cur_pos;
@@ -372,8 +377,7 @@ struct elf_bone {
 };
 
 struct elf_armature {
-	ELF_OBJECT_HEADER;
-	char *name;
+	ELF_RESOURCE_HEADER;
 	char *file_path;
 	int frame_count;
 	int bone_count;
@@ -456,16 +460,15 @@ struct elf_sprite {
 };
 
 struct elf_scene {
-	ELF_OBJECT_HEADER;
-	char *name;
+	ELF_RESOURCE_HEADER;
 	char *file_path;
 	elf_color ambient_color;
 	unsigned char physics;
 
-	elf_list *models;
 	elf_list *scripts;
-	elf_list *materials;
 	elf_list *textures;
+	elf_list *materials;
+	elf_list *models;
 	elf_list *cameras;
 	elf_list *entities;
 	elf_list *lights;
@@ -569,8 +572,7 @@ struct elf_post_process {
 };
 
 struct elf_script {
-	ELF_OBJECT_HEADER;
-	char *name;
+	ELF_RESOURCE_HEADER;
 	char *file_path;
 	char *text;
 	unsigned char error;
