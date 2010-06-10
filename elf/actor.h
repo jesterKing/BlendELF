@@ -59,65 +59,6 @@ void elf_init_actor(elf_actor *actor, unsigned char camera)
 	actor->moved = ELF_TRUE;
 }
 
-void elf_read_actor_header(elf_actor *actor, FILE *file, elf_scene *scene)
-{
-	char name[64];
-	char parent_name[64];
-	char script_name[64];
-	float position[3];
-	float rotation[3];
-	elf_script *script;
-	int i, j;
-	elf_bezier_point *point;
-	elf_bezier_curve *curve;
-	unsigned char curve_count;
-	int point_count;
-
-	fread(name, sizeof(char), 64, file);
-	fread(parent_name, sizeof(char), 64, file);
-	fread(script_name, sizeof(char), 64, file);
-
-	actor->name = elf_create_string(name);
-	if(scene) actor->file_path = elf_create_string(elf_get_scene_file_path(scene));
-
-	fread((char*)position, sizeof(float), 3, file);
-	fread((char*)rotation, sizeof(float), 3, file);
-
-	elf_set_actor_position(actor, position[0], position[1], position[2]);
-	elf_set_actor_rotation(actor, rotation[0], rotation[1], rotation[2]);
-
-	script = NULL;
-
-	if(scene && strlen(script_name) > 0)
-	{
-		script = elf_get_or_load_script_by_name(scene, script_name);
-		if(script) elf_set_actor_script(actor, script);
-	}
-
-	curve_count = 0;
-	fread((char*)&curve_count, sizeof(unsigned char), 1, file);
-	for(i = 0; i < curve_count; i++)
-	{
-		curve = elf_create_bezier_curve();
-		fread((char*)&curve->curve_type, sizeof(unsigned char), 1, file);
-		fread((char*)&curve->interpolation, sizeof(unsigned char), 1, file);
-
-		point_count = 0;
-		fread((char*)&point_count, sizeof(int), 1, file);
-		for(j = 0; j < point_count; j++)
-		{
-			point = elf_create_bezier_point();
-			fread((char*)&point->c1.x, sizeof(float), 2, file);
-			fread((char*)&point->p.x, sizeof(float), 2, file);
-			fread((char*)&point->c2.x, sizeof(float), 2, file);
-
-			elf_add_point_to_bezier_curve(curve, point);
-		}
-
-		elf_add_curve_to_ipo(actor->ipo, curve);
-	}
-}
-
 void elf_update_actor(elf_actor *actor)
 {
 	static float oposition[3];

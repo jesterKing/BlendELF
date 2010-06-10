@@ -1,10 +1,23 @@
 
-elf_resource* elf_get_resource_by_name(elf_list *named_objects, const char *name)
+elf_resource* elf_get_resource_by_id(elf_list *resources, int id)
 {
 	elf_resource *obj;
 
-	for(obj = (elf_resource*)elf_begin_list(named_objects); obj;
-		obj = (elf_resource*)elf_next_in_list(named_objects))
+	for(obj = (elf_resource*)elf_begin_list(resources); obj;
+		obj = (elf_resource*)elf_next_in_list(resources))
+	{
+		if(obj->id == id) return obj;
+	}
+
+	return NULL;
+}
+
+elf_resource* elf_get_resource_by_name(elf_list *resources, const char *name)
+{
+	elf_resource *obj;
+
+	for(obj = (elf_resource*)elf_begin_list(resources); obj;
+		obj = (elf_resource*)elf_next_in_list(resources))
 	{
 		if(!strcmp(obj->name, name)) return obj;
 	}
@@ -23,7 +36,6 @@ void elf_set_unique_name_for_resource(elf_list *named_objects, elf_resource *obj
 	{
 		if(!elf_get_resource_by_name(named_objects, object->name))
 		{
-			printf("-: %s :: %d\n", object->name, object->type);
 			return;
 		}
 
@@ -71,8 +83,6 @@ void elf_set_unique_name_for_resource(elf_list *named_objects, elf_resource *obj
 
 	if(object->name) elf_destroy_string(object->name);
 	object->name = elf_create_string(nname);
-
-	printf("+: %s :: %d\n", object->name, object->type);
 
 	free(nname);
 	free(tname);

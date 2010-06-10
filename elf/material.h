@@ -31,67 +31,6 @@ elf_material* elf_create_material(const char *name)
 	return material;
 }
 
-elf_material* elf_create_material_from_pak(FILE *file, const char *name, elf_scene *scene)
-{
-	elf_material *material;
-	elf_texture *rtexture;
-	int magic;
-	char rname[64];
-	unsigned char texture_count = 0;
-	char texture[64];
-	unsigned char texture_type;
-	float parallax_scale;
-	int i;
-
-	fread((char*)&magic, sizeof(int), 1, file);
-
-	if(magic != 179532109)
-	{
-		elf_set_error(ELF_INVALID_FILE, "error: invalid material \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
-		return NULL;
-	}
-
-	memset(rname, 0x0, sizeof(char)*64);
-	fread(rname, sizeof(char), 64, file);
-
-	material = elf_create_material(NULL);
-
-	material->name = elf_create_string(rname);
-	material->file_path = elf_create_string(elf_get_scene_file_path(scene));
-
-	fread((char*)&material->diffuse_color.r, sizeof(float), 4, file);
-	fread((char*)&material->ambient_color.r, sizeof(float), 4, file);
-	fread((char*)&material->specular_color.r, sizeof(float), 4, file);
-	fread((char*)&material->spec_power, sizeof(float), 1, file);
-
-	elf_set_material_diffuse_color(material, material->diffuse_color.r, material->diffuse_color.g, material->diffuse_color.b, material->diffuse_color.a);
-	elf_set_material_specular_color(material, material->specular_color.r, material->specular_color.g, material->specular_color.b, material->specular_color.a);
-	elf_set_material_ambient_color(material, material->ambient_color.r, material->ambient_color.g, material->ambient_color.b, material->ambient_color.a);
-	elf_set_material_specular_power(material, material->spec_power);
-
-	fread((char*)&texture_count, sizeof(unsigned char), 1, file);
-
-	for(i = 0; i < texture_count; i++)
-	{
-		if(i > GFX_MAX_TEXTURES-1) break;
-
-		memset(texture, 0x0, sizeof(char)*64);
-		fread(texture, sizeof(char), 64, file);
-		fread((char*)&texture_type, sizeof(unsigned char), 1, file);
-		fread((char*)&parallax_scale, sizeof(float), 1, file);
-
-		rtexture = elf_get_or_load_texture_by_name(scene, texture);
-		if(rtexture)
-		{
-			elf_set_material_texture(material, i, rtexture);
-			elf_set_material_texture_type(material, i, texture_type);
-			elf_set_material_texture_parallax_scale(material, i, parallax_scale);
-		}
-	}
-
-	return material;
-}
-
 void elf_destroy_material(elf_material *material)
 {
 	int i;

@@ -410,6 +410,14 @@ int elf_get_global_obj_count();
 unsigned char elf_is_actor(elf_object *obj);
 unsigned char elf_is_gui_object(elf_object *obj);
 
+//////////////////////////////// RESOURCE ////////////////////////////////
+
+// <!!
+elf_resource* elf_get_resource_by_id(elf_list *resources, int id);
+elf_resource* elf_get_resource_by_name(elf_list *resources, const char *name);
+void elf_set_unique_name_for_resource(elf_list *named_objects, elf_resource *object);
+// !!>
+
 //////////////////////////////// STRING ////////////////////////////////
 
 // <!!
@@ -695,7 +703,6 @@ unsigned char elf_save_image_data(const char *file_path, int width, int height, 
 
 // <!!
 elf_texture *elf_create_texture();
-elf_texture *elf_create_texture_from_pak(FILE *file, const char *name, elf_scene *scene);
 void elf_destroy_texture(elf_texture *texture);
 // !!>
 
@@ -715,7 +722,6 @@ void elf_set_texture(int slot, elf_texture *texture, gfx_shader_params *shader_p
 //////////////////////////////// MATERIAL ////////////////////////////////
 
 // <!!
-elf_material* elf_create_material_from_pak(FILE *file, const char *name, elf_scene *scene);
 void elf_destroy_material(elf_material *material);
 // !!>
 
@@ -789,7 +795,6 @@ void elf_set_property_bool(elf_property *property, unsigned char bval);
 
 // <!!
 void elf_init_actor(elf_actor *actor, unsigned char camera);
-void elf_read_actor_header(elf_actor *actor, FILE *file, elf_scene *scene);
 void elf_update_actor(elf_actor *actor);
 void elf_actor_pre_draw(elf_actor *actor);
 void elf_actor_post_draw(elf_actor *actor);
@@ -893,7 +898,6 @@ unsigned char elf_get_actor_selected(elf_actor *actor);
 //////////////////////////////// CAMERA ////////////////////////////////
 
 // <!!
-elf_camera* elf_create_camera_from_pak(FILE *file, const char *name, elf_scene *scene);
 void elf_update_camera(elf_camera *camera);
 void elf_camera_pre_draw(elf_camera *camera);
 void elf_camear_post_draw(elf_camera *camera);
@@ -929,8 +933,6 @@ elf_vec3f elf_un_project_camera_point(elf_camera *camera, float x, float y, floa
 //////////////////////////////// MODEL ////////////////////////////////
 
 // <!!
-elf_model* elf_create_model_from_file(const char *file_path);
-elf_model* elf_create_model_from_pak(FILE *file, const char *name, elf_scene *scene);
 void elf_destroy_model(elf_model *model);
 void elf_generate_model_tangent_vectors(elf_model *model);
 // !!>
@@ -958,7 +960,6 @@ void elf_draw_model_bouding_box(elf_model *model, gfx_shader_params *shader_para
 //////////////////////////////// ENTITY ////////////////////////////////
 
 // <!!
-elf_entity* elf_create_entity_from_pak(FILE *file, const char *name, elf_scene *scene);
 void elf_update_entity(elf_entity *entity);
 void elf_entity_pre_draw(elf_entity *entity);
 void elf_entity_post_draw(elf_entity *entity);
@@ -1016,7 +1017,6 @@ unsigned char elf_get_entity_changed(elf_entity *entity);
 //////////////////////////////// LIGHT ////////////////////////////////
 
 // <!!
-elf_light* elf_create_light_from_pak(FILE *file, const char *name, elf_scene *scene);
 void elf_update_light(elf_light *light);
 void elf_light_pre_draw(elf_light *light);
 void elf_light_post_draw(elf_light *light);
@@ -1070,7 +1070,6 @@ elf_vec3f elf_get_bone_rotation(elf_bone *bone);
 elf_vec4f elf_get_bone_orientation(elf_bone *bone);
 
 // <!!
-elf_armature* elf_create_armature_from_pak(FILE *file, const char *name, elf_scene *scene);
 void elf_update_armature(elf_armature *armature);
 void elf_destroy_armature(elf_armature *armature);
 // !!>
@@ -1187,8 +1186,6 @@ void elf_draw_sprite_debug(elf_sprite *sprite, gfx_shader_params *shader_params)
 
 // <!!
 elf_scene* elf_create_scene();
-int elf_get_scene_size_bytes(elf_scene *scene);
-elf_scene *elf_create_scene_from_pak(elf_pak *pak);
 void elf_update_scene(elf_scene *scene, float sync);
 void elf_scene_pre_draw(elf_scene *scene);
 void elf_scene_post_draw(elf_scene *scene);
@@ -1311,6 +1308,23 @@ elf_light* elf_get_light_from_pak(const char *name, elf_pak *pak);
 elf_armature* elf_get_armature_from_pak(const char *name, elf_pak *pak);
 elf_scene* elf_get_scene_from_pak(const char *name, elf_pak *pak);
 elf_script* elf_get_script_from_pak(const char *name, elf_pak *pak);
+
+void elf_get_actor_header_size_bytes(elf_actor *actor);
+int elf_get_scene_size_bytes(elf_scene *scene);
+int elf_get_script_size_bytes(elf_script *script);
+
+void elf_read_actor_header(elf_actor *actor, FILE *file, elf_scene *scene);
+elf_armature* elf_create_armature_from_pak(FILE *file, const char *name, elf_scene *scene);
+elf_camera* elf_create_camera_from_pak(FILE *file, const char *name, elf_scene *scene);
+elf_entity* elf_create_entity_from_pak(FILE *file, const char *name, elf_scene *scene);
+elf_light* elf_create_light_from_pak(FILE *file, const char *name, elf_scene *scene);
+elf_material* elf_create_material_from_pak(FILE *file, const char *name, elf_scene *scene);
+elf_model* elf_create_model_from_pak(FILE *file, const char *name, elf_scene *scene);
+elf_scene *elf_create_scene_from_pak(elf_pak *pak);
+elf_script* elf_create_script_from_pak(FILE *file, const char *name, elf_scene *scene);
+elf_texture *elf_create_texture_from_pak(FILE *file, const char *name, elf_scene *scene);
+
+unsigned char elf_save_scene_to_pak(elf_scene *scene, const char *file_path);
 // !!>
 
 //////////////////////////////// POST PROCESS ////////////////////////////////
@@ -1350,8 +1364,6 @@ unsigned char elf_is_post_process_light_shafts(elf_post_process *post_process);
 //////////////////////////////// SCRIPT ////////////////////////////////
 
 // <!!
-int elf_get_script_size_bytes(elf_script *script);
-elf_script* elf_create_script_from_pak(FILE *file, const char *file_path, elf_scene *scene);
 void elf_destroy_script(elf_script *script);
 // !!>
 

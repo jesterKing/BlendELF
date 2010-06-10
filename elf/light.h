@@ -41,43 +41,6 @@ elf_light* elf_create_light(const char *name)
 	return light;
 }
 
-elf_light* elf_create_light_from_pak(FILE *file, const char *name, elf_scene *scene)
-{
-	elf_light *light;
-	int magic = 0;
-	unsigned int junk;
-
-	fread((char*)&magic, sizeof(int), 1, file);
-
-	if(magic != 179532113)
-	{
-		elf_set_error(ELF_INVALID_FILE, "error: invalid light \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
-		return NULL;
-	}
-
-	light = elf_create_light(NULL);
-	elf_read_actor_header((elf_actor*)light, file, scene);
-
-	fread((char*)&light->light_type, sizeof(unsigned char), 1, file);
-	if(light->light_type == ELF_SPOT_LIGHT) elf_set_light_shadow_caster(light, ELF_TRUE);
-	fread((char*)&light->color.r, sizeof(float), 4, file);
-	fread((char*)&light->distance, sizeof(float), 1, file);
-	fread((char*)&light->fade_speed, sizeof(float), 1, file);
-	fread((char*)&light->inner_cone, sizeof(float), 1, file);
-	fread((char*)&light->outer_cone, sizeof(float), 1, file);
-	fread((char*)&junk, sizeof(unsigned int), 1, file);
-	fread((char*)&light->shadow_caster, sizeof(unsigned char), 1, file);
-
-	elf_set_light_type(light, light->light_type);
-	elf_set_light_color(light, light->color.r, light->color.g, light->color.b, light->color.a);
-	elf_set_light_distance(light, light->distance);
-	elf_set_light_fade_speed(light, light->fade_speed);
-	elf_set_light_shadow_caster(light, light->shadow_caster);
-	elf_set_light_cone(light, light->inner_cone, light->outer_cone);
-
-	return light;
-}
-
 void elf_update_light(elf_light *light)
 {
 	elf_update_actor((elf_actor*)light);

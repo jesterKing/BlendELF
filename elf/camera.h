@@ -43,34 +43,6 @@ elf_camera* elf_create_camera(const char *name)
 	return camera;
 }
 
-elf_camera* elf_create_camera_from_pak(FILE *file, const char *name, elf_scene *scene)
-{
-	elf_camera *camera;
-	int magic;
-	float fov = 0.0;
-	float clip_near = 0.0;
-	float clip_far = 0.0;
-
-	fread((char*)&magic, sizeof(int), 1, file);
-
-	if(magic != 179532111)
-	{
-		elf_set_error(ELF_INVALID_FILE, "error: invalid camera \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
-		return NULL;
-	}
-
-	camera = elf_create_camera(NULL);
-	elf_read_actor_header((elf_actor*)camera, file, scene);
-
-	fread((char*)&fov, sizeof(float), 1, file);
-	fread((char*)&clip_near, sizeof(float), 1, file);
-	fread((char*)&clip_far, sizeof(float), 1, file);
-
-	elf_set_camera_perspective(camera, fov, -1.0, clip_near, clip_far);
-
-	return camera;
-}
-
 void elf_update_camera(elf_camera *camera)
 {
 	elf_update_actor((elf_actor*)camera);

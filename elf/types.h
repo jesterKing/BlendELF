@@ -361,9 +361,7 @@ typedef struct elf_bone_frame {
 } elf_bone_frame;
 
 struct elf_bone {
-	ELF_OBJECT_HEADER;
-	char *name;
-	int id;
+	ELF_RESOURCE_HEADER;
 	elf_bone *parent;
 	elf_vec3f pos;
 	elf_vec4f qua;

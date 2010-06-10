@@ -14,58 +14,6 @@ elf_script* elf_create_script()
 	return script;
 }
 
-int elf_get_script_size_bytes(elf_script *script)
-{
-	int size_bytes;
-
-	size_bytes = 0;
-
-	size_bytes += sizeof(int);	// magic
-	size_bytes += sizeof(char)*64;	// name
-	size_bytes += sizeof(int);	// length
-	if(script->text) size_bytes += sizeof(char)*strlen(script->text);	// text
-
-	return size_bytes;
-}
-
-elf_script* elf_create_script_from_pak(FILE *file, const char *name, elf_scene *scene)
-{
-	elf_script *script;
-	int magic = 0;
-	char rname[64];
-	unsigned int length;
-	char *text;
-
-	fread((char*)&magic, sizeof(int), 1, file);
-
-	if(magic != 179532121)
-	{
-		elf_set_error(ELF_INVALID_FILE, "error: invalid script \"%s\", wrong magic number\n", name);
-		return NULL;
-	}
-
-	memset(rname, 0x0, sizeof(char)*64);
-	fread(rname, sizeof(char), 64, file);
-
-	script = elf_create_script();
-
-	script->name = elf_create_string(name);
-	script->file_path = elf_create_string(elf_get_scene_file_path(scene));
-
-	fread((char*)&length, sizeof(unsigned int), 1, file);
-	if(length > 0)
-	{
-		text = (char*)malloc(sizeof(char)*length+1);
-		memset(text, 0x0, sizeof(char)*length+1);
-		fread(text, sizeof(char), length, file);
-		text[length] = '\0';
-		elf_set_script_text(script, text);
-		free(text);
-	}
-
-	return script;
-}
-
 elf_script* elf_create_script_from_file(const char *file_path)
 {
 	elf_script *script = NULL;
