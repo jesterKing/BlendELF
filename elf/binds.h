@@ -485,6 +485,7 @@ ELF_API const char* ELF_APIENTRY elfGetMaterialName(elf_handle material);
 ELF_API const char* ELF_APIENTRY elfGetMaterialFilePath(elf_handle material);
 ELF_API elf_handle ELF_APIENTRY elfGetMaterialTexture(elf_handle material, int slot);
 ELF_API int ELF_APIENTRY elfGetMaterialTextureType(elf_handle material, int slot);
+ELF_API int ELF_APIENTRY elfGetMaterialTextureCount(elf_handle material);
 ELF_API float ELF_APIENTRY elfGetMaterialTextureParallaxScale(elf_handle material, int slot);
 ELF_API float ELF_APIENTRY elfGetMaterialTextureAlphaTexture(elf_handle material, int slot);
 ELF_API elf_color ELF_APIENTRY elfGetMaterialDiffuseColor(elf_handle material);

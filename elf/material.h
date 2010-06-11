@@ -162,6 +162,21 @@ float elf_get_material_texture_alpha_texture(elf_material *material, int slot)
 	return material->texture_alpha_tests[slot];
 }
 
+int elf_get_material_texture_count(elf_material *material)
+{
+	int i;
+	int count;
+
+	count = 0;
+
+	for(i = 0; i < GFX_MAX_TEXTURES; i++)
+	{
+		if(material->textures[i]) count++;
+	}
+
+	return count;
+}
+
 elf_color elf_get_material_diffuse_color(elf_material *material)
 {
 	return material->diffuse_color;

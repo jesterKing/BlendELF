@@ -741,6 +741,7 @@ const char* elf_get_material_name(elf_material *material);
 const char* elf_get_material_file_path(elf_material *material);
 elf_texture* elf_get_material_texture(elf_material *material, int slot);
 int elf_get_material_texture_type(elf_material *material, int slot);
+int elf_get_material_texture_count(elf_material *material);
 float elf_get_material_texture_parallax_scale(elf_material *material, int slot);
 float elf_get_material_texture_alpha_texture(elf_material *material, int slot);
 elf_color elf_get_material_diffuse_color(elf_material *material);
@@ -1298,20 +1299,27 @@ unsigned char elf_get_pak_index_type(elf_pak_index *index);
 const char* elf_get_pak_index_name(elf_pak_index *index);
 int elf_get_pak_index_offset(elf_pak_index *index);
 
-elf_texture* elf_get_texture_from_pak(const char *name, elf_pak *pak);
-elf_material* elf_get_material_from_pak(const char *name, elf_pak *pak);
-elf_model* elf_get_model_from_pak(const char *name, elf_pak *pak);
 elf_actor* elf_get_actor_from_pak(const char *name, elf_pak *pak);
+elf_armature* elf_get_armature_from_pak(const char *name, elf_pak *pak);
 elf_camera* elf_get_camera_from_pak(const char *name, elf_pak *pak);
 elf_entity* elf_get_entity_from_pak(const char *name, elf_pak *pak);
 elf_light* elf_get_light_from_pak(const char *name, elf_pak *pak);
-elf_armature* elf_get_armature_from_pak(const char *name, elf_pak *pak);
+elf_material* elf_get_material_from_pak(const char *name, elf_pak *pak);
+elf_model* elf_get_model_from_pak(const char *name, elf_pak *pak);
 elf_scene* elf_get_scene_from_pak(const char *name, elf_pak *pak);
 elf_script* elf_get_script_from_pak(const char *name, elf_pak *pak);
+elf_texture* elf_get_texture_from_pak(const char *name, elf_pak *pak);
 
-void elf_get_actor_header_size_bytes(elf_actor *actor);
+int elf_get_actor_header_size_bytes(elf_actor *actor);
+int elf_get_armature_size_bytes(elf_armature *armature);
+int elf_get_camera_size_bytes(elf_camera *camera);
+int elf_get_entity_size_bytes(elf_entity *entity);
+int elf_get_light_size_bytes(elf_light *light);
+int elf_get_material_size_bytes(elf_material *material);
+int elf_get_model_size_bytes(elf_model *model);
 int elf_get_scene_size_bytes(elf_scene *scene);
 int elf_get_script_size_bytes(elf_script *script);
+int elf_get_texture_size_bytes(elf_texture *texture);
 
 void elf_read_actor_header(elf_actor *actor, FILE *file, elf_scene *scene);
 elf_armature* elf_create_armature_from_pak(FILE *file, const char *name, elf_scene *scene);
@@ -1323,6 +1331,7 @@ elf_model* elf_create_model_from_pak(FILE *file, const char *name, elf_scene *sc
 elf_scene *elf_create_scene_from_pak(elf_pak *pak);
 elf_script* elf_create_script_from_pak(FILE *file, const char *name, elf_scene *scene);
 elf_texture *elf_create_texture_from_pak(FILE *file, const char *name, elf_scene *scene);
+unsigned char elf_load_texture_data_from_pak(elf_texture *texture);
 
 unsigned char elf_save_scene_to_pak(elf_scene *scene, const char *file_path);
 // !!>
@@ -1456,12 +1465,9 @@ elf_vec3f elf_get_physics_world_gravity(elf_physics_world *world);
 
 elf_collision* elf_get_ray_cast_result(elf_physics_world *world, float x, float y, float z, float dx, float dy, float dz);
 elf_list* elf_get_ray_cast_results(elf_physics_world *world, float x, float y, float z, float dx, float dy, float dz);
-
-elf_collision* elf_create_collision();
-void elf_destroy_collision(elf_collision *collision);
 // !!>
 
-elf_actor* elf_get_collision_actor(elf_collision *collision);	// <mdoc> COLLIISION FUNCTIONS
+elf_actor* elf_get_collision_actor(elf_collision *collision);	// <mdoc> COLLISION FUNCTIONS
 elf_vec3f elf_get_collision_position(elf_collision *collision);
 elf_vec3f elf_get_collision_normal(elf_collision *collision);
 float elf_get_collision_depth(elf_collision *collision);

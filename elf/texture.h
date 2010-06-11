@@ -7,6 +7,10 @@ elf_texture *elf_create_texture()
 	memset(texture, 0x0, sizeof(elf_texture));
 	texture->type = ELF_TEXTURE;
 
+	texture->id = ++texture_id_counter;
+
+	global_obj_count++;
+
 	return texture;
 }
 
@@ -54,6 +58,7 @@ elf_texture* elf_create_texture_from_file(const char *file_path)
 	{
 		elf_set_error(ELF_CANT_CREATE, "error: failed to create texture \"%s\"\n", file_path);
 		elf_destroy_texture(texture);
+		elf_destroy_image(image);
 		return NULL;
 	}
 
@@ -68,6 +73,9 @@ void elf_destroy_texture(elf_texture *texture)
 	if(texture->file_path) elf_destroy_string(texture->file_path);
 
 	if(texture->texture) gfx_destroy_texture(texture->texture);
+	if(texture->data) free(texture->data);
+
+	global_obj_count--;
 
 	free(texture);
 }
@@ -112,5 +120,96 @@ void elf_set_texture(int slot, elf_texture *texture, gfx_shader_params *shader_p
 	if(!texture->texture || slot < 0 || slot > GFX_MAX_TEXTURES-1) return;
 
 	shader_params->texture_params[slot].texture = texture->texture;
+}
+
+unsigned char elf_load_texture_data(elf_texture *texture)
+{
+	const char *file_type;
+	FILE *file;
+	elf_pak *pak;
+	elf_pak_index *index;
+	int magic;
+	char name[64];
+	unsigned char type;
+
+	if(texture->data) return ELF_TRUE;
+
+	file_type = strrchr(texture->file_path, '.');
+
+	if(!strcmp(file_type, ".pak"))
+	{
+		pak = elf_create_pak_from_file(texture->file_path);
+		if(!pak) return ELF_FALSE;
+
+		index = elf_get_pak_index_by_name(pak, texture->name, ELF_TEXTURE);
+		if(!index)
+		{
+			elf_set_error(ELF_INVALID_FILE, "error: couldn't fine index for \"%s//%s\"\n", texture->file_path, texture->name);
+			elf_destroy_pak(pak);
+			return ELF_FALSE;
+		}
+
+		file = fopen(pak->file_path, "rb");
+		fseek(file, elf_get_pak_index_offset(index), SEEK_SET);
+		if(feof(file)) return ELF_FALSE;
+
+		fread((char*)&magic, sizeof(int), 1, file);
+
+		if(magic != 179532108)
+		{
+			elf_set_error(ELF_INVALID_FILE, "error: invalid texture \"%s//%s\", wrong magic number\n", texture->file_path, texture->name);
+			elf_destroy_pak(pak);
+			fclose(file);
+			return ELF_FALSE;
+		}
+
+		fread(name, sizeof(char), 64, file);
+		fread((char*)&type, sizeof(unsigned char), 1, file);
+
+		if(type == 1)
+		{
+			fread((char*)&texture->data_size, sizeof(unsigned int), 1, file);
+	 
+			texture->data = (char*)malloc(texture->data_size);
+			fread((char*)texture->data, 1, texture->data_size, file);
+		}
+		else
+		{
+			elf_set_error(ELF_UNKNOWN_FORMAT, "error: can't load texture \"%s//%s\", unknown format\n", texture->file_path, texture->name);
+			elf_destroy_pak(pak);
+			fclose(file);
+			return ELF_FALSE;
+		}
+
+		elf_destroy_pak(pak);
+		fclose(file);
+	}
+	else
+	{
+		file = fopen(texture->file_path, "rb");
+		if(!file)
+		{
+			elf_set_error(ELF_CANT_OPEN_FILE, "error: can't open file \"%s\"", texture->file_path);
+			return ELF_FALSE;
+		}
+
+		fseek(file, 0, SEEK_END);
+		texture->data_size = ftell(file);
+		fseek(file, 0, SEEK_SET);
+
+		texture->data = malloc(texture->data_size);
+		fread((char*)texture->data, 1, texture->data_size, file);
+
+		fclose(file);
+	}
+
+	return ELF_TRUE;
+}
+
+void elf_unload_texture_data(elf_texture *texture)
+{
+	if(texture->data) free(texture->data);
+	texture->data = NULL;
+	texture->data_size = 0;
 }
 

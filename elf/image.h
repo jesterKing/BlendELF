@@ -4,8 +4,9 @@ elf_image* elf_create_image_from_file(const char *file_path)
 	elf_image *image;
 	FIBITMAP *in;
 	int size_bytes;
+	const char *type;
 
-	const char *type = strrchr(file_path, '.');
+	type = strrchr(file_path, '.');
 
 	if(strcmp(type, ".jpg") == 0)
 		in = FreeImage_Load(FIF_JPEG, file_path, JPEG_ACCURATE);

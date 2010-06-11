@@ -1654,6 +1654,24 @@ ELF_API int ELF_APIENTRY elfGetMaterialTextureType(elf_handle material, int slot
 	}
 	return elf_get_material_texture_type((elf_material*)material.get(), slot);
 }
+ELF_API int ELF_APIENTRY elfGetMaterialTextureCount(elf_handle material)
+{
+	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetMaterialTextureCount() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetMaterialTextureCount() -> invalid handle\n");
+		}
+		return 0;
+	}
+	return elf_get_material_texture_count((elf_material*)material.get());
+}
 ELF_API float ELF_APIENTRY elfGetMaterialTextureParallaxScale(elf_handle material, int slot)
 {
 	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)

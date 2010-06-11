@@ -203,6 +203,9 @@ struct elf_texture {
 	ELF_RESOURCE_HEADER;
 	char *file_path;
 	gfx_texture *texture;
+
+	void *data;
+	int data_size;
 };
 
 struct elf_material {
@@ -275,7 +278,7 @@ struct elf_camera {
 };
 
 typedef struct elf_model_area {
-	unsigned int indice_count;
+	int indice_count;
 	gfx_vertex_data *index;
 	gfx_vertex_index *vertex_index;
 	unsigned int material_number;

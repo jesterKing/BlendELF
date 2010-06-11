@@ -6271,6 +6271,32 @@ fail:
 }
 
 
+static int _wrap_elfGetMaterialTextureCount(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  int result;
+  
+  SWIG_check_num_args("GetMaterialTextureCount",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetMaterialTextureCount",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetMaterialTextureCount",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = (int)elfGetMaterialTextureCount(arg1);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfGetMaterialTextureParallaxScale(lua_State* L) {
   int SWIG_arg = 0;
   elf_handle arg1 ;
@@ -18854,6 +18880,7 @@ static const struct luaL_reg swig_commands[] = {
     { "GetMaterialFilePath", _wrap_elfGetMaterialFilePath},
     { "GetMaterialTexture", _wrap_elfGetMaterialTexture},
     { "GetMaterialTextureType", _wrap_elfGetMaterialTextureType},
+    { "GetMaterialTextureCount", _wrap_elfGetMaterialTextureCount},
     { "GetMaterialTextureParallaxScale", _wrap_elfGetMaterialTextureParallaxScale},
     { "GetMaterialTextureAlphaTexture", _wrap_elfGetMaterialTextureAlphaTexture},
     { "GetMaterialDiffuseColor", _wrap_elfGetMaterialDiffuseColor},
