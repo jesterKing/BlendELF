@@ -1143,7 +1143,7 @@ void elf_write_actor_header(elf_actor *actor, FILE *file)
 	else elf_write_name_to_file("", file);
 
 	elf_get_actor_position_(actor, position);
-	elf_get_actor_rotation_(actor, position);
+	elf_get_actor_rotation_(actor, rotation);
 
 	fwrite((char*)position, sizeof(float), 3, file);
 	fwrite((char*)rotation, sizeof(float), 3, file);
@@ -1418,7 +1418,7 @@ void elf_write_texture_to_file(elf_texture *texture, FILE *file)
 	fwrite((char*)&type, sizeof(unsigned char), 1, file);
 
 	fwrite((char*)&texture->data_size, sizeof(int), 1, file);
-	fwrite((char*)&texture->data, 1, texture->data_size, file);
+	fwrite((char*)texture->data, 1, texture->data_size, file);
 }
 
 void elf_write_resource_index_to_file(elf_resource *resource, unsigned int *offset, FILE *file)
