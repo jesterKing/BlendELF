@@ -151,8 +151,8 @@ void elf_set_sprite_material(elf_sprite *sprite, elf_material *material)
 
 	if(sprite->object)
 	{
-		elf_set_actor_physics((elf_actor*)sprite, elf_get_actor_physics_shape((elf_actor*)sprite),
-			elf_get_actor_physics_mass((elf_actor*)sprite));
+		elf_set_actor_physics((elf_actor*)sprite, elf_get_actor_shape((elf_actor*)sprite),
+			elf_get_actor_mass((elf_actor*)sprite));
 	}
 
 	elf_reset_sprite_debug_physics_object(sprite);

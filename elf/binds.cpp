@@ -2694,7 +2694,7 @@ ELF_API elf_vec3f ELF_APIENTRY elfGetActorBoundingOffset(elf_handle actor)
 	_e_type = elf_get_actor_bounding_offset((elf_actor*)actor.get());
 	return _e_type;
 }
-ELF_API int ELF_APIENTRY elfGetActorPhysicsShape(elf_handle actor)
+ELF_API int ELF_APIENTRY elfGetActorShape(elf_handle actor)
 {
 	if(!actor.get() || !elf_is_actor(actor.get()))
 	{
@@ -2702,17 +2702,17 @@ ELF_API int ELF_APIENTRY elfGetActorPhysicsShape(elf_handle actor)
 		if(script)
 		{
 			int line = elf_get_current_script_line();
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetActorPhysicsShape() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetActorShape() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
 		}
 		else
 		{
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetActorPhysicsShape() -> invalid handle\n");
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetActorShape() -> invalid handle\n");
 		}
 		return 0;
 	}
-	return elf_get_actor_physics_shape((elf_actor*)actor.get());
+	return elf_get_actor_shape((elf_actor*)actor.get());
 }
-ELF_API float ELF_APIENTRY elfGetActorPhysicsMass(elf_handle actor)
+ELF_API float ELF_APIENTRY elfGetActorMass(elf_handle actor)
 {
 	if(!actor.get() || !elf_is_actor(actor.get()))
 	{
@@ -2720,15 +2720,15 @@ ELF_API float ELF_APIENTRY elfGetActorPhysicsMass(elf_handle actor)
 		if(script)
 		{
 			int line = elf_get_current_script_line();
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetActorPhysicsMass() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetActorMass() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
 		}
 		else
 		{
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetActorPhysicsMass() -> invalid handle\n");
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetActorMass() -> invalid handle\n");
 		}
 		return 0;
 	}
-	return elf_get_actor_physics_mass((elf_actor*)actor.get());
+	return elf_get_actor_mass((elf_actor*)actor.get());
 }
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorLinearVelocity(elf_handle actor)
 {

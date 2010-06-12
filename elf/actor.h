@@ -336,8 +336,8 @@ void elf_set_actor_bounding_lengths(elf_actor *actor, float x, float y, float z)
 	actor->pbb_lengths.z = z;
 	if(actor->object)
 	{
-		elf_set_actor_physics(actor, elf_get_actor_physics_shape(actor),
-			elf_get_actor_physics_mass(actor));
+		elf_set_actor_physics(actor, elf_get_actor_shape(actor),
+			elf_get_actor_mass(actor));
 	}
 }
 
@@ -348,8 +348,8 @@ void elf_set_actor_bounding_offset(elf_actor *actor, float x, float y, float z)
 	actor->pbb_offset.z = z;
 	if(actor->object)
 	{
-		elf_set_actor_physics(actor, elf_get_actor_physics_shape(actor),
-			elf_get_actor_physics_mass(actor));
+		elf_set_actor_physics(actor, elf_get_actor_shape(actor),
+			elf_get_actor_mass(actor));
 	}
 }
 
@@ -507,13 +507,13 @@ elf_vec3f elf_get_actor_bounding_offset(elf_actor *actor)
 	return actor->pbb_offset;
 }
 
-int elf_get_actor_physics_shape(elf_actor *actor)
+int elf_get_actor_shape(elf_actor *actor)
 {
 	if(actor->object) elf_get_physics_object_shape(actor->object);
 	return 0;
 }
 
-float elf_get_actor_physics_mass(elf_actor *actor)
+float elf_get_actor_mass(elf_actor *actor)
 {
 	if(actor->object) elf_get_physics_object_mass(actor->object);
 	return 0.0;

@@ -168,7 +168,7 @@ unsigned char elf_load_texture_data(elf_texture *texture)
 
 		if(type == 1)
 		{
-			fread((char*)&texture->data_size, sizeof(unsigned int), 1, file);
+			fread((char*)&texture->data_size, sizeof(int), 1, file);
 	 
 			texture->data = (char*)malloc(texture->data_size);
 			fread((char*)texture->data, 1, texture->data_size, file);

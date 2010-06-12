@@ -843,8 +843,8 @@ void elf_set_actor_angular_factor(elf_actor *actor, float x, float y, float z);
 
 elf_vec3f elf_get_actor_bounding_lengths(elf_actor *actor);
 elf_vec3f elf_get_actor_bounding_offset(elf_actor *actor);
-int elf_get_actor_physics_shape(elf_actor *actor);
-float elf_get_actor_physics_mass(elf_actor *actor);
+int elf_get_actor_shape(elf_actor *actor);
+float elf_get_actor_mass(elf_actor *actor);
 
 elf_vec3f elf_get_actor_linear_velocity(elf_actor *actor);
 elf_vec3f elf_get_actor_angular_velocity(elf_actor *actor);
@@ -973,6 +973,7 @@ elf_entity* elf_create_entity(const char *name);	// <mdoc> ENTITY FUNCTIONS
 
 void elf_set_entity_scale(elf_entity *entity, float x, float y, float z);
 elf_vec3f elf_get_entity_scale(elf_entity *entity);
+/* <!> */ void elf_get_entity_scale_(elf_entity *entity, float *scale);
 
 void elf_set_entity_model(elf_entity *entity, elf_model *model);
 elf_model* elf_get_entity_model(elf_entity *entity);
@@ -1332,6 +1333,16 @@ elf_scene *elf_create_scene_from_pak(elf_pak *pak);
 elf_script* elf_create_script_from_pak(FILE *file, const char *name, elf_scene *scene);
 elf_texture *elf_create_texture_from_pak(FILE *file, const char *name, elf_scene *scene);
 unsigned char elf_load_texture_data_from_pak(elf_texture *texture);
+
+void elf_write_actor_header(elf_actor *actor, FILE *file);
+void elf_write_armature_to_file(elf_armature *armature, FILE *file);
+void elf_write_camera_to_file(elf_camera *camera, FILE *file);
+void elf_write_entity_to_file(elf_entity *entity, FILE *file);
+void elf_write_light_to_file(elf_light *light, FILE *file);
+void elf_write_material_to_file(elf_material *material, FILE *file);
+void elf_write_model_to_file(elf_model *model, FILE *file);
+void elf_write_script_to_file(elf_script *script, FILE *file);
+void elf_write_texture_to_file(elf_texture *texture, FILE *file);
 
 unsigned char elf_save_scene_to_pak(elf_scene *scene, const char *file_path);
 // !!>

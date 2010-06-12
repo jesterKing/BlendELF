@@ -298,6 +298,11 @@ elf_vec3f elf_get_entity_scale(elf_entity *entity)
 	return result;
 }
 
+void elf_get_entity_scale_(elf_entity *entity, float *scale)
+{
+	gfx_get_transform_scale(entity->transform, scale);
+}
+
 void elf_set_entity_model(elf_entity *entity, elf_model *model)
 {
 	elf_material *material;
@@ -333,8 +338,8 @@ void elf_set_entity_model(elf_entity *entity, elf_model *model)
 
 	if(entity->object)
 	{
-		elf_set_actor_physics((elf_actor*)entity, elf_get_actor_physics_shape((elf_actor*)entity),
-			elf_get_actor_physics_mass((elf_actor*)entity));
+		elf_set_actor_physics((elf_actor*)entity, elf_get_actor_shape((elf_actor*)entity),
+			elf_get_actor_mass((elf_actor*)entity));
 	}
 
 	elf_reset_entity_debug_physics_object(entity);

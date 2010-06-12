@@ -539,8 +539,8 @@ ELF_API void ELF_APIENTRY elfSetActorLinearFactor(elf_handle actor, float x, flo
 ELF_API void ELF_APIENTRY elfSetActorAngularFactor(elf_handle actor, float x, float y, float z);
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorBoundingLengths(elf_handle actor);
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorBoundingOffset(elf_handle actor);
-ELF_API int ELF_APIENTRY elfGetActorPhysicsShape(elf_handle actor);
-ELF_API float ELF_APIENTRY elfGetActorPhysicsMass(elf_handle actor);
+ELF_API int ELF_APIENTRY elfGetActorShape(elf_handle actor);
+ELF_API float ELF_APIENTRY elfGetActorMass(elf_handle actor);
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorLinearVelocity(elf_handle actor);
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorAngularVelocity(elf_handle actor);
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorLinearFactor(elf_handle actor);

@@ -7909,21 +7909,21 @@ fail:
 }
 
 
-static int _wrap_elfGetActorPhysicsShape(lua_State* L) {
+static int _wrap_elfGetActorShape(lua_State* L) {
   int SWIG_arg = 0;
   elf_handle arg1 ;
   elf_handle *argp1 ;
   int result;
   
-  SWIG_check_num_args("GetActorPhysicsShape",1,1)
-  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetActorPhysicsShape",1,"handle");
+  SWIG_check_num_args("GetActorShape",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetActorShape",1,"handle");
   
   if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("GetActorPhysicsShape",1,SWIGTYPE_p_elf_handle);
+    SWIG_fail_ptr("GetActorShape",1,SWIGTYPE_p_elf_handle);
   }
   arg1 = *argp1;
   
-  result = (int)elfGetActorPhysicsShape(arg1);
+  result = (int)elfGetActorShape(arg1);
   lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
   return SWIG_arg;
   
@@ -7935,21 +7935,21 @@ fail:
 }
 
 
-static int _wrap_elfGetActorPhysicsMass(lua_State* L) {
+static int _wrap_elfGetActorMass(lua_State* L) {
   int SWIG_arg = 0;
   elf_handle arg1 ;
   elf_handle *argp1 ;
   float result;
   
-  SWIG_check_num_args("GetActorPhysicsMass",1,1)
-  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetActorPhysicsMass",1,"handle");
+  SWIG_check_num_args("GetActorMass",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetActorMass",1,"handle");
   
   if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("GetActorPhysicsMass",1,SWIGTYPE_p_elf_handle);
+    SWIG_fail_ptr("GetActorMass",1,SWIGTYPE_p_elf_handle);
   }
   arg1 = *argp1;
   
-  result = (float)elfGetActorPhysicsMass(arg1);
+  result = (float)elfGetActorMass(arg1);
   lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
   return SWIG_arg;
   
@@ -18934,8 +18934,8 @@ static const struct luaL_reg swig_commands[] = {
     { "SetActorAngularFactor", _wrap_elfSetActorAngularFactor},
     { "GetActorBoundingLengths", _wrap_elfGetActorBoundingLengths},
     { "GetActorBoundingOffset", _wrap_elfGetActorBoundingOffset},
-    { "GetActorPhysicsShape", _wrap_elfGetActorPhysicsShape},
-    { "GetActorPhysicsMass", _wrap_elfGetActorPhysicsMass},
+    { "GetActorShape", _wrap_elfGetActorShape},
+    { "GetActorMass", _wrap_elfGetActorMass},
     { "GetActorLinearVelocity", _wrap_elfGetActorLinearVelocity},
     { "GetActorAngularVelocity", _wrap_elfGetActorAngularVelocity},
     { "GetActorLinearFactor", _wrap_elfGetActorLinearFactor},

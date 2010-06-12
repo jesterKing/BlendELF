@@ -104,66 +104,6 @@ elf_scene* elf_create_scene()
 	return scene;
 }
 
-elf_scene *elf_create_scene_from_pak(elf_pak *pak)
-{
-	elf_scene *scene;
-	elf_camera *camera;
-	elf_entity *entity;
-	elf_light *light;
-	elf_pak_index *index;
-	FILE *file;
-	int magic;
-	char name[64];
-	float ambient_color[4];
-	unsigned char scene_read;
-
-	scene = elf_create_scene();
-
-	scene->name = elf_create_string(elf_get_pak_file_path(pak));
-	scene->file_path = elf_create_string(elf_get_pak_file_path(pak));
-
-	scene->pak = pak;
-	elf_inc_ref((elf_object*)pak);
-
-	scene_read = ELF_FALSE;
-	for(index = (elf_pak_index*)elf_begin_list(pak->indexes); index;
-		index = (elf_pak_index*)elf_next_in_list(pak->indexes))
-	{
-		if(index->index_type == ELF_CAMERA) camera = elf_get_or_load_camera_by_name(scene, index->name);
-		else if(index->index_type == ELF_ENTITY) entity = elf_get_or_load_entity_by_name(scene, index->name);
-		else if(index->index_type == ELF_LIGHT) light = elf_get_or_load_light_by_name(scene, index->name);
-		else if(index->index_type == ELF_SCENE && !scene_read)
-		{
-			file = fopen(elf_get_pak_file_path(pak), "rb");
-			if(file)
-			{
-				scene_read = ELF_TRUE;
-				fseek(file, elf_get_pak_index_offset(index), SEEK_SET);
-
-				fread((char*)&magic, sizeof(int), 1, file);
-				if(magic != 179532120)
-				{
-					printf("warning: scene header section of \"%s\" is invalid\n", elf_get_pak_file_path(pak));
-					continue;
-				}
-
-				fread(name, sizeof(char), 64, file);
-				if(scene->name) elf_destroy_string(scene->name);
-				scene->name = elf_create_string(name);
-
-				fread((char*)ambient_color, sizeof(float), 4, file);
-
-				elf_set_scene_ambient_color(scene, ambient_color[0], ambient_color[1], ambient_color[2], ambient_color[3]);
-
-				fclose(file);
-			}
-		}
-		elf_seek_list(pak->indexes, (elf_object*)index);
-	}
-
-	return scene;
-}
-
 elf_scene* elf_create_scene_from_file(const char *file_path)
 {
 	elf_pak *pak;
