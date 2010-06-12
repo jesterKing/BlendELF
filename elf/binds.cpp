@@ -7130,6 +7130,24 @@ ELF_API bool ELF_APIENTRY elfRemoveParticlesByName(elf_handle scene, const char*
 	}
 	return (bool)elf_remove_particles_by_name((elf_scene*)scene.get(), name);
 }
+ELF_API bool ELF_APIENTRY elfRemoveSpriteByName(elf_handle scene, const char* name)
+{
+	if(!scene.get() || elf_get_object_type(scene.get()) != ELF_SCENE)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: RemoveSpriteByName() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "RemoveSpriteByName() -> invalid handle\n");
+		}
+		return false;
+	}
+	return (bool)elf_remove_sprite_by_name((elf_scene*)scene.get(), name);
+}
 ELF_API bool ELF_APIENTRY elfRemoveCameraByIndex(elf_handle scene, int idx)
 {
 	if(!scene.get() || elf_get_object_type(scene.get()) != ELF_SCENE)
@@ -7201,6 +7219,24 @@ ELF_API bool ELF_APIENTRY elfRemoveParticlesByIndex(elf_handle scene, int idx)
 		return false;
 	}
 	return (bool)elf_remove_particles_by_index((elf_scene*)scene.get(), idx);
+}
+ELF_API bool ELF_APIENTRY elfRemoveSpriteByIndex(elf_handle scene, int idx)
+{
+	if(!scene.get() || elf_get_object_type(scene.get()) != ELF_SCENE)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: RemoveSpriteByIndex() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "RemoveSpriteByIndex() -> invalid handle\n");
+		}
+		return false;
+	}
+	return (bool)elf_remove_sprite_by_index((elf_scene*)scene.get(), idx);
 }
 ELF_API bool ELF_APIENTRY elfRemoveCameraByObject(elf_handle scene, elf_handle camera)
 {

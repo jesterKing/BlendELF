@@ -892,11 +892,29 @@ elf_particles *elf_get_or_load_particles_by_name(elf_scene *scene, const char *n
 elf_sprite *elf_get_or_load_sprite_by_name(elf_scene *scene, const char *name)
 {
 	elf_sprite *sprite;
+	elf_pak_index *index;
+	FILE *file;
 
 	for(sprite = (elf_sprite*)elf_begin_list(scene->sprites); sprite;
 		sprite = (elf_sprite*)elf_next_in_list(scene->sprites))
 	{
 		if(!strcmp(sprite->name, name)) return sprite;
+	}
+
+	if(scene->pak)
+	{
+		index = elf_get_pak_index_by_name(scene->pak, name, ELF_SPRITE);
+		if(index)
+		{
+			file = fopen(scene->pak->file_path, "rb");
+			fseek(file, elf_get_pak_index_offset(index), SEEK_SET);
+			if(feof(file)) return NULL;
+
+			sprite = elf_create_sprite_from_pak(file, name, scene);
+			if(sprite) elf_add_sprite_to_scene(scene, sprite);
+			fclose(file);
+			return sprite;
+		}
 	}
 
 	return NULL;
@@ -1012,6 +1030,24 @@ unsigned char elf_remove_particles_by_name(elf_scene *scene, const char *name)
 		{
 			elf_remove_actor((elf_actor*)par);
 			elf_remove_from_list(scene->particles, (elf_object*)par);
+			return ELF_TRUE;
+		}
+	}
+
+	return ELF_FALSE;
+}
+
+unsigned char elf_remove_sprite_by_name(elf_scene *scene, const char *name)
+{
+	elf_sprite *spr;
+
+	for(spr = (elf_sprite*)elf_begin_list(scene->sprites); spr != NULL;
+		spr = (elf_sprite*)elf_next_in_list(scene->sprites))
+	{
+		if(!strcmp(spr->name, name))
+		{
+			elf_remove_actor((elf_actor*)spr);
+			elf_remove_from_list(scene->sprites, (elf_object*)spr);
 			return ELF_TRUE;
 		}
 	}

@@ -14642,6 +14642,35 @@ fail:
 }
 
 
+static int _wrap_elfRemoveSpriteByName(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  char *arg2 = (char *) 0 ;
+  elf_handle *argp1 ;
+  bool result;
+  
+  SWIG_check_num_args("RemoveSpriteByName",2,2)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("RemoveSpriteByName",1,"handle");
+  if(!lua_isstring(L,2)) SWIG_fail_arg("RemoveSpriteByName",2,"char const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("RemoveSpriteByName",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  result = (bool)elfRemoveSpriteByName(arg1,(char const *)arg2);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfRemoveCameraByIndex(lua_State* L) {
   int SWIG_arg = 0;
   elf_handle arg1 ;
@@ -14747,6 +14776,35 @@ static int _wrap_elfRemoveParticlesByIndex(lua_State* L) {
   
   arg2 = (int)lua_tonumber(L, 2);
   result = (bool)elfRemoveParticlesByIndex(arg1,arg2);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfRemoveSpriteByIndex(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  int arg2 ;
+  elf_handle *argp1 ;
+  bool result;
+  
+  SWIG_check_num_args("RemoveSpriteByIndex",2,2)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("RemoveSpriteByIndex",1,"handle");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("RemoveSpriteByIndex",2,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("RemoveSpriteByIndex",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  result = (bool)elfRemoveSpriteByIndex(arg1,arg2);
   lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
   return SWIG_arg;
   
@@ -19160,10 +19218,12 @@ static const struct luaL_reg swig_commands[] = {
     { "RemoveEntityByName", _wrap_elfRemoveEntityByName},
     { "RemoveLightByName", _wrap_elfRemoveLightByName},
     { "RemoveParticlesByName", _wrap_elfRemoveParticlesByName},
+    { "RemoveSpriteByName", _wrap_elfRemoveSpriteByName},
     { "RemoveCameraByIndex", _wrap_elfRemoveCameraByIndex},
     { "RemoveEntityByIndex", _wrap_elfRemoveEntityByIndex},
     { "RemoveLightByIndex", _wrap_elfRemoveLightByIndex},
     { "RemoveParticlesByIndex", _wrap_elfRemoveParticlesByIndex},
+    { "RemoveSpriteByIndex", _wrap_elfRemoveSpriteByIndex},
     { "RemoveCameraByObject", _wrap_elfRemoveCameraByObject},
     { "RemoveEntityByObject", _wrap_elfRemoveEntityByObject},
     { "RemoveLightByObject", _wrap_elfRemoveLightByObject},

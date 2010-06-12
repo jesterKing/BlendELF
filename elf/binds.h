@@ -765,10 +765,12 @@ ELF_API bool ELF_APIENTRY elfRemoveCameraByName(elf_handle scene, const char* na
 ELF_API bool ELF_APIENTRY elfRemoveEntityByName(elf_handle scene, const char* name);
 ELF_API bool ELF_APIENTRY elfRemoveLightByName(elf_handle scene, const char* name);
 ELF_API bool ELF_APIENTRY elfRemoveParticlesByName(elf_handle scene, const char* name);
+ELF_API bool ELF_APIENTRY elfRemoveSpriteByName(elf_handle scene, const char* name);
 ELF_API bool ELF_APIENTRY elfRemoveCameraByIndex(elf_handle scene, int idx);
 ELF_API bool ELF_APIENTRY elfRemoveEntityByIndex(elf_handle scene, int idx);
 ELF_API bool ELF_APIENTRY elfRemoveLightByIndex(elf_handle scene, int idx);
 ELF_API bool ELF_APIENTRY elfRemoveParticlesByIndex(elf_handle scene, int idx);
+ELF_API bool ELF_APIENTRY elfRemoveSpriteByIndex(elf_handle scene, int idx);
 ELF_API bool ELF_APIENTRY elfRemoveCameraByObject(elf_handle scene, elf_handle camera);
 ELF_API bool ELF_APIENTRY elfRemoveEntityByObject(elf_handle scene, elf_handle entity);
 ELF_API bool ELF_APIENTRY elfRemoveLightByObject(elf_handle scene, elf_handle light);

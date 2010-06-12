@@ -345,6 +345,21 @@ int elf_get_script_size_bytes(elf_script *script)
 	return size_bytes;
 }
 
+int elf_get_sprite_size_bytes(elf_sprite *sprite)
+{
+	int size_bytes;
+
+	size_bytes = 0;
+
+	size_bytes += sizeof(int);	// magic
+	size_bytes += elf_get_actor_header_size_bytes((elf_actor*)sprite);
+	size_bytes += sizeof(float)*2;	// scale
+	size_bytes += sizeof(char)*64;	// material
+	size_bytes += sizeof(unsigned char);	// face camera
+
+	return size_bytes;
+}
+
 int elf_get_texture_size_bytes(elf_texture *texture)
 {
 	int size_bytes;
@@ -928,6 +943,7 @@ elf_scene* elf_create_scene_from_pak(elf_pak *pak)
 	elf_camera *camera;
 	elf_entity *entity;
 	elf_light *light;
+	elf_sprite *sprite;
 	elf_pak_index *index;
 	FILE *file;
 	int magic;
@@ -950,6 +966,7 @@ elf_scene* elf_create_scene_from_pak(elf_pak *pak)
 		if(index->index_type == ELF_CAMERA) camera = elf_get_or_load_camera_by_name(scene, index->name);
 		else if(index->index_type == ELF_ENTITY) entity = elf_get_or_load_entity_by_name(scene, index->name);
 		else if(index->index_type == ELF_LIGHT) light = elf_get_or_load_light_by_name(scene, index->name);
+		else if(index->index_type == ELF_SPRITE) sprite = elf_get_or_load_sprite_by_name(scene, index->name);
 		else if(index->index_type == ELF_SCENE && !scene_read)
 		{
 			file = fopen(elf_get_pak_file_path(pak), "rb");
@@ -1018,6 +1035,42 @@ elf_script* elf_create_script_from_pak(FILE *file, const char *name, elf_scene *
 	}
 
 	return script;
+}
+
+elf_sprite* elf_create_sprite_from_pak(FILE *file, const char *name, elf_scene *scene)
+{
+	elf_sprite *sprite;
+	elf_material *rmaterial;
+	int magic = 0;
+	float scale[2] = {0.0, 0.0};
+	char material[64];
+
+	fread((char*)&magic, sizeof(int), 1, file);
+
+	if(magic != 179532140)
+	{
+		elf_set_error(ELF_INVALID_FILE, "error: invalid entity \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
+		return NULL;
+	}
+
+	sprite = elf_create_sprite(NULL);
+	elf_read_actor_header((elf_actor*)sprite, file, scene);
+
+	fread((char*)scale, sizeof(float), 2, file);
+
+	fread(material, sizeof(char), 64, file);
+	if(strlen(material))
+	{
+		rmaterial = elf_get_or_load_material_by_name(scene, material);
+		elf_set_sprite_material(sprite, rmaterial);
+	}
+
+	elf_set_sprite_scale(sprite, scale[0], scale[1]);
+
+	fread((char*)&sprite->face_camera, sizeof(unsigned char), 1, file);
+	elf_set_sprite_face_camera(sprite, sprite->face_camera);
+
+	return sprite;
 }
 
 elf_texture *elf_create_texture_from_pak(FILE *file, const char *name, elf_scene *scene)
@@ -1404,6 +1457,23 @@ void elf_write_script_to_file(elf_script *script, FILE *file)
 	}
 }
 
+void elf_write_sprite_to_file(elf_sprite *sprite, FILE *file)
+{
+	int magic = 0;
+
+	magic = 179532140;
+	fwrite((char*)&magic, sizeof(int), 1, file);
+
+	elf_write_actor_header((elf_actor*)sprite, file);
+
+	fwrite((char*)&sprite->scale.x, sizeof(float), 2, file);
+
+	if(sprite->material) elf_write_name_to_file(sprite->material->name, file);
+	else elf_write_name_to_file("", file);
+
+	fwrite((char*)&sprite->face_camera, sizeof(unsigned char), 1, file);
+}
+
 void elf_write_texture_to_file(elf_texture *texture, FILE *file)
 {
 	int magic;
@@ -1444,6 +1514,7 @@ void elf_write_resource_index_to_file(elf_resource *resource, unsigned int *offs
 		case ELF_CAMERA: *offset += elf_get_camera_size_bytes((elf_camera*)resource); break;
 		case ELF_ENTITY: *offset += elf_get_entity_size_bytes((elf_entity*)resource); break;
 		case ELF_LIGHT: *offset += elf_get_light_size_bytes((elf_light*)resource); break;
+		case ELF_SPRITE: *offset += elf_get_sprite_size_bytes((elf_sprite*)resource); break;
 		case ELF_ARMATURE: *offset += elf_get_armature_size_bytes((elf_armature*)resource); break;
 	}
 }
@@ -1476,6 +1547,7 @@ void elf_write_resources_to_file(elf_list *resources, FILE *file)
 			case ELF_CAMERA: elf_write_camera_to_file((elf_camera*)res, file); break;
 			case ELF_ENTITY: elf_write_entity_to_file((elf_entity*)res, file); break;
 			case ELF_LIGHT: elf_write_light_to_file((elf_light*)res, file); break;
+			case ELF_SPRITE: elf_write_sprite_to_file((elf_sprite*)res, file); break;
 			case ELF_ARMATURE: elf_write_armature_to_file((elf_armature*)res, file); break;
 		}
 	}
@@ -1629,6 +1701,26 @@ unsigned char elf_save_scene_to_pak(elf_scene *scene, const char *file_path)
 			elf_append_to_list(scripts, (elf_object*)spr->script);
 		}
 
+		mat = spr->material;
+
+		if(mat && !elf_get_resource_by_id(materials, mat->id))
+		{
+			elf_set_unique_name_for_resource(materials, (elf_resource*)mat);
+			elf_append_to_list(materials, (elf_object*)mat);
+
+			for(i = 0; i < GFX_MAX_TEXTURES; i++)
+			{
+				if(mat->textures[i] && !elf_get_resource_by_id(textures, mat->textures[i]->id))
+				{
+					if(elf_load_texture_data(mat->textures[i]))
+					{
+						elf_set_unique_name_for_resource(textures, (elf_resource*)mat->textures[i]);
+						elf_append_to_list(textures, (elf_object*)mat->textures[i]);
+					}
+				}
+			}
+		}
+
 		elf_set_unique_name_for_resource(sprites, (elf_resource*)spr);
 		elf_append_to_list(sprites, (elf_object*)spr);
 	}
@@ -1665,7 +1757,8 @@ unsigned char elf_save_scene_to_pak(elf_scene *scene, const char *file_path)
 		elf_get_list_length(cameras) +
 		elf_get_list_length(entities) +
 		elf_get_list_length(lights) +
-		elf_get_list_length(armatures);
+		elf_get_list_length(armatures) +
+		elf_get_list_length(sprites);
 
 	offset += sizeof(int);	// magic
 	offset += sizeof(int);	// number of indexes
@@ -1682,7 +1775,8 @@ unsigned char elf_save_scene_to_pak(elf_scene *scene, const char *file_path)
 		elf_get_list_length(cameras) +
 		elf_get_list_length(entities) +
 		elf_get_list_length(lights) +
-		elf_get_list_length(armatures);
+		elf_get_list_length(armatures) +
+		elf_get_list_length(sprites);
 
 	fwrite((char*)&ival, sizeof(int), 1, file);	// index count
 
@@ -1695,6 +1789,7 @@ unsigned char elf_save_scene_to_pak(elf_scene *scene, const char *file_path)
 	elf_write_resource_indexes_to_file(entities, &offset, file);
 	elf_write_resource_indexes_to_file(lights, &offset, file);
 	elf_write_resource_indexes_to_file(armatures, &offset, file);
+	elf_write_resource_indexes_to_file(sprites, &offset, file);
 
 	elf_write_resources_to_file(scenes, file);
 	elf_write_resources_to_file(scripts, file);
@@ -1705,6 +1800,7 @@ unsigned char elf_save_scene_to_pak(elf_scene *scene, const char *file_path)
 	elf_write_resources_to_file(entities, file);
 	elf_write_resources_to_file(lights, file);
 	elf_write_resources_to_file(armatures, file);
+	elf_write_resources_to_file(sprites, file);
 
 	fclose(file);
 
