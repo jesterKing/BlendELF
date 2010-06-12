@@ -331,6 +331,44 @@ int elf_get_scene_size_bytes(elf_scene *scene)
 	return size_bytes;
 }
 
+int elf_get_particles_size_bytes(elf_particles *particles)
+{
+	int size_bytes;
+
+	size_bytes = 0;
+
+	size_bytes += sizeof(int);	// magic
+	size_bytes += elf_get_actor_header_size_bytes((elf_actor*)particles);
+	size_bytes += sizeof(char)*64;	// texture
+	size_bytes += sizeof(char)*64;	// model
+	size_bytes += sizeof(char)*64;	// entity
+	size_bytes += sizeof(int);	// max count
+	size_bytes += sizeof(unsigned char);	// draw mode
+	size_bytes += sizeof(float);	// spawn delay
+	size_bytes += sizeof(unsigned char);	// spawn
+	size_bytes += sizeof(float)*3;	// gravity
+	size_bytes += sizeof(float);	// size min
+	size_bytes += sizeof(float);	// size max
+	size_bytes += sizeof(float);	// size growth mix
+	size_bytes += sizeof(float);	// size growth max
+	size_bytes += sizeof(float);	// rotation min
+	size_bytes += sizeof(float);	// rotation max
+	size_bytes += sizeof(float);	// rotation growth min
+	size_bytes += sizeof(float);	// rotation growth max
+	size_bytes += sizeof(float);	// life span min
+	size_bytes += sizeof(float);	// life span max
+	size_bytes += sizeof(float);	// fade speed min
+	size_bytes += sizeof(float);	// fade speed max
+	size_bytes += sizeof(float)*3;	// velocity min
+	size_bytes += sizeof(float)*3;	// velocity max
+	size_bytes += sizeof(float)*3;	// position min
+	size_bytes += sizeof(float)*3;	// position max
+	size_bytes += sizeof(float)*4;	// color min
+	size_bytes += sizeof(float)*4;	// color max
+
+	return size_bytes;
+}
+
 int elf_get_script_size_bytes(elf_script *script)
 {
 	int size_bytes;
@@ -937,66 +975,94 @@ elf_model* elf_create_model_from_pak(FILE *file, const char *name, elf_scene *sc
 	return model;
 }
 
-elf_scene* elf_create_scene_from_pak(elf_pak *pak)
+elf_particles* elf_create_particles_from_pak(FILE *file, const char *name, elf_scene *scene)
 {
-	elf_scene *scene;
-	elf_camera *camera;
-	elf_entity *entity;
-	elf_light *light;
-	elf_sprite *sprite;
-	elf_pak_index *index;
-	FILE *file;
-	int magic;
-	char name[64];
-	float ambient_color[4];
-	unsigned char scene_read;
+	elf_particles *particles;
+	elf_texture *rtexture;
+	elf_model *rmodel;
+	elf_entity *rentity;
+	int magic = 0;
+	char texture[64];
+	char model[64];
+	char entity[64];
 
-	scene = elf_create_scene();
+	fread((char*)&magic, sizeof(int), 1, file);
 
-	scene->name = elf_create_string(elf_get_pak_file_path(pak));
-	scene->file_path = elf_create_string(elf_get_pak_file_path(pak));
-
-	scene->pak = pak;
-	elf_inc_ref((elf_object*)pak);
-
-	scene_read = ELF_FALSE;
-	for(index = (elf_pak_index*)elf_begin_list(pak->indexes); index;
-		index = (elf_pak_index*)elf_next_in_list(pak->indexes))
+	if(magic != 179532141)
 	{
-		if(index->index_type == ELF_CAMERA) camera = elf_get_or_load_camera_by_name(scene, index->name);
-		else if(index->index_type == ELF_ENTITY) entity = elf_get_or_load_entity_by_name(scene, index->name);
-		else if(index->index_type == ELF_LIGHT) light = elf_get_or_load_light_by_name(scene, index->name);
-		else if(index->index_type == ELF_SPRITE) sprite = elf_get_or_load_sprite_by_name(scene, index->name);
-		else if(index->index_type == ELF_SCENE && !scene_read)
-		{
-			file = fopen(elf_get_pak_file_path(pak), "rb");
-			if(file)
-			{
-				scene_read = ELF_TRUE;
-				fseek(file, elf_get_pak_index_offset(index), SEEK_SET);
-
-				fread((char*)&magic, sizeof(int), 1, file);
-				if(magic != 179532120)
-				{
-					printf("warning: scene header section of \"%s\" is invalid\n", elf_get_pak_file_path(pak));
-					continue;
-				}
-
-				fread(name, sizeof(char), 64, file);
-				if(scene->name) elf_destroy_string(scene->name);
-				scene->name = elf_create_string(name);
-
-				fread((char*)ambient_color, sizeof(float), 4, file);
-
-				elf_set_scene_ambient_color(scene, ambient_color[0], ambient_color[1], ambient_color[2], ambient_color[3]);
-
-				fclose(file);
-			}
-		}
-		elf_seek_list(pak->indexes, (elf_object*)index);
+		elf_set_error(ELF_INVALID_FILE, "error: invalid particles \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
+		return NULL;
 	}
 
-	return scene;
+	particles = elf_create_particles(NULL, 10);
+	elf_read_actor_header((elf_actor*)particles, file, scene);
+
+	fread(texture, sizeof(char), 64, file);
+	if(strlen(texture))
+	{
+		rtexture = elf_get_or_load_texture_by_name(scene, texture);
+		elf_set_particles_texture(particles, rtexture);
+	}
+
+	fread(model, sizeof(char), 64, file);
+	if(strlen(model))
+	{
+		rmodel = elf_get_or_load_model_by_name(scene, model);
+		elf_set_particles_model(particles, rmodel);
+	}
+
+	fread(entity, sizeof(char), 64, file);
+	if(strlen(entity))
+	{
+		rentity = elf_get_or_load_entity_by_name(scene, entity);
+		elf_set_particles_entity(particles, rentity);
+	}
+
+	fread((char*)&particles->max_count, sizeof(int), 1, file);
+	fread((char*)&particles->draw_mode, sizeof(unsigned char), 1, file);
+
+	elf_set_particles_max_count(particles, particles->max_count);
+	elf_set_particles_draw_mode(particles, particles->draw_mode);
+
+	fread((char*)&particles->spawn_delay, sizeof(float), 1, file);
+	fread((char*)&particles->spawn, sizeof(unsigned char), 1, file);
+	fread((char*)&particles->gravity.x, sizeof(float), 3, file);
+	fread((char*)&particles->size_min, sizeof(float), 1, file);
+	fread((char*)&particles->size_max, sizeof(float), 1, file);
+	fread((char*)&particles->size_growth_min, sizeof(float), 1, file);
+	fread((char*)&particles->size_growth_max, sizeof(float), 1, file);
+	fread((char*)&particles->rotation_min, sizeof(float), 1, file);
+	fread((char*)&particles->rotation_max, sizeof(float), 1, file);
+	fread((char*)&particles->rotation_growth_min, sizeof(float), 1, file);
+	fread((char*)&particles->rotation_growth_max, sizeof(float), 1, file);
+	fread((char*)&particles->life_span_min, sizeof(float), 1, file);
+	fread((char*)&particles->life_span_max, sizeof(float), 1, file);
+	fread((char*)&particles->fade_speed_min, sizeof(float), 1, file);
+	fread((char*)&particles->fade_speed_max, sizeof(float), 1, file);
+	fread((char*)&particles->velocity_min.x, sizeof(float), 3, file);
+	fread((char*)&particles->velocity_max.x, sizeof(float), 3, file);
+	fread((char*)&particles->position_min.x, sizeof(float), 3, file);
+	fread((char*)&particles->position_max.x, sizeof(float), 3, file);
+	fread((char*)&particles->color_min.r, sizeof(float), 4, file);
+	fread((char*)&particles->color_max.r, sizeof(float), 4, file);
+
+	elf_set_particles_spawn_delay(particles, particles->spawn_delay);
+	elf_set_particles_spawn(particles, particles->spawn);
+	elf_set_particles_gravity(particles, particles->gravity.x, particles->gravity.y, particles->gravity.z);
+	elf_set_particles_size(particles, particles->size_min, particles->size_max);
+	elf_set_particles_size_growth(particles, particles->size_growth_min, particles->size_growth_max);
+	elf_set_particles_rotation(particles, particles->rotation_min, particles->rotation_max);
+	elf_set_particles_rotation_growth(particles, particles->rotation_growth_min, particles->rotation_growth_max);
+	elf_set_particles_life_span(particles, particles->life_span_min, particles->life_span_max);
+	elf_set_particles_fade_speed(particles, particles->fade_speed_min, particles->fade_speed_max);
+	elf_set_particles_velocity_min(particles, particles->velocity_min.x, particles->velocity_min.y, particles->velocity_min.z);
+	elf_set_particles_velocity_max(particles, particles->velocity_max.x, particles->velocity_max.y, particles->velocity_max.z);
+	elf_set_particles_position_min(particles, particles->position_min.x, particles->position_min.y, particles->position_min.z);
+	elf_set_particles_position_max(particles, particles->position_max.x, particles->position_max.y, particles->position_max.z);
+	elf_set_particles_color_min(particles, particles->color_min.r, particles->color_min.g, particles->color_min.b, particles->color_min.a);
+	elf_set_particles_color_max(particles, particles->color_max.r, particles->color_max.g, particles->color_max.b, particles->color_max.a);
+
+	return particles;
 }
 
 elf_script* elf_create_script_from_pak(FILE *file, const char *name, elf_scene *scene)
@@ -1049,7 +1115,7 @@ elf_sprite* elf_create_sprite_from_pak(FILE *file, const char *name, elf_scene *
 
 	if(magic != 179532140)
 	{
-		elf_set_error(ELF_INVALID_FILE, "error: invalid entity \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
+		elf_set_error(ELF_INVALID_FILE, "error: invalid sprite \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
 		return NULL;
 	}
 
@@ -1162,6 +1228,70 @@ elf_texture *elf_create_texture_from_pak(FILE *file, const char *name, elf_scene
 	}
 
 	return texture;
+}
+
+elf_scene* elf_create_scene_from_pak(elf_pak *pak)
+{
+	elf_scene *scene;
+	elf_camera *camera;
+	elf_entity *entity;
+	elf_light *light;
+	elf_sprite *sprite;
+	elf_particles *particles;
+	elf_pak_index *index;
+	FILE *file;
+	int magic;
+	char name[64];
+	float ambient_color[4];
+	unsigned char scene_read;
+
+	scene = elf_create_scene();
+
+	scene->name = elf_create_string(elf_get_pak_file_path(pak));
+	scene->file_path = elf_create_string(elf_get_pak_file_path(pak));
+
+	scene->pak = pak;
+	elf_inc_ref((elf_object*)pak);
+
+	scene_read = ELF_FALSE;
+	for(index = (elf_pak_index*)elf_begin_list(pak->indexes); index;
+		index = (elf_pak_index*)elf_next_in_list(pak->indexes))
+	{
+		if(index->index_type == ELF_CAMERA) camera = elf_get_or_load_camera_by_name(scene, index->name);
+		else if(index->index_type == ELF_ENTITY) entity = elf_get_or_load_entity_by_name(scene, index->name);
+		else if(index->index_type == ELF_LIGHT) light = elf_get_or_load_light_by_name(scene, index->name);
+		else if(index->index_type == ELF_SPRITE) sprite = elf_get_or_load_sprite_by_name(scene, index->name);
+		else if(index->index_type == ELF_PARTICLES) particles = elf_get_or_load_particles_by_name(scene, index->name);
+		else if(index->index_type == ELF_SCENE && !scene_read)
+		{
+			file = fopen(elf_get_pak_file_path(pak), "rb");
+			if(file)
+			{
+				scene_read = ELF_TRUE;
+				fseek(file, elf_get_pak_index_offset(index), SEEK_SET);
+
+				fread((char*)&magic, sizeof(int), 1, file);
+				if(magic != 179532120)
+				{
+					printf("warning: scene header section of \"%s\" is invalid\n", elf_get_pak_file_path(pak));
+					continue;
+				}
+
+				fread(name, sizeof(char), 64, file);
+				if(scene->name) elf_destroy_string(scene->name);
+				scene->name = elf_create_string(name);
+
+				fread((char*)ambient_color, sizeof(float), 4, file);
+
+				elf_set_scene_ambient_color(scene, ambient_color[0], ambient_color[1], ambient_color[2], ambient_color[3]);
+
+				fclose(file);
+			}
+		}
+		elf_seek_list(pak->indexes, (elf_object*)index);
+	}
+
+	return scene;
 }
 
 void elf_write_name_to_file(const char *name, FILE *file)
@@ -1427,6 +1557,50 @@ void elf_write_model_to_file(elf_model *model, FILE *file)
 	}
 }
 
+void elf_write_particles_to_file(elf_particles *particles, FILE *file)
+{
+	int magic = 0;
+
+	magic = 179532141;
+	fwrite((char*)&magic, sizeof(int), 1, file);
+
+	elf_write_actor_header((elf_actor*)particles, file);
+
+	if(particles->texture) elf_write_name_to_file(particles->texture->name, file);
+	else elf_write_name_to_file("", file);
+
+	if(particles->model) elf_write_name_to_file(particles->model->name, file);
+	else elf_write_name_to_file("", file);
+
+	if(particles->entity) elf_write_name_to_file(particles->entity->name, file);
+	else elf_write_name_to_file("", file);
+
+	fwrite((char*)&particles->max_count, sizeof(int), 1, file);
+	fwrite((char*)&particles->draw_mode, sizeof(unsigned char), 1, file);
+
+	fwrite((char*)&particles->spawn_delay, sizeof(float), 1, file);
+	fwrite((char*)&particles->spawn, sizeof(unsigned char), 1, file);
+	fwrite((char*)&particles->gravity.x, sizeof(float), 3, file);
+	fwrite((char*)&particles->size_min, sizeof(float), 1, file);
+	fwrite((char*)&particles->size_max, sizeof(float), 1, file);
+	fwrite((char*)&particles->size_growth_min, sizeof(float), 1, file);
+	fwrite((char*)&particles->size_growth_max, sizeof(float), 1, file);
+	fwrite((char*)&particles->rotation_min, sizeof(float), 1, file);
+	fwrite((char*)&particles->rotation_max, sizeof(float), 1, file);
+	fwrite((char*)&particles->rotation_growth_min, sizeof(float), 1, file);
+	fwrite((char*)&particles->rotation_growth_max, sizeof(float), 1, file);
+	fwrite((char*)&particles->life_span_min, sizeof(float), 1, file);
+	fwrite((char*)&particles->life_span_max, sizeof(float), 1, file);
+	fwrite((char*)&particles->fade_speed_min, sizeof(float), 1, file);
+	fwrite((char*)&particles->fade_speed_max, sizeof(float), 1, file);
+	fwrite((char*)&particles->velocity_min.x, sizeof(float), 3, file);
+	fwrite((char*)&particles->velocity_max.x, sizeof(float), 3, file);
+	fwrite((char*)&particles->position_min.x, sizeof(float), 3, file);
+	fwrite((char*)&particles->position_max.x, sizeof(float), 3, file);
+	fwrite((char*)&particles->color_min.r, sizeof(float), 4, file);
+	fwrite((char*)&particles->color_max.r, sizeof(float), 4, file);
+}
+
 void elf_write_scene_to_file(elf_scene *scene, FILE *file)
 {
 	int magic;
@@ -1514,6 +1688,7 @@ void elf_write_resource_index_to_file(elf_resource *resource, unsigned int *offs
 		case ELF_CAMERA: *offset += elf_get_camera_size_bytes((elf_camera*)resource); break;
 		case ELF_ENTITY: *offset += elf_get_entity_size_bytes((elf_entity*)resource); break;
 		case ELF_LIGHT: *offset += elf_get_light_size_bytes((elf_light*)resource); break;
+		case ELF_PARTICLES: *offset += elf_get_particles_size_bytes((elf_particles*)resource); break;
 		case ELF_SPRITE: *offset += elf_get_sprite_size_bytes((elf_sprite*)resource); break;
 		case ELF_ARMATURE: *offset += elf_get_armature_size_bytes((elf_armature*)resource); break;
 	}
@@ -1547,6 +1722,7 @@ void elf_write_resources_to_file(elf_list *resources, FILE *file)
 			case ELF_CAMERA: elf_write_camera_to_file((elf_camera*)res, file); break;
 			case ELF_ENTITY: elf_write_entity_to_file((elf_entity*)res, file); break;
 			case ELF_LIGHT: elf_write_light_to_file((elf_light*)res, file); break;
+			case ELF_PARTICLES: elf_write_particles_to_file((elf_particles*)res, file); break;
 			case ELF_SPRITE: elf_write_sprite_to_file((elf_sprite*)res, file); break;
 			case ELF_ARMATURE: elf_write_armature_to_file((elf_armature*)res, file); break;
 		}
@@ -1688,6 +1864,27 @@ unsigned char elf_save_scene_to_pak(elf_scene *scene, const char *file_path)
 			elf_append_to_list(scripts, (elf_object*)par->script);
 		}
 
+		if(par->texture && !elf_get_resource_by_id(textures, par->texture->id))
+		{
+			if(elf_load_texture_data(par->texture))
+			{
+				elf_set_unique_name_for_resource(textures, (elf_resource*)par->texture);
+				elf_append_to_list(textures, (elf_object*)par->texture);
+			}
+		}
+
+		if(par->model && !elf_get_resource_by_id(models, par->model->id))
+		{
+			elf_set_unique_name_for_resource(models, (elf_resource*)par->model);
+			elf_append_to_list(models, (elf_object*)par->model);
+		}
+
+		if(par->entity && !elf_get_resource_by_id(entities, par->entity->id))
+		{
+			elf_set_unique_name_for_resource(entities, (elf_resource*)par->entity);
+			elf_append_to_list(entities, (elf_object*)par->entity);
+		}
+
 		elf_set_unique_name_for_resource(particles, (elf_resource*)par);
 		elf_append_to_list(particles, (elf_object*)par);
 	}
@@ -1758,6 +1955,7 @@ unsigned char elf_save_scene_to_pak(elf_scene *scene, const char *file_path)
 		elf_get_list_length(entities) +
 		elf_get_list_length(lights) +
 		elf_get_list_length(armatures) +
+		elf_get_list_length(particles) +
 		elf_get_list_length(sprites);
 
 	offset += sizeof(int);	// magic
@@ -1776,6 +1974,7 @@ unsigned char elf_save_scene_to_pak(elf_scene *scene, const char *file_path)
 		elf_get_list_length(entities) +
 		elf_get_list_length(lights) +
 		elf_get_list_length(armatures) +
+		elf_get_list_length(particles) +
 		elf_get_list_length(sprites);
 
 	fwrite((char*)&ival, sizeof(int), 1, file);	// index count
@@ -1789,6 +1988,7 @@ unsigned char elf_save_scene_to_pak(elf_scene *scene, const char *file_path)
 	elf_write_resource_indexes_to_file(entities, &offset, file);
 	elf_write_resource_indexes_to_file(lights, &offset, file);
 	elf_write_resource_indexes_to_file(armatures, &offset, file);
+	elf_write_resource_indexes_to_file(particles, &offset, file);
 	elf_write_resource_indexes_to_file(sprites, &offset, file);
 
 	elf_write_resources_to_file(scenes, file);
@@ -1800,6 +2000,7 @@ unsigned char elf_save_scene_to_pak(elf_scene *scene, const char *file_path)
 	elf_write_resources_to_file(entities, file);
 	elf_write_resources_to_file(lights, file);
 	elf_write_resources_to_file(armatures, file);
+	elf_write_resources_to_file(particles, file);
 	elf_write_resources_to_file(sprites, file);
 
 	fclose(file);

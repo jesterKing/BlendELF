@@ -856,7 +856,7 @@ class Script:
 		self.size_bytes = struct.calcsize('<i')
 		self.size_bytes += struct.calcsize('<64s')
 		# text length, text
-		self.size_bytes += struct.calcsize('<I')
+		self.size_bytes += struct.calcsize('<i')
 		self.size_bytes += len(self.text)
 		
 		print 'Script: '+text.name+' converted'
@@ -867,7 +867,7 @@ class Script:
 		# write name
 		write_name_to_file(self.name, f)
 		# write text
-		f.write(struct.pack('<I', len(self.text)))
+		f.write(struct.pack('<i', len(self.text)))
 		if len(self.text) > 0: f.write(struct.pack('<'+str(len(self.text))+'s', self.text))
 		
 		print 'Script: '+self.name+' saved'
@@ -976,11 +976,11 @@ def export(path):
 	# calculate the index offset
 	offset += struct.calcsize('<B')
 	offset += struct.calcsize('<64s')
-	offset += struct.calcsize('<I')
-	offset *= len(scenes)+len(scripts)+len(textures)+len(materials)+len(models)+len(cameras)+len(entities)+len(lights)+len(armatures)
-	# magic, ambient and number of indexes
 	offset += struct.calcsize('<i')
-	offset += struct.calcsize('<I')
+	offset *= len(scenes)+len(scripts)+len(textures)+len(materials)+len(models)+len(cameras)+len(entities)+len(lights)+len(armatures)
+	# magic and number of indexes
+	offset += struct.calcsize('<i')
+	offset += struct.calcsize('<i')
 
 	f = open(path, 'wb')
 
@@ -988,53 +988,53 @@ def export(path):
 	f.write(struct.pack('<i', 179532100))
 
 	# index count
-	f.write(struct.pack('<I', len(scenes)+len(scripts)+len(textures)+len(materials)+len(models)+len(cameras)+len(entities)+len(lights)+len(armatures)))
+	f.write(struct.pack('<i', len(scenes)+len(scripts)+len(textures)+len(materials)+len(models)+len(cameras)+len(entities)+len(lights)+len(armatures)))
 
 	# write the index
 	for scene in scenes:
 		f.write(struct.pack('<B', 6))
 		write_name_to_file(scene.name, f)
-		f.write(struct.pack('<I', offset))
+		f.write(struct.pack('<i', offset))
 		offset += scene.size_bytes
 	for script in scripts:
 		f.write(struct.pack('<B', 17))
 		write_name_to_file(script.name, f)
-		f.write(struct.pack('<I', offset))
+		f.write(struct.pack('<i', offset))
 		offset += script.size_bytes
 	for texture in textures:
 		f.write(struct.pack('<B', 0))
 		write_name_to_file(texture.name, f)
-		f.write(struct.pack('<I', offset))
+		f.write(struct.pack('<i', offset))
 		offset += texture.size_bytes
 	for material in materials:
 		f.write(struct.pack('<B', 1))
 		write_name_to_file(material.name, f)
-		f.write(struct.pack('<I', offset))
+		f.write(struct.pack('<i', offset))
 		offset += material.size_bytes
 	for model in models:
 		f.write(struct.pack('<B', 2))
 		write_name_to_file(model.name, f)
-		f.write(struct.pack('<I', offset))
+		f.write(struct.pack('<i', offset))
 		offset += model.size_bytes
 	for camera in cameras:
 		f.write(struct.pack('<B', 3))
 		write_name_to_file(camera.name, f)
-		f.write(struct.pack('<I', offset))
+		f.write(struct.pack('<i', offset))
 		offset += camera.size_bytes
 	for entity in entities:
 		f.write(struct.pack('<B', 4))
 		write_name_to_file(entity.name, f)
-		f.write(struct.pack('<I', offset))
+		f.write(struct.pack('<i', offset))
 		offset += entity.size_bytes
 	for light in lights:
 		f.write(struct.pack('<B', 5))
 		write_name_to_file(light.name, f)
-		f.write(struct.pack('<I', offset))
+		f.write(struct.pack('<i', offset))
 		offset += light.size_bytes
 	for armature in armatures:
 		f.write(struct.pack('<B', 22))
 		write_name_to_file(armature.name, f)
-		f.write(struct.pack('<I', offset))
+		f.write(struct.pack('<i', offset))
 		offset += armature.size_bytes
 
 	# write the data

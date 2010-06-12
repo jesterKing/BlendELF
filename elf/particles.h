@@ -477,13 +477,9 @@ void elf_set_particles_max_count(elf_particles *particles, int max_count)
 
 	if(max_count < 1) return;
 
-	elf_dec_ref((elf_object*)particles->particles);
-	gfx_destroy_vertex_array(particles->vertex_array);
-	free(particles->vertices);
-	free(particles->tex_coords);
-	free(particles->colors);
-
 	particles->max_count = max_count;
+
+	elf_dec_ref((elf_object*)particles->particles);
 	particles->particles = elf_create_list();
 	elf_inc_ref((elf_object*)particles->particles);
 
@@ -818,3 +814,4 @@ elf_color elf_get_particles_color_max(elf_particles *particles)
 {
 	return particles->color_max;
 }
+

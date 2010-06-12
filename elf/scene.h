@@ -879,11 +879,29 @@ elf_armature *elf_get_or_load_armature_by_name(elf_scene *scene, const char *nam
 elf_particles *elf_get_or_load_particles_by_name(elf_scene *scene, const char *name)
 {
 	elf_particles *particles;
+	elf_pak_index *index;
+	FILE *file;
 
 	for(particles = (elf_particles*)elf_begin_list(scene->particles); particles;
 		particles = (elf_particles*)elf_next_in_list(scene->particles))
 	{
 		if(!strcmp(particles->name, name)) return particles;
+	}
+
+	if(scene->pak)
+	{
+		index = elf_get_pak_index_by_name(scene->pak, name, ELF_PARTICLES);
+		if(index)
+		{
+			file = fopen(scene->pak->file_path, "rb");
+			fseek(file, elf_get_pak_index_offset(index), SEEK_SET);
+			if(feof(file)) return NULL;
+
+			particles = elf_create_particles_from_pak(file, name, scene);
+			if(particles) elf_add_particles_to_scene(scene, particles);
+			fclose(file);
+			return particles;
+		}
 	}
 
 	return NULL;
