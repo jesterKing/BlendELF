@@ -5,6 +5,22 @@ void mouse_wheel_callback(int wheel);
 void key_callback(int key, int state);
 void char_callback(int code, int state);
 
+elf_video_mode* elf_create_video_mode()
+{
+	elf_video_mode *video_mode;
+
+	video_mode = (elf_video_mode*)malloc(sizeof(elf_video_mode));
+	memset(video_mode, 0x0, sizeof(elf_video_mode));
+	video_mode->type = ELF_VIDEO_MODE;
+
+	return video_mode;
+}
+
+void elf_destroy_video_mode(elf_video_mode *video_mode)
+{
+	free(video_mode);
+}
+
 elf_key_event* elf_create_key_event()
 {
 	elf_key_event *key_event;
@@ -53,7 +69,11 @@ elf_context* elf_create_context()
 	memset(context, 0x0, sizeof(elf_context));
 	context->type = ELF_CONTEXT;
 
+	context->video_modes = elf_create_list();
 	context->events = elf_create_list();
+
+	elf_inc_ref((elf_object*)context->video_modes);
+	elf_inc_ref((elf_object*)context->events);
 
 	global_obj_count++;
 
@@ -63,7 +83,9 @@ elf_context* elf_create_context()
 void elf_destroy_context(elf_context *context)
 {
 	if(context->title) elf_destroy_string(context->title);
-	if(context->events) elf_destroy_list(context->events);
+	
+	elf_dec_ref((elf_object*)context->video_modes);
+	elf_dec_ref((elf_object*)context->events);
 
 	free(context);
 
@@ -73,6 +95,11 @@ void elf_destroy_context(elf_context *context)
 unsigned char elf_init_context(int width, int height,
 	const char *title, unsigned char fullscreen)
 {
+	int i;
+	int video_mode_count;
+	GLFWvidmode *vidmodes;
+	elf_video_mode *video_mode;
+
 	if(ctx)
 	{
 		elf_write_to_log("warning: can not open window twice\n");
@@ -114,6 +141,35 @@ unsigned char elf_init_context(int width, int height,
 	glfwSetMouseWheelCallback(mouse_wheel_callback);
 	glfwSetKeyCallback(key_callback);
 	glfwSetCharCallback(char_callback);
+
+	vidmodes = (GLFWvidmode*)malloc(sizeof(GLFWvidmode)*256);
+	video_mode_count = glfwGetVideoModes(vidmodes, 256);
+
+	for(i = 0; i < video_mode_count; i++)
+	{
+		if(vidmodes[i].RedBits == 8 && vidmodes[i].GreenBits == 8 && vidmodes[i].BlueBits == 8)
+		{
+			video_mode = elf_create_video_mode();
+			video_mode->reso.x = vidmodes[i].Width;
+			video_mode->reso.y = vidmodes[i].Height;
+			elf_append_to_list(ctx->video_modes, (elf_object*)video_mode);
+		}
+	}
+
+	// dunno what I'm doing here, just wondering if the bit counts aren't
+	// 8 for some reason... 
+	if(video_mode_count > 0 && elf_get_list_length(ctx->video_modes) == 0)
+	{
+		for(i = 0; i < video_mode_count; i++)
+		{
+			video_mode = elf_create_video_mode();
+			video_mode->reso.x = vidmodes[i].Width;
+			video_mode->reso.y = vidmodes[i].Height;
+			elf_append_to_list(ctx->video_modes, (elf_object*)video_mode);
+		}
+	}
+
+	free(vidmodes);
 
 	return ELF_TRUE;
 }
@@ -217,6 +273,28 @@ int elf_get_window_width()
 int elf_get_window_height()
 {
 	return ctx->height;
+}
+
+int elf_get_video_mode_count()
+{
+	return elf_get_list_length(ctx->video_modes);
+}
+
+elf_vec2i elf_get_video_mode(int idx)
+{
+	elf_video_mode *mode;
+	elf_vec2i reso;
+
+	memset(&reso.x, 0x0, sizeof(elf_vec2i));
+
+	mode = (elf_video_mode*)elf_get_item_from_list(ctx->video_modes, idx);
+
+	if(mode)
+	{
+		return mode->reso;
+	}
+
+	return reso;
 }
 
 unsigned char elf_is_fullscreen()

@@ -165,7 +165,8 @@ extern "C" {
 #define ELF_SCRIPTING					0x0041
 #define ELF_PHYSICS_TRI_MESH				0x0042
 #define ELF_SPRITE					0x0043
-#define ELF_OBJECT_TYPE_COUNT				0x0044	// <mdoc> NUMBER OF OBJECT TYPES
+#define ELF_VIDEO_MODE					0x0044
+#define ELF_OBJECT_TYPE_COUNT				0x0045	// <mdoc> NUMBER OF OBJECT TYPES
 
 #define ELF_PERSPECTIVE					0x0000	// <mdoc> CAMERA MODE <mdocc> The camera modes used by camera internal functions
 #define ELF_ORTHOGRAPHIC				0x0001
@@ -377,6 +378,7 @@ typedef struct elf_server				elf_server;
 typedef struct elf_client				elf_client;
 typedef struct elf_scripting				elf_scripting;
 typedef struct elf_sprite				elf_sprite;
+typedef struct elf_video_mode				elf_video_mode;
 
 // <!!
 struct elf_vec2i {
@@ -474,10 +476,15 @@ void elf_rseek_list(elf_list *list, elf_object *ptr);
 //////////////////////////////// CONTEXT ////////////////////////////////
 
 // <!!
+elf_video_mode* elf_create_video_mode();
+void elf_destroy_video_mode(elf_video_mode *video_mode);
+
 elf_key_event* elf_create_key_event();
 void elf_destroy_key_event(elf_key_event *key_event);
+
 elf_char_event* elf_create_char_event();
 void elf_destroy_char_event(elf_char_event *char_event);
+
 elf_context* elf_create_context();
 void elf_destroy_context(elf_context *context);
 
@@ -500,6 +507,8 @@ void elf_set_title(const char *title);	// <mdoc> CONTEXT FUNCTIONS
 
 int elf_get_window_width();
 int elf_get_window_height();
+int elf_get_video_mode_count();
+elf_vec2i elf_get_video_mode(int idx);
 unsigned char elf_is_fullscreen();
 const char* elf_get_title();
 int elf_get_multisamples();

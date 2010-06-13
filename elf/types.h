@@ -99,6 +99,11 @@ typedef struct elf_joystick {
 	unsigned char prv_buts[16];
 } elf_joystick;
 
+struct elf_video_mode {
+	ELF_OBJECT_HEADER;
+	elf_vec2i reso;
+};
+
 struct elf_context {
 	ELF_OBJECT_HEADER;
 	int width;
@@ -106,6 +111,7 @@ struct elf_context {
 	unsigned char fullscreen;
 	char *title;
 	int multisamples;
+	elf_list *video_modes;
 	unsigned char cur_keys[256];
 	unsigned char prv_keys[256];
 	int mouse_position[2];

@@ -458,6 +458,17 @@ ELF_API int ELF_APIENTRY elfGetWindowHeight()
 {
 	return elf_get_window_height();
 }
+ELF_API int ELF_APIENTRY elfGetVideoModeCount()
+{
+	return elf_get_video_mode_count();
+}
+ELF_API elf_vec2i ELF_APIENTRY elfGetVideoMode(int idx)
+{
+	elf_vec2i _e_type;
+	memset(&_e_type, 0x0, sizeof(elf_vec2i));
+	_e_type = elf_get_video_mode(idx);
+	return _e_type;
+}
 ELF_API bool ELF_APIENTRY elfIsFullscreen()
 {
 	return (bool)elf_is_fullscreen();

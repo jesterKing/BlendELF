@@ -3199,6 +3199,46 @@ fail:
 }
 
 
+static int _wrap_elfGetVideoModeCount(lua_State* L) {
+  int SWIG_arg = 0;
+  int result;
+  
+  SWIG_check_num_args("GetVideoModeCount",0,0)
+  result = (int)elfGetVideoModeCount();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetVideoMode(lua_State* L) {
+  int SWIG_arg = 0;
+  int arg1 ;
+  elf_vec2i result;
+  
+  SWIG_check_num_args("GetVideoMode",1,1)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("GetVideoMode",1,"int");
+  arg1 = (int)lua_tonumber(L, 1);
+  result = elfGetVideoMode(arg1);
+  {
+    elf_vec2i * resultptr = new elf_vec2i((const elf_vec2i &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_vec2i,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfIsFullscreen(lua_State* L) {
   int SWIG_arg = 0;
   bool result;
@@ -18827,6 +18867,8 @@ static const struct luaL_reg swig_commands[] = {
     { "SetTitle", _wrap_elfSetTitle},
     { "GetWindowWidth", _wrap_elfGetWindowWidth},
     { "GetWindowHeight", _wrap_elfGetWindowHeight},
+    { "GetVideoModeCount", _wrap_elfGetVideoModeCount},
+    { "GetVideoMode", _wrap_elfGetVideoMode},
     { "IsFullscreen", _wrap_elfIsFullscreen},
     { "GetTitle", _wrap_elfGetTitle},
     { "GetMultisamples", _wrap_elfGetMultisamples},
@@ -19553,7 +19595,8 @@ static swig_lua_const_info swig_constants[] = {
 { SWIG_LUA_INT,     (char *)"SCRIPTING", (long) 0x0041, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"PHYSICS_TRI_MESH", (long) 0x0042, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"SPRITE", (long) 0x0043, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"OBJECT_TYPE_COUNT", (long) 0x0044, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"VIDEO_MODE", (long) 0x0044, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"OBJECT_TYPE_COUNT", (long) 0x0045, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"PERSPECTIVE", (long) 0x0000, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"ORTHOGRAPHIC", (long) 0x0001, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"BOX", (long) 0x0001, 0, 0, 0},

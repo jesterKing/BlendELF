@@ -151,7 +151,8 @@
 #define ELF_SCRIPTING 0x0041
 #define ELF_PHYSICS_TRI_MESH 0x0042
 #define ELF_SPRITE 0x0043
-#define ELF_OBJECT_TYPE_COUNT 0x0044
+#define ELF_VIDEO_MODE 0x0044
+#define ELF_OBJECT_TYPE_COUNT 0x0045
 #define ELF_PERSPECTIVE 0x0000
 #define ELF_ORTHOGRAPHIC 0x0001
 #define ELF_BOX 0x0001
@@ -342,6 +343,8 @@ ELF_API void ELF_APIENTRY elfRseekList(elf_handle list, elf_handle ptr);
 ELF_API void ELF_APIENTRY elfSetTitle(const char* title);
 ELF_API int ELF_APIENTRY elfGetWindowWidth();
 ELF_API int ELF_APIENTRY elfGetWindowHeight();
+ELF_API int ELF_APIENTRY elfGetVideoModeCount();
+ELF_API elf_vec2i ELF_APIENTRY elfGetVideoMode(int idx);
 ELF_API bool ELF_APIENTRY elfIsFullscreen();
 ELF_API const char* ELF_APIENTRY elfGetTitle();
 ELF_API int ELF_APIENTRY elfGetMultisamples();
