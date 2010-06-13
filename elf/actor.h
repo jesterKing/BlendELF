@@ -334,6 +334,7 @@ void elf_set_actor_bounding_lengths(elf_actor *actor, float x, float y, float z)
 	actor->pbb_lengths.x = x;
 	actor->pbb_lengths.y = y;
 	actor->pbb_lengths.z = z;
+
 	if(actor->object)
 	{
 		elf_set_actor_physics(actor, elf_get_actor_shape(actor),
@@ -346,6 +347,7 @@ void elf_set_actor_bounding_offset(elf_actor *actor, float x, float y, float z)
 	actor->pbb_offset.x = x;
 	actor->pbb_offset.y = y;
 	actor->pbb_offset.z = z;
+
 	if(actor->object)
 	{
 		elf_set_actor_physics(actor, elf_get_actor_shape(actor),

@@ -212,7 +212,7 @@ void elf_calc_entity_aabb(elf_entity *entity)
 	entity->cull_aabb_max.z += position.z;
 }
 
-void elf_calc_entity_bounding_volumes(elf_entity *entity)
+void elf_calc_entity_bounding_volumes(elf_entity *entity, unsigned char new_model)
 {
 	float max_scale;
 	elf_vec3f tmp_vec;
@@ -261,9 +261,13 @@ void elf_calc_entity_bounding_volumes(elf_entity *entity)
 	entity->bb_max.y += entity->bb_offset.y;
 	entity->bb_max.z += entity->bb_offset.z;
 
-	entity->pbb_lengths.x = entity->model->bb_max.x-entity->model->bb_min.x;
-	entity->pbb_lengths.y = entity->model->bb_max.y-entity->model->bb_min.y;
-	entity->pbb_lengths.z = entity->model->bb_max.z-entity->model->bb_min.z;
+	if(new_model)
+	{
+		entity->pbb_offset = entity->bb_offset;
+		entity->pbb_lengths.x = entity->model->bb_max.x-entity->model->bb_min.x;
+		entity->pbb_lengths.y = entity->model->bb_max.y-entity->model->bb_min.y;
+		entity->pbb_lengths.z = entity->model->bb_max.z-entity->model->bb_min.z;
+	}
 
 	elf_calc_entity_aabb(entity);
 
@@ -283,7 +287,7 @@ void elf_set_entity_scale(elf_entity *entity, float x, float y, float z)
 	gfx_set_transform_scale(entity->transform, x, y, z);
 	gfx_get_transform_scale(entity->transform, &entity->scale.x);
 
-	elf_calc_entity_bounding_volumes(entity);
+	elf_calc_entity_bounding_volumes(entity, ELF_FALSE);
 
 	if(entity->object) elf_set_physics_object_scale(entity->object, x, y, z);
 	if(entity->dobject) elf_set_physics_object_scale(entity->dobject, x, y, z);
@@ -319,7 +323,7 @@ void elf_set_entity_model(elf_entity *entity, elf_model *model)
 	{
 		if(entity->object) elf_disable_entity_physics(entity);
 		elf_reset_entity_debug_physics_object(entity);
-		elf_calc_entity_bounding_volumes(entity);
+		elf_calc_entity_bounding_volumes(entity, ELF_FALSE);
 		return;
 	}
 	else
@@ -334,7 +338,7 @@ void elf_set_entity_model(elf_entity *entity, elf_model *model)
 	}
 
 	elf_set_entity_scale(entity, 1.0, 1.0, 1.0);
-	elf_calc_entity_bounding_volumes(entity);
+	elf_calc_entity_bounding_volumes(entity, ELF_TRUE);
 
 	if(entity->object)
 	{
@@ -459,7 +463,7 @@ void elf_set_entity_armature(elf_entity *entity, elf_armature *armature)
 	if(entity->armature) elf_dec_ref((elf_object*)entity->armature);
 	entity->armature = armature;
 	if(entity->armature) elf_inc_ref((elf_object*)entity->armature);
-	elf_calc_entity_bounding_volumes(entity);
+	elf_calc_entity_bounding_volumes(entity, ELF_FALSE);
 }
 
 void elf_set_entity_armature_frame(elf_entity *entity, float frame)

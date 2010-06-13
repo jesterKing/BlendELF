@@ -178,6 +178,19 @@ int elf_get_actor_header_size_bytes(elf_actor *actor)
 		size_bytes += sizeof(float)*6*elf_get_list_length(curve->points);	// points
 	}
 
+	size_bytes += sizeof(float)*3;	// bounding lengths
+	size_bytes += sizeof(float)*3;	// bounding offset
+	size_bytes += sizeof(unsigned char);	// shape
+	size_bytes += sizeof(float);	// mass
+	size_bytes += sizeof(float);	// linear damp
+	size_bytes += sizeof(float);	// angular damp
+	size_bytes += sizeof(float);	// linear sleep threshold
+	size_bytes += sizeof(float);	// angular sleep threshold
+	size_bytes += sizeof(float);	// restitution
+	size_bytes += sizeof(float)*3;	// anisotropic friction
+	size_bytes += sizeof(float)*3;	// linear factor
+	size_bytes += sizeof(float)*3;	// angular factor
+
 	return size_bytes;
 }
 
@@ -233,10 +246,6 @@ int elf_get_entity_size_bytes(elf_entity *entity)
 	size_bytes += sizeof(float)*3;	// scale
 	size_bytes += sizeof(char)*64;	// model
 	size_bytes += sizeof(char)*64;	// armature
-	size_bytes += sizeof(unsigned char);	// shape
-	size_bytes += sizeof(float);	// mass
-	size_bytes += sizeof(float);	// linear damping
-	size_bytes += sizeof(float);	// angular damping
 	size_bytes += sizeof(int);	// material count
 	size_bytes += sizeof(char)*64*elf_get_entity_material_count(entity);	// materials
 
@@ -426,6 +435,18 @@ void elf_read_actor_header(elf_actor *actor, FILE *file, elf_scene *scene)
 	elf_bezier_curve *curve;
 	unsigned char curve_count;
 	int point_count;
+	float bounding_lengths[3];
+	float bounding_offset[3];
+	unsigned char shape;
+	float mass;
+	float lin_damp;
+	float ang_damp;
+	float lin_sleep;
+	float ang_sleep;
+	float restitution;
+	float anis_fric[3];
+	float linear_factor[3];
+	float angular_factor[3];
 
 	fread(name, sizeof(char), 64, file);
 	fread(parent_name, sizeof(char), 64, file);
@@ -469,6 +490,34 @@ void elf_read_actor_header(elf_actor *actor, FILE *file, elf_scene *scene)
 		}
 
 		elf_add_curve_to_ipo(actor->ipo, curve);
+	}
+
+	fread((char*)bounding_lengths, sizeof(float), 3, file);
+	fread((char*)bounding_offset, sizeof(float), 3, file);
+
+	elf_set_actor_bounding_lengths(actor, bounding_lengths[0], bounding_lengths[1], bounding_lengths[2]);
+	elf_set_actor_bounding_offset(actor, bounding_offset[0], bounding_offset[1], bounding_offset[2]);
+
+	fread((char*)&shape, sizeof(unsigned char), 1, file);
+	fread((char*)&mass, sizeof(float), 1, file);
+	fread((char*)&lin_damp, sizeof(float), 1, file);
+	fread((char*)&ang_damp, sizeof(float), 1, file);
+	fread((char*)&lin_sleep, sizeof(float), 1, file);
+	fread((char*)&ang_sleep, sizeof(float), 1, file);
+	fread((char*)&restitution, sizeof(float), 1, file);
+	fread((char*)anis_fric, sizeof(float), 3, file);
+	fread((char*)linear_factor, sizeof(float), 3, file);
+	fread((char*)angular_factor, sizeof(float), 3, file);
+
+	if(shape == ELF_BOX || shape == ELF_SPHERE || shape == ELF_MESH || shape == ELF_CAPSULE)
+	{
+		elf_set_actor_physics(actor, shape, mass);
+		elf_set_actor_damping(actor, lin_damp, ang_damp);
+		elf_set_actor_sleep_thresholds(actor, lin_sleep, ang_sleep);
+		elf_set_actor_restitution(actor, restitution);
+		elf_set_actor_anisotropic_friction(actor, anis_fric[0], anis_fric[1], anis_fric[2]);
+		elf_set_actor_linear_factor(actor, linear_factor[0], linear_factor[1], linear_factor[2]);
+		elf_set_actor_angular_factor(actor, angular_factor[0], angular_factor[1], angular_factor[2]);
 	}
 }
 
@@ -624,8 +673,8 @@ elf_entity* elf_create_entity_from_pak(FILE *file, const char *name, elf_scene *
 	char model[64];
 	char armature[64];
 	char material[64];
-	unsigned char shape;
-	float mass, lin_damp, ang_damp;
+	elf_vec3f bounding_lengths;
+	elf_vec3f bounding_offset;
 
 	fread((char*)&magic, sizeof(int), 1, file);
 
@@ -640,12 +689,20 @@ elf_entity* elf_create_entity_from_pak(FILE *file, const char *name, elf_scene *
 
 	fread((char*)scale, sizeof(float), 3, file);
 
+	bounding_lengths = elf_get_actor_bounding_lengths((elf_actor*)entity);
+	bounding_offset = elf_get_actor_bounding_offset((elf_actor*)entity);
+
 	fread(model, sizeof(char), 64, file);
 	if(strlen(model))
 	{
 		rmodel = elf_get_or_load_model_by_name(scene, model);
 		elf_set_entity_model(entity, rmodel);
 	}
+
+	if(!elf_about_zero(bounding_lengths.x) || !elf_about_zero(bounding_lengths.y) || !elf_about_zero(bounding_lengths.z))
+		elf_set_actor_bounding_lengths((elf_actor*)entity, bounding_lengths.x, bounding_lengths.y, bounding_lengths.y);
+	if(!elf_about_zero(bounding_offset.x) || !elf_about_zero(bounding_offset.y) || !elf_about_zero(bounding_offset.z))
+		elf_set_actor_bounding_offset((elf_actor*)entity, bounding_offset.x, bounding_offset.y, bounding_offset.y);
 
 	fread(armature, sizeof(char), 64, file);
 	if(strlen(armature))
@@ -657,18 +714,8 @@ elf_entity* elf_create_entity_from_pak(FILE *file, const char *name, elf_scene *
 	// scale must be set after setting a model, setting a model resets the scale
 	elf_set_entity_scale(entity, scale[0], scale[1], scale[2]);
 
-	fread((char*)&shape, sizeof(unsigned char), 1, file);
-	fread((char*)&mass, sizeof(float), 1, file);
-	fread((char*)&lin_damp, sizeof(float), 1, file);
-	fread((char*)&ang_damp, sizeof(float), 1, file);
+	fread((char*)&material_count, sizeof(int), 1, file);
 
-	if(shape == ELF_BOX || shape == ELF_SPHERE || shape == ELF_MESH || shape == ELF_CAPSULE)
-	{
-		elf_set_actor_physics((elf_actor*)entity, shape, mass);
-		elf_set_actor_damping((elf_actor*)entity, lin_damp, ang_damp);
-	}
-
-	fread((char*)&material_count, sizeof(unsigned int), 1, file);
 	for(i = 0, j = 0; i < (int)material_count; i++)
 	{
 		memset(material, 0x0, sizeof(char)*64);
@@ -1319,6 +1366,18 @@ void elf_write_actor_header(elf_actor *actor, FILE *file)
 	elf_bezier_curve *curve;
 	unsigned char curve_count;
 	int point_count;
+	elf_vec3f bounding_lengths;
+	elf_vec3f bounding_offset;
+	unsigned char shape;
+	float mass;
+	float lin_damp;
+	float ang_damp;
+	float lin_sleep;
+	float ang_sleep;
+	float restitution;
+	elf_vec3f anis_fric;
+	elf_vec3f linear_factor;
+	elf_vec3f angular_factor;
 
 	elf_write_name_to_file(actor->name, file);
 	elf_write_name_to_file("", file);
@@ -1350,6 +1409,34 @@ void elf_write_actor_header(elf_actor *actor, FILE *file)
 			fwrite((char*)&point->c2.x, sizeof(float), 2, file);
 		}
 	}
+
+	bounding_lengths = elf_get_actor_bounding_lengths(actor);
+	bounding_offset = elf_get_actor_bounding_offset(actor);
+
+	fwrite((char*)&bounding_lengths.x, sizeof(float), 3, file);
+	fwrite((char*)&bounding_offset.x, sizeof(float), 3, file);
+
+	shape = (unsigned char)elf_get_actor_shape(actor);
+	mass = elf_get_actor_mass(actor);
+	lin_damp = elf_get_actor_linear_damping(actor);
+	ang_damp = elf_get_actor_angular_damping(actor);
+	lin_sleep = elf_get_actor_linear_sleep_threshold(actor);
+	ang_sleep = elf_get_actor_angular_sleep_threshold(actor);
+	restitution = elf_get_actor_restitution(actor);
+	anis_fric = elf_get_actor_anisotropic_friction(actor);
+	linear_factor = elf_get_actor_linear_factor(actor);
+	angular_factor = elf_get_actor_angular_factor(actor);
+
+	fwrite((char*)&shape, sizeof(unsigned char), 1, file);
+	fwrite((char*)&mass, sizeof(float), 1, file);
+	fwrite((char*)&lin_damp, sizeof(float), 1, file);
+	fwrite((char*)&ang_damp, sizeof(float), 1, file);
+	fwrite((char*)&lin_sleep, sizeof(float), 1, file);
+	fwrite((char*)&ang_sleep, sizeof(float), 1, file);
+	fwrite((char*)&restitution, sizeof(float), 1, file);
+	fwrite((char*)&anis_fric.x, sizeof(float), 3, file);
+	fwrite((char*)&linear_factor.x, sizeof(float), 3, file);
+	fwrite((char*)&angular_factor.x, sizeof(float), 3, file);
 }
 
 void elf_write_armature_to_file(elf_armature *armature, FILE *file)
@@ -1403,8 +1490,6 @@ void elf_write_entity_to_file(elf_entity *entity, FILE *file)
 {
 	int magic = 0;
 	float scale[3];
-	unsigned char shape;
-	float mass, lin_damp, ang_damp;
 	unsigned int material_count;
 	elf_material *mat;
 
@@ -1421,16 +1506,6 @@ void elf_write_entity_to_file(elf_entity *entity, FILE *file)
 
 	if(entity->armature) elf_write_name_to_file(entity->armature->name, file);
 	else elf_write_name_to_file("", file);
-
-	shape = (unsigned char)elf_get_actor_shape((elf_actor*)entity);
-	mass = elf_get_actor_mass((elf_actor*)entity);
-	lin_damp = elf_get_actor_linear_damping((elf_actor*)entity);
-	ang_damp = elf_get_actor_angular_damping((elf_actor*)entity);
-
-	fwrite((char*)&shape, sizeof(unsigned char), 1, file);
-	fwrite((char*)&mass, sizeof(float), 1, file);
-	fwrite((char*)&lin_damp, sizeof(float), 1, file);
-	fwrite((char*)&ang_damp, sizeof(float), 1, file);
 
 	material_count = elf_get_entity_material_count(entity);
 	fwrite((char*)&material_count, sizeof(unsigned int), 1, file);
@@ -1511,7 +1586,7 @@ void elf_write_model_to_file(elf_model *model, FILE *file)
 	is_weights_and_boneids = 0;
 	junk = 0;
 	if(model->tex_coords) is_tex_coords = 1;
-	if(model->weights || model->boneids) is_weights_and_boneids = 1;
+	if(model->weights && model->boneids) is_weights_and_boneids = 1;
 	
 	fwrite((char*)&model->vertice_count, sizeof(int), 1, file);
 	fwrite((char*)&model->frame_count, sizeof(int), 1, file);
@@ -1547,10 +1622,10 @@ void elf_write_model_to_file(elf_model *model, FILE *file)
 
 		for(i = 0; i < model->vertice_count; i++)
 		{
-			boneids[i] = model->boneids[i*4];
-			boneids[i+1] = model->boneids[i*4+1];
-			boneids[i+2] = model->boneids[i*4+2];
-			boneids[i+3] = model->boneids[i*4+3];
+			boneids[0] = model->boneids[i*4];
+			boneids[1] = model->boneids[i*4+1];
+			boneids[2] = model->boneids[i*4+2];
+			boneids[3] = model->boneids[i*4+3];
 
 			fwrite((char*)boneids, sizeof(short int), 4, file);
 		}
@@ -1712,6 +1787,8 @@ void elf_write_resources_to_file(elf_list *resources, FILE *file)
 	for(res = (elf_resource*)elf_begin_list(resources); res;
 		res = (elf_resource*)elf_next_in_list(resources))
 	{
+		printf("%s\n", res->name);
+
 		switch(res->type)
 		{
 			case ELF_SCENE: elf_write_scene_to_file((elf_scene*)res, file); break;

@@ -966,7 +966,7 @@ void elf_entity_pre_draw(elf_entity *entity);
 void elf_entity_post_draw(elf_entity *entity);
 void elf_destroy_entity(elf_entity *entity);
 void elf_calc_entity_aabb(elf_entity *entity);
-void elf_calc_entity_bounding_volumes(elf_entity *entity);
+void elf_calc_entity_bounding_volumes(elf_entity *entity, unsigned char new_model);
 // !!>
 
 elf_entity* elf_create_entity(const char *name);	// <mdoc> ENTITY FUNCTIONS
