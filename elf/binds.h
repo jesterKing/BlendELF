@@ -257,12 +257,6 @@
 #define ELF_UNKNOWN_TYPE 0x000B
 #define ELF_INVALID_HANDLE 0x000C
 #define ELF_MISSING_FEATURE 0x000D
-#define ELF_X_PLUS 0x0001
-#define ELF_X_MINUS 0x0002
-#define ELF_Y_PLUS 0x0003
-#define ELF_Y_MINUS 0x0004
-#define ELF_Z_PLUS 0x0005
-#define ELF_Z_MINUS 0x0000
 #if defined(__WIN32__) || defined(WIN32) || defined(__CYGWIN__)
 	#ifndef ELF_PLAYER
 		#define ELF_APIENTRY __stdcall
@@ -527,16 +521,16 @@ ELF_API void ELF_APIENTRY elfSetActorBoundingLengths(elf_handle actor, float x, 
 ELF_API void ELF_APIENTRY elfSetActorBoundingOffset(elf_handle actor, float x, float y, float z);
 ELF_API void ELF_APIENTRY elfSetActorPhysics(elf_handle actor, int shape, float mass);
 ELF_API void ELF_APIENTRY elfDisableActorPhysics(elf_handle actor);
-ELF_API void ELF_APIENTRY elfSetActorAnisotropicFriction(elf_handle actor, float x, float y, float z);
 ELF_API void ELF_APIENTRY elfSetActorDamping(elf_handle actor, float lin_damp, float ang_damp);
 ELF_API void ELF_APIENTRY elfSetActorSleepThresholds(elf_handle actor, float lin_thrs, float ang_thrs);
 ELF_API void ELF_APIENTRY elfSetActorRestitution(elf_handle actor, float restitution);
+ELF_API void ELF_APIENTRY elfSetActorAnisotropicFriction(elf_handle actor, float x, float y, float z);
+ELF_API void ELF_APIENTRY elfSetActorLinearFactor(elf_handle actor, float x, float y, float z);
+ELF_API void ELF_APIENTRY elfSetActorAngularFactor(elf_handle actor, float x, float y, float z);
 ELF_API void ELF_APIENTRY elfAddForceToActor(elf_handle actor, float x, float y, float z);
 ELF_API void ELF_APIENTRY elfAddTorqueToActor(elf_handle actor, float x, float y, float z);
 ELF_API void ELF_APIENTRY elfSetActorLinearVelocity(elf_handle actor, float x, float y, float z);
 ELF_API void ELF_APIENTRY elfSetActorAngularVelocity(elf_handle actor, float x, float y, float z);
-ELF_API void ELF_APIENTRY elfSetActorLinearFactor(elf_handle actor, float x, float y, float z);
-ELF_API void ELF_APIENTRY elfSetActorAngularFactor(elf_handle actor, float x, float y, float z);
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorBoundingLengths(elf_handle actor);
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorBoundingOffset(elf_handle actor);
 ELF_API int ELF_APIENTRY elfGetActorShape(elf_handle actor);

@@ -13,16 +13,26 @@
 	char *file_path; \
 	elf_scene *scene; \
 	gfx_transform *transform; \
-	elf_physics_object *object; \
-	elf_physics_object *dobject; \
 	elf_list *joints; \
 	elf_script *script; \
 	elf_list *sources; \
 	elf_ipo *ipo; \
 	elf_frame_player *ipo_player; \
 	elf_list *properties; \
+	elf_physics_object *object; \
+	elf_physics_object *dobject; \
 	elf_vec3f pbb_lengths; \
 	elf_vec3f pbb_offset; \
+	unsigned char shape; \
+	float mass; \
+	float lin_damp; \
+	float ang_damp; \
+	float lin_sleep; \
+	float ang_sleep; \
+	float restitution; \
+	elf_vec3f anis_fric; \
+	elf_vec3f lin_factor; \
+	elf_vec3f ang_factor; \
 	unsigned char moved; \
 	unsigned char selected
 

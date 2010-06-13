@@ -537,7 +537,7 @@ elf_armature* elf_create_armature_from_pak(FILE *file, const char *name, elf_sce
 
 	fread((char*)&magic, sizeof(int), 1, file);
 
-	if(magic != 179532122)
+	if(magic != ELF_ARMATURE_MAGIC)
 	{
 		elf_set_error(ELF_INVALID_FILE, "error: invalid armature \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
 		return NULL;
@@ -642,7 +642,7 @@ elf_camera* elf_create_camera_from_pak(FILE *file, const char *name, elf_scene *
 
 	fread((char*)&magic, sizeof(int), 1, file);
 
-	if(magic != 179532111)
+	if(magic != ELF_CAMERA_MAGIC)
 	{
 		elf_set_error(ELF_INVALID_FILE, "error: invalid camera \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
 		return NULL;
@@ -678,7 +678,7 @@ elf_entity* elf_create_entity_from_pak(FILE *file, const char *name, elf_scene *
 
 	fread((char*)&magic, sizeof(int), 1, file);
 
-	if(magic != 179532112)
+	if(magic != ELF_ENTITY_MAGIC)
 	{
 		elf_set_error(ELF_INVALID_FILE, "error: invalid entity \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
 		return NULL;
@@ -746,7 +746,7 @@ elf_light* elf_create_light_from_pak(FILE *file, const char *name, elf_scene *sc
 
 	fread((char*)&magic, sizeof(int), 1, file);
 
-	if(magic != 179532113)
+	if(magic != ELF_LIGHT_MAGIC)
 	{
 		elf_set_error(ELF_INVALID_FILE, "error: invalid light \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
 		return NULL;
@@ -789,7 +789,7 @@ elf_material* elf_create_material_from_pak(FILE *file, const char *name, elf_sce
 
 	fread((char*)&magic, sizeof(int), 1, file);
 
-	if(magic != 179532109)
+	if(magic != ELF_MATERIAL_MAGIC)
 	{
 		elf_set_error(ELF_INVALID_FILE, "error: invalid material \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
 		return NULL;
@@ -855,7 +855,7 @@ elf_model* elf_create_model_from_pak(FILE *file, const char *name, elf_scene *sc
 	// read magic
 	fread((char*)&magic, sizeof(int), 1, file);
 
-	if(magic != 179532110)
+	if(magic != ELF_MODEL_MAGIC)
 	{
 		elf_set_error(ELF_INVALID_FILE, "error: invalid model \"%s\", wrong magic number\n", name);
 		return NULL;
@@ -1035,7 +1035,7 @@ elf_particles* elf_create_particles_from_pak(FILE *file, const char *name, elf_s
 
 	fread((char*)&magic, sizeof(int), 1, file);
 
-	if(magic != 179532141)
+	if(magic != ELF_PARTICLES_MAGIC)
 	{
 		elf_set_error(ELF_INVALID_FILE, "error: invalid particles \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
 		return NULL;
@@ -1122,7 +1122,7 @@ elf_script* elf_create_script_from_pak(FILE *file, const char *name, elf_scene *
 
 	fread((char*)&magic, sizeof(int), 1, file);
 
-	if(magic != 179532121)
+	if(magic != ELF_SCRIPT_MAGIC)
 	{
 		elf_set_error(ELF_INVALID_FILE, "error: invalid script \"%s\", wrong magic number\n", name);
 		return NULL;
@@ -1160,7 +1160,7 @@ elf_sprite* elf_create_sprite_from_pak(FILE *file, const char *name, elf_scene *
 
 	fread((char*)&magic, sizeof(int), 1, file);
 
-	if(magic != 179532140)
+	if(magic != ELF_SPRITE_MAGIC)
 	{
 		elf_set_error(ELF_INVALID_FILE, "error: invalid sprite \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
 		return NULL;
@@ -1207,7 +1207,7 @@ elf_texture *elf_create_texture_from_pak(FILE *file, const char *name, elf_scene
 
 	fread((char*)&magic, sizeof(int), 1, file);
 
-	if(magic != 179532108)
+	if(magic != ELF_TEXTURE_MAGIC)
 	{
 		elf_set_error(ELF_INVALID_FILE, "error: invalid texture \"%s//%s\", wrong magic number\n", elf_get_scene_file_path(scene), name);
 		return NULL;
@@ -1318,7 +1318,7 @@ elf_scene* elf_create_scene_from_pak(elf_pak *pak)
 				fseek(file, elf_get_pak_index_offset(index), SEEK_SET);
 
 				fread((char*)&magic, sizeof(int), 1, file);
-				if(magic != 179532120)
+				if(magic != ELF_SCENE_MAGIC)
 				{
 					printf("warning: scene header section of \"%s\" is invalid\n", elf_get_pak_file_path(pak));
 					continue;
@@ -1445,7 +1445,7 @@ void elf_write_armature_to_file(elf_armature *armature, FILE *file)
 	elf_bone *bone;
 	int i, j;
 
-	magic = 179532122;
+	magic = ELF_ARMATURE_MAGIC;
 	fwrite((char*)&magic, sizeof(int), 1, file);
 
 	elf_write_name_to_file(armature->name, file);
@@ -1493,7 +1493,7 @@ void elf_write_entity_to_file(elf_entity *entity, FILE *file)
 	unsigned int material_count;
 	elf_material *mat;
 
-	magic = 179532112;
+	magic = ELF_ENTITY_MAGIC;
 	fwrite((char*)&magic, sizeof(int), 1, file);
 
 	elf_write_actor_header((elf_actor*)entity, file);
@@ -1522,7 +1522,7 @@ void elf_write_light_to_file(elf_light *light, FILE *file)
 	int magic = 0;
 	int junk = 0;
 
-	magic = 179532113;
+	magic = ELF_LIGHT_MAGIC;
 	fwrite((char*)&magic, sizeof(int), 1, file);
 
 	elf_write_actor_header((elf_actor*)light, file);
@@ -1543,7 +1543,7 @@ void elf_write_material_to_file(elf_material *material, FILE *file)
 	unsigned char texture_count;
 	int i;
 
-	magic = 179532109;
+	magic = ELF_MATERIAL_MAGIC;
 	fwrite((char*)&magic, sizeof(int), 1, file);
 
 	elf_write_name_to_file(material->name, file);
@@ -1576,7 +1576,7 @@ void elf_write_model_to_file(elf_model *model, FILE *file)
 	int i = 0;
 	short int boneids[4];
 
-	magic = 179532110;
+	magic = ELF_MODEL_MAGIC;
 	fwrite((char*)&magic, sizeof(int), 1, file);
 
 	elf_write_name_to_file(model->name, file);
@@ -1636,7 +1636,7 @@ void elf_write_particles_to_file(elf_particles *particles, FILE *file)
 {
 	int magic = 0;
 
-	magic = 179532141;
+	magic = ELF_PARTICLES_MAGIC;
 	fwrite((char*)&magic, sizeof(int), 1, file);
 
 	elf_write_actor_header((elf_actor*)particles, file);
@@ -1680,7 +1680,7 @@ void elf_write_scene_to_file(elf_scene *scene, FILE *file)
 {
 	int magic;
 
-	magic = 179532120;
+	magic = ELF_SCENE_MAGIC;
 	fwrite((char*)&magic, sizeof(int), 1, file);
 
 	elf_write_name_to_file(scene->name, file);
@@ -1693,7 +1693,7 @@ void elf_write_script_to_file(elf_script *script, FILE *file)
 	int magic = 0;
 	unsigned int length;
 
-	magic = 179532121;
+	magic = ELF_SCRIPT_MAGIC;
 	fwrite((char*)&magic, sizeof(int), 1, file);
 
 	elf_write_name_to_file(script->name, file);
@@ -1710,7 +1710,7 @@ void elf_write_sprite_to_file(elf_sprite *sprite, FILE *file)
 {
 	int magic = 0;
 
-	magic = 179532140;
+	magic = ELF_SPRITE_MAGIC;
 	fwrite((char*)&magic, sizeof(int), 1, file);
 
 	elf_write_actor_header((elf_actor*)sprite, file);
@@ -1728,7 +1728,7 @@ void elf_write_texture_to_file(elf_texture *texture, FILE *file)
 	int magic;
 	unsigned char type;
 
-	magic = 179532108;
+	magic = ELF_TEXTURE_MAGIC;
 	fwrite((char*)&magic, sizeof(int), 1, file);
 
 	elf_write_name_to_file(texture->name, file);
@@ -1787,8 +1787,6 @@ void elf_write_resources_to_file(elf_list *resources, FILE *file)
 	for(res = (elf_resource*)elf_begin_list(resources); res;
 		res = (elf_resource*)elf_next_in_list(resources))
 	{
-		printf("%s\n", res->name);
-
 		switch(res->type)
 		{
 			case ELF_SCENE: elf_write_scene_to_file((elf_scene*)res, file); break;

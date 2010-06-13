@@ -2472,24 +2472,6 @@ ELF_API void ELF_APIENTRY elfDisableActorPhysics(elf_handle actor)
 	}
 	elf_disable_actor_physics((elf_actor*)actor.get());
 }
-ELF_API void ELF_APIENTRY elfSetActorAnisotropicFriction(elf_handle actor, float x, float y, float z)
-{
-	if(!actor.get() || !elf_is_actor(actor.get()))
-	{
-		elf_script *script = elf_get_current_script();
-		if(script)
-		{
-			int line = elf_get_current_script_line();
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetActorAnisotropicFriction() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
-		}
-		else
-		{
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetActorAnisotropicFriction() -> invalid handle\n");
-		}
-		return;
-	}
-	elf_set_actor_anisotropic_friction((elf_actor*)actor.get(), x, y, z);
-}
 ELF_API void ELF_APIENTRY elfSetActorDamping(elf_handle actor, float lin_damp, float ang_damp)
 {
 	if(!actor.get() || !elf_is_actor(actor.get()))
@@ -2543,6 +2525,60 @@ ELF_API void ELF_APIENTRY elfSetActorRestitution(elf_handle actor, float restitu
 		return;
 	}
 	elf_set_actor_restitution((elf_actor*)actor.get(), restitution);
+}
+ELF_API void ELF_APIENTRY elfSetActorAnisotropicFriction(elf_handle actor, float x, float y, float z)
+{
+	if(!actor.get() || !elf_is_actor(actor.get()))
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetActorAnisotropicFriction() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetActorAnisotropicFriction() -> invalid handle\n");
+		}
+		return;
+	}
+	elf_set_actor_anisotropic_friction((elf_actor*)actor.get(), x, y, z);
+}
+ELF_API void ELF_APIENTRY elfSetActorLinearFactor(elf_handle actor, float x, float y, float z)
+{
+	if(!actor.get() || !elf_is_actor(actor.get()))
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetActorLinearFactor() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetActorLinearFactor() -> invalid handle\n");
+		}
+		return;
+	}
+	elf_set_actor_linear_factor((elf_actor*)actor.get(), x, y, z);
+}
+ELF_API void ELF_APIENTRY elfSetActorAngularFactor(elf_handle actor, float x, float y, float z)
+{
+	if(!actor.get() || !elf_is_actor(actor.get()))
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetActorAngularFactor() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetActorAngularFactor() -> invalid handle\n");
+		}
+		return;
+	}
+	elf_set_actor_angular_factor((elf_actor*)actor.get(), x, y, z);
 }
 ELF_API void ELF_APIENTRY elfAddForceToActor(elf_handle actor, float x, float y, float z)
 {
@@ -2615,42 +2651,6 @@ ELF_API void ELF_APIENTRY elfSetActorAngularVelocity(elf_handle actor, float x, 
 		return;
 	}
 	elf_set_actor_angular_velocity((elf_actor*)actor.get(), x, y, z);
-}
-ELF_API void ELF_APIENTRY elfSetActorLinearFactor(elf_handle actor, float x, float y, float z)
-{
-	if(!actor.get() || !elf_is_actor(actor.get()))
-	{
-		elf_script *script = elf_get_current_script();
-		if(script)
-		{
-			int line = elf_get_current_script_line();
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetActorLinearFactor() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
-		}
-		else
-		{
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetActorLinearFactor() -> invalid handle\n");
-		}
-		return;
-	}
-	elf_set_actor_linear_factor((elf_actor*)actor.get(), x, y, z);
-}
-ELF_API void ELF_APIENTRY elfSetActorAngularFactor(elf_handle actor, float x, float y, float z)
-{
-	if(!actor.get() || !elf_is_actor(actor.get()))
-	{
-		elf_script *script = elf_get_current_script();
-		if(script)
-		{
-			int line = elf_get_current_script_line();
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetActorAngularFactor() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
-		}
-		else
-		{
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetActorAngularFactor() -> invalid handle\n");
-		}
-		return;
-	}
-	elf_set_actor_angular_factor((elf_actor*)actor.get(), x, y, z);
 }
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorBoundingLengths(elf_handle actor)
 {

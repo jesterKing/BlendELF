@@ -55,6 +55,16 @@ void elf_init_actor(elf_actor *actor, unsigned char camera)
 	elf_set_frame_player_callback(actor->ipo_player, elf_actor_ipo_callback);
 
 	actor->pbb_lengths.x = actor->pbb_lengths.y = actor->pbb_lengths.z = 1.0;
+	actor->shape = ELF_NONE;
+	actor->mass = 0.0;
+	actor->lin_damp = 0.0;
+	actor->ang_damp = 0.0;
+	actor->lin_sleep = 0.8;
+	actor->ang_sleep = 1.0;
+	actor->restitution = 0.0;
+	actor->anis_fric.x = actor->anis_fric.y = actor->anis_fric.z = 0.0;
+	actor->lin_factor.x = actor->lin_factor.y = actor->lin_factor.z = 0.0;
+	actor->ang_factor.x = actor->ang_factor.y = actor->ang_factor.z = 0.0;
 
 	actor->moved = ELF_TRUE;
 }
@@ -366,6 +376,9 @@ void elf_set_actor_physics(elf_actor *actor, int shape, float mass)
 
 	elf_disable_actor_physics(actor);
 
+	actor->shape = (unsigned char)shape;
+	actor->mass = mass;
+
 	switch(shape)
 	{
 		case ELF_BOX:
@@ -391,7 +404,7 @@ void elf_set_actor_physics(elf_actor *actor, int shape, float mass)
 		{
 			if(actor->type != ELF_ENTITY) return;
 			entity = (elf_entity*)actor;
-			if(!elf_get_model_indices(entity->model)) return;
+			if(!entity->model || !elf_get_model_indices(entity->model)) return;
 			if(!entity->model->tri_mesh)
 			{
 				entity->model->tri_mesh = elf_create_physics_tri_mesh(
@@ -449,24 +462,42 @@ void elf_disable_actor_physics(elf_actor *actor)
 	}
 }
 
-void elf_set_actor_anisotropic_friction(elf_actor *actor, float x, float y, float z)
-{
-	if(actor->object) elf_set_physics_object_anisotropic_friction(actor->object, x, y, z);
-}
-
 void elf_set_actor_damping(elf_actor *actor, float lin_damp, float ang_damp)
 {
+	actor->lin_damp = lin_damp;
+	actor->ang_damp = ang_damp;
 	if(actor->object) elf_set_physics_object_damping(actor->object, lin_damp, ang_damp);
 }
 
 void elf_set_actor_sleep_thresholds(elf_actor *actor, float lin_thrs, float ang_thrs)
 {
+	actor->lin_sleep = lin_thrs;
+	actor->ang_sleep = ang_thrs;
 	if(actor->object) elf_set_physics_object_sleep_thresholds(actor->object, lin_thrs, ang_thrs);
 }
 
 void elf_set_actor_restitution(elf_actor *actor, float restitution)
 {
+	actor->restitution = restitution;
 	if(actor->object) elf_set_physics_object_restitution(actor->object, restitution);
+}
+
+void elf_set_actor_anisotropic_friction(elf_actor *actor, float x, float y, float z)
+{
+	actor->anis_fric.x = x; actor->anis_fric.y = y; actor->anis_fric.z = z;
+	if(actor->object) elf_set_physics_object_anisotropic_friction(actor->object, x, y, z);
+}
+
+void elf_set_actor_linear_factor(elf_actor *actor, float x, float y, float z)
+{
+	actor->lin_factor.x = x; actor->lin_factor.y = y; actor->lin_factor.z = z;
+	if(actor->object) elf_set_physics_object_linear_factor(actor->object, x, y, z);
+}
+
+void elf_set_actor_angular_factor(elf_actor *actor, float x, float y, float z)
+{
+	actor->ang_factor.x = x; actor->ang_factor.y = y; actor->ang_factor.z = z;
+	if(actor->object) elf_set_physics_object_angular_factor(actor->object, x, y, z);
 }
 
 void elf_add_force_to_actor(elf_actor *actor, float x, float y, float z)
@@ -489,16 +520,6 @@ void elf_set_actor_angular_velocity(elf_actor *actor, float x, float y, float z)
 	if(actor->object) elf_set_physics_object_angular_velocity(actor->object, x, y, z);
 }
 
-void elf_set_actor_linear_factor(elf_actor *actor, float x, float y, float z)
-{
-	if(actor->object) elf_set_physics_object_linear_factor(actor->object, x, y, z);
-}
-
-void elf_set_actor_angular_factor(elf_actor *actor, float x, float y, float z)
-{
-	if(actor->object) elf_set_physics_object_angular_factor(actor->object, x, y, z);
-}
-
 elf_vec3f elf_get_actor_bounding_lengths(elf_actor *actor)
 {
 	return actor->pbb_lengths;
@@ -511,13 +532,13 @@ elf_vec3f elf_get_actor_bounding_offset(elf_actor *actor)
 
 int elf_get_actor_shape(elf_actor *actor)
 {
-	if(actor->object) elf_get_physics_object_shape(actor->object);
+	if(actor->object) return elf_get_physics_object_shape(actor->object);
 	return 0;
 }
 
 float elf_get_actor_mass(elf_actor *actor)
 {
-	if(actor->object) elf_get_physics_object_mass(actor->object);
+	if(actor->object) return elf_get_physics_object_mass(actor->object);
 	return 0.0;
 }
 

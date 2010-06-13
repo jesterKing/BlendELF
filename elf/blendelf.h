@@ -288,12 +288,28 @@ extern "C" {
 #define ELF_INVALID_HANDLE				0x000C
 #define ELF_MISSING_FEATURE				0x000D
 
+// <!!
 #define ELF_X_PLUS					0x0001	// <mdoc> AXIS TYPES <mdocc> axis codes used by elf.DirectActorAt
 #define ELF_X_MINUS					0x0002
 #define ELF_Y_PLUS					0x0003
 #define ELF_Y_MINUS					0x0004
 #define ELF_Z_PLUS					0x0005
 #define ELF_Z_MINUS					0x0000
+// !!>
+
+// <!!
+#define ELF_ARMATURE_MAGIC				179532122
+#define ELF_CAMERA_MAGIC				179532111
+#define ELF_ENTITY_MAGIC				179532112
+#define ELF_LIGHT_MAGIC					179532113
+#define ELF_MATERIAL_MAGIC				179532109
+#define ELF_MODEL_MAGIC					179532110
+#define ELF_PARTICLES_MAGIC				179532141
+#define ELF_SCENE_MAGIC					179532120
+#define ELF_SCRIPT_MAGIC				179532121
+#define ELF_SPRITE_MAGIC				179532140
+#define ELF_TEXTURE_MAGIC				179532108
+// !!>
 
 typedef struct elf_vec2i				elf_vec2i;
 typedef struct elf_vec2f				elf_vec2f;
@@ -830,16 +846,17 @@ void elf_set_actor_bounding_offset(elf_actor *actor, float x, float y, float z);
 void elf_set_actor_physics(elf_actor *actor, int shape, float mass);
 void elf_disable_actor_physics(elf_actor *actor);
 
-void elf_set_actor_anisotropic_friction(elf_actor *actor, float x, float y, float z);
 void elf_set_actor_damping(elf_actor *actor, float lin_damp, float ang_damp);
 void elf_set_actor_sleep_thresholds(elf_actor *actor, float lin_thrs, float ang_thrs);
 void elf_set_actor_restitution(elf_actor *actor, float restitution);
+void elf_set_actor_anisotropic_friction(elf_actor *actor, float x, float y, float z);
+void elf_set_actor_linear_factor(elf_actor *actor, float x, float y, float z);
+void elf_set_actor_angular_factor(elf_actor *actor, float x, float y, float z);
+
 void elf_add_force_to_actor(elf_actor *actor, float x, float y, float z);
 void elf_add_torque_to_actor(elf_actor *actor, float x, float y, float z);
 void elf_set_actor_linear_velocity(elf_actor *actor, float x, float y, float z);
 void elf_set_actor_angular_velocity(elf_actor *actor, float x, float y, float z);
-void elf_set_actor_linear_factor(elf_actor *actor, float x, float y, float z);
-void elf_set_actor_angular_factor(elf_actor *actor, float x, float y, float z);
 
 elf_vec3f elf_get_actor_bounding_lengths(elf_actor *actor);
 elf_vec3f elf_get_actor_bounding_offset(elf_actor *actor);

@@ -7523,40 +7523,6 @@ fail:
 }
 
 
-static int _wrap_elfSetActorAnisotropicFriction(lua_State* L) {
-  int SWIG_arg = 0;
-  elf_handle arg1 ;
-  float arg2 ;
-  float arg3 ;
-  float arg4 ;
-  elf_handle *argp1 ;
-  
-  SWIG_check_num_args("SetActorAnisotropicFriction",4,4)
-  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetActorAnisotropicFriction",1,"handle");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("SetActorAnisotropicFriction",2,"float");
-  if(!lua_isnumber(L,3)) SWIG_fail_arg("SetActorAnisotropicFriction",3,"float");
-  if(!lua_isnumber(L,4)) SWIG_fail_arg("SetActorAnisotropicFriction",4,"float");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("SetActorAnisotropicFriction",1,SWIGTYPE_p_elf_handle);
-  }
-  arg1 = *argp1;
-  
-  arg2 = (float)lua_tonumber(L, 2);
-  arg3 = (float)lua_tonumber(L, 3);
-  arg4 = (float)lua_tonumber(L, 4);
-  elfSetActorAnisotropicFriction(arg1,arg2,arg3,arg4);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
 static int _wrap_elfSetActorDamping(lua_State* L) {
   int SWIG_arg = 0;
   elf_handle arg1 ;
@@ -7636,6 +7602,108 @@ static int _wrap_elfSetActorRestitution(lua_State* L) {
   
   arg2 = (float)lua_tonumber(L, 2);
   elfSetActorRestitution(arg1,arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfSetActorAnisotropicFriction(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  float arg2 ;
+  float arg3 ;
+  float arg4 ;
+  elf_handle *argp1 ;
+  
+  SWIG_check_num_args("SetActorAnisotropicFriction",4,4)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetActorAnisotropicFriction",1,"handle");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("SetActorAnisotropicFriction",2,"float");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("SetActorAnisotropicFriction",3,"float");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("SetActorAnisotropicFriction",4,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("SetActorAnisotropicFriction",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (float)lua_tonumber(L, 2);
+  arg3 = (float)lua_tonumber(L, 3);
+  arg4 = (float)lua_tonumber(L, 4);
+  elfSetActorAnisotropicFriction(arg1,arg2,arg3,arg4);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfSetActorLinearFactor(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  float arg2 ;
+  float arg3 ;
+  float arg4 ;
+  elf_handle *argp1 ;
+  
+  SWIG_check_num_args("SetActorLinearFactor",4,4)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetActorLinearFactor",1,"handle");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("SetActorLinearFactor",2,"float");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("SetActorLinearFactor",3,"float");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("SetActorLinearFactor",4,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("SetActorLinearFactor",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (float)lua_tonumber(L, 2);
+  arg3 = (float)lua_tonumber(L, 3);
+  arg4 = (float)lua_tonumber(L, 4);
+  elfSetActorLinearFactor(arg1,arg2,arg3,arg4);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfSetActorAngularFactor(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  float arg2 ;
+  float arg3 ;
+  float arg4 ;
+  elf_handle *argp1 ;
+  
+  SWIG_check_num_args("SetActorAngularFactor",4,4)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetActorAngularFactor",1,"handle");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("SetActorAngularFactor",2,"float");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("SetActorAngularFactor",3,"float");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("SetActorAngularFactor",4,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("SetActorAngularFactor",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (float)lua_tonumber(L, 2);
+  arg3 = (float)lua_tonumber(L, 3);
+  arg4 = (float)lua_tonumber(L, 4);
+  elfSetActorAngularFactor(arg1,arg2,arg3,arg4);
   
   return SWIG_arg;
   
@@ -7772,74 +7840,6 @@ static int _wrap_elfSetActorAngularVelocity(lua_State* L) {
   arg3 = (float)lua_tonumber(L, 3);
   arg4 = (float)lua_tonumber(L, 4);
   elfSetActorAngularVelocity(arg1,arg2,arg3,arg4);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_elfSetActorLinearFactor(lua_State* L) {
-  int SWIG_arg = 0;
-  elf_handle arg1 ;
-  float arg2 ;
-  float arg3 ;
-  float arg4 ;
-  elf_handle *argp1 ;
-  
-  SWIG_check_num_args("SetActorLinearFactor",4,4)
-  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetActorLinearFactor",1,"handle");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("SetActorLinearFactor",2,"float");
-  if(!lua_isnumber(L,3)) SWIG_fail_arg("SetActorLinearFactor",3,"float");
-  if(!lua_isnumber(L,4)) SWIG_fail_arg("SetActorLinearFactor",4,"float");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("SetActorLinearFactor",1,SWIGTYPE_p_elf_handle);
-  }
-  arg1 = *argp1;
-  
-  arg2 = (float)lua_tonumber(L, 2);
-  arg3 = (float)lua_tonumber(L, 3);
-  arg4 = (float)lua_tonumber(L, 4);
-  elfSetActorLinearFactor(arg1,arg2,arg3,arg4);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_elfSetActorAngularFactor(lua_State* L) {
-  int SWIG_arg = 0;
-  elf_handle arg1 ;
-  float arg2 ;
-  float arg3 ;
-  float arg4 ;
-  elf_handle *argp1 ;
-  
-  SWIG_check_num_args("SetActorAngularFactor",4,4)
-  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetActorAngularFactor",1,"handle");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("SetActorAngularFactor",2,"float");
-  if(!lua_isnumber(L,3)) SWIG_fail_arg("SetActorAngularFactor",3,"float");
-  if(!lua_isnumber(L,4)) SWIG_fail_arg("SetActorAngularFactor",4,"float");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("SetActorAngularFactor",1,SWIGTYPE_p_elf_handle);
-  }
-  arg1 = *argp1;
-  
-  arg2 = (float)lua_tonumber(L, 2);
-  arg3 = (float)lua_tonumber(L, 3);
-  arg4 = (float)lua_tonumber(L, 4);
-  elfSetActorAngularFactor(arg1,arg2,arg3,arg4);
   
   return SWIG_arg;
   
@@ -18980,16 +18980,16 @@ static const struct luaL_reg swig_commands[] = {
     { "SetActorBoundingOffset", _wrap_elfSetActorBoundingOffset},
     { "SetActorPhysics", _wrap_elfSetActorPhysics},
     { "DisableActorPhysics", _wrap_elfDisableActorPhysics},
-    { "SetActorAnisotropicFriction", _wrap_elfSetActorAnisotropicFriction},
     { "SetActorDamping", _wrap_elfSetActorDamping},
     { "SetActorSleepThresholds", _wrap_elfSetActorSleepThresholds},
     { "SetActorRestitution", _wrap_elfSetActorRestitution},
+    { "SetActorAnisotropicFriction", _wrap_elfSetActorAnisotropicFriction},
+    { "SetActorLinearFactor", _wrap_elfSetActorLinearFactor},
+    { "SetActorAngularFactor", _wrap_elfSetActorAngularFactor},
     { "AddForceToActor", _wrap_elfAddForceToActor},
     { "AddTorqueToActor", _wrap_elfAddTorqueToActor},
     { "SetActorLinearVelocity", _wrap_elfSetActorLinearVelocity},
     { "SetActorAngularVelocity", _wrap_elfSetActorAngularVelocity},
-    { "SetActorLinearFactor", _wrap_elfSetActorLinearFactor},
-    { "SetActorAngularFactor", _wrap_elfSetActorAngularFactor},
     { "GetActorBoundingLengths", _wrap_elfGetActorBoundingLengths},
     { "GetActorBoundingOffset", _wrap_elfGetActorBoundingOffset},
     { "GetActorShape", _wrap_elfGetActorShape},
@@ -19632,12 +19632,6 @@ static swig_lua_const_info swig_constants[] = {
 { SWIG_LUA_INT,     (char *)"UNKNOWN_TYPE", (long) 0x000B, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"INVALID_HANDLE", (long) 0x000C, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"MISSING_FEATURE", (long) 0x000D, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"X_PLUS", (long) 0x0001, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"X_MINUS", (long) 0x0002, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"Y_PLUS", (long) 0x0003, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"Y_MINUS", (long) 0x0004, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"Z_PLUS", (long) 0x0005, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"Z_MINUS", (long) 0x0000, 0, 0, 0},
     {0,0,0,0,0,0}
 };
 
