@@ -21,6 +21,7 @@
 	elf_list *properties; \
 	elf_physics_object *object; \
 	elf_physics_object *dobject; \
+	unsigned char physics; \
 	elf_vec3f pbb_lengths; \
 	elf_vec3f pbb_offset; \
 	unsigned char shape; \

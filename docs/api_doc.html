@@ -347,14 +347,6 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apidefine">elf.UNKNOWN_TYPE</div>
 <div class="apidefine">elf.INVALID_HANDLE</div>
 <div class="apidefine">elf.MISSING_FEATURE</div>
-<div class="apitopic">AXIS TYPES</div>
-<div class="apiinfo">axis codes used by elf.DirectActorAt</div>
-<div class="apidefine">elf.X_PLUS</div>
-<div class="apidefine">elf.X_MINUS</div>
-<div class="apidefine">elf.Y_PLUS</div>
-<div class="apidefine">elf.Y_MINUS</div>
-<div class="apidefine">elf.Z_PLUS</div>
-<div class="apidefine">elf.Z_MINUS</div>
 <div class="apitopic">OBJECT FUNCTIONS</div>
 <div class="apiinfo">The object functions can be performed on any generic ELF objects.</div>
 <div class="apifunc"><span class="apikeytype">int</span> elf.GetObjectType( <span class="apiobjtype">object</span> obj )</div>
@@ -523,6 +515,7 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc"><span class="apikeytype">string</span> elf.GetMaterialFilePath( <span class="apiobjtype">object</span> material )</div>
 <div class="apifunc"><span class="apiobjtype">object</span> elf.GetMaterialTexture( <span class="apiobjtype">object</span> material, <span class="apikeytype">int</span> slot )</div>
 <div class="apifunc"><span class="apikeytype">int</span> elf.GetMaterialTextureType( <span class="apiobjtype">object</span> material, <span class="apikeytype">int</span> slot )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetMaterialTextureCount( <span class="apiobjtype">object</span> material )</div>
 <div class="apifunc"><span class="apikeytype">float</span> elf.GetMaterialTextureParallaxScale( <span class="apiobjtype">object</span> material, <span class="apikeytype">int</span> slot )</div>
 <div class="apifunc"><span class="apikeytype">float</span> elf.GetMaterialTextureAlphaTexture( <span class="apiobjtype">object</span> material, <span class="apikeytype">int</span> slot )</div>
 <div class="apifunc"><span class="apikeytype">elf_color</span> elf.GetMaterialDiffuseColor( <span class="apiobjtype">object</span> material )</div>
@@ -565,31 +558,32 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc">elf.SetActorBoundingLengths( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
 <div class="apifunc">elf.SetActorBoundingOffset( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
 <div class="apifunc">elf.SetActorPhysics( <span class="apiobjtype">object</span> actor, <span class="apikeytype">int</span> shape, <span class="apikeytype">float</span> mass )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.IsActorPhysics( <span class="apiobjtype">object</span> actor )</div>
 <div class="apifunc">elf.DisableActorPhysics( <span class="apiobjtype">object</span> actor )</div>
-<div class="apifunc">elf.SetActorAnisotropicFriction( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
 <div class="apifunc">elf.SetActorDamping( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> lin_damp, <span class="apikeytype">float</span> ang_damp )</div>
 <div class="apifunc">elf.SetActorSleepThresholds( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> lin_thrs, <span class="apikeytype">float</span> ang_thrs )</div>
 <div class="apifunc">elf.SetActorRestitution( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> restitution )</div>
+<div class="apifunc">elf.SetActorAnisotropicFriction( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apifunc">elf.SetActorLinearFactor( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
+<div class="apifunc">elf.SetActorAngularFactor( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
 <div class="apifunc">elf.AddForceToActor( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
 <div class="apifunc">elf.AddTorqueToActor( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
 <div class="apifunc">elf.SetActorLinearVelocity( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
 <div class="apifunc">elf.SetActorAngularVelocity( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
-<div class="apifunc">elf.SetActorLinearFactor( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
-<div class="apifunc">elf.SetActorAngularFactor( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
 <div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorBoundingLengths( <span class="apiobjtype">object</span> actor )</div>
 <div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorBoundingOffset( <span class="apiobjtype">object</span> actor )</div>
-<div class="apifunc"><span class="apikeytype">int</span> elf.GetActorPhysicsShape( <span class="apiobjtype">object</span> actor )</div>
-<div class="apifunc"><span class="apikeytype">float</span> elf.GetActorPhysicsMass( <span class="apiobjtype">object</span> actor )</div>
-<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorLinearVelocity( <span class="apiobjtype">object</span> actor )</div>
-<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorAngularVelocity( <span class="apiobjtype">object</span> actor )</div>
-<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorLinearFactor( <span class="apiobjtype">object</span> actor )</div>
-<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorAngularFactor( <span class="apiobjtype">object</span> actor )</div>
-<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorAnisotropicFriction( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetActorShape( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetActorMass( <span class="apiobjtype">object</span> actor )</div>
 <div class="apifunc"><span class="apikeytype">float</span> elf.GetActorLinearDamping( <span class="apiobjtype">object</span> actor )</div>
 <div class="apifunc"><span class="apikeytype">float</span> elf.GetActorAngularDamping( <span class="apiobjtype">object</span> actor )</div>
 <div class="apifunc"><span class="apikeytype">float</span> elf.GetActorLinearSleepThreshold( <span class="apiobjtype">object</span> actor )</div>
 <div class="apifunc"><span class="apikeytype">float</span> elf.GetActorAngularSleepThreshold( <span class="apiobjtype">object</span> actor )</div>
 <div class="apifunc"><span class="apikeytype">float</span> elf.GetActorRestitution( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorAnisotropicFriction( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorLinearFactor( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorAngularFactor( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorLinearVelocity( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetActorAngularVelocity( <span class="apiobjtype">object</span> actor )</div>
 <div class="apifunc"><span class="apiobjtype">object</span> elf.AddHingeJointToActor( <span class="apiobjtype">object</span> actor, <span class="apiobjtype">object</span> actor2, <span class="apikeytype">string</span> name, <span class="apikeytype">float</span> px, <span class="apikeytype">float</span> py, <span class="apikeytype">float</span> pz, <span class="apikeytype">float</span> ax, <span class="apikeytype">float</span> ay, <span class="apikeytype">float</span> az )</div>
 <div class="apifunc"><span class="apiobjtype">object</span> elf.AddBallJointToActor( <span class="apiobjtype">object</span> actor, <span class="apiobjtype">object</span> actor2, <span class="apikeytype">string</span> name, <span class="apikeytype">float</span> px, <span class="apikeytype">float</span> py, <span class="apikeytype">float</span> pz )</div>
 <div class="apifunc"><span class="apiobjtype">object</span> elf.AddConeTwistJointToActor( <span class="apiobjtype">object</span> actor, <span class="apiobjtype">object</span> actor2, <span class="apikeytype">string</span> name, <span class="apikeytype">float</span> px, <span class="apikeytype">float</span> py, <span class="apikeytype">float</span> pz, <span class="apikeytype">float</span> ax, <span class="apikeytype">float</span> ay, <span class="apikeytype">float</span> az )</div>
@@ -765,6 +759,7 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc"><span class="apikeytype">bool</span> elf.GetSpriteFaceCamera( <span class="apiobjtype">object</span> sprite )</div>
 <div class="apitopic">SCENE FUNCTIONS</div>
 <div class="apifunc"><span class="apiobjtype">object</span> elf.CreateSceneFromFile( <span class="apikeytype">string</span> file_path )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.SaveScene( <span class="apiobjtype">object</span> scene, <span class="apikeytype">string</span> file_path )</div>
 <div class="apifunc">elf.SetSceneAmbientColor( <span class="apiobjtype">object</span> scene, <span class="apikeytype">float</span> r, <span class="apikeytype">float</span> g, <span class="apikeytype">float</span> b, <span class="apikeytype">float</span> a )</div>
 <div class="apifunc"><span class="apikeytype">elf_color</span> elf.GetSceneAmbientColor( <span class="apiobjtype">object</span> scene )</div>
 <div class="apifunc">elf.SetSceneGravity( <span class="apiobjtype">object</span> scene, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
@@ -811,10 +806,12 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveEntityByName( <span class="apiobjtype">object</span> scene, <span class="apikeytype">string</span> name )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveLightByName( <span class="apiobjtype">object</span> scene, <span class="apikeytype">string</span> name )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveParticlesByName( <span class="apiobjtype">object</span> scene, <span class="apikeytype">string</span> name )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveSpriteByName( <span class="apiobjtype">object</span> scene, <span class="apikeytype">string</span> name )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveCameraByIndex( <span class="apiobjtype">object</span> scene, <span class="apikeytype">int</span> idx )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveEntityByIndex( <span class="apiobjtype">object</span> scene, <span class="apikeytype">int</span> idx )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveLightByIndex( <span class="apiobjtype">object</span> scene, <span class="apikeytype">int</span> idx )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveParticlesByIndex( <span class="apiobjtype">object</span> scene, <span class="apikeytype">int</span> idx )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveSpriteByIndex( <span class="apiobjtype">object</span> scene, <span class="apikeytype">int</span> idx )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveCameraByObject( <span class="apiobjtype">object</span> scene, <span class="apiobjtype">object</span> camera )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveEntityByObject( <span class="apiobjtype">object</span> scene, <span class="apiobjtype">object</span> entity )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveLightByObject( <span class="apiobjtype">object</span> scene, <span class="apiobjtype">object</span> light )</div>
@@ -849,7 +846,7 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc">elf.StopSound( <span class="apiobjtype">object</span> source )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.IsSoundPlaying( <span class="apiobjtype">object</span> source )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.IsSoundPaused( <span class="apiobjtype">object</span> source )</div>
-<div class="apitopic">COLLIISION FUNCTIONS</div>
+<div class="apitopic">COLLISION FUNCTIONS</div>
 <div class="apifunc"><span class="apiobjtype">object</span> elf.GetCollisionActor( <span class="apiobjtype">object</span> collision )</div>
 <div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetCollisionPosition( <span class="apiobjtype">object</span> collision )</div>
 <div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetCollisionNormal( <span class="apiobjtype">object</span> collision )</div>

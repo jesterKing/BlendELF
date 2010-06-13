@@ -7498,6 +7498,32 @@ fail:
 }
 
 
+static int _wrap_elfIsActorPhysics(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  bool result;
+  
+  SWIG_check_num_args("IsActorPhysics",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("IsActorPhysics",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("IsActorPhysics",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = (bool)elfIsActorPhysics(arg1);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfDisableActorPhysics(lua_State* L) {
   int SWIG_arg = 0;
   elf_handle arg1 ;
@@ -7961,151 +7987,6 @@ fail:
 }
 
 
-static int _wrap_elfGetActorLinearVelocity(lua_State* L) {
-  int SWIG_arg = 0;
-  elf_handle arg1 ;
-  elf_handle *argp1 ;
-  elf_vec3f result;
-  
-  SWIG_check_num_args("GetActorLinearVelocity",1,1)
-  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetActorLinearVelocity",1,"handle");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("GetActorLinearVelocity",1,SWIGTYPE_p_elf_handle);
-  }
-  arg1 = *argp1;
-  
-  result = elfGetActorLinearVelocity(arg1);
-  {
-    elf_vec3f * resultptr = new elf_vec3f((const elf_vec3f &) result);
-    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_vec3f,1); SWIG_arg++;
-  }
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_elfGetActorAngularVelocity(lua_State* L) {
-  int SWIG_arg = 0;
-  elf_handle arg1 ;
-  elf_handle *argp1 ;
-  elf_vec3f result;
-  
-  SWIG_check_num_args("GetActorAngularVelocity",1,1)
-  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetActorAngularVelocity",1,"handle");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("GetActorAngularVelocity",1,SWIGTYPE_p_elf_handle);
-  }
-  arg1 = *argp1;
-  
-  result = elfGetActorAngularVelocity(arg1);
-  {
-    elf_vec3f * resultptr = new elf_vec3f((const elf_vec3f &) result);
-    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_vec3f,1); SWIG_arg++;
-  }
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_elfGetActorLinearFactor(lua_State* L) {
-  int SWIG_arg = 0;
-  elf_handle arg1 ;
-  elf_handle *argp1 ;
-  elf_vec3f result;
-  
-  SWIG_check_num_args("GetActorLinearFactor",1,1)
-  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetActorLinearFactor",1,"handle");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("GetActorLinearFactor",1,SWIGTYPE_p_elf_handle);
-  }
-  arg1 = *argp1;
-  
-  result = elfGetActorLinearFactor(arg1);
-  {
-    elf_vec3f * resultptr = new elf_vec3f((const elf_vec3f &) result);
-    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_vec3f,1); SWIG_arg++;
-  }
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_elfGetActorAngularFactor(lua_State* L) {
-  int SWIG_arg = 0;
-  elf_handle arg1 ;
-  elf_handle *argp1 ;
-  elf_vec3f result;
-  
-  SWIG_check_num_args("GetActorAngularFactor",1,1)
-  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetActorAngularFactor",1,"handle");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("GetActorAngularFactor",1,SWIGTYPE_p_elf_handle);
-  }
-  arg1 = *argp1;
-  
-  result = elfGetActorAngularFactor(arg1);
-  {
-    elf_vec3f * resultptr = new elf_vec3f((const elf_vec3f &) result);
-    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_vec3f,1); SWIG_arg++;
-  }
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_elfGetActorAnisotropicFriction(lua_State* L) {
-  int SWIG_arg = 0;
-  elf_handle arg1 ;
-  elf_handle *argp1 ;
-  elf_vec3f result;
-  
-  SWIG_check_num_args("GetActorAnisotropicFriction",1,1)
-  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetActorAnisotropicFriction",1,"handle");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("GetActorAnisotropicFriction",1,SWIGTYPE_p_elf_handle);
-  }
-  arg1 = *argp1;
-  
-  result = elfGetActorAnisotropicFriction(arg1);
-  {
-    elf_vec3f * resultptr = new elf_vec3f((const elf_vec3f &) result);
-    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_vec3f,1); SWIG_arg++;
-  }
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
 static int _wrap_elfGetActorLinearDamping(lua_State* L) {
   int SWIG_arg = 0;
   elf_handle arg1 ;
@@ -8226,6 +8107,151 @@ static int _wrap_elfGetActorRestitution(lua_State* L) {
   
   result = (float)elfGetActorRestitution(arg1);
   lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetActorAnisotropicFriction(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  elf_vec3f result;
+  
+  SWIG_check_num_args("GetActorAnisotropicFriction",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetActorAnisotropicFriction",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetActorAnisotropicFriction",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = elfGetActorAnisotropicFriction(arg1);
+  {
+    elf_vec3f * resultptr = new elf_vec3f((const elf_vec3f &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_vec3f,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetActorLinearFactor(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  elf_vec3f result;
+  
+  SWIG_check_num_args("GetActorLinearFactor",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetActorLinearFactor",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetActorLinearFactor",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = elfGetActorLinearFactor(arg1);
+  {
+    elf_vec3f * resultptr = new elf_vec3f((const elf_vec3f &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_vec3f,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetActorAngularFactor(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  elf_vec3f result;
+  
+  SWIG_check_num_args("GetActorAngularFactor",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetActorAngularFactor",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetActorAngularFactor",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = elfGetActorAngularFactor(arg1);
+  {
+    elf_vec3f * resultptr = new elf_vec3f((const elf_vec3f &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_vec3f,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetActorLinearVelocity(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  elf_vec3f result;
+  
+  SWIG_check_num_args("GetActorLinearVelocity",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetActorLinearVelocity",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetActorLinearVelocity",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = elfGetActorLinearVelocity(arg1);
+  {
+    elf_vec3f * resultptr = new elf_vec3f((const elf_vec3f &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_vec3f,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetActorAngularVelocity(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  elf_vec3f result;
+  
+  SWIG_check_num_args("GetActorAngularVelocity",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetActorAngularVelocity",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetActorAngularVelocity",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = elfGetActorAngularVelocity(arg1);
+  {
+    elf_vec3f * resultptr = new elf_vec3f((const elf_vec3f &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_vec3f,1); SWIG_arg++;
+  }
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -18979,6 +19005,7 @@ static const struct luaL_reg swig_commands[] = {
     { "SetActorBoundingLengths", _wrap_elfSetActorBoundingLengths},
     { "SetActorBoundingOffset", _wrap_elfSetActorBoundingOffset},
     { "SetActorPhysics", _wrap_elfSetActorPhysics},
+    { "IsActorPhysics", _wrap_elfIsActorPhysics},
     { "DisableActorPhysics", _wrap_elfDisableActorPhysics},
     { "SetActorDamping", _wrap_elfSetActorDamping},
     { "SetActorSleepThresholds", _wrap_elfSetActorSleepThresholds},
@@ -18994,16 +19021,16 @@ static const struct luaL_reg swig_commands[] = {
     { "GetActorBoundingOffset", _wrap_elfGetActorBoundingOffset},
     { "GetActorShape", _wrap_elfGetActorShape},
     { "GetActorMass", _wrap_elfGetActorMass},
-    { "GetActorLinearVelocity", _wrap_elfGetActorLinearVelocity},
-    { "GetActorAngularVelocity", _wrap_elfGetActorAngularVelocity},
-    { "GetActorLinearFactor", _wrap_elfGetActorLinearFactor},
-    { "GetActorAngularFactor", _wrap_elfGetActorAngularFactor},
-    { "GetActorAnisotropicFriction", _wrap_elfGetActorAnisotropicFriction},
     { "GetActorLinearDamping", _wrap_elfGetActorLinearDamping},
     { "GetActorAngularDamping", _wrap_elfGetActorAngularDamping},
     { "GetActorLinearSleepThreshold", _wrap_elfGetActorLinearSleepThreshold},
     { "GetActorAngularSleepThreshold", _wrap_elfGetActorAngularSleepThreshold},
     { "GetActorRestitution", _wrap_elfGetActorRestitution},
+    { "GetActorAnisotropicFriction", _wrap_elfGetActorAnisotropicFriction},
+    { "GetActorLinearFactor", _wrap_elfGetActorLinearFactor},
+    { "GetActorAngularFactor", _wrap_elfGetActorAngularFactor},
+    { "GetActorLinearVelocity", _wrap_elfGetActorLinearVelocity},
+    { "GetActorAngularVelocity", _wrap_elfGetActorAngularVelocity},
     { "AddHingeJointToActor", _wrap_elfAddHingeJointToActor},
     { "AddBallJointToActor", _wrap_elfAddBallJointToActor},
     { "AddConeTwistJointToActor", _wrap_elfAddConeTwistJointToActor},

@@ -62,9 +62,9 @@ void elf_init_actor(elf_actor *actor, unsigned char camera)
 	actor->lin_sleep = 0.8;
 	actor->ang_sleep = 1.0;
 	actor->restitution = 0.0;
-	actor->anis_fric.x = actor->anis_fric.y = actor->anis_fric.z = 0.0;
-	actor->lin_factor.x = actor->lin_factor.y = actor->lin_factor.z = 0.0;
-	actor->ang_factor.x = actor->ang_factor.y = actor->ang_factor.z = 0.0;
+	actor->anis_fric.x = actor->anis_fric.y = actor->anis_fric.z = 1.0;
+	actor->lin_factor.x = actor->lin_factor.y = actor->lin_factor.z = 1.0;
+	actor->ang_factor.x = actor->ang_factor.y = actor->ang_factor.z = 1.0;
 
 	actor->moved = ELF_TRUE;
 }
@@ -378,6 +378,7 @@ void elf_set_actor_physics(elf_actor *actor, int shape, float mass)
 
 	actor->shape = (unsigned char)shape;
 	actor->mass = mass;
+	actor->physics = ELF_TRUE;
 
 	switch(shape)
 	{
@@ -439,6 +440,13 @@ void elf_set_actor_physics(elf_actor *actor, int shape, float mass)
 	elf_set_physics_object_orientation(actor->object, orient[0], orient[1], orient[2], orient[3]);
 	elf_set_physics_object_scale(actor->object, scale[0], scale[1], scale[2]);
 
+	elf_set_physics_object_damping(actor->object, actor->lin_damp, actor->ang_damp);
+	elf_set_physics_object_sleep_thresholds(actor->object, actor->lin_sleep, actor->ang_sleep);
+	elf_set_physics_object_restitution(actor->object, actor->restitution);
+	elf_set_physics_object_anisotropic_friction(actor->object, actor->anis_fric.x, actor->anis_fric.y, actor->anis_fric.z);
+	elf_set_physics_object_linear_factor(actor->object, actor->lin_factor.x, actor->lin_factor.y, actor->lin_factor.z);
+	elf_set_physics_object_angular_factor(actor->object, actor->ang_factor.x, actor->ang_factor.y, actor->ang_factor.z);
+
 	if(actor->scene) elf_set_physics_object_world(actor->object, actor->scene->world);
 
 	// things are seriously going to blow up if we don't update the joints
@@ -451,6 +459,11 @@ void elf_set_actor_physics(elf_actor *actor, int shape, float mass)
 	}
 }
 
+unsigned char elf_is_actor_physics(elf_actor *actor)
+{
+	return actor->physics;
+}
+
 void elf_disable_actor_physics(elf_actor *actor)
 {
 	if(actor->object)
@@ -460,6 +473,8 @@ void elf_disable_actor_physics(elf_actor *actor)
 		elf_dec_ref((elf_object*)actor->object);
 		actor->object = NULL;
 	}
+
+	actor->physics = ELF_FALSE;
 }
 
 void elf_set_actor_damping(elf_actor *actor, float lin_damp, float ang_damp)
@@ -532,14 +547,52 @@ elf_vec3f elf_get_actor_bounding_offset(elf_actor *actor)
 
 int elf_get_actor_shape(elf_actor *actor)
 {
-	if(actor->object) return elf_get_physics_object_shape(actor->object);
-	return 0;
+	return actor->shape;
 }
 
 float elf_get_actor_mass(elf_actor *actor)
 {
-	if(actor->object) return elf_get_physics_object_mass(actor->object);
-	return 0.0;
+	return actor->mass;
+}
+
+float elf_get_actor_linear_damping(elf_actor *actor)
+{
+	return actor->lin_damp;
+}
+
+float elf_get_actor_angular_damping(elf_actor *actor)
+{
+	return actor->ang_damp;
+}
+
+float elf_get_actor_linear_sleep_threshold(elf_actor *actor)
+{
+	return actor->lin_sleep;
+}
+
+float elf_get_actor_angular_sleep_threshold(elf_actor *actor)
+{
+	return actor->ang_sleep;
+}
+
+float elf_get_actor_restitution(elf_actor *actor)
+{
+	return actor->restitution;
+}
+
+elf_vec3f elf_get_actor_anisotropic_friction(elf_actor *actor)
+{
+	return actor->anis_fric;
+}
+
+elf_vec3f elf_get_actor_linear_factor(elf_actor *actor)
+{
+	return actor->lin_factor;
+}
+
+elf_vec3f elf_get_actor_angular_factor(elf_actor *actor)
+{
+	return actor->ang_factor;
 }
 
 elf_vec3f elf_get_actor_linear_velocity(elf_actor *actor)
@@ -560,66 +613,6 @@ elf_vec3f elf_get_actor_angular_velocity(elf_actor *actor)
 	if(actor->object) elf_get_physics_object_angular_velocity(actor->object, &result.x);
 
 	return result;
-}
-
-elf_vec3f elf_get_actor_linear_factor(elf_actor *actor)
-{
-	elf_vec3f result;
-	memset(&result, 0x0, sizeof(elf_vec3f));
-
-	if(actor->object) elf_get_physics_object_linear_factor(actor->object, &result.x);
-
-	return result;
-}
-
-elf_vec3f elf_get_actor_angular_factor(elf_actor *actor)
-{
-	elf_vec3f result;
-	memset(&result, 0x0, sizeof(elf_vec3f));
-
-	if(actor->object) elf_get_physics_object_angular_factor(actor->object, &result.x);
-
-	return result;
-}
-
-elf_vec3f elf_get_actor_anisotropic_friction(elf_actor *actor)
-{
-	elf_vec3f result;
-	memset(&result, 0x0, sizeof(elf_vec3f));
-
-	if(actor->object) elf_get_physics_object_anisotropic_friction(actor->object, &result.x);
-
-	return result;
-}
-
-float elf_get_actor_linear_damping(elf_actor *actor)
-{
-	if(actor->object) return elf_get_physics_object_linear_damping(actor->object);
-	return 0.0;
-}
-
-float elf_get_actor_angular_damping(elf_actor *actor)
-{
-	if(actor->object) return elf_get_physics_object_angular_damping(actor->object);
-	return 0.0;
-}
-
-float elf_get_actor_linear_sleep_threshold(elf_actor *actor)
-{
-	if(actor->object) return elf_get_physics_object_linear_sleep_threshold(actor->object);
-	return 0.0;
-}
-
-float elf_get_actor_angular_sleep_threshold(elf_actor *actor)
-{
-	if(actor->object) return elf_get_physics_object_angular_sleep_threshold(actor->object);
-	return 0.0;
-}
-
-float elf_get_actor_restitution(elf_actor *actor)
-{
-	if(actor->object) return elf_get_physics_object_restitution(actor->object);
-	return 0.0;
 }
 
 elf_joint* elf_add_hinge_joint_to_actor(elf_actor *actor, elf_actor *actor2, const char *name, float px, float py, float pz, float ax, float ay, float az)

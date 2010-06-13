@@ -844,6 +844,7 @@ void elf_get_actor_orientation_(elf_actor *actor, float *params);
 void elf_set_actor_bounding_lengths(elf_actor *actor, float x, float y, float z);
 void elf_set_actor_bounding_offset(elf_actor *actor, float x, float y, float z);
 void elf_set_actor_physics(elf_actor *actor, int shape, float mass);
+unsigned char elf_is_actor_physics(elf_actor *actor);
 void elf_disable_actor_physics(elf_actor *actor);
 
 void elf_set_actor_damping(elf_actor *actor, float lin_damp, float ang_damp);
@@ -863,16 +864,16 @@ elf_vec3f elf_get_actor_bounding_offset(elf_actor *actor);
 int elf_get_actor_shape(elf_actor *actor);
 float elf_get_actor_mass(elf_actor *actor);
 
-elf_vec3f elf_get_actor_linear_velocity(elf_actor *actor);
-elf_vec3f elf_get_actor_angular_velocity(elf_actor *actor);
-elf_vec3f elf_get_actor_linear_factor(elf_actor *actor);
-elf_vec3f elf_get_actor_angular_factor(elf_actor *actor);
-elf_vec3f elf_get_actor_anisotropic_friction(elf_actor *actor);
 float elf_get_actor_linear_damping(elf_actor *actor);
 float elf_get_actor_angular_damping(elf_actor *actor);
 float elf_get_actor_linear_sleep_threshold(elf_actor *actor);
 float elf_get_actor_angular_sleep_threshold(elf_actor *actor);
 float elf_get_actor_restitution(elf_actor *actor);
+elf_vec3f elf_get_actor_anisotropic_friction(elf_actor *actor);
+elf_vec3f elf_get_actor_linear_factor(elf_actor *actor);
+elf_vec3f elf_get_actor_angular_factor(elf_actor *actor);
+elf_vec3f elf_get_actor_linear_velocity(elf_actor *actor);
+elf_vec3f elf_get_actor_angular_velocity(elf_actor *actor);
 
 elf_joint* elf_add_hinge_joint_to_actor(elf_actor *actor, elf_actor *actor2, const char *name, float px, float py, float pz, float ax, float ay, float az);
 elf_joint* elf_add_ball_joint_to_actor(elf_actor *actor, elf_actor *actor2, const char *name, float px, float py, float pz);

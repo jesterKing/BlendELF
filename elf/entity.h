@@ -263,7 +263,6 @@ void elf_calc_entity_bounding_volumes(elf_entity *entity, unsigned char new_mode
 
 	if(new_model)
 	{
-		entity->pbb_offset = entity->bb_offset;
 		entity->pbb_lengths.x = entity->model->bb_max.x-entity->model->bb_min.x;
 		entity->pbb_lengths.y = entity->model->bb_max.y-entity->model->bb_min.y;
 		entity->pbb_lengths.z = entity->model->bb_max.z-entity->model->bb_min.z;
@@ -340,7 +339,7 @@ void elf_set_entity_model(elf_entity *entity, elf_model *model)
 	elf_set_entity_scale(entity, 1.0, 1.0, 1.0);
 	elf_calc_entity_bounding_volumes(entity, ELF_TRUE);
 
-	if(entity->object)
+	if(elf_is_actor_physics((elf_actor*)entity))
 	{
 		elf_set_actor_physics((elf_actor*)entity, elf_get_actor_shape((elf_actor*)entity),
 			elf_get_actor_mass((elf_actor*)entity));

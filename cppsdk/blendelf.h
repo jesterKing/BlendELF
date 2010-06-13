@@ -257,12 +257,6 @@
 #define ELF_UNKNOWN_TYPE 0x000B
 #define ELF_INVALID_HANDLE 0x000C
 #define ELF_MISSING_FEATURE 0x000D
-#define ELF_X_PLUS 0x0001
-#define ELF_X_MINUS 0x0002
-#define ELF_Y_PLUS 0x0003
-#define ELF_Y_MINUS 0x0004
-#define ELF_Z_PLUS 0x0005
-#define ELF_Z_MINUS 0x0000
 #if defined(__WIN32__) || defined(WIN32) || defined(__CYGWIN__)
 	#ifndef ELF_PLAYER
 		#define ELF_APIENTRY __stdcall
@@ -485,6 +479,7 @@ ELF_API const char* ELF_APIENTRY elfGetMaterialName(elf_handle material);
 ELF_API const char* ELF_APIENTRY elfGetMaterialFilePath(elf_handle material);
 ELF_API elf_handle ELF_APIENTRY elfGetMaterialTexture(elf_handle material, int slot);
 ELF_API int ELF_APIENTRY elfGetMaterialTextureType(elf_handle material, int slot);
+ELF_API int ELF_APIENTRY elfGetMaterialTextureCount(elf_handle material);
 ELF_API float ELF_APIENTRY elfGetMaterialTextureParallaxScale(elf_handle material, int slot);
 ELF_API float ELF_APIENTRY elfGetMaterialTextureAlphaTexture(elf_handle material, int slot);
 ELF_API elf_color ELF_APIENTRY elfGetMaterialDiffuseColor(elf_handle material);
@@ -525,31 +520,32 @@ ELF_API elf_vec4f ELF_APIENTRY elfGetActorOrientation(elf_handle actor);
 ELF_API void ELF_APIENTRY elfSetActorBoundingLengths(elf_handle actor, float x, float y, float z);
 ELF_API void ELF_APIENTRY elfSetActorBoundingOffset(elf_handle actor, float x, float y, float z);
 ELF_API void ELF_APIENTRY elfSetActorPhysics(elf_handle actor, int shape, float mass);
+ELF_API bool ELF_APIENTRY elfIsActorPhysics(elf_handle actor);
 ELF_API void ELF_APIENTRY elfDisableActorPhysics(elf_handle actor);
-ELF_API void ELF_APIENTRY elfSetActorAnisotropicFriction(elf_handle actor, float x, float y, float z);
 ELF_API void ELF_APIENTRY elfSetActorDamping(elf_handle actor, float lin_damp, float ang_damp);
 ELF_API void ELF_APIENTRY elfSetActorSleepThresholds(elf_handle actor, float lin_thrs, float ang_thrs);
 ELF_API void ELF_APIENTRY elfSetActorRestitution(elf_handle actor, float restitution);
+ELF_API void ELF_APIENTRY elfSetActorAnisotropicFriction(elf_handle actor, float x, float y, float z);
+ELF_API void ELF_APIENTRY elfSetActorLinearFactor(elf_handle actor, float x, float y, float z);
+ELF_API void ELF_APIENTRY elfSetActorAngularFactor(elf_handle actor, float x, float y, float z);
 ELF_API void ELF_APIENTRY elfAddForceToActor(elf_handle actor, float x, float y, float z);
 ELF_API void ELF_APIENTRY elfAddTorqueToActor(elf_handle actor, float x, float y, float z);
 ELF_API void ELF_APIENTRY elfSetActorLinearVelocity(elf_handle actor, float x, float y, float z);
 ELF_API void ELF_APIENTRY elfSetActorAngularVelocity(elf_handle actor, float x, float y, float z);
-ELF_API void ELF_APIENTRY elfSetActorLinearFactor(elf_handle actor, float x, float y, float z);
-ELF_API void ELF_APIENTRY elfSetActorAngularFactor(elf_handle actor, float x, float y, float z);
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorBoundingLengths(elf_handle actor);
 ELF_API elf_vec3f ELF_APIENTRY elfGetActorBoundingOffset(elf_handle actor);
-ELF_API int ELF_APIENTRY elfGetActorPhysicsShape(elf_handle actor);
-ELF_API float ELF_APIENTRY elfGetActorPhysicsMass(elf_handle actor);
-ELF_API elf_vec3f ELF_APIENTRY elfGetActorLinearVelocity(elf_handle actor);
-ELF_API elf_vec3f ELF_APIENTRY elfGetActorAngularVelocity(elf_handle actor);
-ELF_API elf_vec3f ELF_APIENTRY elfGetActorLinearFactor(elf_handle actor);
-ELF_API elf_vec3f ELF_APIENTRY elfGetActorAngularFactor(elf_handle actor);
-ELF_API elf_vec3f ELF_APIENTRY elfGetActorAnisotropicFriction(elf_handle actor);
+ELF_API int ELF_APIENTRY elfGetActorShape(elf_handle actor);
+ELF_API float ELF_APIENTRY elfGetActorMass(elf_handle actor);
 ELF_API float ELF_APIENTRY elfGetActorLinearDamping(elf_handle actor);
 ELF_API float ELF_APIENTRY elfGetActorAngularDamping(elf_handle actor);
 ELF_API float ELF_APIENTRY elfGetActorLinearSleepThreshold(elf_handle actor);
 ELF_API float ELF_APIENTRY elfGetActorAngularSleepThreshold(elf_handle actor);
 ELF_API float ELF_APIENTRY elfGetActorRestitution(elf_handle actor);
+ELF_API elf_vec3f ELF_APIENTRY elfGetActorAnisotropicFriction(elf_handle actor);
+ELF_API elf_vec3f ELF_APIENTRY elfGetActorLinearFactor(elf_handle actor);
+ELF_API elf_vec3f ELF_APIENTRY elfGetActorAngularFactor(elf_handle actor);
+ELF_API elf_vec3f ELF_APIENTRY elfGetActorLinearVelocity(elf_handle actor);
+ELF_API elf_vec3f ELF_APIENTRY elfGetActorAngularVelocity(elf_handle actor);
 ELF_API elf_handle ELF_APIENTRY elfAddHingeJointToActor(elf_handle actor, elf_handle actor2, const char* name, float px, float py, float pz, float ax, float ay, float az);
 ELF_API elf_handle ELF_APIENTRY elfAddBallJointToActor(elf_handle actor, elf_handle actor2, const char* name, float px, float py, float pz);
 ELF_API elf_handle ELF_APIENTRY elfAddConeTwistJointToActor(elf_handle actor, elf_handle actor2, const char* name, float px, float py, float pz, float ax, float ay, float az);
@@ -717,6 +713,7 @@ ELF_API elf_handle ELF_APIENTRY elfGetSpriteMaterial(elf_handle sprite);
 ELF_API elf_vec2f ELF_APIENTRY elfGetSpriteScale(elf_handle sprite);
 ELF_API bool ELF_APIENTRY elfGetSpriteFaceCamera(elf_handle sprite);
 ELF_API elf_handle ELF_APIENTRY elfCreateSceneFromFile(const char* file_path);
+ELF_API bool ELF_APIENTRY elfSaveScene(elf_handle scene, const char* file_path);
 ELF_API void ELF_APIENTRY elfSetSceneAmbientColor(elf_handle scene, float r, float g, float b, float a);
 ELF_API elf_color ELF_APIENTRY elfGetSceneAmbientColor(elf_handle scene);
 ELF_API void ELF_APIENTRY elfSetSceneGravity(elf_handle scene, float x, float y, float z);
@@ -763,10 +760,12 @@ ELF_API bool ELF_APIENTRY elfRemoveCameraByName(elf_handle scene, const char* na
 ELF_API bool ELF_APIENTRY elfRemoveEntityByName(elf_handle scene, const char* name);
 ELF_API bool ELF_APIENTRY elfRemoveLightByName(elf_handle scene, const char* name);
 ELF_API bool ELF_APIENTRY elfRemoveParticlesByName(elf_handle scene, const char* name);
+ELF_API bool ELF_APIENTRY elfRemoveSpriteByName(elf_handle scene, const char* name);
 ELF_API bool ELF_APIENTRY elfRemoveCameraByIndex(elf_handle scene, int idx);
 ELF_API bool ELF_APIENTRY elfRemoveEntityByIndex(elf_handle scene, int idx);
 ELF_API bool ELF_APIENTRY elfRemoveLightByIndex(elf_handle scene, int idx);
 ELF_API bool ELF_APIENTRY elfRemoveParticlesByIndex(elf_handle scene, int idx);
+ELF_API bool ELF_APIENTRY elfRemoveSpriteByIndex(elf_handle scene, int idx);
 ELF_API bool ELF_APIENTRY elfRemoveCameraByObject(elf_handle scene, elf_handle camera);
 ELF_API bool ELF_APIENTRY elfRemoveEntityByObject(elf_handle scene, elf_handle entity);
 ELF_API bool ELF_APIENTRY elfRemoveLightByObject(elf_handle scene, elf_handle light);
