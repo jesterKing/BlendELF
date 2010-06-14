@@ -430,10 +430,10 @@ void elf_draw_text_field(elf_text_field *text_field, elf_area *area, gfx_shader_
 	if(text_field->font && text_field->text && strlen(text_field->text) > 0)
 	{
 		gfx_set_viewport(x+text_field->offset_x, y+text_field->offset_y,
-			width-text_field->offset_x, height-text_field->offset_y);
+			width-text_field->offset_x*2, height-text_field->offset_y*2);
 		gfx_get_orthographic_projection_matrix((float)x+text_field->offset_x, (float)x+width-text_field->offset_x,
 			(float)y+text_field->offset_y, (float)y+height-text_field->offset_y,
-			-1.0f, 1.0f, shader_params->projection_matrix);
+			-1.0, 1.0, shader_params->projection_matrix);
 
 		gfx_set_color(&shader_params->material_params.color, text_field->text_color.r, text_field->text_color.g,
 			text_field->text_color.b, text_field->text_color.a*text_field->color.a);
