@@ -482,6 +482,7 @@ struct elf_scene {
 	char *file_path;
 	elf_color ambient_color;
 	unsigned char physics;
+	unsigned char run_scripts;
 
 	elf_list *scripts;
 	elf_list *textures;

@@ -570,8 +570,6 @@ void elf_deinit();
 void elf_resize_window(int width, int height);
 
 /* <!> */ char* elf_get_directory_from_path(const char *file_path);
-/* <!> */ void elf_set_current_working_directory(const char *dir_path);
-const char* elf_get_current_working_directory();
 
 const char* elf_get_platform();
 
@@ -1232,6 +1230,9 @@ elf_vec3f elf_get_scene_gravity(elf_scene *scene);
 
 void elf_set_scene_physics(elf_scene *scene, unsigned char physics);
 unsigned char elf_get_scene_physics(elf_scene *scene);
+
+void elf_set_scene_run_scripts(elf_scene *scene, unsigned char run_scripts);
+unsigned char elf_get_scene_run_scripts(elf_scene *scene, unsigned char run_scripts);
 
 const char* elf_get_scene_name(elf_scene *scene);
 const char* elf_get_scene_file_path(elf_scene *scene);

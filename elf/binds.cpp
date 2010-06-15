@@ -676,10 +676,6 @@ ELF_API void ELF_APIENTRY elfResizeWindow(int width, int height)
 {
 	elf_resize_window(width, height);
 }
-ELF_API const char* ELF_APIENTRY elfGetCurrentWorkingDirectory()
-{
-	return elf_get_current_working_directory();
-}
 ELF_API const char* ELF_APIENTRY elfGetPlatform()
 {
 	return elf_get_platform();
@@ -923,6 +919,104 @@ ELF_API elf_handle ELF_APIENTRY elfGetActor()
 	elf_handle handle;
 	handle = (elf_object*)elf_get_actor();
 	return handle;
+}
+ELF_API elf_handle ELF_APIENTRY elfReadDirectory(const char* path)
+{
+	elf_handle handle;
+	handle = (elf_object*)elf_read_directory(path);
+	return handle;
+}
+ELF_API const char* ELF_APIENTRY elfGetDirectoryPath(elf_handle directory)
+{
+	if(!directory.get() || elf_get_object_type(directory.get()) != ELF_DIRECTORY)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetDirectoryPath() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetDirectoryPath() -> invalid handle\n");
+		}
+		return "";
+	}
+	return elf_get_directory_path((elf_directory*)directory.get());
+}
+ELF_API int ELF_APIENTRY elfGetDirectoryItemCount(elf_handle directory)
+{
+	if(!directory.get() || elf_get_object_type(directory.get()) != ELF_DIRECTORY)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetDirectoryItemCount() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetDirectoryItemCount() -> invalid handle\n");
+		}
+		return 0;
+	}
+	return elf_get_directory_item_count((elf_directory*)directory.get());
+}
+ELF_API elf_handle ELF_APIENTRY elfGetDirectoryItem(elf_handle directory, int idx)
+{
+	elf_handle handle;
+	if(!directory.get() || elf_get_object_type(directory.get()) != ELF_DIRECTORY)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetDirectoryItem() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetDirectoryItem() -> invalid handle\n");
+		}
+		return handle;
+	}
+	handle = (elf_object*)elf_get_directory_item((elf_directory*)directory.get(), idx);
+	return handle;
+}
+ELF_API const char* ELF_APIENTRY elfGetDirectoryItemName(elf_handle dir_item)
+{
+	if(!dir_item.get() || elf_get_object_type(dir_item.get()) != ELF_DIRECTORY_ITEM)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetDirectoryItemName() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetDirectoryItemName() -> invalid handle\n");
+		}
+		return "";
+	}
+	return elf_get_directory_item_name((elf_directory_item*)dir_item.get());
+}
+ELF_API int ELF_APIENTRY elfGetDirectoryItemType(elf_handle dir_item)
+{
+	if(!dir_item.get() || elf_get_object_type(dir_item.get()) != ELF_DIRECTORY_ITEM)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetDirectoryItemType() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetDirectoryItemType() -> invalid handle\n");
+		}
+		return 0;
+	}
+	return elf_get_directory_item_type((elf_directory_item*)dir_item.get());
 }
 ELF_API elf_vec3f ELF_APIENTRY elfCreateVec3f()
 {
@@ -6310,6 +6404,42 @@ ELF_API bool ELF_APIENTRY elfGetScenePhysics(elf_handle scene)
 		return false;
 	}
 	return (bool)elf_get_scene_physics((elf_scene*)scene.get());
+}
+ELF_API void ELF_APIENTRY elfSetSceneRunScripts(elf_handle scene, bool run_scripts)
+{
+	if(!scene.get() || elf_get_object_type(scene.get()) != ELF_SCENE)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetSceneRunScripts() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetSceneRunScripts() -> invalid handle\n");
+		}
+		return;
+	}
+	elf_set_scene_run_scripts((elf_scene*)scene.get(), run_scripts);
+}
+ELF_API bool ELF_APIENTRY elfGetSceneRunScripts(elf_handle scene, bool run_scripts)
+{
+	if(!scene.get() || elf_get_object_type(scene.get()) != ELF_SCENE)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetSceneRunScripts() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetSceneRunScripts() -> invalid handle\n");
+		}
+		return false;
+	}
+	return (bool)elf_get_scene_run_scripts((elf_scene*)scene.get(), run_scripts);
 }
 ELF_API const char* ELF_APIENTRY elfGetSceneName(elf_handle scene)
 {

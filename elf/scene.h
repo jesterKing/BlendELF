@@ -305,7 +305,6 @@ elf_color elf_get_scene_ambient_color(elf_scene *scene)
 	return scene->ambient_color;
 }
 
-
 void elf_set_scene_gravity(elf_scene *scene, float x, float y, float z)
 {
 	elf_set_physics_world_gravity(scene->world, x, y, z);
@@ -324,6 +323,16 @@ void elf_set_scene_physics(elf_scene *scene, unsigned char physics)
 unsigned char elf_get_scene_physics(elf_scene *scene)
 {
 	return scene->physics;
+}
+
+void elf_set_scene_run_scripts(elf_scene *scene, unsigned char run_scripts)
+{
+	scene->run_scripts = !run_scripts == ELF_FALSE;
+}
+
+unsigned char elf_get_scene_run_scripts(elf_scene *scene, unsigned char run_scripts)
+{
+	return scene->run_scripts;
 }
 
 const char* elf_get_scene_name(elf_scene *scene)

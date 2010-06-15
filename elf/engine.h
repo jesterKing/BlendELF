@@ -788,17 +788,6 @@ char* elf_get_directory_from_path(const char *file_path)
 	}
 }
 
-void elf_set_current_working_directory(const char *dir_path)
-{
-	if(eng->cwd) elf_destroy_string(eng->cwd);
-	eng->cwd = elf_create_string(dir_path);
-}
-
-const char* elf_get_current_working_directory()
-{
-	return eng->cwd;
-}
-
 const char* elf_get_platform()
 {
 #if defined(ELF_WINDOWS)

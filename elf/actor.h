@@ -102,7 +102,7 @@ void elf_update_actor(elf_actor *actor)
 		elf_get_actor_position_(actor, position);
 	}
 
-	if(actor->script)
+	if(actor->script && actor->scene->run_scripts)
 	{
 		eng->actor = (elf_object*)actor;
 		elf_inc_ref((elf_object*)actor);

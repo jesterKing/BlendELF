@@ -3851,23 +3851,6 @@ fail:
 }
 
 
-static int _wrap_elfGetCurrentWorkingDirectory(lua_State* L) {
-  int SWIG_arg = 0;
-  char *result = 0 ;
-  
-  SWIG_check_num_args("GetCurrentWorkingDirectory",0,0)
-  result = (char *)elfGetCurrentWorkingDirectory();
-  lua_pushstring(L,(const char*)result); SWIG_arg++;
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
 static int _wrap_elfGetPlatform(lua_State* L) {
   int SWIG_arg = 0;
   char *result = 0 ;
@@ -4798,6 +4781,165 @@ static int _wrap_elfGetActor(lua_State* L) {
     elf_handle * resultptr = new elf_handle((const elf_handle &) result);
     SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_handle,1); SWIG_arg++;
   }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfReadDirectory(lua_State* L) {
+  int SWIG_arg = 0;
+  char *arg1 = (char *) 0 ;
+  elf_handle result;
+  
+  SWIG_check_num_args("ReadDirectory",1,1)
+  if(!lua_isstring(L,1)) SWIG_fail_arg("ReadDirectory",1,"char const *");
+  arg1 = (char *)lua_tostring(L, 1);
+  result = elfReadDirectory((char const *)arg1);
+  {
+    elf_handle * resultptr = new elf_handle((const elf_handle &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_handle,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetDirectoryPath(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  char *result = 0 ;
+  
+  SWIG_check_num_args("GetDirectoryPath",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetDirectoryPath",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetDirectoryPath",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = (char *)elfGetDirectoryPath(arg1);
+  lua_pushstring(L,(const char*)result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetDirectoryItemCount(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  int result;
+  
+  SWIG_check_num_args("GetDirectoryItemCount",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetDirectoryItemCount",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetDirectoryItemCount",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = (int)elfGetDirectoryItemCount(arg1);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetDirectoryItem(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  int arg2 ;
+  elf_handle *argp1 ;
+  elf_handle result;
+  
+  SWIG_check_num_args("GetDirectoryItem",2,2)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetDirectoryItem",1,"handle");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("GetDirectoryItem",2,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetDirectoryItem",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  result = elfGetDirectoryItem(arg1,arg2);
+  {
+    elf_handle * resultptr = new elf_handle((const elf_handle &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_handle,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetDirectoryItemName(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  char *result = 0 ;
+  
+  SWIG_check_num_args("GetDirectoryItemName",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetDirectoryItemName",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetDirectoryItemName",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = (char *)elfGetDirectoryItemName(arg1);
+  lua_pushstring(L,(const char*)result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetDirectoryItemType(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  int result;
+  
+  SWIG_check_num_args("GetDirectoryItemType",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetDirectoryItemType",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetDirectoryItemType",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = (int)elfGetDirectoryItemType(arg1);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -13419,6 +13561,63 @@ fail:
 }
 
 
+static int _wrap_elfSetSceneRunScripts(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  bool arg2 ;
+  elf_handle *argp1 ;
+  
+  SWIG_check_num_args("SetSceneRunScripts",2,2)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetSceneRunScripts",1,"handle");
+  if(!lua_isboolean(L,2)) SWIG_fail_arg("SetSceneRunScripts",2,"bool");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("SetSceneRunScripts",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (lua_toboolean(L, 2)!=0);
+  elfSetSceneRunScripts(arg1,arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetSceneRunScripts(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  bool arg2 ;
+  elf_handle *argp1 ;
+  bool result;
+  
+  SWIG_check_num_args("GetSceneRunScripts",2,2)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetSceneRunScripts",1,"handle");
+  if(!lua_isboolean(L,2)) SWIG_fail_arg("GetSceneRunScripts",2,"bool");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetSceneRunScripts",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (lua_toboolean(L, 2)!=0);
+  result = (bool)elfGetSceneRunScripts(arg1,arg2);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfGetSceneName(lua_State* L) {
   int SWIG_arg = 0;
   elf_handle arg1 ;
@@ -18898,7 +19097,6 @@ static const struct luaL_reg swig_commands[] = {
     { "InitWithConfig", _wrap_elfInitWithConfig},
     { "Deinit", _wrap_elfDeinit},
     { "ResizeWindow", _wrap_elfResizeWindow},
-    { "GetCurrentWorkingDirectory", _wrap_elfGetCurrentWorkingDirectory},
     { "GetPlatform", _wrap_elfGetPlatform},
     { "GetVersionMajor", _wrap_elfGetVersionMajor},
     { "GetVersionMinor", _wrap_elfGetVersionMinor},
@@ -18951,6 +19149,12 @@ static const struct luaL_reg swig_commands[] = {
     { "SetDebugDraw", _wrap_elfSetDebugDraw},
     { "IsDebugDraw", _wrap_elfIsDebugDraw},
     { "GetActor", _wrap_elfGetActor},
+    { "ReadDirectory", _wrap_elfReadDirectory},
+    { "GetDirectoryPath", _wrap_elfGetDirectoryPath},
+    { "GetDirectoryItemCount", _wrap_elfGetDirectoryItemCount},
+    { "GetDirectoryItem", _wrap_elfGetDirectoryItem},
+    { "GetDirectoryItemName", _wrap_elfGetDirectoryItemName},
+    { "GetDirectoryItemType", _wrap_elfGetDirectoryItemType},
     { "CreateVec3f", _wrap_elfCreateVec3f},
     { "CreateVec3fFromValues", _wrap_elfCreateVec3fFromValues},
     { "CreateQua", _wrap_elfCreateQua},
@@ -19247,6 +19451,8 @@ static const struct luaL_reg swig_commands[] = {
     { "GetSceneGravity", _wrap_elfGetSceneGravity},
     { "SetScenePhysics", _wrap_elfSetScenePhysics},
     { "GetScenePhysics", _wrap_elfGetScenePhysics},
+    { "SetSceneRunScripts", _wrap_elfSetSceneRunScripts},
+    { "GetSceneRunScripts", _wrap_elfGetSceneRunScripts},
     { "GetSceneName", _wrap_elfGetSceneName},
     { "GetSceneFilePath", _wrap_elfGetSceneFilePath},
     { "GetSceneCameraCount", _wrap_elfGetSceneCameraCount},
