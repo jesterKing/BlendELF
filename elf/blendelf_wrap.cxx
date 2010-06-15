@@ -3936,6 +3936,23 @@ fail:
 }
 
 
+static int _wrap_elfGetCurrentDirectory(lua_State* L) {
+  int SWIG_arg = 0;
+  char *result = 0 ;
+  
+  SWIG_check_num_args("GetCurrentDirectory",0,0)
+  result = (char *)elfGetCurrentDirectory();
+  lua_pushstring(L,(const char*)result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfGetErrorString(lua_State* L) {
   int SWIG_arg = 0;
   char *result = 0 ;
@@ -17866,6 +17883,81 @@ fail:
 }
 
 
+static int _wrap_elfSetScreenToTop(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  
+  SWIG_check_num_args("SetScreenToTop",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetScreenToTop",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("SetScreenToTop",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  elfSetScreenToTop(arg1);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfForceFocusToScreen(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  
+  SWIG_check_num_args("ForceFocusToScreen",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("ForceFocusToScreen",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("ForceFocusToScreen",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  elfForceFocusToScreen(arg1);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfReleaseFocusFromScreen(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  
+  SWIG_check_num_args("ReleaseFocusFromScreen",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("ReleaseFocusFromScreen",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("ReleaseFocusFromScreen",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  elfReleaseFocusFromScreen(arg1);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfCreateTextList(lua_State* L) {
   int SWIG_arg = 0;
   char *arg1 = (char *) 0 ;
@@ -17933,6 +18025,64 @@ static int _wrap_elfGetTextListSelectionColor(lua_State* L) {
   arg1 = *argp1;
   
   result = elfGetTextListSelectionColor(arg1);
+  {
+    elf_color * resultptr = new elf_color((const elf_color &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_color,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetTextListLightColor(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  elf_color result;
+  
+  SWIG_check_num_args("GetTextListLightColor",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetTextListLightColor",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetTextListLightColor",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = elfGetTextListLightColor(arg1);
+  {
+    elf_color * resultptr = new elf_color((const elf_color &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_color,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetTextListDarkColor(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  elf_color result;
+  
+  SWIG_check_num_args("GetTextListDarkColor",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetTextListDarkColor",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetTextListDarkColor",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = elfGetTextListDarkColor(arg1);
   {
     elf_color * resultptr = new elf_color((const elf_color &) result);
     SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_color,1); SWIG_arg++;
@@ -18166,6 +18316,80 @@ static int _wrap_elfSetTextListSelectionColor(lua_State* L) {
   arg4 = (float)lua_tonumber(L, 4);
   arg5 = (float)lua_tonumber(L, 5);
   elfSetTextListSelectionColor(arg1,arg2,arg3,arg4,arg5);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfSetTextListLightColor(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  float arg2 ;
+  float arg3 ;
+  float arg4 ;
+  float arg5 ;
+  elf_handle *argp1 ;
+  
+  SWIG_check_num_args("SetTextListLightColor",5,5)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetTextListLightColor",1,"handle");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("SetTextListLightColor",2,"float");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("SetTextListLightColor",3,"float");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("SetTextListLightColor",4,"float");
+  if(!lua_isnumber(L,5)) SWIG_fail_arg("SetTextListLightColor",5,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("SetTextListLightColor",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (float)lua_tonumber(L, 2);
+  arg3 = (float)lua_tonumber(L, 3);
+  arg4 = (float)lua_tonumber(L, 4);
+  arg5 = (float)lua_tonumber(L, 5);
+  elfSetTextListLightColor(arg1,arg2,arg3,arg4,arg5);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfSetTextListDarkColor(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  float arg2 ;
+  float arg3 ;
+  float arg4 ;
+  float arg5 ;
+  elf_handle *argp1 ;
+  
+  SWIG_check_num_args("SetTextListDarkColor",5,5)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetTextListDarkColor",1,"handle");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("SetTextListDarkColor",2,"float");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("SetTextListDarkColor",3,"float");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("SetTextListDarkColor",4,"float");
+  if(!lua_isnumber(L,5)) SWIG_fail_arg("SetTextListDarkColor",5,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("SetTextListDarkColor",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (float)lua_tonumber(L, 2);
+  arg3 = (float)lua_tonumber(L, 3);
+  arg4 = (float)lua_tonumber(L, 4);
+  arg5 = (float)lua_tonumber(L, 5);
+  elfSetTextListDarkColor(arg1,arg2,arg3,arg4,arg5);
   
   return SWIG_arg;
   
@@ -19102,6 +19326,7 @@ static const struct luaL_reg swig_commands[] = {
     { "GetVersionMinor", _wrap_elfGetVersionMinor},
     { "GetVersionRelease", _wrap_elfGetVersionRelease},
     { "GetVersion", _wrap_elfGetVersion},
+    { "GetCurrentDirectory", _wrap_elfGetCurrentDirectory},
     { "GetErrorString", _wrap_elfGetErrorString},
     { "GetError", _wrap_elfGetError},
     { "Run", _wrap_elfRun},
@@ -19597,9 +19822,14 @@ static const struct luaL_reg swig_commands[] = {
     { "CreateScreen", _wrap_elfCreateScreen},
     { "GetScreenTexture", _wrap_elfGetScreenTexture},
     { "SetScreenTexture", _wrap_elfSetScreenTexture},
+    { "SetScreenToTop", _wrap_elfSetScreenToTop},
+    { "ForceFocusToScreen", _wrap_elfForceFocusToScreen},
+    { "ReleaseFocusFromScreen", _wrap_elfReleaseFocusFromScreen},
     { "CreateTextList", _wrap_elfCreateTextList},
     { "GetTextListFont", _wrap_elfGetTextListFont},
     { "GetTextListSelectionColor", _wrap_elfGetTextListSelectionColor},
+    { "GetTextListLightColor", _wrap_elfGetTextListLightColor},
+    { "GetTextListDarkColor", _wrap_elfGetTextListDarkColor},
     { "GetTextListRowCount", _wrap_elfGetTextListRowCount},
     { "GetTextListItemCount", _wrap_elfGetTextListItemCount},
     { "GetTextListSelectionIndex", _wrap_elfGetTextListSelectionIndex},
@@ -19608,6 +19838,8 @@ static const struct luaL_reg swig_commands[] = {
     { "GetTextListSelectedItem", _wrap_elfGetTextListSelectedItem},
     { "SetTextListFont", _wrap_elfSetTextListFont},
     { "SetTextListSelectionColor", _wrap_elfSetTextListSelectionColor},
+    { "SetTextListLightColor", _wrap_elfSetTextListLightColor},
+    { "SetTextListDarkColor", _wrap_elfSetTextListDarkColor},
     { "SetTextListSize", _wrap_elfSetTextListSize},
     { "AddTextListItem", _wrap_elfAddTextListItem},
     { "SetTextListItem", _wrap_elfSetTextListItem},

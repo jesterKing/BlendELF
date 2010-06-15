@@ -569,14 +569,15 @@ void elf_deinit();
 
 void elf_resize_window(int width, int height);
 
-/* <!> */ char* elf_get_directory_from_path(const char *file_path);
-
 const char* elf_get_platform();
 
 int elf_get_version_major();
 int elf_get_version_minor();
 const char* elf_get_version_release();
 const char* elf_get_version();
+
+/* <!> */ char* elf_get_directory_from_path(const char *file_path);
+const char* elf_get_current_directory();
 
 const char* elf_get_error_string();
 int elf_get_error();
@@ -1704,6 +1705,9 @@ elf_screen* elf_create_screen(const char *name);	// <mdoc> SCREEN FUNCTIONS
 
 elf_texture* elf_get_screen_texture(elf_screen *screen);
 void elf_set_screen_texture(elf_screen *screen, elf_texture *texture);
+void elf_set_screen_to_top(elf_screen *screen);
+void elf_force_focus_to_screen(elf_screen *screen);
+void elf_release_focus_from_screen(elf_screen *screen);
 
 // <!!
 void elf_destroy_text_list(elf_text_list *text_list);
@@ -1715,6 +1719,8 @@ elf_text_list* elf_create_text_list(const char *name);	// <mdoc> TEXT LIST FUNCT
 
 elf_font* elf_get_text_list_font(elf_text_list *text_list);
 elf_color elf_get_text_list_selection_color(elf_text_list *text_list);
+elf_color elf_get_text_list_light_color(elf_text_list *text_list);
+elf_color elf_get_text_list_dark_color(elf_text_list *text_list);
 int elf_get_text_list_row_count(elf_text_list *text_list);
 int elf_get_text_list_item_count(elf_text_list *text_list);
 int elf_get_text_list_selection_index(elf_text_list *text_list);
@@ -1724,6 +1730,8 @@ const char* elf_get_text_list_selected_item(elf_text_list *text_list);
 
 void elf_set_text_list_font(elf_text_list *text_list, elf_font *font);
 void elf_set_text_list_selection_color(elf_text_list *text_list, float r, float g, float b, float a);
+void elf_set_text_list_light_color(elf_text_list *text_list, float r, float g, float b, float a);
+void elf_set_text_list_dark_color(elf_text_list *text_list, float r, float g, float b, float a);
 void elf_set_text_list_size(elf_text_list *text_list, int rows, int width);
 void elf_add_text_list_item(elf_text_list *text_list, const char *text);
 void elf_set_text_list_item(elf_text_list *text_list, int idx, const char *text);

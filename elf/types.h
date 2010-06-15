@@ -127,7 +127,7 @@ struct elf_context {
 struct elf_engine {
 	ELF_OBJECT_HEADER;
 
-	char *cwd;
+	char cwd[256];
 
 	unsigned char free_run;
 
@@ -668,6 +668,8 @@ struct elf_screen {
 struct elf_text_list {
 	ELF_GUI_OBJECT_HEADER;
 	elf_color selection_color;
+	elf_color light_color;
+	elf_color dark_color;
 	elf_font *font;
 	elf_list *items;
 	int rows;
@@ -690,6 +692,7 @@ struct elf_gui {
 	elf_gui_object *trace;
 	elf_gui_object *target;
 	elf_text_field *active_text_field;
+	elf_screen *focus_screen;
 
 	unsigned char update_size;
 

@@ -367,8 +367,6 @@ elf_engine* elf_create_engine()
 	memset(engine, 0x0, sizeof(elf_engine));
 	engine->type = ELF_ENGINE;
 
-	engine->cwd = elf_create_string("");
-
 	engine->fps_timer = elf_create_timer();
 	engine->fps_limit_timer = elf_create_timer();
 	engine->time_sync_timer = elf_create_timer();
@@ -526,8 +524,6 @@ elf_engine* elf_create_engine()
 
 void elf_destroy_engine(elf_engine *engine)
 {
-	if(engine->cwd) elf_destroy_string(engine->cwd);
-
 	gfx_dec_ref((gfx_object*)engine->lines);
 	gfx_dec_ref((gfx_object*)engine->sprite_vertex_array);
 
@@ -558,6 +554,8 @@ unsigned char elf_init_engine()
 	eng = elf_create_engine();
 	if(!eng) return ELF_FALSE;
 	elf_inc_ref((elf_object*)eng);
+
+	getcwd(eng->cwd, 256);
 
 	return ELF_TRUE;
 }
@@ -771,23 +769,6 @@ void elf_resize_window(int width, int height)
 	elf_init_post_process_buffers(eng->post_process);*/
 }
 
-char* elf_get_directory_from_path(const char *file_path)
-{
-	int idx;
-
-	if(strlen(file_path) < 1) return elf_create_string("");
-
-	idx = elf_rfind_chars_from_string(file_path, "/\\");
-	if(idx < 1)
-	{
-		return elf_create_string("");
-	}
-	else
-	{
-		return elf_sub_string((char*)file_path, 0, idx+1);
-	}
-}
-
 const char* elf_get_platform()
 {
 #if defined(ELF_WINDOWS)
@@ -806,17 +787,39 @@ int elf_get_version_major()
 
 int elf_get_version_minor()
 {
-	return 91;
+	return 9;
 }
 
 const char* elf_get_version_release()
 {
-	return "Beta";
+	return "Beta 2";
 }
 
 const char* elf_get_version()
 {
-	return "BlendELF 0.91 Beta";
+	return "BlendELF 0.9 Beta 2";
+}
+
+char* elf_get_directory_from_path(const char *file_path)
+{
+	int idx;
+
+	if(strlen(file_path) < 1) return elf_create_string("");
+
+	idx = elf_rfind_chars_from_string(file_path, "/\\");
+	if(idx < 1)
+	{
+		return elf_create_string("");
+	}
+	else
+	{
+		return elf_sub_string((char*)file_path, 0, idx+1);
+	}
+}
+
+const char* elf_get_current_directory()
+{
+	return eng->cwd;
 }
 
 const char* elf_get_error_string()

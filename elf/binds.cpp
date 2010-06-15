@@ -696,6 +696,10 @@ ELF_API const char* ELF_APIENTRY elfGetVersion()
 {
 	return elf_get_version();
 }
+ELF_API const char* ELF_APIENTRY elfGetCurrentDirectory()
+{
+	return elf_get_current_directory();
+}
 ELF_API const char* ELF_APIENTRY elfGetErrorString()
 {
 	return elf_get_error_string();
@@ -9291,6 +9295,60 @@ ELF_API void ELF_APIENTRY elfSetScreenTexture(elf_handle screen, elf_handle text
 	}
 	elf_set_screen_texture((elf_screen*)screen.get(), (elf_texture*)texture.get());
 }
+ELF_API void ELF_APIENTRY elfSetScreenToTop(elf_handle screen)
+{
+	if(!screen.get() || elf_get_object_type(screen.get()) != ELF_SCREEN)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetScreenToTop() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetScreenToTop() -> invalid handle\n");
+		}
+		return;
+	}
+	elf_set_screen_to_top((elf_screen*)screen.get());
+}
+ELF_API void ELF_APIENTRY elfForceFocusToScreen(elf_handle screen)
+{
+	if(!screen.get() || elf_get_object_type(screen.get()) != ELF_SCREEN)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: ForceFocusToScreen() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "ForceFocusToScreen() -> invalid handle\n");
+		}
+		return;
+	}
+	elf_force_focus_to_screen((elf_screen*)screen.get());
+}
+ELF_API void ELF_APIENTRY elfReleaseFocusFromScreen(elf_handle screen)
+{
+	if(!screen.get() || elf_get_object_type(screen.get()) != ELF_SCREEN)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: ReleaseFocusFromScreen() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "ReleaseFocusFromScreen() -> invalid handle\n");
+		}
+		return;
+	}
+	elf_release_focus_from_screen((elf_screen*)screen.get());
+}
 ELF_API elf_handle ELF_APIENTRY elfCreateTextList(const char* name)
 {
 	elf_handle handle;
@@ -9336,6 +9394,48 @@ ELF_API elf_color ELF_APIENTRY elfGetTextListSelectionColor(elf_handle text_list
 		return _e_type;
 	}
 	_e_type = elf_get_text_list_selection_color((elf_text_list*)text_list.get());
+	return _e_type;
+}
+ELF_API elf_color ELF_APIENTRY elfGetTextListLightColor(elf_handle text_list)
+{
+	elf_color _e_type;
+	memset(&_e_type, 0x0, sizeof(elf_color));
+	if(!text_list.get() || elf_get_object_type(text_list.get()) != ELF_TEXT_LIST)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetTextListLightColor() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetTextListLightColor() -> invalid handle\n");
+		}
+		return _e_type;
+	}
+	_e_type = elf_get_text_list_light_color((elf_text_list*)text_list.get());
+	return _e_type;
+}
+ELF_API elf_color ELF_APIENTRY elfGetTextListDarkColor(elf_handle text_list)
+{
+	elf_color _e_type;
+	memset(&_e_type, 0x0, sizeof(elf_color));
+	if(!text_list.get() || elf_get_object_type(text_list.get()) != ELF_TEXT_LIST)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetTextListDarkColor() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetTextListDarkColor() -> invalid handle\n");
+		}
+		return _e_type;
+	}
+	_e_type = elf_get_text_list_dark_color((elf_text_list*)text_list.get());
 	return _e_type;
 }
 ELF_API int ELF_APIENTRY elfGetTextListRowCount(elf_handle text_list)
@@ -9495,6 +9595,42 @@ ELF_API void ELF_APIENTRY elfSetTextListSelectionColor(elf_handle text_list, flo
 		return;
 	}
 	elf_set_text_list_selection_color((elf_text_list*)text_list.get(), r, g, b, a);
+}
+ELF_API void ELF_APIENTRY elfSetTextListLightColor(elf_handle text_list, float r, float g, float b, float a)
+{
+	if(!text_list.get() || elf_get_object_type(text_list.get()) != ELF_TEXT_LIST)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetTextListLightColor() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetTextListLightColor() -> invalid handle\n");
+		}
+		return;
+	}
+	elf_set_text_list_light_color((elf_text_list*)text_list.get(), r, g, b, a);
+}
+ELF_API void ELF_APIENTRY elfSetTextListDarkColor(elf_handle text_list, float r, float g, float b, float a)
+{
+	if(!text_list.get() || elf_get_object_type(text_list.get()) != ELF_TEXT_LIST)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetTextListDarkColor() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetTextListDarkColor() -> invalid handle\n");
+		}
+		return;
+	}
+	elf_set_text_list_dark_color((elf_text_list*)text_list.get(), r, g, b, a);
 }
 ELF_API void ELF_APIENTRY elfSetTextListSize(elf_handle text_list, int rows, int width)
 {

@@ -531,12 +531,6 @@ void elf_set_text_field_offset(elf_text_field *text_field, int offset_x, int off
 	text_field->offset_y = offset_y;
 }
 
-void elf_set_text_field_text(elf_text_field *text_field, const char *text)
-{
-	if(text_field->text) elf_destroy_string(text_field->text);
-	text_field->text = elf_create_string(text);
-}
-
 void elf_move_text_field_cursor_left(elf_text_field *text_field)
 {
 	if(text_field->cursor_pos == 0) return;
@@ -570,6 +564,16 @@ void elf_move_text_field_cursor_right(elf_text_field *text_field)
 	}
 
 	elf_destroy_string(str);
+}
+
+void elf_set_text_field_text(elf_text_field *text_field, const char *text)
+{
+	if(text_field->text) elf_destroy_string(text_field->text);
+	text_field->text = elf_create_string(text);
+	text_field->cursor_pos = 0;
+
+	while(text_field->cursor_pos < strlen(text_field->text))
+		elf_move_text_field_cursor_right(text_field);
 }
 
 elf_slider* elf_create_slider(const char *name)
@@ -826,6 +830,42 @@ void elf_set_screen_texture(elf_screen *screen, elf_texture *texture)
 	elf_recalc_gui_object((elf_gui_object*)screen);
 }
 
+void elf_set_screen_to_top(elf_screen *screen)
+{
+	if(!screen->parent) return;
+
+	elf_inc_ref((elf_object*)screen);
+	elf_remove_from_list(screen->parent->screens, (elf_object*)screen);
+	elf_append_to_list(screen->parent->screens, (elf_object*)screen);
+	elf_dec_ref((elf_object*)screen);
+}
+
+void elf_force_focus_to_screen(elf_screen *screen)
+{
+	elf_button *button;
+
+	if(!screen->root) return;
+
+	if(screen->root->target && screen->root->target->type == ELF_BUTTON)
+	{
+		button = (elf_button*)screen->root->target;
+		button->state = ELF_OFF;
+	}
+
+	screen->root->trace = NULL;
+	screen->root->target = NULL;
+	screen->root->active_text_field = NULL;
+
+	screen->root->focus_screen = screen;
+}
+
+void elf_release_focus_from_screen(elf_screen *screen)
+{
+	if(!screen->root) return;
+
+	screen->root->focus_screen = NULL;
+}
+
 elf_text_list* elf_create_text_list(const char *name)
 {
 	elf_text_list *text_list;
@@ -835,8 +875,9 @@ elf_text_list* elf_create_text_list(const char *name)
 	text_list->type = ELF_TEXT_LIST;
 
 	text_list->color.r = text_list->color.g = text_list->color.b = text_list->color.a = 1.0;
-	text_list->selection_color.r = text_list->selection_color.g = text_list->selection_color.b = 0.5;
-	text_list->selection_color.a = 0.5;
+	text_list->selection_color.r = text_list->selection_color.g = text_list->selection_color.b = text_list->selection_color.a = 0.5;
+	text_list->light_color.r = text_list->light_color.g = text_list->light_color.b = 0.0; text_list->light_color.a = 0.25;
+	text_list->dark_color.r = text_list->dark_color.g = text_list->dark_color.b = 0.0; text_list->dark_color.a = 0.125;
 	text_list->visible = ELF_TRUE;
 	text_list->rows = 16;
 	text_list->list_width = 256;
@@ -869,6 +910,7 @@ void elf_draw_text_list(elf_text_list *text_list, elf_area *area, gfx_shader_par
 	int x, y, width, height;
 	int offset;
 	int i;
+	unsigned char light;
 	elf_string *str_obj;
 
 	if(!text_list->visible || !text_list->font || elf_get_list_length(text_list->items) < 1) return;
@@ -901,6 +943,7 @@ void elf_draw_text_list(elf_text_list *text_list, elf_area *area, gfx_shader_par
 	gfx_set_color(&shader_params->material_params.color, text_list->color.r,
 		text_list->color.g, text_list->color.b, text_list->color.a);
 
+	light = ELF_TRUE;
 	offset = text_list->font->size+text_list->font->offset_y;
 	for(i = 0, str_obj = (elf_string*)elf_begin_list(text_list->items); str_obj;
 		str_obj = (elf_string*)elf_next_in_list(text_list->items), i++)
@@ -917,6 +960,19 @@ void elf_draw_text_list(elf_text_list *text_list, elf_area *area, gfx_shader_par
 			gfx_draw_2d_quad((float)text_list->pos.x, (float)text_list->pos.y+text_list->height-offset,
 				(float)text_list->list_width, (float)text_list->font->size+text_list->font->offset_y);
 		}
+		else
+		{
+			shader_params->texture_params[0].texture = NULL;
+			if(light) gfx_set_color(&shader_params->material_params.color, text_list->light_color.r,
+				text_list->light_color.g, text_list->light_color.b, text_list->light_color.a);
+			else gfx_set_color(&shader_params->material_params.color, text_list->dark_color.r,
+				text_list->dark_color.g, text_list->dark_color.b, text_list->dark_color.a);
+			gfx_set_shader_params(shader_params);	
+			gfx_draw_2d_quad((float)text_list->pos.x, (float)text_list->pos.y+text_list->height-offset,
+				(float)text_list->list_width, (float)text_list->font->size+text_list->font->offset_y);
+		}
+
+		light = !light;
 
 		gfx_set_color(&shader_params->material_params.color, text_list->color.r,
 			text_list->color.g, text_list->color.b, text_list->color.a);
@@ -936,6 +992,16 @@ elf_font* elf_get_text_list_font(elf_text_list *text_list)
 elf_color elf_get_text_list_selection_color(elf_text_list *text_list)
 {
 	return text_list->selection_color;
+}
+
+elf_color elf_get_text_list_light_color(elf_text_list *text_list)
+{
+	return text_list->light_color;
+}
+
+elf_color elf_get_text_list_dark_color(elf_text_list *text_list)
+{
+	return text_list->dark_color;
 }
 
 int elf_get_text_list_row_count(elf_text_list *text_list)
@@ -1018,6 +1084,22 @@ void elf_set_text_list_selection_color(elf_text_list *text_list, float r, float 
 	text_list->selection_color.g = g;
 	text_list->selection_color.b = b;
 	text_list->selection_color.a = a;
+}
+
+void elf_set_text_list_light_color(elf_text_list *text_list, float r, float g, float b, float a)
+{
+	text_list->light_color.r = r;
+	text_list->light_color.g = g;
+	text_list->light_color.b = b;
+	text_list->light_color.a = a;
+}
+
+void elf_set_text_list_dark_color(elf_text_list *text_list, float r, float g, float b, float a)
+{
+	text_list->dark_color.r = r;
+	text_list->dark_color.g = g;
+	text_list->dark_color.b = b;
+	text_list->dark_color.a = a;
 }
 
 void elf_set_text_list_size(elf_text_list *text_list, int rows, int width)
@@ -1338,6 +1420,11 @@ elf_gui_object* elf_trace_top_object(elf_gui_object *object, unsigned char click
 	mouse_pos = elf_get_mouse_position();
 	mouse_pos.y = elf_get_window_height()-mouse_pos.y;
 
+	if(object->type == ELF_GUI && ((elf_gui*)object)->focus_screen)
+	{
+		return elf_trace_top_object((elf_gui_object*)((elf_gui*)object)->focus_screen, click);
+	}
+
 	result = NULL;
 	if(object->screens)
 	{
@@ -1554,8 +1641,27 @@ void elf_update_gui(elf_gui *gui, float step)
 
 	if(elf_get_mouse_button_state(ELF_BUTTON_LEFT) == ELF_PRESSED)
 	{
-		gui->active_text_field = NULL;
+		if(gui->active_text_field && gui->active_text_field != (elf_text_field*)gui->trace)
+		{
+			gui->active_text_field->event = ELF_LOSE_FOCUS;
+			if(gui->active_text_field->script)
+			{
+				eng->actor = (elf_object*)gui->active_text_field;
+				elf_inc_ref((elf_object*)gui->active_text_field);
+
+				elf_run_string("me = elf.GetActor(); event = elf.LOSE_FOCUS");
+				elf_run_script(gui->active_text_field->script);
+				elf_run_string("me = nil; event = 0");
+
+				elf_dec_ref((elf_object*)gui->active_text_field);
+				eng->actor = NULL;
+			}
+
+			gui->active_text_field = NULL;
+		}
+
 		gui->target = gui->trace;
+
 		if(gui->target)
 		{
 			if(gui->target->type == ELF_BUTTON)
@@ -1724,6 +1830,7 @@ void elf_update_gui(elf_gui *gui, float step)
 	if(gui->cur_key)
 	{
 		gui->key_step += step;
+
 		if(gui->key_repeat)
 		{
 			if(gui->key_step >= 0.05)
@@ -1746,6 +1853,7 @@ void elf_update_gui(elf_gui *gui, float step)
 	if(gui->cur_char)
 	{
 		gui->char_step += step;
+
 		if(gui->char_repeat)
 		{
 			if(gui->char_step >= 0.05)
@@ -1768,6 +1876,7 @@ void elf_update_gui(elf_gui *gui, float step)
 	for(i = 0; i < elf_get_event_count(); i++)
 	{
 		event = elf_get_event(i);
+
 		if(event->type == ELF_CHAR_EVENT)
 		{
 			if(((elf_char_event*)event)->state == ELF_TRUE)
@@ -1784,6 +1893,7 @@ void elf_update_gui(elf_gui *gui, float step)
 				gui->char_repeat = ELF_FALSE;
 			}
 		}
+
 		if(event->type == ELF_KEY_EVENT)
 		{
 			if(((elf_key_event*)event)->state == ELF_TRUE)
@@ -1946,6 +2056,8 @@ unsigned char elf_remove_gui_object_by_name(elf_gui_object *parent, const char *
 			{
 				if(object->root->trace == object) object->root->trace = NULL;
 				if(object->root->target == object) object->root->target = NULL;
+				if(object->root->active_text_field == (elf_text_field*)object)
+					object->root->active_text_field = NULL;
 			}
 			object->parent = NULL;
 			elf_clear_gui_object_root(object);
@@ -1963,6 +2075,8 @@ unsigned char elf_remove_gui_object_by_name(elf_gui_object *parent, const char *
 			{
 				if(object->root->trace == object) object->root->trace = NULL;
 				if(object->root->target == object) object->root->target = NULL;
+				if(object->root->focus_screen == (elf_screen*)object)
+					object->root->focus_screen = NULL;
 			}
 			object->parent = NULL;
 			elf_clear_gui_object_root(object);
@@ -2016,8 +2130,8 @@ unsigned char elf_remove_gui_object_by_index(elf_gui_object *parent, int idx)
 				{
 					if(object->root->trace == object) object->root->trace = NULL;
 					if(object->root->target == object) object->root->target = NULL;
-					if(object->root->active_text_field == (elf_text_field*)object)
-						object->root->active_text_field = NULL;
+					if(object->root->focus_screen == (elf_screen*)object)
+						object->root->focus_screen = NULL;
 				}
 				object->parent = NULL;
 				elf_clear_gui_object_root(object);
@@ -2040,6 +2154,8 @@ unsigned char elf_remove_gui_object_by_object(elf_gui_object *parent, elf_gui_ob
 		if(object->root->target == object) object->root->target = NULL;
 		if(object->root->active_text_field == (elf_text_field*)object)
 			object->root->active_text_field = NULL;
+		if(object->root->focus_screen == (elf_screen*)object)
+			object->root->focus_screen = NULL;
 	}
 	object->parent = NULL;
 	elf_clear_gui_object_root(object);

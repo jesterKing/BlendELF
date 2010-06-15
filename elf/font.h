@@ -148,6 +148,7 @@ int elf_get_string_width(elf_font *font, const char *str)
 
 	for(i = 0; i < strlen(str); i++)
 	{
+		if(str[i] < 0) continue;
 		chr = &font->chars[(unsigned int)str[i]];
 		if(str[i] == ' ') ox += font->size/3;
 		else if(str[i] == '\t') ox += font->size/3*5;
@@ -176,6 +177,7 @@ int elf_get_string_height(elf_font *font, const char *str)
 
 	for(i = 0; i < strlen(str); i++)
 	{
+		if(str[i] < 0) continue;
 		chr = &font->chars[(unsigned int)str[i]];
 		if(str[i] == ' ') ox += font->size/3;
 		else if(str[i] == '\t') ox += font->size/3*5;
@@ -206,6 +208,7 @@ void elf_draw_string(elf_font *font, const char *str, int x, int y, gfx_shader_p
 
 	for(i = 0; i < strlen(str); i++)
 	{
+		if(str[i] < 0) continue;
 		chr = &font->chars[(unsigned int)str[i]];
 		if(str[i] == ' ') ox += font->size/3;
 		else if(str[i] == '\t') ox += font->size/3*5;
