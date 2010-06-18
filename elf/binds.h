@@ -721,6 +721,7 @@ ELF_API void ELF_APIENTRY elfSetSpriteFaceCamera(elf_handle sprite, bool face_ca
 ELF_API elf_handle ELF_APIENTRY elfGetSpriteMaterial(elf_handle sprite);
 ELF_API elf_vec2f ELF_APIENTRY elfGetSpriteScale(elf_handle sprite);
 ELF_API bool ELF_APIENTRY elfGetSpriteFaceCamera(elf_handle sprite);
+ELF_API elf_handle ELF_APIENTRY elfCreateScene(const char* name);
 ELF_API elf_handle ELF_APIENTRY elfCreateSceneFromFile(const char* file_path);
 ELF_API bool ELF_APIENTRY elfSaveScene(elf_handle scene, const char* file_path);
 ELF_API void ELF_APIENTRY elfSetSceneAmbientColor(elf_handle scene, float r, float g, float b, float a);
@@ -914,6 +915,8 @@ ELF_API elf_handle ELF_APIENTRY elfGetGuiObjectByIndex(elf_handle parent, int id
 ELF_API bool ELF_APIENTRY elfRemoveGuiObjectByName(elf_handle parent, const char* name);
 ELF_API bool ELF_APIENTRY elfRemoveGuiObjectByIndex(elf_handle parent, int idx);
 ELF_API bool ELF_APIENTRY elfRemoveGuiObjectByObject(elf_handle parent, elf_handle object);
+ELF_API elf_handle ELF_APIENTRY elfGetGuiTrace(elf_handle gui);
+ELF_API elf_handle ELF_APIENTRY elfGetGuiFocus(elf_handle gui);
 ELF_API void ELF_APIENTRY elfEmptyGui(elf_handle gui);
 ELF_API bool ELF_APIENTRY elfCreateSession(const char* address, unsigned short port);
 ELF_API bool ELF_APIENTRY elfConnectSession(const char* address, unsigned short port);

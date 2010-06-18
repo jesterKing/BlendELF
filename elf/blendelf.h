@@ -1213,13 +1213,13 @@ void elf_draw_sprite_debug(elf_sprite *sprite, gfx_shader_params *shader_params)
 //////////////////////////////// SCENE ////////////////////////////////
 
 // <!!
-elf_scene* elf_create_scene();
 void elf_update_scene(elf_scene *scene, float sync);
 void elf_scene_pre_draw(elf_scene *scene);
 void elf_scene_post_draw(elf_scene *scene);
 void elf_destroy_scene(elf_scene *scene);
 // !!>
 
+elf_scene* elf_create_scene(const char *name);
 elf_scene* elf_create_scene_from_file(const char *file_path);	// <mdoc> SCENE FUNCTIONS
 unsigned char elf_save_scene(elf_scene *scene, const char *file_path);
 
@@ -1772,6 +1772,9 @@ elf_gui_object* elf_get_gui_object_by_index(elf_gui_object *parent, int idx);
 unsigned char elf_remove_gui_object_by_name(elf_gui_object *parent, const char *name);
 unsigned char elf_remove_gui_object_by_index(elf_gui_object *parent, int idx);
 unsigned char elf_remove_gui_object_by_object(elf_gui_object *parent, elf_gui_object *object);
+
+elf_gui_object* elf_get_gui_trace(elf_gui *gui);
+elf_gui_object* elf_get_gui_focus(elf_gui *gui);
 
 void elf_empty_gui(elf_gui *gui);
 

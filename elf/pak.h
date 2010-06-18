@@ -1292,7 +1292,7 @@ elf_scene* elf_create_scene_from_pak(elf_pak *pak)
 	float ambient_color[4];
 	unsigned char scene_read;
 
-	scene = elf_create_scene();
+	scene = elf_create_scene(NULL);
 
 	scene->name = elf_create_string(elf_get_pak_file_path(pak));
 	scene->file_path = elf_create_string(elf_get_pak_file_path(pak));

@@ -6271,6 +6271,12 @@ ELF_API bool ELF_APIENTRY elfGetSpriteFaceCamera(elf_handle sprite)
 	}
 	return (bool)elf_get_sprite_face_camera((elf_sprite*)sprite.get());
 }
+ELF_API elf_handle ELF_APIENTRY elfCreateScene(const char* name)
+{
+	elf_handle handle;
+	handle = (elf_object*)elf_create_scene(name);
+	return handle;
+}
 ELF_API elf_handle ELF_APIENTRY elfCreateSceneFromFile(const char* file_path)
 {
 	elf_handle handle;
@@ -10049,6 +10055,46 @@ ELF_API bool ELF_APIENTRY elfRemoveGuiObjectByObject(elf_handle parent, elf_hand
 		return false;
 	}
 	return (bool)elf_remove_gui_object_by_object((elf_gui_object*)parent.get(), (elf_gui_object*)object.get());
+}
+ELF_API elf_handle ELF_APIENTRY elfGetGuiTrace(elf_handle gui)
+{
+	elf_handle handle;
+	if(!gui.get() || elf_get_object_type(gui.get()) != ELF_GUI)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetGuiTrace() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetGuiTrace() -> invalid handle\n");
+		}
+		return handle;
+	}
+	handle = (elf_object*)elf_get_gui_trace((elf_gui*)gui.get());
+	return handle;
+}
+ELF_API elf_handle ELF_APIENTRY elfGetGuiFocus(elf_handle gui)
+{
+	elf_handle handle;
+	if(!gui.get() || elf_get_object_type(gui.get()) != ELF_GUI)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetGuiFocus() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetGuiFocus() -> invalid handle\n");
+		}
+		return handle;
+	}
+	handle = (elf_object*)elf_get_gui_focus((elf_gui*)gui.get());
+	return handle;
 }
 ELF_API void ELF_APIENTRY elfEmptyGui(elf_handle gui)
 {

@@ -2163,6 +2163,17 @@ unsigned char elf_remove_gui_object_by_object(elf_gui_object *parent, elf_gui_ob
 	else return elf_remove_from_list(parent->screens, (elf_object*)object);
 }
 
+elf_gui_object* elf_get_gui_trace(elf_gui *gui)
+{
+	if(gui->trace->type == ELF_GUI) return NULL;
+	return gui->trace;
+}
+
+elf_gui_object* elf_get_gui_focus(elf_gui *gui)
+{
+	return (elf_gui_object*)gui->focus_screen;
+}
+
 void elf_empty_gui(elf_gui *gui)
 {
 	elf_dec_ref((elf_object*)gui->children);

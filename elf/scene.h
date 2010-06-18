@@ -52,7 +52,7 @@ const char *dof_depth_write_alpha_frag =
 "\tgl_FragColor.a = elf_Blur;\n"
 "}\n";
 
-elf_scene* elf_create_scene()
+elf_scene* elf_create_scene(const char *name)
 {
 	elf_scene *scene;
 
@@ -96,6 +96,8 @@ elf_scene* elf_create_scene()
 
 	scene->dof_depth_write = gfx_create_shader_program(dof_depth_write_vert, dof_depth_write_frag);
 	scene->dof_depth_write_alpha = gfx_create_shader_program(dof_depth_write_alpha_vert, dof_depth_write_alpha_frag);
+
+	if(name) scene->name = elf_create_string(name);
 
 	scene->id = ++scene_id_counter;
 
