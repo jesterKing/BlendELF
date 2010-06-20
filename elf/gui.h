@@ -2165,7 +2165,7 @@ unsigned char elf_remove_gui_object_by_object(elf_gui_object *parent, elf_gui_ob
 
 elf_gui_object* elf_get_gui_trace(elf_gui *gui)
 {
-	if(gui->trace->type == ELF_GUI) return NULL;
+	if(!gui->trace || gui->trace->type == ELF_GUI) return NULL;
 	return gui->trace;
 }
 

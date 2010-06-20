@@ -1220,76 +1220,27 @@ void elf_append_folder_to_directory_item_list(elf_list *items, elf_directory_ite
 	elf_append_to_list(items, (elf_object*)nitem);
 }
 
+typedef struct elf_dir_item_emul {
+	char *str;
+	int type;
+} elf_dir_item_emul;
+
+static int alphacmp(const void *a, const void *b)
+{
+	return strcmp((*((elf_dir_item_emul*)a)).str, (*((elf_dir_item_emul*)b)).str);
+}
+
 elf_directory* elf_read_directory(const char *path)
 {
-#ifdef ELF_WINDOWS
-	/*elf_directory *directory;
-	elf_directory_item *dir_item;
-	WIN32_FIND_DATA ffd;
-	HANDLE hFind = INVALID_HANDLE_VALUE;
-	DWORD dwError = 0;
-	size_t length_of_arg;
-	TCHAR szDir[MAX_PATH];
-	int i;
-
-	StringCbLength(path, MAX_PATH, &length_of_arg);
-	if (length_of_arg > (MAX_PATH - 3))
-	{
-		elf_set_error(ELF_CANT_OPEN_DIRECTORY, error: can't open directory, \"%s\". directory path is too long\n", path);
-		return NULL;
-	}
-
-	StringCbCopyN(szDir, MAX_PATH, path, length_of_arg+1);
-	StringCbCatN(szDir, MAX_PATH, "\\*", 3);
-
-	hFind = FindFirstFile(szDir, &ffd);
-
-	if(hFind == INVALID_HANDLE_VALUE) 
-	{
-		elf_set_error(ELF_CANT_OPEN_DIRECTORY, "error: can't open directory \"%s\"\n", path);
-		return NULL;
-	}
-
-	directory = elf_create_directory();
-
-	do
-	{
-		dir_item = elf_create_directory_item();
-		StringCbLength(ffd.cFileName, MAX_PATH, &length_of_arg);
-		dir_item->name = malloc(length_of_arg+1);
-		memset(dir_item->name, 0x0, sizeof(char)*(length_of_arg+1));
-		for(i = 0; i < length_of_arg; i++) dir_item->name[i] = (char)ffd.cFileName[i];
-		global_obj_count++;
-		if (ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-		{
-			dir_item->item_type = ELF_DIR;
-			elf_append_folder_to_directory_item_list(directory->items, dir_item);
-		}
-		else
-		{
-			dir_item->item_type = ELF_FILE;
-			elf_append_to_list(directory->items, (elf_object*)dir_item);
-		}
-	}
-	while (FindNextFile(hFind, &ffd) != 0);
-
-	dwError = GetLastError();
-	if (dwError != ERROR_NO_MORE_FILES) 
-	{
-		elf_set_error(ELF_LOL, "error: something happened during listing the directory \"%s\"... dunno what though :D\n", path);
-	}
-
-	FindClose(hFind);
-
-	return directory;*/
-	elf_set_error(ELF_MISSING_FEATURE, "error: file listing not supported on windows yet\n");
-#else
 	elf_directory *directory;
 	elf_directory_item *dir_item;
-	int num_entries, i;
-	struct dirent **namelist, **list;
+	DIR *dir;
+	struct dirent *dp;
+	elf_dir_item_emul *names;
+	int item_count;
+	int i;
 
-	if((num_entries = scandir(path, &namelist, NULL, alphasort)) < 0)
+	if(!(dir = opendir(path)))
 	{
 		elf_set_error(ELF_CANT_OPEN_DIRECTORY, "error: could not open directory \"%s\"\n", path);
 		return NULL;
@@ -1298,27 +1249,55 @@ elf_directory* elf_read_directory(const char *path)
 	{
 		directory = elf_create_directory();
 		directory->path = elf_create_string(path);
-		for(i = 0, list = namelist; i < num_entries; i++, list++)
+
+		while((dp = readdir(dir)))
 		{
 			dir_item = elf_create_directory_item();
-			dir_item->name = elf_create_string((*list)->d_name);
-			if((*list)->d_type == 4)
-			{
-				dir_item->item_type = ELF_DIR;
-				elf_append_folder_to_directory_item_list(directory->items, dir_item);
-			}
-			else
-			{
-				dir_item->item_type = ELF_FILE;
-				elf_append_to_list(directory->items, (elf_object*)dir_item);
-			}
-			free(*list);
-		}
-		free(namelist);
-	}
+			dir_item->name = elf_create_string(dp->d_name);
 
-	return directory;
-#endif
+			if(dp->d_type == 4) dir_item->item_type = ELF_DIR;
+			else dir_item->item_type = ELF_FILE;
+
+			elf_append_to_list(directory->items, (elf_object*)dir_item);
+		}
+
+		item_count = elf_get_list_length(directory->items);
+
+		names = malloc(sizeof(elf_dir_item_emul)*item_count);
+		memset(names, 0x0, sizeof(elf_dir_item_emul)*item_count);
+
+		for(i = 0, dir_item = (elf_directory_item*)elf_begin_list(directory->items); dir_item;
+			dir_item = (elf_directory_item*)elf_next_in_list(directory->items), i++)
+		{
+			names[i].str = malloc(sizeof(char)*(strlen(dir_item->name)+1));
+			memcpy(names[i].str, dir_item->name, sizeof(char)*(strlen(dir_item->name)+1));
+			names[i].type = dir_item->item_type;
+		}
+
+		qsort(names, item_count, sizeof(elf_dir_item_emul), alphacmp);
+
+		elf_destroy_directory(directory);
+
+		directory = elf_create_directory();
+		directory->path = elf_create_string(path);
+
+		for(i = 0; i < item_count; i++)
+		{
+			dir_item = elf_create_directory_item();
+			dir_item->name = elf_create_string(names[i].str);
+			dir_item->item_type = names[i].type;
+
+			if(dir_item->item_type == ELF_DIR)
+				elf_append_folder_to_directory_item_list(directory->items, dir_item);
+			else elf_append_to_list(directory->items, (elf_object*)dir_item);
+
+			free(names[i].str);
+		}
+
+		free(names);
+
+		return directory;
+	}
 }
 
 const char* elf_get_directory_path(elf_directory *directory)

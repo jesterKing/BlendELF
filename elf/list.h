@@ -72,6 +72,14 @@ void elf_insert_to_list(elf_list *list, int idx, elf_object *obj)
 		list->last = list->first;
 		list->length = 1;
 	}
+	else if(idx == 0)
+	{
+		ptr->prev = elf_create_list_ptr();
+		ptr->prev->obj = obj,
+		ptr->prev->next = ptr;
+		list->first = ptr->prev;
+		list->length++;
+	}
 	else if(idx == list->length)
 	{
 		while(ptr->next) ptr = ptr->next;
