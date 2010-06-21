@@ -9079,6 +9079,24 @@ ELF_API void ELF_APIENTRY elfSetTextFieldOffset(elf_handle text_field, int offse
 	}
 	elf_set_text_field_offset((elf_text_field*)text_field.get(), offset_x, offset_y);
 }
+ELF_API void ELF_APIENTRY elfSetTextFieldCursorPosition(elf_handle text_field, int idx)
+{
+	if(!text_field.get() || elf_get_object_type(text_field.get()) != ELF_TEXT_FIELD)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetTextFieldCursorPosition() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetTextFieldCursorPosition() -> invalid handle\n");
+		}
+		return;
+	}
+	elf_set_text_field_cursor_position((elf_text_field*)text_field.get(), idx);
+}
 ELF_API void ELF_APIENTRY elfSetTextFieldText(elf_handle text_field, const char* text)
 {
 	if(!text_field.get() || elf_get_object_type(text_field.get()) != ELF_TEXT_FIELD)

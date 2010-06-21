@@ -1677,6 +1677,7 @@ void elf_set_text_field_texture(elf_text_field *text_field, elf_texture *texture
 void elf_set_text_field_font(elf_text_field *text_field, elf_font *font);
 void elf_set_text_field_text_color(elf_text_field *text_field, float r, float g, float b, float a);
 void elf_set_text_field_offset(elf_text_field *text_field, int offset_x, int offset_y);
+void elf_set_text_field_cursor_position(elf_text_field *text_field, int idx);
 void elf_set_text_field_text(elf_text_field *text_field, const char *text);
 
 // <!!

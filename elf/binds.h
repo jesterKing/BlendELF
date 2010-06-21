@@ -865,6 +865,7 @@ ELF_API void ELF_APIENTRY elfSetTextFieldTexture(elf_handle text_field, elf_hand
 ELF_API void ELF_APIENTRY elfSetTextFieldFont(elf_handle text_field, elf_handle font);
 ELF_API void ELF_APIENTRY elfSetTextFieldTextColor(elf_handle text_field, float r, float g, float b, float a);
 ELF_API void ELF_APIENTRY elfSetTextFieldOffset(elf_handle text_field, int offset_x, int offset_y);
+ELF_API void ELF_APIENTRY elfSetTextFieldCursorPosition(elf_handle text_field, int idx);
 ELF_API void ELF_APIENTRY elfSetTextFieldText(elf_handle text_field, const char* text);
 ELF_API elf_handle ELF_APIENTRY elfCreateSlider(const char* name);
 ELF_API elf_handle ELF_APIENTRY elfGetSliderBackgroundTexture(elf_handle slider);

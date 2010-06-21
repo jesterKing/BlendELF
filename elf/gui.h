@@ -566,11 +566,24 @@ void elf_move_text_field_cursor_right(elf_text_field *text_field)
 	elf_destroy_string(str);
 }
 
+void elf_set_text_field_cursor_position(elf_text_field *text_field, int idx)
+{
+	if(idx < 0) return;
+	if(idx > strlen(text_field->text)) idx = strlen(text_field->text);
+
+	text_field->cursor_pos = 0;
+	text_field->draw_pos = 0;
+
+	while(text_field->cursor_pos < idx)
+		elf_move_text_field_cursor_right(text_field);
+}
+
 void elf_set_text_field_text(elf_text_field *text_field, const char *text)
 {
 	if(text_field->text) elf_destroy_string(text_field->text);
 	text_field->text = elf_create_string(text);
 	text_field->cursor_pos = 0;
+	text_field->draw_pos = 0;
 
 	while(text_field->cursor_pos < strlen(text_field->text))
 		elf_move_text_field_cursor_right(text_field);
