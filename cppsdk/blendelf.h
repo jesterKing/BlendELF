@@ -151,7 +151,8 @@
 #define ELF_SCRIPTING 0x0041
 #define ELF_PHYSICS_TRI_MESH 0x0042
 #define ELF_SPRITE 0x0043
-#define ELF_OBJECT_TYPE_COUNT 0x0044
+#define ELF_VIDEO_MODE 0x0044
+#define ELF_OBJECT_TYPE_COUNT 0x0045
 #define ELF_PERSPECTIVE 0x0000
 #define ELF_ORTHOGRAPHIC 0x0001
 #define ELF_BOX 0x0001
@@ -342,6 +343,8 @@ ELF_API void ELF_APIENTRY elfRseekList(elf_handle list, elf_handle ptr);
 ELF_API void ELF_APIENTRY elfSetTitle(const char* title);
 ELF_API int ELF_APIENTRY elfGetWindowWidth();
 ELF_API int ELF_APIENTRY elfGetWindowHeight();
+ELF_API int ELF_APIENTRY elfGetVideoModeCount();
+ELF_API elf_vec2i ELF_APIENTRY elfGetVideoMode(int idx);
 ELF_API bool ELF_APIENTRY elfIsFullscreen();
 ELF_API const char* ELF_APIENTRY elfGetTitle();
 ELF_API int ELF_APIENTRY elfGetMultisamples();
@@ -371,12 +374,12 @@ ELF_API bool ELF_APIENTRY elfInit(int width, int height, const char* title, bool
 ELF_API bool ELF_APIENTRY elfInitWithConfig(const char* file_path);
 ELF_API void ELF_APIENTRY elfDeinit();
 ELF_API void ELF_APIENTRY elfResizeWindow(int width, int height);
-ELF_API const char* ELF_APIENTRY elfGetCurrentWorkingDirectory();
 ELF_API const char* ELF_APIENTRY elfGetPlatform();
 ELF_API int ELF_APIENTRY elfGetVersionMajor();
 ELF_API int ELF_APIENTRY elfGetVersionMinor();
 ELF_API const char* ELF_APIENTRY elfGetVersionRelease();
 ELF_API const char* ELF_APIENTRY elfGetVersion();
+ELF_API const char* ELF_APIENTRY elfGetCurrentDirectory();
 ELF_API const char* ELF_APIENTRY elfGetErrorString();
 ELF_API int ELF_APIENTRY elfGetError();
 ELF_API bool ELF_APIENTRY elfRun();
@@ -424,6 +427,12 @@ ELF_API bool ELF_APIENTRY elfIsOcclusionCulling();
 ELF_API void ELF_APIENTRY elfSetDebugDraw(bool debug_draw);
 ELF_API bool ELF_APIENTRY elfIsDebugDraw();
 ELF_API elf_handle ELF_APIENTRY elfGetActor();
+ELF_API elf_handle ELF_APIENTRY elfReadDirectory(const char* path);
+ELF_API const char* ELF_APIENTRY elfGetDirectoryPath(elf_handle directory);
+ELF_API int ELF_APIENTRY elfGetDirectoryItemCount(elf_handle directory);
+ELF_API elf_handle ELF_APIENTRY elfGetDirectoryItem(elf_handle directory, int idx);
+ELF_API const char* ELF_APIENTRY elfGetDirectoryItemName(elf_handle dir_item);
+ELF_API int ELF_APIENTRY elfGetDirectoryItemType(elf_handle dir_item);
 ELF_API elf_vec3f ELF_APIENTRY elfCreateVec3f();
 ELF_API elf_vec3f ELF_APIENTRY elfCreateVec3fFromValues(float x, float y, float z);
 ELF_API elf_vec4f ELF_APIENTRY elfCreateQua();
@@ -712,6 +721,7 @@ ELF_API void ELF_APIENTRY elfSetSpriteFaceCamera(elf_handle sprite, bool face_ca
 ELF_API elf_handle ELF_APIENTRY elfGetSpriteMaterial(elf_handle sprite);
 ELF_API elf_vec2f ELF_APIENTRY elfGetSpriteScale(elf_handle sprite);
 ELF_API bool ELF_APIENTRY elfGetSpriteFaceCamera(elf_handle sprite);
+ELF_API elf_handle ELF_APIENTRY elfCreateScene(const char* name);
 ELF_API elf_handle ELF_APIENTRY elfCreateSceneFromFile(const char* file_path);
 ELF_API bool ELF_APIENTRY elfSaveScene(elf_handle scene, const char* file_path);
 ELF_API void ELF_APIENTRY elfSetSceneAmbientColor(elf_handle scene, float r, float g, float b, float a);
@@ -720,6 +730,8 @@ ELF_API void ELF_APIENTRY elfSetSceneGravity(elf_handle scene, float x, float y,
 ELF_API elf_vec3f ELF_APIENTRY elfGetSceneGravity(elf_handle scene);
 ELF_API void ELF_APIENTRY elfSetScenePhysics(elf_handle scene, bool physics);
 ELF_API bool ELF_APIENTRY elfGetScenePhysics(elf_handle scene);
+ELF_API void ELF_APIENTRY elfSetSceneRunScripts(elf_handle scene, bool run_scripts);
+ELF_API bool ELF_APIENTRY elfGetSceneRunScripts(elf_handle scene, bool run_scripts);
 ELF_API const char* ELF_APIENTRY elfGetSceneName(elf_handle scene);
 ELF_API const char* ELF_APIENTRY elfGetSceneFilePath(elf_handle scene);
 ELF_API int ELF_APIENTRY elfGetSceneCameraCount(elf_handle scene);
@@ -853,6 +865,7 @@ ELF_API void ELF_APIENTRY elfSetTextFieldTexture(elf_handle text_field, elf_hand
 ELF_API void ELF_APIENTRY elfSetTextFieldFont(elf_handle text_field, elf_handle font);
 ELF_API void ELF_APIENTRY elfSetTextFieldTextColor(elf_handle text_field, float r, float g, float b, float a);
 ELF_API void ELF_APIENTRY elfSetTextFieldOffset(elf_handle text_field, int offset_x, int offset_y);
+ELF_API void ELF_APIENTRY elfSetTextFieldCursorPosition(elf_handle text_field, int idx);
 ELF_API void ELF_APIENTRY elfSetTextFieldText(elf_handle text_field, const char* text);
 ELF_API elf_handle ELF_APIENTRY elfCreateSlider(const char* name);
 ELF_API elf_handle ELF_APIENTRY elfGetSliderBackgroundTexture(elf_handle slider);
@@ -864,9 +877,14 @@ ELF_API void ELF_APIENTRY elfSetSliderValue(elf_handle slider, float value);
 ELF_API elf_handle ELF_APIENTRY elfCreateScreen(const char* name);
 ELF_API elf_handle ELF_APIENTRY elfGetScreenTexture(elf_handle screen);
 ELF_API void ELF_APIENTRY elfSetScreenTexture(elf_handle screen, elf_handle texture);
+ELF_API void ELF_APIENTRY elfSetScreenToTop(elf_handle screen);
+ELF_API void ELF_APIENTRY elfForceFocusToScreen(elf_handle screen);
+ELF_API void ELF_APIENTRY elfReleaseFocusFromScreen(elf_handle screen);
 ELF_API elf_handle ELF_APIENTRY elfCreateTextList(const char* name);
 ELF_API elf_handle ELF_APIENTRY elfGetTextListFont(elf_handle text_list);
 ELF_API elf_color ELF_APIENTRY elfGetTextListSelectionColor(elf_handle text_list);
+ELF_API elf_color ELF_APIENTRY elfGetTextListLightColor(elf_handle text_list);
+ELF_API elf_color ELF_APIENTRY elfGetTextListDarkColor(elf_handle text_list);
 ELF_API int ELF_APIENTRY elfGetTextListRowCount(elf_handle text_list);
 ELF_API int ELF_APIENTRY elfGetTextListItemCount(elf_handle text_list);
 ELF_API int ELF_APIENTRY elfGetTextListSelectionIndex(elf_handle text_list);
@@ -875,6 +893,8 @@ ELF_API const char* ELF_APIENTRY elfGetTextListItem(elf_handle text_list, int id
 ELF_API const char* ELF_APIENTRY elfGetTextListSelectedItem(elf_handle text_list);
 ELF_API void ELF_APIENTRY elfSetTextListFont(elf_handle text_list, elf_handle font);
 ELF_API void ELF_APIENTRY elfSetTextListSelectionColor(elf_handle text_list, float r, float g, float b, float a);
+ELF_API void ELF_APIENTRY elfSetTextListLightColor(elf_handle text_list, float r, float g, float b, float a);
+ELF_API void ELF_APIENTRY elfSetTextListDarkColor(elf_handle text_list, float r, float g, float b, float a);
 ELF_API void ELF_APIENTRY elfSetTextListSize(elf_handle text_list, int rows, int width);
 ELF_API void ELF_APIENTRY elfAddTextListItem(elf_handle text_list, const char* text);
 ELF_API void ELF_APIENTRY elfSetTextListItem(elf_handle text_list, int idx, const char* text);
@@ -896,6 +916,8 @@ ELF_API elf_handle ELF_APIENTRY elfGetGuiObjectByIndex(elf_handle parent, int id
 ELF_API bool ELF_APIENTRY elfRemoveGuiObjectByName(elf_handle parent, const char* name);
 ELF_API bool ELF_APIENTRY elfRemoveGuiObjectByIndex(elf_handle parent, int idx);
 ELF_API bool ELF_APIENTRY elfRemoveGuiObjectByObject(elf_handle parent, elf_handle object);
+ELF_API elf_handle ELF_APIENTRY elfGetGuiTrace(elf_handle gui);
+ELF_API elf_handle ELF_APIENTRY elfGetGuiFocus(elf_handle gui);
 ELF_API void ELF_APIENTRY elfEmptyGui(elf_handle gui);
 ELF_API bool ELF_APIENTRY elfCreateSession(const char* address, unsigned short port);
 ELF_API bool ELF_APIENTRY elfConnectSession(const char* address, unsigned short port);

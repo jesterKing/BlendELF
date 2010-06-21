@@ -210,6 +210,7 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apidefine">elf.SCRIPTING</div>
 <div class="apidefine">elf.PHYSICS_TRI_MESH</div>
 <div class="apidefine">elf.SPRITE</div>
+<div class="apidefine">elf.VIDEO_MODE</div>
 <div class="apitopic">NUMBER OF OBJECT TYPES</div>
 <div class="apidefine">elf.OBJECT_TYPE_COUNT</div>
 <div class="apitopic">CAMERA MODE</div>
@@ -372,6 +373,8 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc">elf.SetTitle( <span class="apikeytype">string</span> title )</div>
 <div class="apifunc"><span class="apikeytype">int</span> elf.GetWindowWidth(  )</div>
 <div class="apifunc"><span class="apikeytype">int</span> elf.GetWindowHeight(  )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetVideoModeCount(  )</div>
+<div class="apifunc"><span class="apikeytype">elf_vec2i</span> elf.GetVideoMode( <span class="apikeytype">int</span> idx )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.IsFullscreen(  )</div>
 <div class="apifunc"><span class="apikeytype">string</span> elf.GetTitle(  )</div>
 <div class="apifunc"><span class="apikeytype">int</span> elf.GetMultisamples(  )</div>
@@ -403,12 +406,12 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc"><span class="apikeytype">bool</span> elf.InitWithConfig( <span class="apikeytype">string</span> file_path )</div>
 <div class="apifunc">elf.Deinit(  )</div>
 <div class="apifunc">elf.ResizeWindow( <span class="apikeytype">int</span> width, <span class="apikeytype">int</span> height )</div>
-<div class="apifunc"><span class="apikeytype">string</span> elf.GetCurrentWorkingDirectory(  )</div>
 <div class="apifunc"><span class="apikeytype">string</span> elf.GetPlatform(  )</div>
 <div class="apifunc"><span class="apikeytype">int</span> elf.GetVersionMajor(  )</div>
 <div class="apifunc"><span class="apikeytype">int</span> elf.GetVersionMinor(  )</div>
 <div class="apifunc"><span class="apikeytype">string</span> elf.GetVersionRelease(  )</div>
 <div class="apifunc"><span class="apikeytype">string</span> elf.GetVersion(  )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetCurrentDirectory(  )</div>
 <div class="apifunc"><span class="apikeytype">string</span> elf.GetErrorString(  )</div>
 <div class="apifunc"><span class="apikeytype">int</span> elf.GetError(  )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.Run(  )</div>
@@ -456,6 +459,12 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc">elf.SetDebugDraw( <span class="apikeytype">bool</span> debug_draw )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.IsDebugDraw(  )</div>
 <div class="apifunc"><span class="apiobjtype">object</span> elf.GetActor(  )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.ReadDirectory( <span class="apikeytype">string</span> path )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetDirectoryPath( <span class="apiobjtype">object</span> directory )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetDirectoryItemCount( <span class="apiobjtype">object</span> directory )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetDirectoryItem( <span class="apiobjtype">object</span> directory, <span class="apikeytype">int</span> idx )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetDirectoryItemName( <span class="apiobjtype">object</span> dir_item )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetDirectoryItemType( <span class="apiobjtype">object</span> dir_item )</div>
 <div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.CreateVec3f(  )</div>
 <div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.CreateVec3fFromValues( <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
 <div class="apifunc"><span class="apikeytype">elf_vec4f</span> elf.CreateQua(  )</div>
@@ -757,6 +766,7 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc"><span class="apiobjtype">object</span> elf.GetSpriteMaterial( <span class="apiobjtype">object</span> sprite )</div>
 <div class="apifunc"><span class="apikeytype">elf_vec2f</span> elf.GetSpriteScale( <span class="apiobjtype">object</span> sprite )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.GetSpriteFaceCamera( <span class="apiobjtype">object</span> sprite )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.CreateScene( <span class="apikeytype">string</span> name )</div>
 <div class="apitopic">SCENE FUNCTIONS</div>
 <div class="apifunc"><span class="apiobjtype">object</span> elf.CreateSceneFromFile( <span class="apikeytype">string</span> file_path )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.SaveScene( <span class="apiobjtype">object</span> scene, <span class="apikeytype">string</span> file_path )</div>
@@ -766,6 +776,8 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetSceneGravity( <span class="apiobjtype">object</span> scene )</div>
 <div class="apifunc">elf.SetScenePhysics( <span class="apiobjtype">object</span> scene, <span class="apikeytype">bool</span> physics )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.GetScenePhysics( <span class="apiobjtype">object</span> scene )</div>
+<div class="apifunc">elf.SetSceneRunScripts( <span class="apiobjtype">object</span> scene, <span class="apikeytype">bool</span> run_scripts )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.GetSceneRunScripts( <span class="apiobjtype">object</span> scene, <span class="apikeytype">bool</span> run_scripts )</div>
 <div class="apifunc"><span class="apikeytype">string</span> elf.GetSceneName( <span class="apiobjtype">object</span> scene )</div>
 <div class="apifunc"><span class="apikeytype">string</span> elf.GetSceneFilePath( <span class="apiobjtype">object</span> scene )</div>
 <div class="apifunc"><span class="apikeytype">int</span> elf.GetSceneCameraCount( <span class="apiobjtype">object</span> scene )</div>
@@ -910,6 +922,7 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc">elf.SetTextFieldFont( <span class="apiobjtype">object</span> text_field, <span class="apiobjtype">object</span> font )</div>
 <div class="apifunc">elf.SetTextFieldTextColor( <span class="apiobjtype">object</span> text_field, <span class="apikeytype">float</span> r, <span class="apikeytype">float</span> g, <span class="apikeytype">float</span> b, <span class="apikeytype">float</span> a )</div>
 <div class="apifunc">elf.SetTextFieldOffset( <span class="apiobjtype">object</span> text_field, <span class="apikeytype">int</span> offset_x, <span class="apikeytype">int</span> offset_y )</div>
+<div class="apifunc">elf.SetTextFieldCursorPosition( <span class="apiobjtype">object</span> text_field, <span class="apikeytype">int</span> idx )</div>
 <div class="apifunc">elf.SetTextFieldText( <span class="apiobjtype">object</span> text_field, <span class="apikeytype">string</span> text )</div>
 <div class="apitopic">SLIDER FUNCTIONS</div>
 <div class="apifunc"><span class="apiobjtype">object</span> elf.CreateSlider( <span class="apikeytype">string</span> name )</div>
@@ -923,10 +936,15 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc"><span class="apiobjtype">object</span> elf.CreateScreen( <span class="apikeytype">string</span> name )</div>
 <div class="apifunc"><span class="apiobjtype">object</span> elf.GetScreenTexture( <span class="apiobjtype">object</span> screen )</div>
 <div class="apifunc">elf.SetScreenTexture( <span class="apiobjtype">object</span> screen, <span class="apiobjtype">object</span> texture )</div>
+<div class="apifunc">elf.SetScreenToTop( <span class="apiobjtype">object</span> screen )</div>
+<div class="apifunc">elf.ForceFocusToScreen( <span class="apiobjtype">object</span> screen )</div>
+<div class="apifunc">elf.ReleaseFocusFromScreen( <span class="apiobjtype">object</span> screen )</div>
 <div class="apitopic">TEXT LIST FUNCTIONS</div>
 <div class="apifunc"><span class="apiobjtype">object</span> elf.CreateTextList( <span class="apikeytype">string</span> name )</div>
 <div class="apifunc"><span class="apiobjtype">object</span> elf.GetTextListFont( <span class="apiobjtype">object</span> text_list )</div>
 <div class="apifunc"><span class="apikeytype">elf_color</span> elf.GetTextListSelectionColor( <span class="apiobjtype">object</span> text_list )</div>
+<div class="apifunc"><span class="apikeytype">elf_color</span> elf.GetTextListLightColor( <span class="apiobjtype">object</span> text_list )</div>
+<div class="apifunc"><span class="apikeytype">elf_color</span> elf.GetTextListDarkColor( <span class="apiobjtype">object</span> text_list )</div>
 <div class="apifunc"><span class="apikeytype">int</span> elf.GetTextListRowCount( <span class="apiobjtype">object</span> text_list )</div>
 <div class="apifunc"><span class="apikeytype">int</span> elf.GetTextListItemCount( <span class="apiobjtype">object</span> text_list )</div>
 <div class="apifunc"><span class="apikeytype">int</span> elf.GetTextListSelectionIndex( <span class="apiobjtype">object</span> text_list )</div>
@@ -935,6 +953,8 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc"><span class="apikeytype">string</span> elf.GetTextListSelectedItem( <span class="apiobjtype">object</span> text_list )</div>
 <div class="apifunc">elf.SetTextListFont( <span class="apiobjtype">object</span> text_list, <span class="apiobjtype">object</span> font )</div>
 <div class="apifunc">elf.SetTextListSelectionColor( <span class="apiobjtype">object</span> text_list, <span class="apikeytype">float</span> r, <span class="apikeytype">float</span> g, <span class="apikeytype">float</span> b, <span class="apikeytype">float</span> a )</div>
+<div class="apifunc">elf.SetTextListLightColor( <span class="apiobjtype">object</span> text_list, <span class="apikeytype">float</span> r, <span class="apikeytype">float</span> g, <span class="apikeytype">float</span> b, <span class="apikeytype">float</span> a )</div>
+<div class="apifunc">elf.SetTextListDarkColor( <span class="apiobjtype">object</span> text_list, <span class="apikeytype">float</span> r, <span class="apikeytype">float</span> g, <span class="apikeytype">float</span> b, <span class="apikeytype">float</span> a )</div>
 <div class="apifunc">elf.SetTextListSize( <span class="apiobjtype">object</span> text_list, <span class="apikeytype">int</span> rows, <span class="apikeytype">int</span> width )</div>
 <div class="apifunc">elf.AddTextListItem( <span class="apiobjtype">object</span> text_list, <span class="apikeytype">string</span> text )</div>
 <div class="apifunc">elf.SetTextListItem( <span class="apiobjtype">object</span> text_list, <span class="apikeytype">int</span> idx, <span class="apikeytype">string</span> text )</div>
@@ -958,6 +978,8 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveGuiObjectByName( <span class="apiobjtype">object</span> parent, <span class="apikeytype">string</span> name )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveGuiObjectByIndex( <span class="apiobjtype">object</span> parent, <span class="apikeytype">int</span> idx )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.RemoveGuiObjectByObject( <span class="apiobjtype">object</span> parent, <span class="apiobjtype">object</span> object )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetGuiTrace( <span class="apiobjtype">object</span> gui )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetGuiFocus( <span class="apiobjtype">object</span> gui )</div>
 <div class="apifunc">elf.EmptyGui( <span class="apiobjtype">object</span> gui )</div>
 <div class="apitopic">NETWORKING FUNCTIONS</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.CreateSession( <span class="apikeytype">string</span> address, <span class="apikeytype">unsigned short</span> port )</div>
