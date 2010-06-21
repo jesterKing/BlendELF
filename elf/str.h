@@ -143,7 +143,13 @@ char* elf_sub_string(char *str, int start, int len)
 	}
 
 	if(start < 0 || start > (int)strlen(str)-1 ||
-		len < 0 || start+len > (int)strlen(str)) return NULL;
+		len < 0 || start+len > (int)strlen(str))
+	{
+		nstr = (char*)malloc(sizeof(char)*1);
+		nstr[0] = '\0';
+		global_obj_count++;
+		return nstr;
+	}
 
 	nstr = (char*)malloc(sizeof(char)*len+1);
 	memcpy(nstr, &str[start], sizeof(char)*len);
