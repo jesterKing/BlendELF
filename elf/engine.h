@@ -600,7 +600,7 @@ unsigned char elf_init_with_hwnd(int width, int height,
 		elf_deinit_context();
 		return ELF_FALSE;
 	}
-	//elf_init_audio();
+	elf_init_audio();
 	elf_init_engine();
 	elf_init_scripting();
 	elf_init_networking();
