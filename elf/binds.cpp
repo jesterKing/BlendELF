@@ -433,6 +433,138 @@ ELF_API void ELF_APIENTRY elfRseekList(elf_handle list, elf_handle ptr)
 	}
 	elf_rseek_list((elf_list*)list.get(), (elf_object*)ptr.get());
 }
+ELF_API elf_handle ELF_APIENTRY elfReadConfig(const char* file_path)
+{
+	elf_handle handle;
+	handle = (elf_object*)elf_read_config(file_path);
+	return handle;
+}
+ELF_API int ELF_APIENTRY elfGetConfigWindowWidth(elf_handle config)
+{
+	if(!config.get() || elf_get_object_type(config.get()) != ELF_CONFIG)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetConfigWindowWidth() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetConfigWindowWidth() -> invalid handle\n");
+		}
+		return 0;
+	}
+	return elf_get_config_window_width((elf_config*)config.get());
+}
+ELF_API int ELF_APIENTRY elfGetConfigWindowHeight(elf_handle config)
+{
+	if(!config.get() || elf_get_object_type(config.get()) != ELF_CONFIG)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetConfigWindowHeight() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetConfigWindowHeight() -> invalid handle\n");
+		}
+		return 0;
+	}
+	return elf_get_config_window_height((elf_config*)config.get());
+}
+ELF_API bool ELF_APIENTRY elfGetConfigFullscreen(elf_handle config)
+{
+	if(!config.get() || elf_get_object_type(config.get()) != ELF_CONFIG)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetConfigFullscreen() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetConfigFullscreen() -> invalid handle\n");
+		}
+		return false;
+	}
+	return (bool)elf_get_config_fullscreen((elf_config*)config.get());
+}
+ELF_API float ELF_APIENTRY elfGetConfigTextureAnisotropy(elf_handle config)
+{
+	if(!config.get() || elf_get_object_type(config.get()) != ELF_CONFIG)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetConfigTextureAnisotropy() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetConfigTextureAnisotropy() -> invalid handle\n");
+		}
+		return 0;
+	}
+	return elf_get_config_texture_anisotropy((elf_config*)config.get());
+}
+ELF_API int ELF_APIENTRY elfGetConfigShadowMapSize(elf_handle config)
+{
+	if(!config.get() || elf_get_object_type(config.get()) != ELF_CONFIG)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetConfigShadowMapSize() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetConfigShadowMapSize() -> invalid handle\n");
+		}
+		return 0;
+	}
+	return elf_get_config_shadow_map_size((elf_config*)config.get());
+}
+ELF_API const char* ELF_APIENTRY elfGetConfigStart(elf_handle config)
+{
+	if(!config.get() || elf_get_object_type(config.get()) != ELF_CONFIG)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetConfigStart() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetConfigStart() -> invalid handle\n");
+		}
+		return "";
+	}
+	return elf_get_config_start((elf_config*)config.get());
+}
+ELF_API const char* ELF_APIENTRY elfGetConfigLog(elf_handle config)
+{
+	if(!config.get() || elf_get_object_type(config.get()) != ELF_CONFIG)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetConfigLog() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetConfigLog() -> invalid handle\n");
+		}
+		return "";
+	}
+	return elf_get_config_log((elf_config*)config.get());
+}
 ELF_API void ELF_APIENTRY elfSetTitle(const char* title)
 {
 	elf_set_title(title);

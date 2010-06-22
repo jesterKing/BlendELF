@@ -3146,6 +3146,211 @@ fail:
 }
 
 
+static int _wrap_elfReadConfig(lua_State* L) {
+  int SWIG_arg = 0;
+  char *arg1 = (char *) 0 ;
+  elf_handle result;
+  
+  SWIG_check_num_args("ReadConfig",1,1)
+  if(!lua_isstring(L,1)) SWIG_fail_arg("ReadConfig",1,"char const *");
+  arg1 = (char *)lua_tostring(L, 1);
+  result = elfReadConfig((char const *)arg1);
+  {
+    elf_handle * resultptr = new elf_handle((const elf_handle &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_handle,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetConfigWindowWidth(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  int result;
+  
+  SWIG_check_num_args("GetConfigWindowWidth",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetConfigWindowWidth",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetConfigWindowWidth",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = (int)elfGetConfigWindowWidth(arg1);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetConfigWindowHeight(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  int result;
+  
+  SWIG_check_num_args("GetConfigWindowHeight",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetConfigWindowHeight",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetConfigWindowHeight",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = (int)elfGetConfigWindowHeight(arg1);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetConfigFullscreen(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  bool result;
+  
+  SWIG_check_num_args("GetConfigFullscreen",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetConfigFullscreen",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetConfigFullscreen",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = (bool)elfGetConfigFullscreen(arg1);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetConfigTextureAnisotropy(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  float result;
+  
+  SWIG_check_num_args("GetConfigTextureAnisotropy",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetConfigTextureAnisotropy",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetConfigTextureAnisotropy",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = (float)elfGetConfigTextureAnisotropy(arg1);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetConfigShadowMapSize(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  int result;
+  
+  SWIG_check_num_args("GetConfigShadowMapSize",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetConfigShadowMapSize",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetConfigShadowMapSize",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = (int)elfGetConfigShadowMapSize(arg1);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetConfigStart(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  char *result = 0 ;
+  
+  SWIG_check_num_args("GetConfigStart",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetConfigStart",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetConfigStart",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = (char *)elfGetConfigStart(arg1);
+  lua_pushstring(L,(const char*)result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_elfGetConfigLog(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  elf_handle *argp1 ;
+  char *result = 0 ;
+  
+  SWIG_check_num_args("GetConfigLog",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetConfigLog",1,"handle");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("GetConfigLog",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  result = (char *)elfGetConfigLog(arg1);
+  lua_pushstring(L,(const char*)result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfSetTitle(lua_State* L) {
   int SWIG_arg = 0;
   char *arg1 = (char *) 0 ;
@@ -19248,6 +19453,14 @@ static const struct luaL_reg swig_commands[] = {
     { "RnextInList", _wrap_elfRnextInList},
     { "SeekList", _wrap_elfSeekList},
     { "RseekList", _wrap_elfRseekList},
+    { "ReadConfig", _wrap_elfReadConfig},
+    { "GetConfigWindowWidth", _wrap_elfGetConfigWindowWidth},
+    { "GetConfigWindowHeight", _wrap_elfGetConfigWindowHeight},
+    { "GetConfigFullscreen", _wrap_elfGetConfigFullscreen},
+    { "GetConfigTextureAnisotropy", _wrap_elfGetConfigTextureAnisotropy},
+    { "GetConfigShadowMapSize", _wrap_elfGetConfigShadowMapSize},
+    { "GetConfigStart", _wrap_elfGetConfigStart},
+    { "GetConfigLog", _wrap_elfGetConfigLog},
     { "SetTitle", _wrap_elfSetTitle},
     { "GetWindowWidth", _wrap_elfGetWindowWidth},
     { "GetWindowHeight", _wrap_elfGetWindowHeight},
