@@ -515,6 +515,7 @@ ELF_API void ELF_APIENTRY elfSetPropertyBool(elf_handle property, bool bval);
 ELF_API const char* ELF_APIENTRY elfGetActorName(elf_handle actor);
 ELF_API const char* ELF_APIENTRY elfGetActorFilePath(elf_handle actor);
 ELF_API elf_handle ELF_APIENTRY elfGetActorScript(elf_handle actor);
+ELF_API void ELF_APIENTRY elfSetActorName(elf_handle actor, const char* name);
 ELF_API void ELF_APIENTRY elfSetActorScript(elf_handle actor, elf_handle script);
 ELF_API void ELF_APIENTRY elfSetActorPosition(elf_handle actor, float x, float y, float z);
 ELF_API void ELF_APIENTRY elfSetActorRotation(elf_handle actor, float x, float y, float z);

@@ -2288,6 +2288,24 @@ ELF_API elf_handle ELF_APIENTRY elfGetActorScript(elf_handle actor)
 	handle = (elf_object*)elf_get_actor_script((elf_actor*)actor.get());
 	return handle;
 }
+ELF_API void ELF_APIENTRY elfSetActorName(elf_handle actor, const char* name)
+{
+	if(!actor.get() || !elf_is_actor(actor.get()))
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetActorName() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetActorName() -> invalid handle\n");
+		}
+		return;
+	}
+	elf_set_actor_name((elf_actor*)actor.get(), name);
+}
 ELF_API void ELF_APIENTRY elfSetActorScript(elf_handle actor, elf_handle script)
 {
 	if(!actor.get() || !elf_is_actor(actor.get()))

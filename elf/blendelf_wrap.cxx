@@ -7236,6 +7236,34 @@ fail:
 }
 
 
+static int _wrap_elfSetActorName(lua_State* L) {
+  int SWIG_arg = 0;
+  elf_handle arg1 ;
+  char *arg2 = (char *) 0 ;
+  elf_handle *argp1 ;
+  
+  SWIG_check_num_args("SetActorName",2,2)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("SetActorName",1,"handle");
+  if(!lua_isstring(L,2)) SWIG_fail_arg("SetActorName",2,"char const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
+    SWIG_fail_ptr("SetActorName",1,SWIGTYPE_p_elf_handle);
+  }
+  arg1 = *argp1;
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  elfSetActorName(arg1,(char const *)arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfSetActorScript(lua_State* L) {
   int SWIG_arg = 0;
   elf_handle arg1 ;
@@ -19571,6 +19599,7 @@ static const struct luaL_reg swig_commands[] = {
     { "GetActorName", _wrap_elfGetActorName},
     { "GetActorFilePath", _wrap_elfGetActorFilePath},
     { "GetActorScript", _wrap_elfGetActorScript},
+    { "SetActorName", _wrap_elfSetActorName},
     { "SetActorScript", _wrap_elfSetActorScript},
     { "SetActorPosition", _wrap_elfSetActorPosition},
     { "SetActorRotation", _wrap_elfSetActorRotation},

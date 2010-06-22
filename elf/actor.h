@@ -197,6 +197,12 @@ elf_script* elf_get_actor_script(elf_actor *actor)
 	return actor->script;
 }
 
+void elf_set_actor_name(elf_actor *actor, const char *name)
+{
+	if(actor->name) elf_destroy_string(actor->name);
+	actor->name = elf_create_string(name);
+}
+
 void elf_set_actor_script(elf_actor *actor, elf_script *script)
 {
 	if(actor->script) elf_dec_ref((elf_object*)actor->script);

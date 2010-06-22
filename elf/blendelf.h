@@ -828,8 +828,9 @@ void elf_clean_actor(elf_actor *actor);
 
 const char* elf_get_actor_name(elf_actor *actor);	// <mdoc> ACTOR FUNCTIONS <mdocc> Actor functions can be performed on all actor types. [Camera|Entity|Light|Armature]
 const char* elf_get_actor_file_path(elf_actor *actor);
-
 elf_script* elf_get_actor_script(elf_actor *actor);
+
+void elf_set_actor_name(elf_actor *actor, const char *name);
 void elf_set_actor_script(elf_actor *actor, elf_script *script);
 
 void elf_set_actor_position(elf_actor *actor, float x, float y, float z);
