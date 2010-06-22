@@ -620,9 +620,9 @@ unsigned char elf_init_with_config(const char *file_path)
 		config->window_size[0] = 1024;
 		config->window_size[1] = 768;
 		config->fullscreen = ELF_FALSE;
-		config->texture_anisotropy = 1.0f;
+		config->texture_anisotropy = 1.0;
 		config->shadow_map_size = 1024;
-		config->start = elf_create_string("game.pak");
+		config->start = elf_create_string("");
 	}
 
 	if(!elf_init(config->window_size[0], config->window_size[1], "BlendELF", !config->fullscreen == ELF_FALSE))
@@ -634,6 +634,8 @@ unsigned char elf_init_with_config(const char *file_path)
 
 	elf_set_texture_anisotropy(config->texture_anisotropy);
 	elf_set_shadow_map_size(config->shadow_map_size);
+
+	if(strlen(config->start) > 0) elf_load_scene(config->start);
 
 	elf_destroy_game_config(config);
 
