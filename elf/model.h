@@ -158,7 +158,7 @@ void elf_destroy_model(elf_model *model)
 
 	free(model);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 const char* elf_get_model_name(elf_model *model)

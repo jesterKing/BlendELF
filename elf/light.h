@@ -36,7 +36,7 @@ elf_light* elf_create_light(const char *name)
 
 	if(name) light->name = elf_create_string(name);
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return light;
 }
@@ -66,7 +66,7 @@ void elf_destroy_light(elf_light *light)
 
 	free(light);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 void elf_set_light_type(elf_light *light, int type)

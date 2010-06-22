@@ -7,7 +7,7 @@ elf_particle* elf_create_particle()
 	memset(particle, 0x0, sizeof(elf_particle));
 	particle->type = ELF_PARTICLE;
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return particle;
 }
@@ -16,7 +16,7 @@ void elf_destroy_particle(elf_particle *particle)
 {
 	free(particle);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 elf_particles* elf_create_particles(const char *name, int max_count)
@@ -121,9 +121,9 @@ elf_particles* elf_create_particles(const char *name, int max_count)
 
 	if(name) particles->name = elf_create_string(name);
 
-	particles->id = ++particles_id_counter;
+	particles->id = ++gen->particles_id_counter;
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return particles;
 }
@@ -456,7 +456,7 @@ void elf_destroy_particles(elf_particles *particles)
 
 	free(particles);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 const char* elf_get_particles_name(elf_particles *particles)

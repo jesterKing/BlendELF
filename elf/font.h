@@ -7,7 +7,7 @@ elf_font* elf_create_font()
 	memset(font, 0x0, sizeof(elf_font));
 	font->type = ELF_FONT;
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return font;
 }
@@ -120,7 +120,7 @@ void elf_destroy_font(elf_font *font)
 
 	free(font);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 const char* elf_get_font_name(elf_font *font)

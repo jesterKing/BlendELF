@@ -7,7 +7,7 @@ elf_pak_index* elf_create_pak_index()
 	memset(index, 0x0, sizeof(elf_pak_index));
 	index->type = ELF_PAK_INDEX;
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return index;
 }
@@ -18,7 +18,7 @@ void elf_destroy_pak_index(elf_pak_index *index)
 
 	free(index);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 elf_pak* elf_create_pak_from_file(const char *file_path)
@@ -55,7 +55,7 @@ elf_pak* elf_create_pak_from_file(const char *file_path)
 	memset(pak, 0x0, sizeof(elf_pak));
 	pak->type = ELF_PAK;
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	pak->file_path = elf_create_string(file_path);
 
@@ -108,7 +108,7 @@ void elf_destroy_pak(elf_pak *pak)
 
 	free(pak);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 const char* elf_get_pak_file_path(elf_pak *pak)
@@ -865,9 +865,9 @@ elf_model* elf_create_model_from_pak(FILE *file, const char *name, elf_scene *sc
 	memset(model, 0x0, sizeof(elf_model));
 	model->type = ELF_MODEL;
 
-	model->id = ++model_id_counter;
+	model->id = ++gen->model_id_counter;
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	// read name
 	fread(rname, sizeof(char), 64, file);

@@ -79,7 +79,7 @@ elf_label* elf_create_label(const char *name)
 
 	if(name) label->name = elf_create_string(name);
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return label;
 }
@@ -93,7 +93,7 @@ void elf_destroy_label(elf_label *label)
 
 	free(label);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 void elf_draw_label(elf_label *label, gfx_shader_params *shader_params)
@@ -160,7 +160,7 @@ elf_button* elf_create_button(const char *name)
 
 	if(name) button->name = elf_create_string(name);
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return button;
 }
@@ -177,7 +177,7 @@ void elf_destroy_button(elf_button *button)
 
 	free(button);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 void elf_draw_button(elf_button *button, gfx_shader_params *shader_params)
@@ -284,7 +284,7 @@ elf_picture* elf_create_picture(const char *name)
 
 	if(name) picture->name = elf_create_string(name);
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return picture;
 }
@@ -297,7 +297,7 @@ void elf_destroy_picture(elf_picture *picture)
 
 	free(picture);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 void elf_draw_picture(elf_picture *picture, gfx_shader_params *shader_params)
@@ -367,7 +367,7 @@ elf_text_field* elf_create_text_field(const char *name)
 
 	if(name) text_field->name = elf_create_string(name);
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return text_field;
 }
@@ -383,7 +383,7 @@ void elf_destroy_text_field(elf_text_field *text_field)
 
 	free(text_field);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 void elf_draw_text_field(elf_text_field *text_field, elf_area *area, gfx_shader_params *shader_params)
@@ -603,7 +603,7 @@ elf_slider* elf_create_slider(const char *name)
 
 	if(name) slider->name = elf_create_string(name);
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return slider;
 }
@@ -619,7 +619,7 @@ void elf_destroy_slider(elf_slider *slider)
 
 	free(slider);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 void elf_draw_slider(elf_slider *slider, gfx_shader_params *shader_params)
@@ -722,7 +722,7 @@ elf_screen* elf_create_screen(const char *name)
 
 	if(name) screen->name = elf_create_string(name);
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return screen;
 }
@@ -738,7 +738,7 @@ void elf_destroy_screen(elf_screen *screen)
 
 	free(screen);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 void elf_draw_screen(elf_screen *screen, elf_area *area, gfx_shader_params *shader_params)
@@ -901,7 +901,7 @@ elf_text_list* elf_create_text_list(const char *name)
 
 	if(name) text_list->name = elf_create_string(name);
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return text_list;
 }
@@ -915,7 +915,7 @@ void elf_destroy_text_list(elf_text_list *text_list)
 
 	free(text_list);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 void elf_draw_text_list(elf_text_list *text_list, elf_area *area, gfx_shader_params *shader_params)
@@ -1206,7 +1206,7 @@ elf_check_box* elf_create_check_box(const char *name)
 
 	if(name) check_box->name = elf_create_string(name);
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return check_box;
 }
@@ -1222,7 +1222,7 @@ void elf_destroy_check_box(elf_check_box *check_box)
 
 	free(check_box);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 void elf_draw_check_box(elf_check_box *check_box, gfx_shader_params *shader_params)
@@ -1396,7 +1396,7 @@ elf_gui* elf_create_gui()
 	gui->width = elf_get_window_width();
 	gui->height = elf_get_window_height();
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return gui;
 }
@@ -1419,7 +1419,7 @@ void elf_destroy_gui(elf_gui *gui)
 
 	free(gui);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 elf_gui_object* elf_trace_top_object(elf_gui_object *object, unsigned char click)

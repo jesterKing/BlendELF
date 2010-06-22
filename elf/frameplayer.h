@@ -9,7 +9,7 @@ elf_frame_player *elf_create_frame_player()
 
 	player->cur_frame = 1.0;
 
-	global_obj_count++;
+	elf_inc_obj_count();
 	
 	return player;
 }
@@ -18,7 +18,7 @@ void elf_destroy_frame_player(elf_frame_player *player)
 {
 	free(player);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 void elf_update_frame_player(elf_frame_player *player)

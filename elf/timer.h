@@ -7,12 +7,16 @@ elf_timer *elf_create_timer()
 	memset(timer, 0x0, sizeof(elf_timer));
 	timer->type = ELF_TIMER;
 
+	elf_inc_obj_count();
+
 	return timer;
 }
 
 void elf_destroy_timer(elf_timer *timer)
 {
 	free(timer);
+
+	elf_dec_obj_count();
 }
 
 void elf_start_timer(elf_timer *timer)

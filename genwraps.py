@@ -8,9 +8,6 @@ decls = """#if defined(__WIN32__) || defined(WIN32) || defined(__CYGWIN__)
 		#else
 				#define ELF_API __declspec(dllimport)
 		#endif
-		#include "windows.h"
-		ELF_API bool ELF_APIENTRY elfInitWithHWND(int width, int height, const char* title, bool fullscreen, HWND hwnd);
-		ELF_API HWND ELF_APIENTRY elfGetWindowHWND();
 	#else
 		#define ELF_API
 		#define ELF_APIENTRY
@@ -73,19 +70,6 @@ defs = """#include <stdlib.h>
 #include "gfx.h"
 #include "blendelf.h"
 #include "binds.h"
-
-#ifdef ELF_WINDOWS
-	#ifndef ELF_PLAYER
-ELF_API bool ELF_APIENTRY elfInitWithHWND(int width, int height, const char* title, bool fullscreen, HWND hwnd)
-{
-	return elf_init_with_hwnd(width, height, title, fullscreen, hwnd);
-}
-ELF_API HWND ELF_APIENTRY elfGetWindowHWND()
-{
-	return elf_get_window_hwnd();
-}
-	#endif
-#endif
 
 ELF_API elf_handle::elf_handle()
 {

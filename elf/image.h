@@ -57,7 +57,7 @@ elf_image* elf_create_image_from_file(const char *file_path)
 
 	FreeImage_Unload(in);
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return image;
 }
@@ -68,7 +68,7 @@ void elf_destroy_image(elf_image *image)
 
 	free(image);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 int elf_get_image_width(elf_image *image)

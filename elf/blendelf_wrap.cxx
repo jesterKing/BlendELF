@@ -3585,203 +3585,27 @@ fail:
 }
 
 
-static int _wrap_elfReadGameConfig(lua_State* L) {
-  int SWIG_arg = 0;
-  char *arg1 = (char *) 0 ;
-  elf_handle result;
-  
-  SWIG_check_num_args("ReadGameConfig",1,1)
-  if(!lua_isstring(L,1)) SWIG_fail_arg("ReadGameConfig",1,"char const *");
-  arg1 = (char *)lua_tostring(L, 1);
-  result = elfReadGameConfig((char const *)arg1);
-  {
-    elf_handle * resultptr = new elf_handle((const elf_handle &) result);
-    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_elf_handle,1); SWIG_arg++;
-  }
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_elfGetGameConfigWindowWidth(lua_State* L) {
-  int SWIG_arg = 0;
-  elf_handle arg1 ;
-  elf_handle *argp1 ;
-  int result;
-  
-  SWIG_check_num_args("GetGameConfigWindowWidth",1,1)
-  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetGameConfigWindowWidth",1,"handle");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("GetGameConfigWindowWidth",1,SWIGTYPE_p_elf_handle);
-  }
-  arg1 = *argp1;
-  
-  result = (int)elfGetGameConfigWindowWidth(arg1);
-  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_elfGetGameConfigWindowHeight(lua_State* L) {
-  int SWIG_arg = 0;
-  elf_handle arg1 ;
-  elf_handle *argp1 ;
-  int result;
-  
-  SWIG_check_num_args("GetGameConfigWindowHeight",1,1)
-  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetGameConfigWindowHeight",1,"handle");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("GetGameConfigWindowHeight",1,SWIGTYPE_p_elf_handle);
-  }
-  arg1 = *argp1;
-  
-  result = (int)elfGetGameConfigWindowHeight(arg1);
-  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_elfGetGameConfigFullscreen(lua_State* L) {
-  int SWIG_arg = 0;
-  elf_handle arg1 ;
-  elf_handle *argp1 ;
-  bool result;
-  
-  SWIG_check_num_args("GetGameConfigFullscreen",1,1)
-  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetGameConfigFullscreen",1,"handle");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("GetGameConfigFullscreen",1,SWIGTYPE_p_elf_handle);
-  }
-  arg1 = *argp1;
-  
-  result = (bool)elfGetGameConfigFullscreen(arg1);
-  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_elfGetGameConfigTextureAnisotropy(lua_State* L) {
-  int SWIG_arg = 0;
-  elf_handle arg1 ;
-  elf_handle *argp1 ;
-  float result;
-  
-  SWIG_check_num_args("GetGameConfigTextureAnisotropy",1,1)
-  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetGameConfigTextureAnisotropy",1,"handle");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("GetGameConfigTextureAnisotropy",1,SWIGTYPE_p_elf_handle);
-  }
-  arg1 = *argp1;
-  
-  result = (float)elfGetGameConfigTextureAnisotropy(arg1);
-  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_elfGetGameConfigShadowMapSize(lua_State* L) {
-  int SWIG_arg = 0;
-  elf_handle arg1 ;
-  elf_handle *argp1 ;
-  int result;
-  
-  SWIG_check_num_args("GetGameConfigShadowMapSize",1,1)
-  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetGameConfigShadowMapSize",1,"handle");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("GetGameConfigShadowMapSize",1,SWIGTYPE_p_elf_handle);
-  }
-  arg1 = *argp1;
-  
-  result = (int)elfGetGameConfigShadowMapSize(arg1);
-  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_elfGetGameConfigStart(lua_State* L) {
-  int SWIG_arg = 0;
-  elf_handle arg1 ;
-  elf_handle *argp1 ;
-  char *result = 0 ;
-  
-  SWIG_check_num_args("GetGameConfigStart",1,1)
-  if(!lua_isuserdata(L,1)) SWIG_fail_arg("GetGameConfigStart",1,"handle");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&argp1,SWIGTYPE_p_elf_handle,0))){
-    SWIG_fail_ptr("GetGameConfigStart",1,SWIGTYPE_p_elf_handle);
-  }
-  arg1 = *argp1;
-  
-  result = (char *)elfGetGameConfigStart(arg1);
-  lua_pushstring(L,(const char*)result); SWIG_arg++;
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
 static int _wrap_elfInit(lua_State* L) {
   int SWIG_arg = 0;
   int arg1 ;
   int arg2 ;
   char *arg3 = (char *) 0 ;
   bool arg4 ;
+  char *arg5 = (char *) 0 ;
   bool result;
   
-  SWIG_check_num_args("Init",4,4)
+  SWIG_check_num_args("Init",5,5)
   if(!lua_isnumber(L,1)) SWIG_fail_arg("Init",1,"int");
   if(!lua_isnumber(L,2)) SWIG_fail_arg("Init",2,"int");
   if(!lua_isstring(L,3)) SWIG_fail_arg("Init",3,"char const *");
   if(!lua_isboolean(L,4)) SWIG_fail_arg("Init",4,"bool");
+  if(!lua_isstring(L,5)) SWIG_fail_arg("Init",5,"char const *");
   arg1 = (int)lua_tonumber(L, 1);
   arg2 = (int)lua_tonumber(L, 2);
   arg3 = (char *)lua_tostring(L, 3);
   arg4 = (lua_toboolean(L, 4)!=0);
-  result = (bool)elfInit(arg1,arg2,(char const *)arg3,arg4);
+  arg5 = (char *)lua_tostring(L, 5);
+  result = (bool)elfInit(arg1,arg2,(char const *)arg3,arg4,(char const *)arg5);
   lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
   return SWIG_arg;
   
@@ -19447,13 +19271,6 @@ static const struct luaL_reg swig_commands[] = {
     { "GetJoystickButtonState", _wrap_elfGetJoystickButtonState},
     { "GetEventCount", _wrap_elfGetEventCount},
     { "GetEvent", _wrap_elfGetEvent},
-    { "ReadGameConfig", _wrap_elfReadGameConfig},
-    { "GetGameConfigWindowWidth", _wrap_elfGetGameConfigWindowWidth},
-    { "GetGameConfigWindowHeight", _wrap_elfGetGameConfigWindowHeight},
-    { "GetGameConfigFullscreen", _wrap_elfGetGameConfigFullscreen},
-    { "GetGameConfigTextureAnisotropy", _wrap_elfGetGameConfigTextureAnisotropy},
-    { "GetGameConfigShadowMapSize", _wrap_elfGetGameConfigShadowMapSize},
-    { "GetGameConfigStart", _wrap_elfGetGameConfigStart},
     { "Init", _wrap_elfInit},
     { "InitWithConfig", _wrap_elfInitWithConfig},
     { "Deinit", _wrap_elfDeinit},
@@ -20165,7 +19982,7 @@ static swig_lua_const_info swig_constants[] = {
 { SWIG_LUA_INT,     (char *)"JOINT", (long) 0x0037, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"PARTICLE", (long) 0x0038, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"PARTICLES", (long) 0x0039, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"GAME_CONFIG", (long) 0x003A, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"CONFIG", (long) 0x003A, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"BEZIER_POINT", (long) 0x003B, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"BEZIER_CURVE", (long) 0x003C, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"IPO", (long) 0x003D, 0, 0, 0},
@@ -20176,7 +19993,8 @@ static swig_lua_const_info swig_constants[] = {
 { SWIG_LUA_INT,     (char *)"PHYSICS_TRI_MESH", (long) 0x0042, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"SPRITE", (long) 0x0043, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"VIDEO_MODE", (long) 0x0044, 0, 0, 0},
-{ SWIG_LUA_INT,     (char *)"OBJECT_TYPE_COUNT", (long) 0x0045, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"GENERAL", (long) 0x0045, 0, 0, 0},
+{ SWIG_LUA_INT,     (char *)"OBJECT_TYPE_COUNT", (long) 0x0046, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"PERSPECTIVE", (long) 0x0000, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"ORTHOGRAPHIC", (long) 0x0001, 0, 0, 0},
 { SWIG_LUA_INT,     (char *)"BOX", (long) 0x0001, 0, 0, 0},

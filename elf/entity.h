@@ -29,9 +29,9 @@ elf_entity* elf_create_entity(const char *name)
 
 	if(name) entity->name = elf_create_string(name);
 
-	entity->id = ++entity_id_counter;
+	entity->id = ++gen->entity_id_counter;
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return entity;
 }
@@ -107,7 +107,7 @@ void elf_destroy_entity(elf_entity *entity)
 
 	free(entity);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 void elf_eval_entity_aabb_corner(elf_entity *entity, elf_vec4f *orient, elf_vec3f *corner, elf_vec3f *result)

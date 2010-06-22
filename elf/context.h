@@ -29,7 +29,7 @@ elf_key_event* elf_create_key_event()
 	memset(key_event, 0x0, sizeof(elf_key_event));
 	key_event->type = ELF_KEY_EVENT;
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return key_event;
 }
@@ -38,7 +38,7 @@ void elf_destroy_key_event(elf_key_event *key_event)
 {
 	free(key_event);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 elf_char_event* elf_create_char_event()
@@ -49,7 +49,7 @@ elf_char_event* elf_create_char_event()
 	memset(char_event, 0x0, sizeof(elf_char_event));
 	char_event->type = ELF_CHAR_EVENT;
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return char_event;
 }
@@ -58,7 +58,7 @@ void elf_destroy_char_event(elf_char_event *char_event)
 {
 	free(char_event);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 elf_context* elf_create_context()
@@ -75,7 +75,7 @@ elf_context* elf_create_context()
 	elf_inc_ref((elf_object*)context->video_modes);
 	elf_inc_ref((elf_object*)context->events);
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return context;
 }
@@ -89,7 +89,7 @@ void elf_destroy_context(elf_context *context)
 
 	free(context);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 unsigned char elf_init_context(int width, int height,

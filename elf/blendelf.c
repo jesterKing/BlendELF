@@ -5,31 +5,13 @@
 #include "blendelf.h"
 #include "types.h"
 
+elf_general *gen = NULL;
 elf_context *ctx = NULL;
 elf_engine *eng = NULL;
-elf_resources *res = NULL;
 
-int scene_id_counter = 0;
-int script_id_counter = 0;
-int texture_id_counter = 0;
-int material_id_counter = 0;
-int model_id_counter = 0;
-int camera_id_counter = 0;
-int entity_id_counter = 0;
-int light_id_counter = 0;
-int armature_id_counter = 0;
-int particles_id_counter = 0;
-int sprite_id_counter = 0;
-
-int global_ref_count;
-int global_ref_count_table[ELF_OBJECT_TYPE_COUNT];
-int global_obj_count;
-
-char* elf_err_str = NULL;
-char* elf_err_str_store = NULL;
-int elf_err_code = 0;
-
-#include "object.h"
+#include "general.h"
+#include "config.h"
+#include "log.h"
 #include "resource.h"
 #include "str.h"
 #include "list.h"
@@ -62,24 +44,18 @@ int elf_err_code = 0;
 
 int main()
 {
-	elf_game_config *config;
+	elf_config *config;
 	elf_script *script;
 
-	if(!(config = elf_read_game_config("config.txt")))
-	{
-		config = elf_create_game_config();
-		config->window_size[0] = 1024;
-		config->window_size[1] = 768;
-		config->fullscreen = ELF_FALSE;
-		config->texture_anisotropy = 1.0f;
-		config->shadow_map_size = 1024;
-		config->start = elf_create_string("game.pak");
-	}
+	elf_init_general();
 
-	if(!elf_init(config->window_size[0], config->window_size[1], "BlendELF", !config->fullscreen == ELF_FALSE))
+	if(!(config = elf_read_config("config.txt")))
+		config = elf_create_config();
+
+	if(!elf_init(config->window_size[0], config->window_size[1], "BlendELF", !config->fullscreen == ELF_FALSE, config->log))
 	{
 		elf_set_error(ELF_CANT_INITIALIZE, "error: can't initialize engine\n");
-		elf_destroy_game_config(config);
+		elf_destroy_config(config);
 		return -1;
 	}
 
@@ -97,7 +73,7 @@ int main()
 	{
 		if(!elf_load_scene(config->start))
 		{
-			elf_destroy_game_config(config);
+			elf_destroy_config(config);
 			elf_deinit();
 			return -1;
 		}
@@ -105,7 +81,7 @@ int main()
 		while(elf_run());
 	}
 
-	elf_destroy_game_config(config);
+	elf_destroy_config(config);
 
 	elf_deinit();
 

@@ -155,7 +155,7 @@ extern "C" {
 #define ELF_JOINT					0x0037
 #define ELF_PARTICLE					0x0038
 #define ELF_PARTICLES					0x0039
-#define ELF_GAME_CONFIG					0x003A
+#define ELF_CONFIG					0x003A
 #define ELF_BEZIER_POINT				0x003B
 #define ELF_BEZIER_CURVE				0x003C
 #define ELF_IPO						0x003D
@@ -166,7 +166,8 @@ extern "C" {
 #define ELF_PHYSICS_TRI_MESH				0x0042
 #define ELF_SPRITE					0x0043
 #define ELF_VIDEO_MODE					0x0044
-#define ELF_OBJECT_TYPE_COUNT				0x0045	// <mdoc> NUMBER OF OBJECT TYPES
+#define ELF_GENERAL					0x0045
+#define ELF_OBJECT_TYPE_COUNT				0x0046	// <mdoc> NUMBER OF OBJECT TYPES
 
 #define ELF_PERSPECTIVE					0x0000	// <mdoc> CAMERA MODE <mdocc> The camera modes used by camera internal functions
 #define ELF_ORTHOGRAPHIC				0x0001
@@ -318,6 +319,8 @@ typedef struct elf_vec3f				elf_vec3f;
 typedef struct elf_vec4f				elf_vec4f;
 typedef struct elf_color				elf_color;
 
+typedef struct elf_general				elf_general;
+typedef struct elf_config				elf_config;
 typedef struct elf_object				elf_object;
 typedef struct elf_resource				elf_resource;
 typedef struct elf_gui_object				elf_gui_object;
@@ -371,7 +374,6 @@ typedef struct elf_joint				elf_joint;
 typedef struct elf_resources				elf_resources;
 typedef struct elf_particle				elf_particle;
 typedef struct elf_particles				elf_particles;
-typedef struct elf_game_config				elf_game_config;
 typedef struct elf_frame_player				elf_frame_player;
 typedef struct elf_property				elf_property;
 typedef struct elf_server				elf_server;
@@ -412,15 +414,25 @@ struct elf_color {
 };
 // !!>
 
-//////////////////////////////// OBJECT ////////////////////////////////
+//////////////////////////////// GENERAL ////////////////////////////////
 
 // <!!
-void elf_init_objects();
-void elf_deinit_objects();
+elf_general* elf_create_general();
+void elf_destroy_general(elf_general *general);
+
+void elf_init_general();
+void elf_deinit_general();
+
+void elf_set_log_file_path(const char *file_path);
+
 void elf_inc_ref(elf_object *obj);
 void elf_dec_ref(elf_object *obj);
 void elf_log_ref_count_table();
+
+void elf_inc_obj_count();
+void elf_dec_obj_count();
 // !!>
+
 int elf_get_object_type(elf_object *obj);	// <mdoc> OBJECT FUNCTIONS <mdocc> The object functions can be performed on any generic ELF objects.
 int elf_get_object_ref_count(elf_object *obj);
 int elf_get_global_ref_count();
@@ -473,6 +485,31 @@ elf_object* elf_rnext_in_list(elf_list *list);
 void elf_seek_list(elf_list *list, elf_object *ptr);
 void elf_rseek_list(elf_list *list, elf_object *ptr);
 
+//////////////////////////////// CONFIGURATION ////////////////////////////////
+
+// <!!
+elf_config* elf_create_config();
+void elf_destroy_config(elf_config *config);
+// !!>
+
+elf_config* elf_read_config(const char *file_path);	// <mdoc> CONFIGURATION FUNCTIONS
+int elf_get_config_window_width(elf_config *config);
+int elf_get_config_window_height(elf_config *config);
+unsigned char elf_get_config_fullscreen(elf_config *config);
+float elf_get_config_texture_anisotropy(elf_config *config);
+int elf_get_config_shadow_map_size(elf_config *config);
+const char* elf_get_config_start(elf_config *config);
+const char* elf_get_config_log(elf_config *config);
+
+//////////////////////////////// LOG ////////////////////////////////
+
+// <!!
+void elf_start_log(const char *text);
+void elf_write_to_log(const char *fmt, ...);
+void elf_set_error(int code, const char *fmt, ...);
+void elf_set_error_no_save(int code, const char *fmt, ...);
+// !!>
+
 //////////////////////////////// CONTEXT ////////////////////////////////
 
 // <!!
@@ -493,14 +530,6 @@ unsigned char elf_init_context(int width, int height,
 void elf_close_window();
 
 unsigned char elf_resize_context(int width, int height);
-
-#ifdef ELF_WINDOWS
-	#ifndef ELF_PLAYER
-		#include "windows.h"
-		unsigned char elf_init_context_with_hwnd(int width, int height, const char *title, unsigned char fullscreen, HWND hwnd);
-		HWND elf_get_window_hwnd();
-	#endif
-#endif
 // !!>
 
 void elf_set_title(const char *title);	// <mdoc> CONTEXT FUNCTIONS
@@ -538,32 +567,14 @@ void elf_write_to_log(const char *fmt, ...);
 void elf_set_error(int code, const char *fmt, ...);
 void elf_set_error_no_save(int code, const char *fmt, ...);
 
-elf_game_config* elf_create_game_config();
-void elf_destroy_game_config(elf_game_config *config);
-
 elf_engine* elf_create_engine();
 void elf_destroy_engine(elf_engine *engine);
 
 unsigned char elf_init_engine();
 void elf_deinit_engine();
-
-#ifdef ELF_WINDOWS
-	#ifndef ELF_PLAYER
-		#include "windows.h"
-		unsigned char elf_init_with_hwnd(int width, int height, const char *title, unsigned char fullscreen, HWND hwnd);
-	#endif
-#endif
 // !!>
 
-elf_game_config* elf_read_game_config(const char *file_path);	// <mdoc> GAME CONFIGURATION FUNCTIONS
-int elf_get_game_config_window_width(elf_game_config *config);
-int elf_get_game_config_window_height(elf_game_config *config);
-unsigned char elf_get_game_config_fullscreen(elf_game_config *config);
-float elf_get_game_config_texture_anisotropy(elf_game_config *config);
-int elf_get_game_config_shadow_map_size(elf_game_config *config);
-const char* elf_get_game_config_start(elf_game_config *config);
-
-unsigned char elf_init(int width, int height, const char *title, unsigned char fullscreen);	// <mdoc> ENGINE FUNCTIONS
+unsigned char elf_init(int width, int height, const char *title, unsigned char fullscreen, const char *log);	// <mdoc> ENGINE FUNCTIONS
 unsigned char elf_init_with_config(const char *file_path);
 void elf_deinit();
 

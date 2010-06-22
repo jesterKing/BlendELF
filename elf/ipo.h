@@ -7,7 +7,7 @@ elf_bezier_point* elf_create_bezier_point()
 	memset(point, 0x0, sizeof(elf_bezier_point));
 	point->type = ELF_BEZIER_POINT;
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return point;
 }
@@ -16,7 +16,7 @@ void elf_destroy_bezier_point(elf_bezier_point *point)
 {
 	free(point);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 elf_bezier_curve* elf_create_bezier_curve()
@@ -30,7 +30,7 @@ elf_bezier_curve* elf_create_bezier_curve()
 	curve->points = elf_create_list();
 	elf_inc_ref((elf_object*)curve->points);
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return curve;
 }
@@ -41,7 +41,7 @@ void elf_destroy_bezier_curve(elf_bezier_curve *curve)
 
 	free(curve);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 void elf_add_point_to_bezier_curve(elf_bezier_curve *curve, elf_bezier_point *point)
@@ -98,7 +98,7 @@ elf_ipo* elf_create_ipo()
 	ipo->curves = elf_create_list();
 	elf_inc_ref((elf_object*)ipo->curves);
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return ipo;
 }
@@ -109,7 +109,7 @@ void elf_destroy_ipo(elf_ipo *ipo)
 
 	free(ipo);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 unsigned char elf_add_curve_to_ipo(elf_ipo *ipo, elf_bezier_curve *curve)

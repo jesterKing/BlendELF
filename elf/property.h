@@ -11,7 +11,7 @@ elf_property* elf_create_property(const char *name)
 
 	if(property) property->name = elf_create_string(name);
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return property;
 }
@@ -23,7 +23,7 @@ void elf_destroy_property(elf_property *property)
 
 	free(property);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 int elf_get_property_type(elf_property *property)

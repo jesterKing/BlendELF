@@ -10,7 +10,7 @@ char* elf_create_string(const char *str)
 
 	memcpy(nstr, str, sizeof(char)*strlen(str));
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return nstr;
 }
@@ -19,7 +19,7 @@ void elf_destroy_string(char *str)
 {
 	free(str);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 elf_string* elf_create_string_object()
@@ -53,7 +53,7 @@ char* elf_remove_char_from_string(char *str, int idx)
 	if(sizeof(char)*(strlen(str)-idx) > 0)
 		memcpy(&nstr[idx], &str[idx+1], sizeof(char)*(strlen(str)-idx));
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return nstr;
 }
@@ -67,7 +67,7 @@ char* elf_append_char_to_string(char *str, char c)
 	nstr[strlen(str)] = c;
 	nstr[strlen(str)+1] = '\0';
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return nstr;
 }
@@ -87,7 +87,7 @@ char* elf_insert_char_to_string(char *str, int idx, char c)
 	nstr[idx] = c;
 	nstr[strlen(str)+1] = '\0';
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return nstr;
 }
@@ -104,7 +104,7 @@ char* elf_merge_strings(const char *str1, const char *str2)
 	memcpy(&nstr[strlen(str1)], str2, sizeof(char)*strlen(str2));
 	nstr[strlen(str1)+strlen(str2)] = '\0';
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return nstr;
 }
@@ -125,7 +125,7 @@ char* elf_merge_strings3(const char *str1, const char *str2, const char *str3)
 	memcpy(&nstr[strlen(str1)], str2, sizeof(char)*strlen(str2));
 	memcpy(&nstr[strlen(str1)+strlen(str2)], str3, sizeof(char)*strlen(str3));
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return nstr;
 }
@@ -138,7 +138,7 @@ char* elf_sub_string(char *str, int start, int len)
 	{
 		nstr = (char*)malloc(sizeof(char)*1);
 		nstr[0] = '\0';
-		global_obj_count++;
+		elf_inc_obj_count();
 		return nstr;
 	}
 
@@ -147,7 +147,7 @@ char* elf_sub_string(char *str, int start, int len)
 	{
 		nstr = (char*)malloc(sizeof(char)*1);
 		nstr[0] = '\0';
-		global_obj_count++;
+		elf_inc_obj_count();
 		return nstr;
 	}
 
@@ -155,7 +155,7 @@ char* elf_sub_string(char *str, int start, int len)
 	memcpy(nstr, &str[start], sizeof(char)*len);
 	nstr[len] = '\0';
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return nstr;
 }

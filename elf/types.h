@@ -80,6 +80,41 @@ struct elf_list {
 	int length;
 };
 
+struct elf_general {
+	ELF_OBJECT_HEADER;
+	char *log;
+
+	char* err_str;
+	int err_code;
+
+	int scene_id_counter;
+	int script_id_counter;
+	int texture_id_counter;
+	int material_id_counter;
+	int model_id_counter;
+	int camera_id_counter;
+	int entity_id_counter;
+	int light_id_counter;
+	int armature_id_counter;
+	int particles_id_counter;
+	int sprite_id_counter;
+
+	int global_ref_count;
+	int global_obj_count;
+
+	int global_ref_count_table[ELF_OBJECT_TYPE_COUNT];
+};
+
+struct elf_config {
+	ELF_OBJECT_HEADER;
+	int window_size[2];
+	unsigned char fullscreen;
+	float texture_anisotropy;
+	int shadow_map_size;
+	char *start;
+	char *log;
+};
+
 struct elf_key_event {
 	ELF_OBJECT_HEADER;
 	int key;
@@ -161,22 +196,6 @@ struct elf_engine {
 	elf_gui *gui;
 
 	elf_object *actor;
-};
-
-struct elf_game_config {
-	ELF_OBJECT_HEADER;
-	int window_size[2];
-	unsigned char fullscreen;
-	float texture_anisotropy;
-	int shadow_map_size;
-	char *start;
-};
-
-struct elf_resources {
-	ELF_OBJECT_HEADER;
-	char *root;
-	elf_list *textures;
-	elf_list *models;
 };
 
 struct elf_directory {

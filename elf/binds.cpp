@@ -6,19 +6,6 @@
 #include "blendelf.h"
 #include "binds.h"
 
-#ifdef ELF_WINDOWS
-	#ifndef ELF_PLAYER
-ELF_API bool ELF_APIENTRY elfInitWithHWND(int width, int height, const char* title, bool fullscreen, HWND hwnd)
-{
-	return elf_init_with_hwnd(width, height, title, fullscreen, hwnd);
-}
-ELF_API HWND ELF_APIENTRY elfGetWindowHWND()
-{
-	return elf_get_window_hwnd();
-}
-	#endif
-#endif
-
 ELF_API elf_handle::elf_handle()
 {
 	obj = NULL;
@@ -546,123 +533,9 @@ ELF_API elf_handle ELF_APIENTRY elfGetEvent(int idx)
 	handle = (elf_object*)elf_get_event(idx);
 	return handle;
 }
-ELF_API elf_handle ELF_APIENTRY elfReadGameConfig(const char* file_path)
+ELF_API bool ELF_APIENTRY elfInit(int width, int height, const char* title, bool fullscreen, const char* log)
 {
-	elf_handle handle;
-	handle = (elf_object*)elf_read_game_config(file_path);
-	return handle;
-}
-ELF_API int ELF_APIENTRY elfGetGameConfigWindowWidth(elf_handle config)
-{
-	if(!config.get() || elf_get_object_type(config.get()) != ELF_GAME_CONFIG)
-	{
-		elf_script *script = elf_get_current_script();
-		if(script)
-		{
-			int line = elf_get_current_script_line();
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetGameConfigWindowWidth() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
-		}
-		else
-		{
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetGameConfigWindowWidth() -> invalid handle\n");
-		}
-		return 0;
-	}
-	return elf_get_game_config_window_width((elf_game_config*)config.get());
-}
-ELF_API int ELF_APIENTRY elfGetGameConfigWindowHeight(elf_handle config)
-{
-	if(!config.get() || elf_get_object_type(config.get()) != ELF_GAME_CONFIG)
-	{
-		elf_script *script = elf_get_current_script();
-		if(script)
-		{
-			int line = elf_get_current_script_line();
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetGameConfigWindowHeight() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
-		}
-		else
-		{
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetGameConfigWindowHeight() -> invalid handle\n");
-		}
-		return 0;
-	}
-	return elf_get_game_config_window_height((elf_game_config*)config.get());
-}
-ELF_API bool ELF_APIENTRY elfGetGameConfigFullscreen(elf_handle config)
-{
-	if(!config.get() || elf_get_object_type(config.get()) != ELF_GAME_CONFIG)
-	{
-		elf_script *script = elf_get_current_script();
-		if(script)
-		{
-			int line = elf_get_current_script_line();
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetGameConfigFullscreen() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
-		}
-		else
-		{
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetGameConfigFullscreen() -> invalid handle\n");
-		}
-		return false;
-	}
-	return (bool)elf_get_game_config_fullscreen((elf_game_config*)config.get());
-}
-ELF_API float ELF_APIENTRY elfGetGameConfigTextureAnisotropy(elf_handle config)
-{
-	if(!config.get() || elf_get_object_type(config.get()) != ELF_GAME_CONFIG)
-	{
-		elf_script *script = elf_get_current_script();
-		if(script)
-		{
-			int line = elf_get_current_script_line();
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetGameConfigTextureAnisotropy() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
-		}
-		else
-		{
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetGameConfigTextureAnisotropy() -> invalid handle\n");
-		}
-		return 0;
-	}
-	return elf_get_game_config_texture_anisotropy((elf_game_config*)config.get());
-}
-ELF_API int ELF_APIENTRY elfGetGameConfigShadowMapSize(elf_handle config)
-{
-	if(!config.get() || elf_get_object_type(config.get()) != ELF_GAME_CONFIG)
-	{
-		elf_script *script = elf_get_current_script();
-		if(script)
-		{
-			int line = elf_get_current_script_line();
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetGameConfigShadowMapSize() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
-		}
-		else
-		{
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetGameConfigShadowMapSize() -> invalid handle\n");
-		}
-		return 0;
-	}
-	return elf_get_game_config_shadow_map_size((elf_game_config*)config.get());
-}
-ELF_API const char* ELF_APIENTRY elfGetGameConfigStart(elf_handle config)
-{
-	if(!config.get() || elf_get_object_type(config.get()) != ELF_GAME_CONFIG)
-	{
-		elf_script *script = elf_get_current_script();
-		if(script)
-		{
-			int line = elf_get_current_script_line();
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetGameConfigStart() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
-		}
-		else
-		{
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetGameConfigStart() -> invalid handle\n");
-		}
-		return "";
-	}
-	return elf_get_game_config_start((elf_game_config*)config.get());
-}
-ELF_API bool ELF_APIENTRY elfInit(int width, int height, const char* title, bool fullscreen)
-{
-	return (bool)elf_init(width, height, title, fullscreen);
+	return (bool)elf_init(width, height, title, fullscreen, log);
 }
 ELF_API bool ELF_APIENTRY elfInitWithConfig(const char* file_path)
 {

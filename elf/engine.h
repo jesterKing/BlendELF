@@ -1,362 +1,4 @@
 
-void elf_start_log(const char *text)
-{
-	FILE *file;
-
-	printf("%s", text);
-
-	file = fopen("elf.log", "w");
-	if(file)
-	{
-		fwrite(text, sizeof(char), strlen(text), file);
-		fclose(file);
-	}
-}
-
-void elf_write_to_log(const char *fmt, ...)
-{
-	va_list list;
-	const char *p, *s;
-	int d;
-	double f;
-	FILE *file;
-
-	va_start(list, fmt);
-
-	file = fopen("elf.log", "a");
-	if(!file) fopen("elf.log", "w");
-
-	for(p = fmt; *p; ++p)
-	{
-		if(*p != '%')
-		{
-			putc(*p, stdout);
-			if(file) putc(*p, file);
-		}
-		else
-		{
-			switch(*++p)
-			{
-				case 's':
-					s = va_arg(list, char*);
-					if(s == NULL) continue;
-					printf("%s", s);
-					if(file) fprintf(file, "%s", s);
-					continue;
-				case 'd':
-					d = va_arg(list, int);
-					printf("%d", d);
-					if(file) fprintf(file, "%d", d);
-					continue;
-				case 'f':
-					f = va_arg(list, double);
-					printf("%f", f);
-					if(file) fprintf(file, "%f", f);
-					continue;
-			}
-		}
-	}
-
-	if(file) fclose(file);
-}
-
-void elf_set_error(int code, const char *fmt, ...)
-{
-	va_list list;
-	const char *p, *s;
-	int d;
-	double f;
-	char* err_str;
-	char* tmp_str;
-	char num[32];
-	FILE *file;
-
-	va_start(list, fmt);
-
-	file = fopen("elf.log", "a");
-	if(!file) fopen("elf.log", "w");
-
-	err_str = elf_create_string("");
-
-	for(p = fmt; *p; ++p)
-	{
-		if(*p != '%')
-		{
-			putc(*p, stdout);
-			if(file) putc(*p, file);
-			tmp_str = elf_append_char_to_string(err_str, *p);
-			elf_destroy_string(err_str);
-			err_str = tmp_str;
-		}
-		else
-		{
-			switch(*++p)
-			{
-				case 's':
-					s = va_arg(list, char*);
-					if(s == NULL) continue;
-					printf("%s", s);
-					if(file) fprintf(file, "%s", s);
-
-					tmp_str = elf_merge_strings(err_str, s);
-					elf_destroy_string(err_str);
-					err_str = tmp_str;
-					continue;
-				case 'd':
-					d = va_arg(list, int);
-					printf("%d", d);
-					if(file) fprintf(file, "%d", d);
-
-					memset(num, 0x0, sizeof(char)*32);
-					sprintf(num, "%d", d);
-
-					tmp_str = elf_merge_strings(err_str, num);
-					elf_destroy_string(err_str);
-					err_str = tmp_str;
-					continue;
-				case 'f':
-					f = va_arg(list, double);
-					printf("%f", f);
-					if(file) fprintf(file, "%f", f);
-
-					memset(num, 0x0, sizeof(char)*32);
-					sprintf(num, "%f", f);
-
-					tmp_str = elf_merge_strings(err_str, num);
-					elf_destroy_string(err_str);
-					err_str = tmp_str;
-					continue;
-			}
-		}
-	}
-
-	elf_err_code = code;
-
-	if(elf_err_str) elf_destroy_string(elf_err_str);
-	elf_err_str = elf_create_string(err_str);
-	elf_destroy_string(err_str);
-
-	if(file) fclose(file);
-}
-
-void elf_set_error_no_save(int code, const char *fmt, ...)
-{
-	va_list list;
-	const char *p, *s;
-	int d;
-	double f;
-	char* err_str;
-	char* tmp_str;
-	char num[32];
-
-	va_start(list, fmt);
-
-	err_str = elf_create_string("");
-
-	for(p = fmt; *p; ++p)
-	{
-		if(*p != '%')
-		{
-			putc(*p, stdout);
-
-			tmp_str = elf_append_char_to_string(err_str, *p);
-			elf_destroy_string(err_str);
-			err_str = tmp_str;
-		}
-		else
-		{
-			switch(*++p)
-			{
-				case 's':
-					s = va_arg(list, char*);
-					if(s == NULL) continue;
-					printf("%s", s);
-
-					tmp_str = elf_merge_strings(err_str, s);
-					elf_destroy_string(err_str);
-					err_str = tmp_str;
-					continue;
-				case 'd':
-					d = va_arg(list, int);
-					printf("%d", d);
-
-					memset(num, 0x0, sizeof(char)*32);
-					sprintf(num, "%d", d);
-
-					tmp_str = elf_merge_strings(err_str, num);
-					elf_destroy_string(err_str);
-					err_str = tmp_str;
-					continue;
-				case 'f':
-					f = va_arg(list, double);
-					printf("%f", f);
-
-					memset(num, 0x0, sizeof(char)*32);
-					sprintf(num, "%f", f);
-
-					tmp_str = elf_merge_strings(err_str, num);
-					elf_destroy_string(err_str);
-					err_str = tmp_str;
-					continue;
-			}
-		}
-	}
-
-	elf_err_code = code;
-
-	if(elf_err_str) elf_destroy_string(elf_err_str);
-	elf_err_str = elf_create_string(err_str);
-	elf_destroy_string(err_str);
-}
-
-elf_game_config* elf_create_game_config()
-{
-	elf_game_config *config;
-
-	config = (elf_game_config*)malloc(sizeof(elf_game_config));
-	memset(config, 0x0, sizeof(elf_game_config));
-	config->type = ELF_GAME_CONFIG;
-
-	global_obj_count--;
-
-	return config;
-}
-
-void elf_destroy_game_config(elf_game_config *config)
-{
-	if(config->start) elf_destroy_string(config->start);
-
-	free(config);
-
-	global_obj_count++;
-}
-
-elf_game_config* elf_read_game_config(const char *file_path)
-{
-	elf_game_config *config;
-	FILE *file;
-	int length;
-	char *text;
-	int pos;
-	char *str;
-	int scope;
-
-	file = fopen(file_path, "r");
-	if(!file) return NULL;
-
-	fseek(file, 0, SEEK_END);
-	length = ftell(file);
-	fseek(file, 0, SEEK_SET);
-	if(length > 0)
-	{
-		text = (char*)malloc(sizeof(char)*length+1);
-		memset(text, 0x0, sizeof(char)*length+1);
-		fread(text, sizeof(char), length, file);
-		fclose(file);
-	}
-	else
-	{
-		fclose(file);
-		return NULL;
-	}
-
-	config = elf_create_game_config();
-
-	pos = 0;
-	scope = 0;
-	while((str = elf_read_next(text, &pos)))
-	{
-		if(scope > 0)
-		{
-			if(!strcmp(str, "{"))
-			{
-				scope++;
-			}
-			else if(!strcmp(str, "}"))
-			{
-				scope--;
-			}
-		}
-		else
-		{
-			if(!strcmp(str, "window_size"))
-			{
-				elf_read_sst_ints(text, &pos, 2, config->window_size);
-			}
-			else if(!strcmp(str, "fullscreen"))
-			{
-				config->fullscreen = elf_read_sst_bool(text, &pos);
-			}
-			else if(!strcmp(str, "texture_anisotropy"))
-			{
-				config->texture_anisotropy = elf_read_sst_float(text, &pos);
-			}
-			else if(!strcmp(str, "shadow_map_size"))
-			{
-				config->shadow_map_size = elf_read_sst_int(text, &pos);
-			}
-			else if(!strcmp(str, "start"))
-			{
-				if(config->start) elf_destroy_string(config->start);
-				config->start = elf_read_sst_string(text, &pos);
-			}
-			else if(!strcmp(str, "{"))
-			{
-				scope++;
-			}
-			else if(!strcmp(str, "}"))
-			{
-				scope--;
-				if(scope < 0)
-				{
-					elf_destroy_string(str);
-					break;
-				}
-			}
-			else
-			{
-				elf_write_to_log("warning: unknown element \"%s\" in config.txt\n", str);
-			}
-		}
-		elf_destroy_string(str);
-		str = NULL;
-	}
-
-	free(text);
-
-	return config;
-}
-
-int elf_get_game_config_window_width(elf_game_config *config)
-{
-	return config->window_size[0];
-}
-
-int elf_get_game_config_window_height(elf_game_config *config)
-{
-	return config->window_size[1];
-}
-
-unsigned char elf_get_game_config_fullscreen(elf_game_config *config)
-{
-	return !config->fullscreen == ELF_FALSE;
-}
-
-float elf_get_game_config_texture_anisotropy(elf_game_config *config)
-{
-	return config->texture_anisotropy;
-}
-
-int elf_get_game_config_shadow_map_size(elf_game_config *config)
-{
-	return config->shadow_map_size;
-}
-
-const char* elf_get_game_config_start(elf_game_config *config)
-{
-	return config->start;
-}
-
 elf_engine* elf_create_engine()
 {
 	elf_engine *engine;
@@ -569,11 +211,13 @@ void elf_deinit_engine()
 }
 
 unsigned char elf_init(int width, int height,
-	const char *title, unsigned char fullscreen)
+	const char *title, unsigned char fullscreen, const char *log)
 {
+	elf_init_general();
+	elf_set_log_file_path(log);
+
 	elf_start_log("BlendELF 0.9 Beta\n");
 
-	elf_init_objects();
 	if(!elf_init_context(width, height, title, fullscreen)) return ELF_FALSE;
 	if(!gfx_init())
 	{
@@ -588,47 +232,19 @@ unsigned char elf_init(int width, int height,
 	return ELF_TRUE;
 }
 
-#ifdef ELF_WINDOWS
-	#ifndef ELF_PLAYER
-unsigned char elf_init_with_hwnd(int width, int height,
-	const char *title, unsigned char fullscreen, HWND hwnd)
-{
-	elf_init_objects();
-	if(!elf_init_context_with_hwnd(width, height, title, fullscreen, hwnd)) return ELF_FALSE;
-	if(!gfx_init())
-	{
-		elf_deinit_context();
-		return ELF_FALSE;
-	}
-	elf_init_audio();
-	elf_init_engine();
-	elf_init_scripting();
-	elf_init_networking();
-
-	return ELF_TRUE;
-}
-	#endif
-#endif
-
 unsigned char elf_init_with_config(const char *file_path)
 {
-	elf_game_config *config;
+	elf_config *config;
 
-	if(!(config = elf_read_game_config("config.txt")))
-	{
-		config = elf_create_game_config();
-		config->window_size[0] = 1024;
-		config->window_size[1] = 768;
-		config->fullscreen = ELF_FALSE;
-		config->texture_anisotropy = 1.0;
-		config->shadow_map_size = 1024;
-		config->start = elf_create_string("");
-	}
+	elf_init_general();
 
-	if(!elf_init(config->window_size[0], config->window_size[1], "BlendELF", !config->fullscreen == ELF_FALSE))
+	if(!(config = elf_read_config("config.txt")))
+		config = elf_create_config();
+
+	if(!elf_init(config->window_size[0], config->window_size[1], "BlendELF", !config->fullscreen == ELF_FALSE, config->log))
 	{
 		elf_set_error(ELF_CANT_INITIALIZE, "error: could not initialize engine\n");
-		elf_destroy_game_config(config);
+		elf_destroy_config(config);
 		return ELF_FALSE;
 	}
 
@@ -637,7 +253,7 @@ unsigned char elf_init_with_config(const char *file_path)
 
 	if(strlen(config->start) > 0) elf_load_scene(config->start);
 
-	elf_destroy_game_config(config);
+	elf_destroy_config(config);
 
 	return ELF_TRUE;
 }
@@ -753,11 +369,7 @@ void elf_deinit()
 	elf_deinit_engine();
 	elf_deinit_audio();
 	elf_deinit_context();
-	if(elf_err_str) elf_destroy_string(elf_err_str);
-	if(elf_err_str_store) elf_destroy_string(elf_err_str_store);
-	elf_deinit_objects();
-	elf_err_str = NULL;
-	elf_err_str_store = NULL;
+	elf_deinit_general();
 }
 
 void elf_resize_window(int width, int height)
@@ -826,17 +438,12 @@ const char* elf_get_current_directory()
 
 const char* elf_get_error_string()
 {
-	if(elf_err_str_store) elf_destroy_string(elf_err_str_store);
-	elf_err_str_store = elf_err_str;
-	elf_err_str = NULL;
-	return elf_err_str_store;
+	return gen->err_str;
 }
 
 int elf_get_error()
 {
-	int err;
-	err = elf_err_code;
-	return elf_err_code;
+	return gen->err_code;
 }
 
 void elf_quit()
@@ -1166,9 +773,18 @@ elf_directory* elf_create_directory()
 
 	directory->items = elf_create_list();
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return directory;
+}
+
+void elf_destroy_directory_item(elf_directory_item *directory_item)
+{
+	if(directory_item->name) elf_destroy_string(directory_item->name);
+
+	free(directory_item);
+
+	elf_dec_obj_count();
 }
 
 elf_directory_item* elf_create_directory_item()
@@ -1179,7 +795,7 @@ elf_directory_item* elf_create_directory_item()
 	memset(dir_item, 0x0, sizeof(elf_directory_item));
 	dir_item->type = ELF_DIRECTORY_ITEM;
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return dir_item;
 }
@@ -1191,16 +807,7 @@ void elf_destroy_directory(elf_directory *directory)
 
 	free(directory);
 
-	global_obj_count--;
-}
-
-void elf_destroy_directory_item(elf_directory_item *directory_item)
-{
-	if(directory_item->name) elf_destroy_string(directory_item->name);
-
-	free(directory_item);
-
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 void elf_append_folder_to_directory_item_list(elf_list *items, elf_directory_item *nitem)

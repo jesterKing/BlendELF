@@ -7,9 +7,9 @@ elf_texture *elf_create_texture()
 	memset(texture, 0x0, sizeof(elf_texture));
 	texture->type = ELF_TEXTURE;
 
-	texture->id = ++texture_id_counter;
+	texture->id = ++gen->texture_id_counter;
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return texture;
 }
@@ -75,7 +75,7 @@ void elf_destroy_texture(elf_texture *texture)
 	if(texture->texture) gfx_destroy_texture(texture->texture);
 	if(texture->data) free(texture->data);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 
 	free(texture);
 }

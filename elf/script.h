@@ -7,9 +7,9 @@ elf_script* elf_create_script()
 	memset(script, 0x0, sizeof(elf_script));
 	script->type = ELF_SCRIPT;
 
-	script->id = ++script_id_counter;
+	script->id = ++gen->script_id_counter;
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return script;
 }
@@ -55,7 +55,7 @@ void elf_destroy_script(elf_script *script)
 	if(script->file_path) elf_destroy_string(script->file_path);
 	if(script->text) elf_destroy_string(script->text);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 
 	free(script);
 }

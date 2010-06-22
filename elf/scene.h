@@ -99,9 +99,9 @@ elf_scene* elf_create_scene(const char *name)
 
 	if(name) scene->name = elf_create_string(name);
 
-	scene->id = ++scene_id_counter;
+	scene->id = ++gen->scene_id_counter;
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return scene;
 }
@@ -289,7 +289,7 @@ void elf_destroy_scene(elf_scene *scene)
 
 	if(scene->pak) elf_dec_ref((elf_object*)scene->pak);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 
 	free(scene);
 }

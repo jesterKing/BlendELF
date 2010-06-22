@@ -27,9 +27,9 @@ elf_sprite* elf_create_sprite(const char *name)
 
 	if(name) sprite->name = elf_create_string(name);
 
-	sprite->id = sprite_id_counter++;
+	sprite->id = ++gen->sprite_id_counter;
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return sprite;
 }
@@ -70,7 +70,7 @@ void elf_destroy_sprite(elf_sprite *sprite)
 
 	free(sprite);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 void elf_calc_sprite_bounds(elf_sprite *sprite)

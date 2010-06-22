@@ -12,7 +12,7 @@ elf_bone* elf_create_bone(const char *name)
 	bone->children = elf_create_list();
 	elf_inc_ref((elf_object*)bone->children);
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return bone;
 }
@@ -26,7 +26,7 @@ void elf_destroy_bone(elf_bone *bone)
 
 	free(bone);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 elf_armature* elf_get_bone_armature(elf_bone *bone)
@@ -179,9 +179,9 @@ elf_armature* elf_create_armature(const char *name)
 
 	if(name) armature->name = elf_create_string(name);
 
-	armature->id = ++armature_id_counter;
+	armature->id = ++gen->armature_id_counter;
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return armature;
 }
@@ -300,7 +300,7 @@ void elf_destroy_armature(elf_armature *armature)
 
 	free(armature);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 elf_bone* elf_get_bone_from_armature_by_name(const char *name, elf_armature *armature)

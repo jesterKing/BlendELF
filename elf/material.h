@@ -24,9 +24,9 @@ elf_material* elf_create_material(const char *name)
 
 	if(name) material->name = elf_create_string(name);
 
-	global_obj_count++;
+	elf_inc_obj_count();
 
-	material->id = ++material_id_counter;
+	material->id = ++gen->material_id_counter;
 
 	return material;
 }
@@ -45,7 +45,7 @@ void elf_destroy_material(elf_material *material)
 
 	free(material);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 void elf_set_material_texture(elf_material *material, int slot, elf_texture *texture)

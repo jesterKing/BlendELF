@@ -36,9 +36,9 @@ elf_camera* elf_create_camera(const char *name)
 
 	if(name) camera->name = elf_create_string(name);
 
-	camera->id = ++camera_id_counter;
+	camera->id = ++gen->camera_id_counter;
 	
-	global_obj_count++;
+	elf_inc_obj_count();
 
 	return camera;
 }
@@ -70,7 +70,7 @@ void elf_destroy_camera(elf_camera *camera)
 
 	free(camera);
 
-	global_obj_count--;
+	elf_dec_obj_count();
 }
 
 void elf_set_camera_viewport(elf_camera *camera, int x, int y, int width, int height)
