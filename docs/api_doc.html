@@ -200,7 +200,7 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apidefine">elf.JOINT</div>
 <div class="apidefine">elf.PARTICLE</div>
 <div class="apidefine">elf.PARTICLES</div>
-<div class="apidefine">elf.GAME_CONFIG</div>
+<div class="apidefine">elf.CONFIG</div>
 <div class="apidefine">elf.BEZIER_POINT</div>
 <div class="apidefine">elf.BEZIER_CURVE</div>
 <div class="apidefine">elf.IPO</div>
@@ -211,6 +211,7 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apidefine">elf.PHYSICS_TRI_MESH</div>
 <div class="apidefine">elf.SPRITE</div>
 <div class="apidefine">elf.VIDEO_MODE</div>
+<div class="apidefine">elf.GENERAL</div>
 <div class="apitopic">NUMBER OF OBJECT TYPES</div>
 <div class="apidefine">elf.OBJECT_TYPE_COUNT</div>
 <div class="apitopic">CAMERA MODE</div>
@@ -369,6 +370,15 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc"><span class="apiobjtype">object</span> elf.RnextInList( <span class="apiobjtype">object</span> list )</div>
 <div class="apifunc">elf.SeekList( <span class="apiobjtype">object</span> list, <span class="apiobjtype">object</span> ptr )</div>
 <div class="apifunc">elf.RseekList( <span class="apiobjtype">object</span> list, <span class="apiobjtype">object</span> ptr )</div>
+<div class="apitopic">CONFIGURATION FUNCTIONS</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.ReadConfig( <span class="apikeytype">string</span> file_path )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetConfigWindowWidth( <span class="apiobjtype">object</span> config )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetConfigWindowHeight( <span class="apiobjtype">object</span> config )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.GetConfigFullscreen( <span class="apiobjtype">object</span> config )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetConfigTextureAnisotropy( <span class="apiobjtype">object</span> config )</div>
+<div class="apifunc"><span class="apikeytype">int</span> elf.GetConfigShadowMapSize( <span class="apiobjtype">object</span> config )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetConfigStart( <span class="apiobjtype">object</span> config )</div>
+<div class="apifunc"><span class="apikeytype">string</span> elf.GetConfigLog( <span class="apiobjtype">object</span> config )</div>
 <div class="apitopic">CONTEXT FUNCTIONS</div>
 <div class="apifunc">elf.SetTitle( <span class="apikeytype">string</span> title )</div>
 <div class="apifunc"><span class="apikeytype">int</span> elf.GetWindowWidth(  )</div>
@@ -393,16 +403,8 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc"><span class="apikeytype">int</span> elf.GetJoystickButtonState( <span class="apikeytype">int</span> joy, <span class="apikeytype">int</span> but )</div>
 <div class="apifunc"><span class="apikeytype">int</span> elf.GetEventCount(  )</div>
 <div class="apifunc"><span class="apiobjtype">object</span> elf.GetEvent( <span class="apikeytype">int</span> idx )</div>
-<div class="apitopic">GAME CONFIGURATION FUNCTIONS</div>
-<div class="apifunc"><span class="apiobjtype">object</span> elf.ReadGameConfig( <span class="apikeytype">string</span> file_path )</div>
-<div class="apifunc"><span class="apikeytype">int</span> elf.GetGameConfigWindowWidth( <span class="apiobjtype">object</span> config )</div>
-<div class="apifunc"><span class="apikeytype">int</span> elf.GetGameConfigWindowHeight( <span class="apiobjtype">object</span> config )</div>
-<div class="apifunc"><span class="apikeytype">bool</span> elf.GetGameConfigFullscreen( <span class="apiobjtype">object</span> config )</div>
-<div class="apifunc"><span class="apikeytype">float</span> elf.GetGameConfigTextureAnisotropy( <span class="apiobjtype">object</span> config )</div>
-<div class="apifunc"><span class="apikeytype">int</span> elf.GetGameConfigShadowMapSize( <span class="apiobjtype">object</span> config )</div>
-<div class="apifunc"><span class="apikeytype">string</span> elf.GetGameConfigStart( <span class="apiobjtype">object</span> config )</div>
 <div class="apitopic">ENGINE FUNCTIONS</div>
-<div class="apifunc"><span class="apikeytype">bool</span> elf.Init( <span class="apikeytype">int</span> width, <span class="apikeytype">int</span> height, <span class="apikeytype">string</span> title, <span class="apikeytype">bool</span> fullscreen )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.Init( <span class="apikeytype">int</span> width, <span class="apikeytype">int</span> height, <span class="apikeytype">string</span> title, <span class="apikeytype">bool</span> fullscreen, <span class="apikeytype">string</span> log )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.InitWithConfig( <span class="apikeytype">string</span> file_path )</div>
 <div class="apifunc">elf.Deinit(  )</div>
 <div class="apifunc">elf.ResizeWindow( <span class="apikeytype">int</span> width, <span class="apikeytype">int</span> height )</div>
@@ -553,6 +555,7 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc"><span class="apikeytype">string</span> elf.GetActorName( <span class="apiobjtype">object</span> actor )</div>
 <div class="apifunc"><span class="apikeytype">string</span> elf.GetActorFilePath( <span class="apiobjtype">object</span> actor )</div>
 <div class="apifunc"><span class="apiobjtype">object</span> elf.GetActorScript( <span class="apiobjtype">object</span> actor )</div>
+<div class="apifunc">elf.SetActorName( <span class="apiobjtype">object</span> actor, <span class="apikeytype">string</span> name )</div>
 <div class="apifunc">elf.SetActorScript( <span class="apiobjtype">object</span> actor, <span class="apiobjtype">object</span> script )</div>
 <div class="apifunc">elf.SetActorPosition( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>
 <div class="apifunc">elf.SetActorRotation( <span class="apiobjtype">object</span> actor, <span class="apikeytype">float</span> x, <span class="apikeytype">float</span> y, <span class="apikeytype">float</span> z )</div>

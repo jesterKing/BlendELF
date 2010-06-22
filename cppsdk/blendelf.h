@@ -141,7 +141,7 @@
 #define ELF_JOINT 0x0037
 #define ELF_PARTICLE 0x0038
 #define ELF_PARTICLES 0x0039
-#define ELF_GAME_CONFIG 0x003A
+#define ELF_CONFIG 0x003A
 #define ELF_BEZIER_POINT 0x003B
 #define ELF_BEZIER_CURVE 0x003C
 #define ELF_IPO 0x003D
@@ -152,7 +152,8 @@
 #define ELF_PHYSICS_TRI_MESH 0x0042
 #define ELF_SPRITE 0x0043
 #define ELF_VIDEO_MODE 0x0044
-#define ELF_OBJECT_TYPE_COUNT 0x0045
+#define ELF_GENERAL 0x0045
+#define ELF_OBJECT_TYPE_COUNT 0x0046
 #define ELF_PERSPECTIVE 0x0000
 #define ELF_ORTHOGRAPHIC 0x0001
 #define ELF_BOX 0x0001
@@ -266,9 +267,6 @@
 		#else
 				#define ELF_API __declspec(dllimport)
 		#endif
-		#include "windows.h"
-		ELF_API bool ELF_APIENTRY elfInitWithHWND(int width, int height, const char* title, bool fullscreen, HWND hwnd);
-		ELF_API HWND ELF_APIENTRY elfGetWindowHWND();
 	#else
 		#define ELF_API
 		#define ELF_APIENTRY
@@ -340,6 +338,14 @@ ELF_API elf_handle ELF_APIENTRY elfRbeginList(elf_handle list);
 ELF_API elf_handle ELF_APIENTRY elfRnextInList(elf_handle list);
 ELF_API void ELF_APIENTRY elfSeekList(elf_handle list, elf_handle ptr);
 ELF_API void ELF_APIENTRY elfRseekList(elf_handle list, elf_handle ptr);
+ELF_API elf_handle ELF_APIENTRY elfReadConfig(const char* file_path);
+ELF_API int ELF_APIENTRY elfGetConfigWindowWidth(elf_handle config);
+ELF_API int ELF_APIENTRY elfGetConfigWindowHeight(elf_handle config);
+ELF_API bool ELF_APIENTRY elfGetConfigFullscreen(elf_handle config);
+ELF_API float ELF_APIENTRY elfGetConfigTextureAnisotropy(elf_handle config);
+ELF_API int ELF_APIENTRY elfGetConfigShadowMapSize(elf_handle config);
+ELF_API const char* ELF_APIENTRY elfGetConfigStart(elf_handle config);
+ELF_API const char* ELF_APIENTRY elfGetConfigLog(elf_handle config);
 ELF_API void ELF_APIENTRY elfSetTitle(const char* title);
 ELF_API int ELF_APIENTRY elfGetWindowWidth();
 ELF_API int ELF_APIENTRY elfGetWindowHeight();
@@ -363,14 +369,7 @@ ELF_API elf_vec2f ELF_APIENTRY elfGetJoystickAxis(int joy);
 ELF_API int ELF_APIENTRY elfGetJoystickButtonState(int joy, int but);
 ELF_API int ELF_APIENTRY elfGetEventCount();
 ELF_API elf_handle ELF_APIENTRY elfGetEvent(int idx);
-ELF_API elf_handle ELF_APIENTRY elfReadGameConfig(const char* file_path);
-ELF_API int ELF_APIENTRY elfGetGameConfigWindowWidth(elf_handle config);
-ELF_API int ELF_APIENTRY elfGetGameConfigWindowHeight(elf_handle config);
-ELF_API bool ELF_APIENTRY elfGetGameConfigFullscreen(elf_handle config);
-ELF_API float ELF_APIENTRY elfGetGameConfigTextureAnisotropy(elf_handle config);
-ELF_API int ELF_APIENTRY elfGetGameConfigShadowMapSize(elf_handle config);
-ELF_API const char* ELF_APIENTRY elfGetGameConfigStart(elf_handle config);
-ELF_API bool ELF_APIENTRY elfInit(int width, int height, const char* title, bool fullscreen);
+ELF_API bool ELF_APIENTRY elfInit(int width, int height, const char* title, bool fullscreen, const char* log);
 ELF_API bool ELF_APIENTRY elfInitWithConfig(const char* file_path);
 ELF_API void ELF_APIENTRY elfDeinit();
 ELF_API void ELF_APIENTRY elfResizeWindow(int width, int height);
@@ -515,6 +514,7 @@ ELF_API void ELF_APIENTRY elfSetPropertyBool(elf_handle property, bool bval);
 ELF_API const char* ELF_APIENTRY elfGetActorName(elf_handle actor);
 ELF_API const char* ELF_APIENTRY elfGetActorFilePath(elf_handle actor);
 ELF_API elf_handle ELF_APIENTRY elfGetActorScript(elf_handle actor);
+ELF_API void ELF_APIENTRY elfSetActorName(elf_handle actor, const char* name);
 ELF_API void ELF_APIENTRY elfSetActorScript(elf_handle actor, elf_handle script);
 ELF_API void ELF_APIENTRY elfSetActorPosition(elf_handle actor, float x, float y, float z);
 ELF_API void ELF_APIENTRY elfSetActorRotation(elf_handle actor, float x, float y, float z);
