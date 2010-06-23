@@ -685,20 +685,14 @@ class Light(Actor):
 		if data.getMode() is 1: self.shadow_caster = 1
 		else: self.shadow_caster = 0
 
-		# magic
-		self.size_bytes += struct.calcsize('<i')
-		# actor header
-		self.size_bytes += get_actor_header_size(self)
-		# type
-		self.size_bytes += struct.calcsize('<B')
-		# color
-		self.size_bytes += struct.calcsize('<ffff')
-		# attenuation
-		self.size_bytes += struct.calcsize('<ff')
-		# spot light specs
-		self.size_bytes += struct.calcsize('<ff')
-		# shadow specs
-		self.size_bytes += struct.calcsize('<IB')
+		self.size_bytes += struct.calcsize('<i')	# magic
+		self.size_bytes += get_actor_header_size(self)	# actor header
+		self.size_bytes += struct.calcsize('<B')	# type
+		self.size_bytes += struct.calcsize('<ffff')	# color
+		self.size_bytes += struct.calcsize('<ff')	# attenuation
+		self.size_bytes += struct.calcsize('<ff')	# spot light specs
+		self.size_bytes += struct.calcsize('<IB')	# shadow specs
+		self.size_bytes += struct.calcsize('<Bfff')	# light shaft specs
 		
 		print 'Light \"'+self.name+'\" converted'
 		print '  type: '+self.type
@@ -729,8 +723,10 @@ class Light(Actor):
 		f.write(struct.pack('<ff', self.inner_cone, self.outer_cone))
 		
 		# write shadow specs
-		
 		f.write(struct.pack('<IB', self.shadow_map_size, self.shadow_caster))
+
+		# write ligth shaft specs
+		f.write(struct.pack('<Bfff', 0, 0.0, 0.0, 0.0))
 
 		print 'Light \"'+self.name+'\" saved'
 

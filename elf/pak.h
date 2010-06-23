@@ -268,6 +268,10 @@ int elf_get_light_size_bytes(elf_light *light)
 	size_bytes += sizeof(float);	// outer cone
 	size_bytes += sizeof(unsigned int);	// junk???
 	size_bytes += sizeof(unsigned char);	// shadow caster
+	size_bytes += sizeof(unsigned char);	// shaft
+	size_bytes += sizeof(float);	// shaft size
+	size_bytes += sizeof(float);	// shaft intensity
+	size_bytes += sizeof(float);	// shaft fade off
 
 	return size_bytes;
 }
@@ -764,6 +768,10 @@ elf_light* elf_create_light_from_pak(FILE *file, const char *name, elf_scene *sc
 	fread((char*)&light->outer_cone, sizeof(float), 1, file);
 	fread((char*)&junk, sizeof(unsigned int), 1, file);
 	fread((char*)&light->shadow_caster, sizeof(unsigned char), 1, file);
+	fread((char*)&light->shaft, sizeof(unsigned char), 1, file);
+	fread((char*)&light->shaft_size, sizeof(float), 1, file);
+	fread((char*)&light->shaft_intensity, sizeof(float), 1, file);
+	fread((char*)&light->shaft_fade_off, sizeof(float), 1, file);
 
 	elf_set_light_type(light, light->light_type);
 	elf_set_light_color(light, light->color.r, light->color.g, light->color.b, light->color.a);
@@ -771,6 +779,7 @@ elf_light* elf_create_light_from_pak(FILE *file, const char *name, elf_scene *sc
 	elf_set_light_fade_speed(light, light->fade_speed);
 	elf_set_light_shadow_caster(light, light->shadow_caster);
 	elf_set_light_cone(light, light->inner_cone, light->outer_cone);
+	if(light->shaft) elf_set_light_shaft(light, light->shaft_size, light->shaft_intensity, light->shaft_fade_off);
 
 	return light;
 }
@@ -1535,6 +1544,10 @@ void elf_write_light_to_file(elf_light *light, FILE *file)
 	fwrite((char*)&light->outer_cone, sizeof(float), 1, file);
 	fwrite((char*)&junk, sizeof(int), 1, file);
 	fwrite((char*)&light->shadow_caster, sizeof(unsigned char), 1, file);
+	fwrite((char*)&light->shaft, sizeof(unsigned char), 1, file);
+	fwrite((char*)&light->shaft_size, sizeof(float), 1, file);
+	fwrite((char*)&light->shaft_intensity, sizeof(float), 1, file);
+	fwrite((char*)&light->shaft_fade_off, sizeof(float), 1, file);
 }
 
 void elf_write_material_to_file(elf_material *material, FILE *file)
