@@ -547,11 +547,11 @@ unsigned char elf_save_screen_shot(const char *file_path)
 {
 	unsigned char *data;
 
-	data = (unsigned char*)malloc(sizeof(unsigned char)*elf_get_window_width()*elf_get_window_height()*3);
+	data = (unsigned char*)malloc(sizeof(unsigned char)*elf_get_window_width()*elf_get_window_height()*4);
 
-	gfx_read_pixels(0, 0, elf_get_window_width(), elf_get_window_height(), GFX_BGR, GFX_UBYTE, data);
+	gfx_read_pixels(0, 0, elf_get_window_width(), elf_get_window_height(), GFX_BGRA, GFX_UBYTE, data);
 
-	if(!elf_save_image_data(file_path, elf_get_window_width(), elf_get_window_height(), 24, data))
+	if(!elf_save_image_data(file_path, elf_get_window_width(), elf_get_window_height(), 32, data))
 	{
 		free(data);
 		return ELF_FALSE;

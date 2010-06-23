@@ -94,11 +94,21 @@ void* elf_get_image_data(elf_image *image)
 unsigned char elf_save_image_data(const char *file_path, int width, int height, unsigned char bpp, void *data)
 {
 	FIBITMAP *out;
+	FIBITMAP *temp;
 	const char *type;
 
 	if(width < 1 || height < 1 || bpp%8 != 0 || bpp > 32 || !data) return ELF_FALSE;
 
 	out = FreeImage_ConvertFromRawBits((BYTE*)data, width, height, width*(bpp/8), bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK, FALSE);
+
+	// the jpg freeimage plugin can't save a 32 bit map, and who knows what other
+	// plugins can't, so for now, this should fix it...
+	if(bpp != 24)
+	{
+		temp = FreeImage_ConvertTo24Bits(out);
+		FreeImage_Unload(out);
+		out = temp;
+	}
 
 	if(!out)
 	{
