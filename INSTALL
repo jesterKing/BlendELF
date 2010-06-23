@@ -42,7 +42,7 @@ type the following command and blendelf should compile:
 make
 
 If you want to make a release build of blendelf, or a
-shared library release build of blender, use thefollowing
+shared library release build of blender, use the following
 commands:
 
 (for static release): make static
