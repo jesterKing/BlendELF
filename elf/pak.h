@@ -37,7 +37,7 @@ elf_pak* elf_create_pak_from_file(const char *file_path)
 	file = fopen(file_path, "rb");
 	if(!file)
 	{
-		elf_set_error(ELF_CANT_OPEN_FILE, "error: could not open \"%s\"\n", file_path);
+		elf_set_error(ELF_CANT_OPEN_FILE, "error: can't open \"%s\"\n", file_path);
 		return NULL;
 	}
 
