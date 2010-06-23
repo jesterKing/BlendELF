@@ -52,7 +52,7 @@ int main()
 	if(!(config = elf_read_config("config.txt")))
 		config = elf_create_config();
 
-	if(strlen(config->start) > 0)
+	if(strlen(config->start) < 1)
 	{
 		if(config->start) elf_destroy_string(config->start);
 		config->start = elf_create_string("start.pak");
