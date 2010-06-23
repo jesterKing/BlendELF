@@ -130,6 +130,8 @@ unsigned char elf_init_context(int width, int height,
 		return ELF_FALSE;
 	}
 
+	glfwGetWindowSize(&ctx->width, &ctx->height);
+
 	glfwEnable(GLFW_MOUSE_CURSOR);
 
 	glfwSetWindowTitle(title);
