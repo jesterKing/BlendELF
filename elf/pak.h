@@ -288,11 +288,10 @@ int elf_get_material_size_bytes(elf_material *material)
 	size_bytes += sizeof(float)*4;	// ambient color
 	size_bytes += sizeof(float)*4;	// specular color
 	size_bytes += sizeof(float);	// specular power
-	size_bytes += sizeof(unsigned char);	// texture count
-
-	size_bytes += sizeof(char)*64*elf_get_material_texture_count(material);	// texture name
-	size_bytes += sizeof(unsigned char)*elf_get_material_texture_count(material);	// texture type
-	size_bytes += sizeof(float)*elf_get_material_texture_count(material);	// texture parallax scale
+	size_bytes += sizeof(char)*64*5;	// textures
+	size_bytes += sizeof(float);	// parallax scale
+	size_bytes += sizeof(unsigned char);	// alpha test
+	size_bytes += sizeof(float);	// alpha threshold
 
 	return size_bytes;
 }
@@ -790,11 +789,10 @@ elf_material* elf_create_material_from_pak(FILE *file, const char *name, elf_sce
 	elf_texture *rtexture;
 	int magic;
 	char rname[64];
-	unsigned char texture_count = 0;
 	char texture[64];
-	unsigned char texture_type;
 	float parallax_scale;
-	int i;
+	unsigned char alpha_test;
+	float alpha_threshold;
 
 	fread((char*)&magic, sizeof(int), 1, file);
 
@@ -822,25 +820,33 @@ elf_material* elf_create_material_from_pak(FILE *file, const char *name, elf_sce
 	elf_set_material_ambient_color(material, material->ambient_color.r, material->ambient_color.g, material->ambient_color.b, material->ambient_color.a);
 	elf_set_material_specular_power(material, material->spec_power);
 
-	fread((char*)&texture_count, sizeof(unsigned char), 1, file);
+	fread(texture, sizeof(char), 64, file);
+	if(strlen(texture) > 0) rtexture = elf_get_or_load_texture_by_name(scene, texture); else rtexture = NULL;
+	if(rtexture) elf_set_material_diffuse_map(material, rtexture);
 
-	for(i = 0; i < texture_count; i++)
-	{
-		if(i > GFX_MAX_TEXTURES-1) break;
+	fread(texture, sizeof(char), 64, file);
+	if(strlen(texture) > 0) rtexture = elf_get_or_load_texture_by_name(scene, texture); else rtexture = NULL;
+	if(rtexture) elf_set_material_normal_map(material, rtexture);
 
-		memset(texture, 0x0, sizeof(char)*64);
-		fread(texture, sizeof(char), 64, file);
-		fread((char*)&texture_type, sizeof(unsigned char), 1, file);
-		fread((char*)&parallax_scale, sizeof(float), 1, file);
+	fread(texture, sizeof(char), 64, file);
+	if(strlen(texture) > 0) rtexture = elf_get_or_load_texture_by_name(scene, texture); else rtexture = NULL;
+	if(rtexture) elf_set_material_height_map(material, rtexture);
 
-		rtexture = elf_get_or_load_texture_by_name(scene, texture);
-		if(rtexture)
-		{
-			elf_set_material_texture(material, i, rtexture);
-			elf_set_material_texture_type(material, i, texture_type);
-			elf_set_material_texture_parallax_scale(material, i, parallax_scale);
-		}
-	}
+	fread(texture, sizeof(char), 64, file);
+	if(strlen(texture) > 0) rtexture = elf_get_or_load_texture_by_name(scene, texture); else rtexture = NULL;
+	if(rtexture) elf_set_material_specular_map(material, rtexture);
+
+	fread(texture, sizeof(char), 64, file);
+	if(strlen(texture) > 0) rtexture = elf_get_or_load_texture_by_name(scene, texture); else rtexture = NULL;
+	if(rtexture) elf_set_material_light_map(material, rtexture);
+
+	fread((char*)&parallax_scale, sizeof(float), 1, file);
+	fread((char*)&alpha_test, sizeof(unsigned char), 1, file);
+	fread((char*)&alpha_threshold, sizeof(float), 1, file);
+
+	elf_set_material_parallax_scale(material, parallax_scale);
+	elf_set_material_alpha_test(material, alpha_test);
+	elf_set_material_alpha_threshold(material, alpha_threshold);
 
 	return material;
 }
@@ -870,13 +876,7 @@ elf_model* elf_create_model_from_pak(FILE *file, const char *name, elf_scene *sc
 		return NULL;
 	}
 
-	model = (elf_model*)malloc(sizeof(elf_model));
-	memset(model, 0x0, sizeof(elf_model));
-	model->type = ELF_MODEL;
-
-	model->id = ++gen->model_id_counter;
-
-	elf_inc_obj_count();
+	model = elf_create_model(NULL);
 
 	// read name
 	fread(rname, sizeof(char), 64, file);
@@ -1553,8 +1553,6 @@ void elf_write_light_to_file(elf_light *light, FILE *file)
 void elf_write_material_to_file(elf_material *material, FILE *file)
 {
 	int magic;
-	unsigned char texture_count;
-	int i;
 
 	magic = ELF_MATERIAL_MAGIC;
 	fwrite((char*)&magic, sizeof(int), 1, file);
@@ -1566,17 +1564,20 @@ void elf_write_material_to_file(elf_material *material, FILE *file)
 	fwrite((char*)&material->specular_color.r, sizeof(float), 4, file);
 	fwrite((char*)&material->spec_power, sizeof(float), 1, file);
 
-	texture_count = elf_get_material_texture_count(material);
-	fwrite((char*)&texture_count, sizeof(unsigned char), 1, file);
+	if(material->diffuse_map) elf_write_name_to_file(material->diffuse_map->name, file);
+	else elf_write_name_to_file("", file);
+	if(material->normal_map) elf_write_name_to_file(material->normal_map->name, file);
+	else elf_write_name_to_file("", file);
+	if(material->height_map) elf_write_name_to_file(material->height_map->name, file);
+	else elf_write_name_to_file("", file);
+	if(material->specular_map) elf_write_name_to_file(material->specular_map->name, file);
+	else elf_write_name_to_file("", file);
+	if(material->light_map) elf_write_name_to_file(material->light_map->name, file);
+	else elf_write_name_to_file("", file);
 
-	for(i = 0; i < GFX_MAX_TEXTURES; i++)
-	{
-		if(!material->textures[i]) continue;
-
-		elf_write_name_to_file(material->textures[i]->name, file);
-		fwrite((char*)&material->texture_types[i], sizeof(unsigned char), 1, file);
-		fwrite((char*)&material->texture_parallax_scales[i], sizeof(float), 1, file);
-	}
+	fwrite((char*)&material->parallax_scale, sizeof(float), 1, file);
+	fwrite((char*)&material->alpha_test, sizeof(unsigned char), 1, file);
+	fwrite((char*)&material->alpha_threshold, sizeof(float), 1, file);
 }
 
 void elf_write_model_to_file(elf_model *model, FILE *file)
@@ -1817,9 +1818,24 @@ void elf_write_resources_to_file(elf_list *resources, FILE *file)
 	}
 }
 
+void elf_add_texture_for_saving(elf_list *textures, elf_texture *texture)
+{
+	if(texture && !elf_get_resource_by_id(textures, texture->id))
+	{
+		if(elf_load_texture_data(texture))
+		{
+			elf_set_unique_name_for_resource(textures, (elf_resource*)texture);
+			elf_append_to_list(textures, (elf_object*)texture);
+		}
+	}
+	else
+	{
+		return;
+	}
+}
+
 unsigned char elf_save_scene_to_pak(elf_scene *scene, const char *file_path)
 {
-	int i;
 	unsigned int offset;
 	int ival;
 	
@@ -1912,17 +1928,11 @@ unsigned char elf_save_scene_to_pak(elf_scene *scene, const char *file_path)
 				elf_set_unique_name_for_resource(materials, (elf_resource*)mat);
 				elf_append_to_list(materials, (elf_object*)mat);
 
-				for(i = 0; i < GFX_MAX_TEXTURES; i++)
-				{
-					if(mat->textures[i] && !elf_get_resource_by_id(textures, mat->textures[i]->id))
-					{
-						if(elf_load_texture_data(mat->textures[i]))
-						{
-							elf_set_unique_name_for_resource(textures, (elf_resource*)mat->textures[i]);
-							elf_append_to_list(textures, (elf_object*)mat->textures[i]);
-						}
-					}
-				}
+				elf_add_texture_for_saving(textures, mat->diffuse_map);
+				elf_add_texture_for_saving(textures, mat->normal_map);
+				elf_add_texture_for_saving(textures, mat->height_map);
+				elf_add_texture_for_saving(textures, mat->specular_map);
+				elf_add_texture_for_saving(textures, mat->light_map);
 			}
 		}
 
@@ -1993,17 +2003,11 @@ unsigned char elf_save_scene_to_pak(elf_scene *scene, const char *file_path)
 			elf_set_unique_name_for_resource(materials, (elf_resource*)mat);
 			elf_append_to_list(materials, (elf_object*)mat);
 
-			for(i = 0; i < GFX_MAX_TEXTURES; i++)
-			{
-				if(mat->textures[i] && !elf_get_resource_by_id(textures, mat->textures[i]->id))
-				{
-					if(elf_load_texture_data(mat->textures[i]))
-					{
-						elf_set_unique_name_for_resource(textures, (elf_resource*)mat->textures[i]);
-						elf_append_to_list(textures, (elf_object*)mat->textures[i]);
-					}
-				}
-			}
+			elf_add_texture_for_saving(textures, mat->diffuse_map);
+			elf_add_texture_for_saving(textures, mat->normal_map);
+			elf_add_texture_for_saving(textures, mat->height_map);
+			elf_add_texture_for_saving(textures, mat->specular_map);
+			elf_add_texture_for_saving(textures, mat->light_map);
 		}
 
 		elf_set_unique_name_for_resource(sprites, (elf_resource*)spr);

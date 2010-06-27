@@ -289,6 +289,7 @@ extern "C" {
 #define ELF_UNKNOWN_TYPE				0x000B
 #define ELF_INVALID_HANDLE				0x000C
 #define ELF_MISSING_FEATURE				0x000D
+#define ELF_INVALID_MESH				0x000E
 
 // <!!
 #define ELF_X_PLUS					0x0001	// <mdoc> AXIS TYPES <mdocc> axis codes used by elf.DirectActorAt
@@ -762,10 +763,6 @@ void elf_destroy_material(elf_material *material);
 
 elf_material* elf_create_material(const char *name);	// <mdoc> MATERIAL FUNCTIONS
 
-void elf_set_material_texture(elf_material *material, int slot, elf_texture *texture);
-void elf_set_material_texture_type(elf_material *material, int slot, int type);
-void elf_set_material_texture_parallax_scale(elf_material *material, int slot, float scale);
-void elf_set_material_texture_alpha_test(elf_material *material, int slot, float test);
 void elf_set_material_diffuse_color(elf_material *material, float r, float g, float b, float a);
 void elf_set_material_specular_color(elf_material *material, float r, float g, float b, float a);
 void elf_set_material_ambient_color(elf_material *material, float r, float g, float b, float a);
@@ -774,19 +771,36 @@ void elf_set_material_lighting(elf_material *material, unsigned char lighting);
 
 const char* elf_get_material_name(elf_material *material);
 const char* elf_get_material_file_path(elf_material *material);
-elf_texture* elf_get_material_texture(elf_material *material, int slot);
-int elf_get_material_texture_type(elf_material *material, int slot);
-int elf_get_material_texture_count(elf_material *material);
-float elf_get_material_texture_parallax_scale(elf_material *material, int slot);
-float elf_get_material_texture_alpha_texture(elf_material *material, int slot);
 elf_color elf_get_material_diffuse_color(elf_material *material);
 elf_color elf_get_material_specular_color(elf_material *material);
 elf_color elf_get_material_ambient_color(elf_material *material);
 float elf_get_material_specular_power(elf_material *material);
 unsigned char elf_get_material_lighting(elf_material *material);
 
+void elf_set_material_diffuse_map(elf_material *material, elf_texture *texture);
+void elf_set_material_normal_map(elf_material *material, elf_texture *texture);
+void elf_set_material_height_map(elf_material *material, elf_texture *texture);
+void elf_set_material_specular_map(elf_material *material, elf_texture *texture);
+void elf_set_material_light_map(elf_material *material, elf_texture *texture);
+
+elf_texture* elf_get_material_diffuse_map(elf_material *material);
+elf_texture* elf_get_material_normal_map(elf_material *material);
+elf_texture* elf_get_material_height_map(elf_material *material);
+elf_texture* elf_get_material_specular_map(elf_material *material);
+elf_texture* elf_get_material_light_map(elf_material *material);
+
+void elf_set_material_parallax_scale(elf_material *material, float scale);
+
+void elf_set_material_alpha_test(elf_material *material, unsigned char alpha_test);
+void elf_set_material_alpha_threshold(elf_material *material, float threshold);
+
+float elf_get_material_parallax_scale(elf_material *material);
+
+unsigned char elf_get_material_alpha_test(elf_material *material);
+float elf_get_material_alpha_threshold(elf_material *material);
+
 // <!!
-void elf_set_material_alpha_textures(elf_material *material, gfx_shader_params *shader_params);
+void elf_set_material_alpha_texture(elf_material *material, gfx_shader_params *shader_params);
 void elf_set_material(elf_material *material, gfx_shader_params *shader_params);
 // !!>
 

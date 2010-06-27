@@ -75,18 +75,12 @@ void elf_destroy_sprite(elf_sprite *sprite)
 
 void elf_calc_sprite_bounds(elf_sprite *sprite)
 {
-	int i;
-
 	if(sprite->material)
 	{
-		for(i = 0; i < GFX_MAX_TEXTURES; i++)
+		if(sprite->material->diffuse_map && sprite->material->diffuse_map->texture)
 		{
-			if(sprite->material->textures[i] && sprite->material->textures[i]->texture)
-			{
-				sprite->tex_size.x = (float)gfx_get_texture_width(sprite->material->textures[i]->texture)/100.0;
-				sprite->tex_size.y = (float)gfx_get_texture_height(sprite->material->textures[i]->texture)/100.0;
-				break;
-			}
+			sprite->tex_size.x = (float)gfx_get_texture_width(sprite->material->diffuse_map->texture)/100.0;
+			sprite->tex_size.y = (float)gfx_get_texture_height(sprite->material->diffuse_map->texture)/100.0;
 		}
 	}
 	else
@@ -248,7 +242,7 @@ void elf_draw_sprite_without_materials(elf_sprite *sprite, gfx_shader_params *sh
 	gfx_mul_matrix4_matrix4(gfx_get_transform_matrix(sprite->transform),
 			shader_params->camera_matrix, shader_params->modelview_matrix);
 
-	elf_set_material_alpha_textures(sprite->material, shader_params);
+	elf_set_material_alpha_texture(sprite->material, shader_params);
 	gfx_set_shader_params(shader_params);
 	gfx_set_texture_params_default(shader_params);
 

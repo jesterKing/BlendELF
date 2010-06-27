@@ -253,10 +253,17 @@ struct elf_material {
 	float spec_power;
 	unsigned char lighting;
 	unsigned char non_lit_flag;
-	int texture_types[GFX_MAX_TEXTURES];
-	float texture_parallax_scales[GFX_MAX_TEXTURES];
-	float texture_alpha_tests[GFX_MAX_TEXTURES];
-	elf_texture *textures[GFX_MAX_TEXTURES];
+
+	elf_texture *diffuse_map;
+	elf_texture *normal_map;
+	elf_texture *height_map;
+	elf_texture *specular_map;
+	elf_texture *light_map;
+
+	float parallax_scale;
+
+	unsigned char alpha_test;
+	float alpha_threshold;
 };
 
 struct elf_bezier_point {

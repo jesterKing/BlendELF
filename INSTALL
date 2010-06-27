@@ -15,6 +15,7 @@ Ogg Vorbis (http://www.vorbis.com)
 lua (http://www.lua.org)
 Bullet Physics (http://bulletphysics.com)
 enet (http://enet.bespin.org/)
+Assimp (http://assimp.sourceforge.net/)
 
 The chances are that you already have some of them. Most
 of them can be installed from the package repositories.
@@ -35,6 +36,12 @@ the installation script with cmake unless you supply
 it with a flag:
 
 cmake . -G "Unix Makefiles" -DINSTALL_LIBS=ON
+
+Cmake is the primary build system for Assimp too. Use
+the following command to configure, compile and install
+Assimp:
+
+cmake . && make && make install
 
 After you got all of the libraries installed, just
 type the following command and blendelf should compile:
@@ -62,7 +69,8 @@ Extract and generate XCode project with:
 
 cmake . -G Xcode
 
-Lastly, build it using XCode.
+Then build it using XCode.
+
 For GLFW, check out the glfw svn:
 
 svn co https://glfw.svn.sourceforge.net/svnroot/glfw glfw
@@ -71,7 +79,8 @@ Compile with:
 
 make cocoa
 
-Install the other dependencies with macports.
+Install the other dependencies with macports or following
+the install instructions of the individual libraries.
 
 sudo port install lua
 sudo port install vorbis

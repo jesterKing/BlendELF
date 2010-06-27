@@ -106,17 +106,181 @@ elf_scene* elf_create_scene(const char *name)
 	return scene;
 }
 
+void elf_recursively_import_assets(elf_scene *scene, const struct aiScene *aiscn, struct aiNode *aind)
+{
+	int i, j, k;
+	elf_entity *entity;
+	elf_model *model;
+	elf_material *material;
+	int index;
+	float *vertex_buffer;
+	float *normal_buffer;
+	unsigned int *index_buffer;
+	struct aiColor4D col;
+	const struct aiMaterial *aimat;
+	float shininess;
+	float strength;
+	unsigned int max;
+
+	for(i = 0; i < aind->mNumMeshes; i++)
+	{
+		const struct aiMesh *mesh = aiscn->mMeshes[aind->mMeshes[i]];
+
+		if(mesh->mNumVertices < 3 || mesh->mNumFaces < 1) continue;
+
+		entity = elf_create_entity("Node");
+		model = elf_create_model("NodeMesh");
+
+		model->vertice_count = mesh->mNumVertices;
+		model->frame_count = 1;
+		model->area_count = 1;
+		model->indice_count = mesh->mNumFaces*3;
+
+		model->vertices = gfx_create_vertex_data(3*mesh->mNumVertices, GFX_FLOAT, GFX_VERTEX_DATA_STATIC);
+		model->normals = gfx_create_vertex_data(3*mesh->mNumVertices, GFX_FLOAT, GFX_VERTEX_DATA_STATIC);
+
+		gfx_inc_ref((gfx_object*)model->vertices);
+		gfx_inc_ref((gfx_object*)model->normals);
+
+		vertex_buffer = (float*)gfx_get_vertex_data_buffer(model->vertices);
+		normal_buffer = (float*)gfx_get_vertex_data_buffer(model->normals);
+
+		model->areas = (elf_model_area*)malloc(sizeof(elf_model_area)*model->area_count);
+		memset(model->areas, 0x0, sizeof(elf_model_area)*model->area_count);
+
+		model->areas[0].indice_count = mesh->mNumFaces*3;
+		model->areas[0].index = gfx_create_vertex_data(model->areas[0].indice_count, GFX_UINT, GFX_VERTEX_DATA_STATIC);
+		gfx_inc_ref((gfx_object*)model->areas[0].index);
+
+		model->index = (unsigned int*)malloc(sizeof(unsigned int)*model->areas[0].indice_count);
+		index_buffer = (unsigned int*)gfx_get_vertex_data_buffer(model->areas[0].index);
+
+		for(j = 0; j < mesh->mNumFaces; j++)
+		{
+			const struct aiFace *face = &mesh->mFaces[j];
+
+			if(face->mNumIndices != 3)
+			{
+				elf_set_error(ELF_INVALID_MESH, "error: unexpected non triangular face when loading mesh\n");
+				break;
+			}
+
+			for(k = 0; k < face->mNumIndices; k++)
+			{
+				index = face->mIndices[k];
+
+				index_buffer[j*3+k] = index;
+				memcpy(&vertex_buffer[index*3], &mesh->mVertices[index].x, sizeof(float)*3);
+				if(mesh->mNormals != NULL)
+					memcpy(&normal_buffer[index*3], &mesh->mNormals[index].x, sizeof(float)*3);
+			}
+		}
+
+		// get bounding box values
+		memcpy(&model->bb_min.x, vertex_buffer, sizeof(float)*3);
+		memcpy(&model->bb_max.x, vertex_buffer, sizeof(float)*3);
+
+		for(j = 3; j < model->vertice_count*3; j+=3)
+		{
+			if(vertex_buffer[j] < model->bb_min.x) model->bb_min.x = vertex_buffer[j];
+			if(vertex_buffer[j+1] < model->bb_min.y) model->bb_min.y = vertex_buffer[j+1];
+			if(vertex_buffer[j+2] < model->bb_min.z) model->bb_min.z = vertex_buffer[j+2];
+
+			if(vertex_buffer[j] > model->bb_max.x) model->bb_max.x = vertex_buffer[j];
+			if(vertex_buffer[j+1] > model->bb_max.y) model->bb_max.y = vertex_buffer[j+1];
+			if(vertex_buffer[j+2] > model->bb_max.z) model->bb_max.z = vertex_buffer[j+2];
+		}
+
+		model->vertex_array = gfx_create_vertex_array(GFX_TRUE);
+		gfx_inc_ref((gfx_object*)model->vertex_array);
+
+		gfx_set_vertex_array_data(model->vertex_array, GFX_VERTEX, model->vertices);
+		gfx_set_vertex_array_data(model->vertex_array, GFX_NORMAL, model->normals);
+
+		model->areas[0].vertex_index = gfx_create_vertex_index(GFX_TRUE, model->areas[0].index);
+		gfx_inc_ref((gfx_object*)model->areas[0].vertex_index);
+
+		memcpy(model->index, index_buffer, sizeof(unsigned int)*model->areas[0].indice_count);
+
+		elf_set_entity_model(entity, model);
+
+		material = elf_create_material("NodeMaterial");
+
+		aimat = aiscn->mMaterials[mesh->mMaterialIndex];
+
+		if(AI_SUCCESS == aiGetMaterialColor(aimat, AI_MATKEY_COLOR_DIFFUSE, &col))
+			elf_set_material_diffuse_color(material, col.r, col.g, col.b, col.a);
+		if(AI_SUCCESS == aiGetMaterialColor(aimat, AI_MATKEY_COLOR_SPECULAR, &col))
+			elf_set_material_specular_color(material, col.r, col.g, col.b, col.a);
+		if(AI_SUCCESS == aiGetMaterialColor(aimat, AI_MATKEY_COLOR_AMBIENT, &col))
+			elf_set_material_ambient_color(material, col.r, col.g, col.b, col.a);
+
+		max = 1;
+		if(AI_SUCCESS == aiGetMaterialFloatArray(aimat, AI_MATKEY_SHININESS, &shininess, &max))
+		{
+			max = 1;
+			if(AI_SUCCESS == aiGetMaterialFloatArray(aimat, AI_MATKEY_SHININESS_STRENGTH, &strength, &max))
+			{
+				elf_set_material_specular_power(material, shininess*strength);
+			}
+			else
+			{
+				elf_set_material_specular_power(material, shininess);
+			}
+		}
+
+		elf_set_entity_material(entity, 0, material);
+
+		elf_add_entity_to_scene(scene, entity);
+	}
+
+	for (i = 0; i < aind->mNumChildren; i++)
+	{
+		elf_recursively_import_assets(scene, aiscn, aind->mChildren[i]);
+	}
+}
+
 elf_scene* elf_create_scene_from_file(const char *file_path)
 {
 	elf_pak *pak;
 	elf_scene *scene;
+	char *type;
 
-	pak = elf_create_pak_from_file(file_path);
-	if(!pak) return NULL;
+	type = strrchr(file_path, '.');
 
-	scene = elf_create_scene_from_pak(pak);
+	if(!strcmp(type, ".pak"))
+	{
+		pak = elf_create_pak_from_file(file_path);
+		if(!pak) return NULL;
 
-	return scene;
+		scene = elf_create_scene_from_pak(pak);
+
+		return scene;
+	}
+	else
+	{
+		const struct aiScene *aiscn;
+		struct aiLogStream stream;
+
+		stream = aiGetPredefinedLogStream(aiDefaultLogStream_STDOUT,NULL);
+		aiAttachLogStream(&stream);
+
+		aiscn = aiImportFile(file_path, aiProcessPreset_TargetRealtime_Quality);
+		if(!aiscn)
+		{
+			aiDetachAllLogStreams();
+			return NULL;
+		}
+
+		scene = elf_create_scene(file_path);
+
+		elf_recursively_import_assets(scene, aiscn, aiscn->mRootNode);
+
+		aiReleaseImport(aiscn);
+		aiDetachAllLogStreams();
+
+		return scene;
+	}
 }
 
 unsigned char elf_save_scene(elf_scene *scene, const char *file_path)

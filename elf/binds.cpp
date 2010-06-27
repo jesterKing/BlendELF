@@ -1518,92 +1518,6 @@ ELF_API elf_handle ELF_APIENTRY elfCreateMaterial(const char* name)
 	handle = (elf_object*)elf_create_material(name);
 	return handle;
 }
-ELF_API void ELF_APIENTRY elfSetMaterialTexture(elf_handle material, int slot, elf_handle texture)
-{
-	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
-	{
-		elf_script *script = elf_get_current_script();
-		if(script)
-		{
-			int line = elf_get_current_script_line();
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetMaterialTexture() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
-		}
-		else
-		{
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetMaterialTexture() -> invalid handle\n");
-		}
-		return;
-	}
-	if(!texture.get() || elf_get_object_type(texture.get()) != ELF_TEXTURE)
-	{
-		elf_script *script = elf_get_current_script();
-		if(script)
-		{
-			int line = elf_get_current_script_line();
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetMaterialTexture() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
-		}
-		else
-		{
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetMaterialTexture() -> invalid handle\n");
-		}
-		return;
-	}
-	elf_set_material_texture((elf_material*)material.get(), slot, (elf_texture*)texture.get());
-}
-ELF_API void ELF_APIENTRY elfSetMaterialTextureType(elf_handle material, int slot, int type)
-{
-	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
-	{
-		elf_script *script = elf_get_current_script();
-		if(script)
-		{
-			int line = elf_get_current_script_line();
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetMaterialTextureType() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
-		}
-		else
-		{
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetMaterialTextureType() -> invalid handle\n");
-		}
-		return;
-	}
-	elf_set_material_texture_type((elf_material*)material.get(), slot, type);
-}
-ELF_API void ELF_APIENTRY elfSetMaterialTextureParallaxScale(elf_handle material, int slot, float scale)
-{
-	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
-	{
-		elf_script *script = elf_get_current_script();
-		if(script)
-		{
-			int line = elf_get_current_script_line();
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetMaterialTextureParallaxScale() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
-		}
-		else
-		{
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetMaterialTextureParallaxScale() -> invalid handle\n");
-		}
-		return;
-	}
-	elf_set_material_texture_parallax_scale((elf_material*)material.get(), slot, scale);
-}
-ELF_API void ELF_APIENTRY elfSetMaterialTextureAlphaTest(elf_handle material, int slot, float test)
-{
-	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
-	{
-		elf_script *script = elf_get_current_script();
-		if(script)
-		{
-			int line = elf_get_current_script_line();
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetMaterialTextureAlphaTest() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
-		}
-		else
-		{
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetMaterialTextureAlphaTest() -> invalid handle\n");
-		}
-		return;
-	}
-	elf_set_material_texture_alpha_test((elf_material*)material.get(), slot, test);
-}
 ELF_API void ELF_APIENTRY elfSetMaterialDiffuseColor(elf_handle material, float r, float g, float b, float a)
 {
 	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
@@ -1730,98 +1644,6 @@ ELF_API const char* ELF_APIENTRY elfGetMaterialFilePath(elf_handle material)
 	}
 	return elf_get_material_file_path((elf_material*)material.get());
 }
-ELF_API elf_handle ELF_APIENTRY elfGetMaterialTexture(elf_handle material, int slot)
-{
-	elf_handle handle;
-	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
-	{
-		elf_script *script = elf_get_current_script();
-		if(script)
-		{
-			int line = elf_get_current_script_line();
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetMaterialTexture() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
-		}
-		else
-		{
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetMaterialTexture() -> invalid handle\n");
-		}
-		return handle;
-	}
-	handle = (elf_object*)elf_get_material_texture((elf_material*)material.get(), slot);
-	return handle;
-}
-ELF_API int ELF_APIENTRY elfGetMaterialTextureType(elf_handle material, int slot)
-{
-	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
-	{
-		elf_script *script = elf_get_current_script();
-		if(script)
-		{
-			int line = elf_get_current_script_line();
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetMaterialTextureType() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
-		}
-		else
-		{
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetMaterialTextureType() -> invalid handle\n");
-		}
-		return 0;
-	}
-	return elf_get_material_texture_type((elf_material*)material.get(), slot);
-}
-ELF_API int ELF_APIENTRY elfGetMaterialTextureCount(elf_handle material)
-{
-	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
-	{
-		elf_script *script = elf_get_current_script();
-		if(script)
-		{
-			int line = elf_get_current_script_line();
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetMaterialTextureCount() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
-		}
-		else
-		{
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetMaterialTextureCount() -> invalid handle\n");
-		}
-		return 0;
-	}
-	return elf_get_material_texture_count((elf_material*)material.get());
-}
-ELF_API float ELF_APIENTRY elfGetMaterialTextureParallaxScale(elf_handle material, int slot)
-{
-	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
-	{
-		elf_script *script = elf_get_current_script();
-		if(script)
-		{
-			int line = elf_get_current_script_line();
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetMaterialTextureParallaxScale() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
-		}
-		else
-		{
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetMaterialTextureParallaxScale() -> invalid handle\n");
-		}
-		return 0;
-	}
-	return elf_get_material_texture_parallax_scale((elf_material*)material.get(), slot);
-}
-ELF_API float ELF_APIENTRY elfGetMaterialTextureAlphaTexture(elf_handle material, int slot)
-{
-	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
-	{
-		elf_script *script = elf_get_current_script();
-		if(script)
-		{
-			int line = elf_get_current_script_line();
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetMaterialTextureAlphaTexture() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
-		}
-		else
-		{
-			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetMaterialTextureAlphaTexture() -> invalid handle\n");
-		}
-		return 0;
-	}
-	return elf_get_material_texture_alpha_texture((elf_material*)material.get(), slot);
-}
 ELF_API elf_color ELF_APIENTRY elfGetMaterialDiffuseColor(elf_handle material)
 {
 	elf_color _e_type;
@@ -1920,6 +1742,374 @@ ELF_API bool ELF_APIENTRY elfGetMaterialLighting(elf_handle material)
 		return false;
 	}
 	return (bool)elf_get_material_lighting((elf_material*)material.get());
+}
+ELF_API void ELF_APIENTRY elfSetMaterialDiffuseMap(elf_handle material, elf_handle texture)
+{
+	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetMaterialDiffuseMap() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetMaterialDiffuseMap() -> invalid handle\n");
+		}
+		return;
+	}
+	if(!texture.get() || elf_get_object_type(texture.get()) != ELF_TEXTURE)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetMaterialDiffuseMap() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetMaterialDiffuseMap() -> invalid handle\n");
+		}
+		return;
+	}
+	elf_set_material_diffuse_map((elf_material*)material.get(), (elf_texture*)texture.get());
+}
+ELF_API void ELF_APIENTRY elfSetMaterialNormalMap(elf_handle material, elf_handle texture)
+{
+	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetMaterialNormalMap() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetMaterialNormalMap() -> invalid handle\n");
+		}
+		return;
+	}
+	if(!texture.get() || elf_get_object_type(texture.get()) != ELF_TEXTURE)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetMaterialNormalMap() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetMaterialNormalMap() -> invalid handle\n");
+		}
+		return;
+	}
+	elf_set_material_normal_map((elf_material*)material.get(), (elf_texture*)texture.get());
+}
+ELF_API void ELF_APIENTRY elfSetMaterialHeightMap(elf_handle material, elf_handle texture)
+{
+	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetMaterialHeightMap() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetMaterialHeightMap() -> invalid handle\n");
+		}
+		return;
+	}
+	if(!texture.get() || elf_get_object_type(texture.get()) != ELF_TEXTURE)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetMaterialHeightMap() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetMaterialHeightMap() -> invalid handle\n");
+		}
+		return;
+	}
+	elf_set_material_height_map((elf_material*)material.get(), (elf_texture*)texture.get());
+}
+ELF_API void ELF_APIENTRY elfSetMaterialSpecularMap(elf_handle material, elf_handle texture)
+{
+	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetMaterialSpecularMap() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetMaterialSpecularMap() -> invalid handle\n");
+		}
+		return;
+	}
+	if(!texture.get() || elf_get_object_type(texture.get()) != ELF_TEXTURE)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetMaterialSpecularMap() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetMaterialSpecularMap() -> invalid handle\n");
+		}
+		return;
+	}
+	elf_set_material_specular_map((elf_material*)material.get(), (elf_texture*)texture.get());
+}
+ELF_API void ELF_APIENTRY elfSetMaterialLightMap(elf_handle material, elf_handle texture)
+{
+	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetMaterialLightMap() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetMaterialLightMap() -> invalid handle\n");
+		}
+		return;
+	}
+	if(!texture.get() || elf_get_object_type(texture.get()) != ELF_TEXTURE)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetMaterialLightMap() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetMaterialLightMap() -> invalid handle\n");
+		}
+		return;
+	}
+	elf_set_material_light_map((elf_material*)material.get(), (elf_texture*)texture.get());
+}
+ELF_API elf_handle ELF_APIENTRY elfGetMaterialDiffuseMap(elf_handle material)
+{
+	elf_handle handle;
+	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetMaterialDiffuseMap() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetMaterialDiffuseMap() -> invalid handle\n");
+		}
+		return handle;
+	}
+	handle = (elf_object*)elf_get_material_diffuse_map((elf_material*)material.get());
+	return handle;
+}
+ELF_API elf_handle ELF_APIENTRY elfGetMaterialNormalMap(elf_handle material)
+{
+	elf_handle handle;
+	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetMaterialNormalMap() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetMaterialNormalMap() -> invalid handle\n");
+		}
+		return handle;
+	}
+	handle = (elf_object*)elf_get_material_normal_map((elf_material*)material.get());
+	return handle;
+}
+ELF_API elf_handle ELF_APIENTRY elfGetMaterialHeightMap(elf_handle material)
+{
+	elf_handle handle;
+	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetMaterialHeightMap() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetMaterialHeightMap() -> invalid handle\n");
+		}
+		return handle;
+	}
+	handle = (elf_object*)elf_get_material_height_map((elf_material*)material.get());
+	return handle;
+}
+ELF_API elf_handle ELF_APIENTRY elfGetMaterialSpecularMap(elf_handle material)
+{
+	elf_handle handle;
+	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetMaterialSpecularMap() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetMaterialSpecularMap() -> invalid handle\n");
+		}
+		return handle;
+	}
+	handle = (elf_object*)elf_get_material_specular_map((elf_material*)material.get());
+	return handle;
+}
+ELF_API elf_handle ELF_APIENTRY elfGetMaterialLightMap(elf_handle material)
+{
+	elf_handle handle;
+	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetMaterialLightMap() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetMaterialLightMap() -> invalid handle\n");
+		}
+		return handle;
+	}
+	handle = (elf_object*)elf_get_material_light_map((elf_material*)material.get());
+	return handle;
+}
+ELF_API void ELF_APIENTRY elfSetMaterialParallaxScale(elf_handle material, float scale)
+{
+	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetMaterialParallaxScale() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetMaterialParallaxScale() -> invalid handle\n");
+		}
+		return;
+	}
+	elf_set_material_parallax_scale((elf_material*)material.get(), scale);
+}
+ELF_API void ELF_APIENTRY elfSetMaterialAlphaTest(elf_handle material, bool alpha_test)
+{
+	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetMaterialAlphaTest() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetMaterialAlphaTest() -> invalid handle\n");
+		}
+		return;
+	}
+	elf_set_material_alpha_test((elf_material*)material.get(), alpha_test);
+}
+ELF_API void ELF_APIENTRY elfSetMaterialAlphaThreshold(elf_handle material, float threshold)
+{
+	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: SetMaterialAlphaThreshold() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "SetMaterialAlphaThreshold() -> invalid handle\n");
+		}
+		return;
+	}
+	elf_set_material_alpha_threshold((elf_material*)material.get(), threshold);
+}
+ELF_API float ELF_APIENTRY elfGetMaterialParallaxScale(elf_handle material)
+{
+	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetMaterialParallaxScale() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetMaterialParallaxScale() -> invalid handle\n");
+		}
+		return 0;
+	}
+	return elf_get_material_parallax_scale((elf_material*)material.get());
+}
+ELF_API bool ELF_APIENTRY elfGetMaterialAlphaTest(elf_handle material)
+{
+	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetMaterialAlphaTest() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetMaterialAlphaTest() -> invalid handle\n");
+		}
+		return false;
+	}
+	return (bool)elf_get_material_alpha_test((elf_material*)material.get());
+}
+ELF_API float ELF_APIENTRY elfGetMaterialAlphaThreshold(elf_handle material)
+{
+	if(!material.get() || elf_get_object_type(material.get()) != ELF_MATERIAL)
+	{
+		elf_script *script = elf_get_current_script();
+		if(script)
+		{
+			int line = elf_get_current_script_line();
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "[script \"%s\" %s]:%d: GetMaterialAlphaThreshold() -> invalid handle\n", elf_get_script_name(script), elf_get_script_file_path(script), line);
+		}
+		else
+		{
+			elf_set_error_no_save(ELF_INVALID_HANDLE, "GetMaterialAlphaThreshold() -> invalid handle\n");
+		}
+		return 0;
+	}
+	return elf_get_material_alpha_threshold((elf_material*)material.get());
 }
 ELF_API void ELF_APIENTRY elfAddPointToBezierCurve(elf_handle curve, elf_handle point)
 {

@@ -39,26 +39,19 @@ elf_entity* elf_create_entity(const char *name)
 void elf_generate_entity_tangent_vectors(elf_entity *entity)
 {
 	elf_material *material;
-	unsigned char found = ELF_FALSE;
-	int i;
+
+	if(elf_get_model_tangents(entity->model)) return;
 
 	if(!entity->model) return;
 
 	for(material = (elf_material*)elf_begin_list(entity->materials); material;
 		material = (elf_material*)elf_next_in_list(entity->materials))
 	{
-		for(i = 0; i < GFX_MAX_TEXTURES; i++)
+		if(elf_get_material_normal_map(material))
 		{
-			if(material->textures[i] &&
-				material->texture_types[i] == GFX_NORMAL_MAP &&
-				!elf_get_model_tangents(entity->model))
-			{
-				elf_generate_model_tangent_vectors(entity->model);
-				found = ELF_TRUE;
-				break;
-			}
+			elf_generate_model_tangent_vectors(entity->model);
+			return;
 		}
-		if(found) break;
 	}
 }
 

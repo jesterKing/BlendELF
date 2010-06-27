@@ -1,4 +1,21 @@
 
+elf_model* elf_create_model(const char *name)
+{
+	elf_model *model;
+
+	model = (elf_model*)malloc(sizeof(elf_model));
+	memset(model, 0x0, sizeof(elf_model));
+	model->type = ELF_MODEL;
+
+	model->id = ++gen->model_id_counter;
+
+	if(name) model->name = elf_create_string(name);
+
+	elf_inc_obj_count();
+
+	return model;
+}
+
 void elf_generate_model_tangent_vectors(elf_model *model)
 {
 	float *vertex_buffer;
@@ -298,7 +315,7 @@ void elf_draw_model_without_materials(elf_list *materials, elf_model *model, gfx
 	{
 		if(model->areas[i].vertex_index)
 		{
-			if(material) elf_set_material_alpha_textures(material, shader_params);
+			if(material) elf_set_material_alpha_texture(material, shader_params);
 			gfx_set_shader_params(shader_params);
 			gfx_draw_vertex_index(model->areas[i].vertex_index, GFX_TRIANGLES);
 			gfx_set_texture_params_default(shader_params);
