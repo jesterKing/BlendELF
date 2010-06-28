@@ -801,6 +801,7 @@ float elf_get_material_alpha_threshold(elf_material *material);
 
 // <!!
 void elf_set_material_alpha_texture(elf_material *material, gfx_shader_params *shader_params);
+void elf_set_material_ambient(elf_material *material, gfx_shader_params *shader_params);
 void elf_set_material(elf_material *material, gfx_shader_params *shader_params);
 // !!>
 

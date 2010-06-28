@@ -75,18 +75,17 @@ void elf_insert_to_list(elf_list *list, int idx, elf_object *obj)
 	else if(idx == 0)
 	{
 		ptr->prev = elf_create_list_ptr();
-		ptr->prev->obj = obj,
+		ptr->prev->obj = obj;
 		ptr->prev->next = ptr;
 		list->first = ptr->prev;
 		list->length++;
 	}
 	else if(idx == list->length)
 	{
-		while(ptr->next) ptr = ptr->next;
-		ptr->next = elf_create_list_ptr();
-		ptr->next->obj = obj;
-		list->last = ptr->next;
-		list->last->prev = ptr;
+		list->last->next = elf_create_list_ptr();
+		list->last->next->obj = obj;
+		list->last->next->prev = list->last;
+		list->last = list->last->next;
 		list->length++;
 	}
 	else
@@ -110,8 +109,6 @@ void elf_insert_to_list(elf_list *list, int idx, elf_object *obj)
 
 void elf_append_to_list(elf_list *list, elf_object *obj)
 {
-	elf_list_ptr *last;
-
 	if(!obj) return;
 
 	if(!list->first)
@@ -123,12 +120,10 @@ void elf_append_to_list(elf_list *list, elf_object *obj)
 	}
 	else
 	{
-		last = list->first;
-		while(last->next) last = last->next;
-		last->next = elf_create_list_ptr();
-		last->next->obj = obj;
-		last->next->prev = last;
-		list->last = last->next;
+		list->last->next = elf_create_list_ptr();
+		list->last->next->obj = obj;
+		list->last->next->prev = list->last;
+		list->last = list->last->next;
 		list->length++;
 	}
 

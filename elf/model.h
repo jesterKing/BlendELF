@@ -288,13 +288,14 @@ void elf_draw_model_ambient(elf_list *materials, elf_model *model, gfx_shader_pa
 	{
 		if(model->areas[i].vertex_index)
 		{
-			if(material)
+			if(material && material->lighting)
 			{
-				elf_set_material(material, shader_params);
-				shader_params->material_params.color.r = eng->ambient_color.r*material->ambient_color.r;
-				shader_params->material_params.color.g = eng->ambient_color.g*material->ambient_color.g;
-				shader_params->material_params.color.b = eng->ambient_color.b*material->ambient_color.b;
+				elf_set_material_ambient(material, shader_params);
 				gfx_set_shader_params(shader_params);
+			}
+			else
+			{
+				continue;
 			}
 			gfx_draw_vertex_index(model->areas[i].vertex_index, GFX_TRIANGLES);
 		}
