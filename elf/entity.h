@@ -36,7 +36,7 @@ elf_entity* elf_create_entity(const char *name)
 	return entity;
 }
 
-void elf_generate_entity_tangent_vectors(elf_entity *entity)
+void elf_generate_entity_tangents(elf_entity *entity)
 {
 	elf_material *material;
 
@@ -49,7 +49,7 @@ void elf_generate_entity_tangent_vectors(elf_entity *entity)
 	{
 		if(elf_get_material_normal_map(material))
 		{
-			elf_generate_model_tangent_vectors(entity->model);
+			elf_generate_model_tangents(entity->model);
 			return;
 		}
 	}
@@ -356,8 +356,7 @@ int elf_get_entity_material_count(elf_entity *entity)
 void elf_add_entity_material(elf_entity *entity, elf_material *material)
 {
 	elf_append_to_list(entity->materials, (elf_object*)material);
-	// check if normal/displacmeent maps are needed
-	elf_generate_entity_tangent_vectors(entity);
+	elf_generate_entity_tangents(entity);
 }
 
 void elf_set_entity_material(elf_entity *entity, int idx, elf_material *material)
@@ -377,7 +376,7 @@ void elf_set_entity_material(elf_entity *entity, int idx, elf_material *material
 		}
 	}
 
-	elf_generate_entity_tangent_vectors(entity);
+	elf_generate_entity_tangents(entity);
 }
 
 elf_material* elf_get_entity_material(elf_entity *entity, int idx)

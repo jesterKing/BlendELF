@@ -91,6 +91,7 @@ struct gfx_vertex_index {
 };
 
 struct gfx_texture {
+	GFX_OBJECT_HEADER;
 	unsigned int id;
 	unsigned int width;
 	unsigned int height;

@@ -736,7 +736,7 @@ elf_entity* elf_create_entity_from_pak(FILE *file, const char *name, elf_scene *
 	}
 
 	// check if normal/displacement maps are needed
-	elf_generate_entity_tangent_vectors(entity);
+	elf_generate_entity_tangents(entity);
 
 	return entity;
 }

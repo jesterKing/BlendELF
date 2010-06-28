@@ -151,6 +151,7 @@ void gfx_set_vertex_array_data(gfx_vertex_array *vertex_array, unsigned int targ
 		case GFX_TANGENT: varr->element_count = 3; break;
 		case GFX_WEIGHTS: varr->element_count = 4; break;
 		case GFX_BONEIDS: varr->element_count = 4; break;
+		default: printf("error: invalid target for vertex array data\n"); return;
 	}
 
 	varr->vertex_count = data->count/varr->element_count;

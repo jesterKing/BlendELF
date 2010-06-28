@@ -145,6 +145,14 @@ void gfx_get_shader_program_config(gfx_shader_params *shader_params, gfx_shader_
 	shader_config->light = shader_params->light_params.type;
 	shader_config->alpha_test_in_shader = shader_params->render_params.alpha_test_in_shader;
 	shader_config->vertex_color = shader_params->render_params.vertex_color;
+	shader_config->specular = GFX_FALSE;
+	if((shader_params->material_params.specular_color.r > 0.0001 ||
+		shader_params->material_params.specular_color.g > 0.0001 ||
+		shader_params->material_params.specular_color.b > 0.0001) &&
+		shader_params->material_params.spec_power > 0.0001)
+	{
+		shader_config->specular = GFX_TRUE;
+	}
 }
 
 void gfx_add_vertex_attributes(gfx_document *document, gfx_shader_config *config)
@@ -356,9 +364,12 @@ void gfx_add_fragment_lighting_calcs(gfx_document *document, gfx_shader_config *
 		gfx_add_line_to_document(document, "\tif(lambertTerm > 0.0)");
 		gfx_add_line_to_document(document, "\t{");
 		gfx_add_line_to_document(document, "\t\tdiffuse = elf_Color*vec4(elf_LightColor*lambertTerm, 1.0);");
-		gfx_add_line_to_document(document, "\t\tvec3 R = reflect(-L, N);");
-		gfx_add_line_to_document(document, "\t\tfloat specStrength = clamp(pow(max(dot(R, E), 0.0), elf_SpecPower), 0.0, 1.0);");
-		gfx_add_line_to_document(document, "\t\tspecular = elf_SpecularColor*elf_LightColor*specStrength;");
+		if(config->specular)
+		{
+			gfx_add_line_to_document(document, "\t\tvec3 R = reflect(-L, N);");
+			gfx_add_line_to_document(document, "\t\tfloat specStrength = clamp(pow(max(dot(R, E), 0.0), elf_SpecPower), 0.0, 1.0);");
+			gfx_add_line_to_document(document, "\t\tspecular = elf_SpecularColor*elf_LightColor*specStrength;");
+		}
 		gfx_add_line_to_document(document, "\t}");
 	}
 	if(!config->light) gfx_add_line_to_document(document, "\tfinal_color *= elf_Color;");
@@ -383,9 +394,9 @@ void gfx_add_fragment_texture_calcs(gfx_document *document, gfx_shader_config *c
 void gfx_add_fragment_post_lighting_calcs(gfx_document *document, gfx_shader_config *config)
 {
 	if(config->light && !(config->textures & GFX_COLOR_RAMP_MAP)) gfx_add_line_to_document(document, "\tfinal_color.rgb *= diffuse.rgb;");
-	if(config->light && config->textures & GFX_SPECULAR_MAP && !(config->textures & GFX_HEIGHT_MAP)) gfx_add_line_to_document(document, "\tfinal_color.rgb += specular*texture2D(elf_SpecularMap, elf_TexCoord).rgb;");
-	if(config->light && config->textures & GFX_SPECULAR_MAP && config->textures & GFX_HEIGHT_MAP) gfx_add_line_to_document(document, "\tfinal_color.rgb += specular*texture2D(elf_SpecularMap, elf_HeightTexCoord).rgb;");
-	if(config->light && !(config->textures & GFX_SPECULAR_MAP)) gfx_add_line_to_document(document, "\tfinal_color.rgb += specular;"); 
+	if(config->light && config->specular && config->textures & GFX_SPECULAR_MAP && !(config->textures & GFX_HEIGHT_MAP)) gfx_add_line_to_document(document, "\tfinal_color.rgb += specular*texture2D(elf_SpecularMap, elf_TexCoord).rgb;");
+	if(config->light && config->specular && config->textures & GFX_SPECULAR_MAP && config->textures & GFX_HEIGHT_MAP) gfx_add_line_to_document(document, "\tfinal_color.rgb += specular*texture2D(elf_SpecularMap, elf_HeightTexCoord).rgb;");
+	if(config->light && config->specular && !(config->textures & GFX_SPECULAR_MAP)) gfx_add_line_to_document(document, "\tfinal_color.rgb += specular;"); 
 	if(config->light && config->light != GFX_SUN_LIGHT) gfx_add_line_to_document(document, "\tfinal_color.rgb *= attenuation;");
 	if(config->light && config->textures & GFX_SHADOW_MAP) gfx_add_line_to_document(document, "\tfinal_color.rgb *= shadow;");
 	if(config->light == GFX_SPOT_LIGHT) gfx_add_line_to_document(document, "\tfinal_color.rgb *= spot;");

@@ -112,15 +112,20 @@ void elf_recursively_import_assets(elf_scene *scene, const struct aiScene *aiscn
 	elf_entity *entity;
 	elf_model *model;
 	elf_material *material;
+	elf_texture *texture;
 	int index;
 	float *vertex_buffer;
 	float *normal_buffer;
+	float *texcoord_buffer;
 	unsigned int *index_buffer;
 	struct aiColor4D col;
 	const struct aiMaterial *aimat;
 	float shininess;
 	float strength;
 	unsigned int max;
+	struct aiString path;
+	char *parent_folder;
+	char *real_path;
 
 	for(i = 0; i < aind->mNumMeshes; i++)
 	{
@@ -138,12 +143,15 @@ void elf_recursively_import_assets(elf_scene *scene, const struct aiScene *aiscn
 
 		model->vertices = gfx_create_vertex_data(3*mesh->mNumVertices, GFX_FLOAT, GFX_VERTEX_DATA_STATIC);
 		model->normals = gfx_create_vertex_data(3*mesh->mNumVertices, GFX_FLOAT, GFX_VERTEX_DATA_STATIC);
+		if(mesh->mTextureCoords[0] != NULL) model->tex_coords = gfx_create_vertex_data(2*mesh->mNumVertices, GFX_FLOAT, GFX_VERTEX_DATA_STATIC);
 
 		gfx_inc_ref((gfx_object*)model->vertices);
 		gfx_inc_ref((gfx_object*)model->normals);
+		if(mesh->mTextureCoords[0] != NULL) gfx_inc_ref((gfx_object*)model->tex_coords);
 
 		vertex_buffer = (float*)gfx_get_vertex_data_buffer(model->vertices);
 		normal_buffer = (float*)gfx_get_vertex_data_buffer(model->normals);
+		if(mesh->mTextureCoords[0] != NULL) texcoord_buffer = (float*)gfx_get_vertex_data_buffer(model->tex_coords);
 
 		model->areas = (elf_model_area*)malloc(sizeof(elf_model_area)*model->area_count);
 		memset(model->areas, 0x0, sizeof(elf_model_area)*model->area_count);
@@ -173,6 +181,8 @@ void elf_recursively_import_assets(elf_scene *scene, const struct aiScene *aiscn
 				memcpy(&vertex_buffer[index*3], &mesh->mVertices[index].x, sizeof(float)*3);
 				if(mesh->mNormals != NULL)
 					memcpy(&normal_buffer[index*3], &mesh->mNormals[index].x, sizeof(float)*3);
+				if(mesh->mTextureCoords[0] != NULL)
+					memcpy(&texcoord_buffer[index*2], &mesh->mTextureCoords[0][index].x, sizeof(float)*2);
 			}
 		}
 
@@ -196,6 +206,7 @@ void elf_recursively_import_assets(elf_scene *scene, const struct aiScene *aiscn
 
 		gfx_set_vertex_array_data(model->vertex_array, GFX_VERTEX, model->vertices);
 		gfx_set_vertex_array_data(model->vertex_array, GFX_NORMAL, model->normals);
+		if(mesh->mTextureCoords[0] != NULL) gfx_set_vertex_array_data(model->vertex_array, GFX_TEX_COORD, model->tex_coords);
 
 		model->areas[0].vertex_index = gfx_create_vertex_index(GFX_TRUE, model->areas[0].index);
 		gfx_inc_ref((gfx_object*)model->areas[0].vertex_index);
@@ -229,7 +240,55 @@ void elf_recursively_import_assets(elf_scene *scene, const struct aiScene *aiscn
 			}
 		}
 
+		parent_folder = elf_get_directory_from_path(scene->file_path);
+		real_path = NULL;
+
+		if(AI_SUCCESS == aiGetMaterialString(aimat, AI_MATKEY_TEXTURE_DIFFUSE(0), &path))
+		{
+			if(real_path) elf_destroy_string(real_path);
+			real_path = elf_merge_strings(parent_folder, path.data);
+			texture = elf_create_texture_from_file(real_path);
+			if(texture) elf_set_material_diffuse_map(material, texture);
+		}
+
+		if(AI_SUCCESS == aiGetMaterialString(aimat, AI_MATKEY_TEXTURE_SPECULAR(0), &path))
+		{
+			if(real_path) elf_destroy_string(real_path);
+			real_path = elf_merge_strings(parent_folder, path.data);
+			texture = elf_create_texture_from_file(real_path);
+			if(texture) elf_set_material_specular_map(material, texture);
+		}
+
+		if(AI_SUCCESS == aiGetMaterialString(aimat, AI_MATKEY_TEXTURE_NORMALS(0), &path))
+		{
+			if(real_path) elf_destroy_string(real_path);
+			real_path = elf_merge_strings(parent_folder, path.data);
+			texture = elf_create_texture_from_file(real_path);
+			if(texture) elf_set_material_normal_map(material, texture);
+		}
+
+		if(AI_SUCCESS == aiGetMaterialString(aimat, AI_MATKEY_TEXTURE_LIGHTMAP(0), &path))
+		{
+			if(real_path) elf_destroy_string(real_path);
+			real_path = elf_merge_strings(parent_folder, path.data);
+			texture = elf_create_texture_from_file(real_path);
+			if(texture) elf_set_material_light_map(material, texture);
+		}
+
+		if(AI_SUCCESS == aiGetMaterialString(aimat, AI_MATKEY_TEXTURE_HEIGHT(0), &path))
+		{
+			if(real_path) elf_destroy_string(real_path);
+			real_path = elf_merge_strings(parent_folder, path.data);
+			texture = elf_create_texture_from_file(real_path);
+			if(texture) elf_set_material_height_map(material, texture);
+		}
+
+		elf_destroy_string(parent_folder);
+		if(real_path) elf_destroy_string(real_path);
+
 		elf_set_entity_material(entity, 0, material);
+
+		elf_generate_entity_tangents(entity);
 
 		elf_add_entity_to_scene(scene, entity);
 	}
@@ -257,7 +316,7 @@ elf_scene* elf_create_scene_from_file(const char *file_path)
 
 		return scene;
 	}
-	else
+	else if(aiIsExtensionSupported(type))
 	{
 		const struct aiScene *aiscn;
 		struct aiLogStream stream;
@@ -273,6 +332,7 @@ elf_scene* elf_create_scene_from_file(const char *file_path)
 		}
 
 		scene = elf_create_scene(file_path);
+		scene->file_path = elf_create_string(file_path);
 
 		elf_recursively_import_assets(scene, aiscn, aiscn->mRootNode);
 
@@ -280,6 +340,11 @@ elf_scene* elf_create_scene_from_file(const char *file_path)
 		aiDetachAllLogStreams();
 
 		return scene;
+	}
+	else
+	{
+		elf_set_error(ELF_INVALID_FILE, "error: can't open \"%s\", unsupported format\n");
+		return NULL;
 	}
 }
 

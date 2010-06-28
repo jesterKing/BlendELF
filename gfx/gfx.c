@@ -21,6 +21,8 @@ int gfx_global_obj_count = 0;
 int gfx_global_ref_count_table[GFX_OBJECT_TYPE_COUNT];
 int gfx_global_ref_count = 0;
 
+void elf_write_to_log(const char *fmt, ...);
+
 #include "gfxtypes.h"
 #include "gfxobject.h"
 #include "gfxmath.h"
@@ -33,52 +35,6 @@ int gfx_global_ref_count = 0;
 #include "gfxshaderparams.h"
 #include "gfxquery.h"
 #include "gfxdraw.h"
-
-void gfx_write_to_log(const char *fmt, ...)
-{
-	va_list list;
-	const char *p, *s;
-	int d;
-	double f;
-	FILE *file;
-
-	va_start(list, fmt);
-
-	file = fopen("elf.log", "a");
-	if(!file) file = fopen("elf.log", "w");
-
-	for(p = fmt; *p; ++p)
-	{
-		if(*p != '%')
-		{
-			putc(*p, stdout);
-			if(file) putc(*p, file);
-		}
-		else
-		{
-			switch(*++p)
-			{
-				case 's':
-					s = va_arg(list, char*);
-					printf("%s", s);
-					if(file) fprintf(file, "%s", s);
-					continue;
-				case 'd':
-					d = va_arg(list, int);
-					printf("%d", d);
-					if(file) fprintf(file, "%d", d);
-					continue;
-				case 'f':
-					f = va_arg(list, double);
-					printf("%f", f);
-					if(file) fprintf(file, "%f", f);
-					continue;
-			}
-		}
-	}
-
-	if(file) fclose(file);
-}
 
 unsigned char gfx_init()
 {
@@ -162,19 +118,19 @@ unsigned char gfx_init()
 
 	if(driver->version < 200)
 	{
-		gfx_write_to_log("OpenGL version 2.0 not supported!\n");
+		elf_write_to_log("OpenGL version 2.0 not supported!\n");
 		return GFX_FALSE;
 	}
 
 	if(!glewIsSupported("GL_EXT_framebuffer_object"))
 	{
-		gfx_write_to_log("GL_EXT_framebuffer_object not supported!\n");
+		elf_write_to_log("GL_EXT_framebuffer_object not supported!\n");
 		return GFX_FALSE;
 	}
 
 	if(!glewIsSupported("GL_ARB_texture_float"))
 	{
-		gfx_write_to_log("GL_ARB_texture_float not supported!\n");
+		elf_write_to_log("GL_ARB_texture_float not supported!\n");
 		return GFX_FALSE;
 	}
 
@@ -184,7 +140,7 @@ unsigned char gfx_init()
 	glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS_EXT, &driver->max_color_attachments);
 	glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &driver->max_anisotropy);
 
-	gfx_write_to_log("OpenGL %s; %s; %s\n", glGetString(GL_VERSION), glGetString(GL_VENDOR), glGetString(GL_RENDERER));
+	elf_write_to_log("OpenGL %s; %s; %s\n", glGetString(GL_VERSION), glGetString(GL_VENDOR), glGetString(GL_RENDERER));
 
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClearDepth(1.0);

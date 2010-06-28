@@ -16,7 +16,7 @@ elf_model* elf_create_model(const char *name)
 	return model;
 }
 
-void elf_generate_model_tangent_vectors(elf_model *model)
+void elf_generate_model_tangents(elf_model *model)
 {
 	float *vertex_buffer;
 	float *tex_coord_buffer;

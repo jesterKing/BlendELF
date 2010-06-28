@@ -987,7 +987,7 @@ elf_vec3f elf_un_project_camera_point(elf_camera *camera, float x, float y, floa
 
 // <!!
 void elf_destroy_model(elf_model *model);
-void elf_generate_model_tangent_vectors(elf_model *model);
+void elf_generate_model_tangents(elf_model *model);
 // !!>
 
 const char* elf_get_model_name(elf_model *model);	// <mdoc> MODEL FUNCTIONS
