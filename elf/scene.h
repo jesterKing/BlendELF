@@ -420,6 +420,7 @@ void elf_scene_pre_draw(elf_scene *scene)
 	elf_entity *ent;
 	elf_light *light;
 	elf_sprite *spr;
+	elf_particles *par;
 
 	for(cam = (elf_camera*)elf_begin_list(scene->cameras); cam != NULL;
 		cam = (elf_camera*)elf_next_in_list(scene->cameras))
@@ -444,6 +445,12 @@ void elf_scene_pre_draw(elf_scene *scene)
 	{
 		elf_sprite_pre_draw(spr, scene->cur_camera);
 	}
+
+	for(par = (elf_particles*)elf_begin_list(scene->particles); par != NULL;
+		par = (elf_particles*)elf_next_in_list(scene->particles))
+	{
+		elf_particles_pre_draw(par);
+	}
 }
 
 void elf_scene_post_draw(elf_scene *scene)
@@ -452,6 +459,7 @@ void elf_scene_post_draw(elf_scene *scene)
 	elf_entity *ent;
 	elf_light *light;
 	elf_sprite *spr;
+	elf_particles *par;
 
 	for(cam = (elf_camera*)elf_begin_list(scene->cameras); cam != NULL;
 		cam = (elf_camera*)elf_next_in_list(scene->cameras))
@@ -475,6 +483,12 @@ void elf_scene_post_draw(elf_scene *scene)
 		spr = (elf_sprite*)elf_next_in_list(scene->sprites))
 	{
 		elf_sprite_post_draw(spr);
+	}
+
+	for(par = (elf_particles*)elf_begin_list(scene->particles); par != NULL;
+		par = (elf_particles*)elf_next_in_list(scene->particles))
+	{
+		elf_particles_post_draw(par);
 	}
 }
 
@@ -1803,7 +1817,10 @@ void elf_draw_scene(elf_scene *scene)
 	for(par = (elf_particles*)elf_begin_list(scene->particles); par;
 		par = (elf_particles*)elf_next_in_list(scene->particles))
 	{
-		elf_draw_particles(par, scene->cur_camera, &scene->shader_params);
+		if(!elf_cull_particles(par, scene->cur_camera))
+		{
+			elf_draw_particles(par, scene->cur_camera, &scene->shader_params);
+		}
 	}
 
 	// render stuff for dof...

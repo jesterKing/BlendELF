@@ -5341,6 +5341,29 @@ fail:
 }
 
 
+static int _wrap_elfFloatMin(lua_State* L) {
+  int SWIG_arg = 0;
+  float arg1 ;
+  float arg2 ;
+  float result;
+  
+  SWIG_check_num_args("FloatMin",2,2)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("FloatMin",1,"float");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("FloatMin",2,"float");
+  arg1 = (float)lua_tonumber(L, 1);
+  arg2 = (float)lua_tonumber(L, 2);
+  result = (float)elfFloatMin(arg1,arg2);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_elfFloatMax(lua_State* L) {
   int SWIG_arg = 0;
   float arg1 ;
@@ -19761,6 +19784,7 @@ static const struct luaL_reg swig_commands[] = {
     { "GetVec3fLength", _wrap_elfGetVec3fLength},
     { "AboutZero", _wrap_elfAboutZero},
     { "FloatAbs", _wrap_elfFloatAbs},
+    { "FloatMin", _wrap_elfFloatMin},
     { "FloatMax", _wrap_elfFloatMax},
     { "RandomFloat", _wrap_elfRandomFloat},
     { "RandomFloatRange", _wrap_elfRandomFloatRange},

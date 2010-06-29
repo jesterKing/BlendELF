@@ -182,6 +182,41 @@ void elf_init_new_particle(elf_particles *particles, elf_particle *particle)
 	particle->color.a = elf_random_float_range(particles->color_min.a, particles->color_max.a);
 }
 
+void elf_calc_particles_aabb(elf_particles *particles)
+{
+	elf_vec3f position;
+
+	particles->cull_aabb_min.x = particles->life_span_max*(particles->velocity_min.x+elf_float_min(0.0, particles->gravity.x));
+	particles->cull_aabb_min.y = particles->life_span_max*(particles->velocity_min.y+elf_float_min(0.0, particles->gravity.y));
+	particles->cull_aabb_min.z = particles->life_span_max*(particles->velocity_min.z+elf_float_min(0.0, particles->gravity.z));
+
+	particles->cull_aabb_max.x = particles->life_span_max*(particles->velocity_max.x+elf_float_max(0.0, particles->gravity.x));
+	particles->cull_aabb_max.y = particles->life_span_max*(particles->velocity_max.y+elf_float_max(0.0, particles->gravity.y));
+	particles->cull_aabb_max.z = particles->life_span_max*(particles->velocity_max.z+elf_float_max(0.0, particles->gravity.z));
+
+	elf_get_actor_position_((elf_actor*)particles, &position.x);
+
+	particles->cull_aabb_min.x += position.x;
+	particles->cull_aabb_min.y += position.y;
+	particles->cull_aabb_min.z += position.z;
+
+	particles->cull_aabb_max.x += position.x;
+	particles->cull_aabb_max.y += position.y;
+	particles->cull_aabb_max.z += position.z;
+}
+
+void elf_particles_pre_draw(elf_particles *particles)
+{
+	elf_actor_pre_draw((elf_actor*)particles);
+
+	if(particles->moved) elf_calc_particles_aabb(particles);
+}
+
+void elf_particles_post_draw(elf_particles *particles)
+{
+	elf_actor_post_draw((elf_actor*)particles);
+}
+
 void elf_update_particles(elf_particles *particles, float sync)
 {
 	elf_particle *particle;
@@ -813,5 +848,10 @@ elf_color elf_get_particles_color_min(elf_particles *particles)
 elf_color elf_get_particles_color_max(elf_particles *particles)
 {
 	return particles->color_max;
+}
+
+unsigned char elf_cull_particles(elf_particles *particles, elf_camera *camera)
+{
+	return !elf_aabb_inside_frustum(camera, &particles->cull_aabb_min.x, &particles->cull_aabb_max.x);
 }
 

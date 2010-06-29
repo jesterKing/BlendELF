@@ -1043,6 +1043,12 @@ float elf_float_abs(float val)
 	return val;
 }
 
+float elf_float_min(float a, float b)
+{
+	if(a < b) return a;
+	return b;
+}
+
 float elf_float_max(float a, float b)
 {
 	if(a > b) return a;

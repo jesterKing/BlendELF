@@ -687,6 +687,7 @@ float elf_get_vec3f_length(elf_vec3f vec);
 
 unsigned char elf_about_zero(float val);
 float elf_float_abs(float val);
+float elf_float_min(float a, float b);
 float elf_float_max(float a, float b);
 float elf_random_float();
 float elf_random_float_range(float min, float max);
@@ -1146,6 +1147,8 @@ void elf_draw_armature_debug(elf_armature *armature, gfx_shader_params *shader_p
 // <!!
 elf_particle* elf_create_particle();
 void elf_destroy_particle(elf_particle *particle);
+void elf_particles_pre_draw(elf_particles *particles);
+void elf_particles_post_draw(elf_particles *particles);
 void elf_update_particles(elf_particles *particles, float sync);
 void elf_destroy_particles(elf_particles *particles);
 // !!>
@@ -1208,6 +1211,7 @@ elf_color elf_get_particles_color_max(elf_particles *particles);
 
 // <!!
 void elf_draw_particles(elf_particles *particles, elf_camera *camera, gfx_shader_params *shader_params);
+unsigned char elf_cull_particles(elf_particles *particles, elf_camera *camera);
 // !!>
 
 //////////////////////////////// SPRITE ////////////////////////////////

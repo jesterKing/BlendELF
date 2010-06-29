@@ -481,6 +481,9 @@ struct elf_particles {
 	elf_vec3f position_max;
 	elf_color color_min;
 	elf_color color_max;
+
+	elf_vec3f cull_aabb_min;
+	elf_vec3f cull_aabb_max;
 };
 
 struct elf_sprite {

@@ -1096,6 +1096,10 @@ ELF_API float ELF_APIENTRY elfFloatAbs(float val)
 {
 	return elf_float_abs(val);
 }
+ELF_API float ELF_APIENTRY elfFloatMin(float a, float b)
+{
+	return elf_float_min(a, b);
+}
 ELF_API float ELF_APIENTRY elfFloatMax(float a, float b)
 {
 	return elf_float_max(a, b);

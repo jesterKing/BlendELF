@@ -445,6 +445,7 @@ ELF_API elf_vec3f ELF_APIENTRY elfAddVec3fVec3f(elf_vec3f vec1, elf_vec3f vec2);
 ELF_API float ELF_APIENTRY elfGetVec3fLength(elf_vec3f vec);
 ELF_API bool ELF_APIENTRY elfAboutZero(float val);
 ELF_API float ELF_APIENTRY elfFloatAbs(float val);
+ELF_API float ELF_APIENTRY elfFloatMin(float a, float b);
 ELF_API float ELF_APIENTRY elfFloatMax(float a, float b);
 ELF_API float ELF_APIENTRY elfRandomFloat();
 ELF_API float ELF_APIENTRY elfRandomFloatRange(float min, float max);
