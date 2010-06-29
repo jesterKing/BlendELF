@@ -13,8 +13,6 @@ void elf_init_general()
 void elf_deinit_general()
 {
 	if(!gen) return;
-
-	if(gen->log) elf_destroy_string(gen->log);
 	if(gen->err_str) elf_destroy_string(gen->err_str);
 
 	if(gen->global_ref_count > 0)
@@ -31,13 +29,15 @@ void elf_deinit_general()
 		elf_log_ref_count_table();
 	}
 
-	if(gen->global_obj_count > 0)
+	if(gen->global_obj_count > 1)
 		elf_write_to_log("error: possible memory leak in ELF, [%d] objects not destroyed\n",
-			elf_get_global_obj_count());
+			elf_get_global_obj_count()-1);
 
-	if(gen->global_obj_count < 0)
+	if(gen->global_obj_count < 1)
 		elf_write_to_log("error: possible double free in ELF, [%d] negative object count\n",
-			elf_get_global_obj_count());
+			elf_get_global_obj_count()-1);
+
+	if(gen->log) elf_destroy_string(gen->log);
 
 	free(gen);
 }
