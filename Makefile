@@ -8,7 +8,7 @@ INCS = -Igfx -Ielf -I/usr/include/lua5.1 -I/usr/include/freetype2
 
 BLENDELF_LIBS = -lGL -lGLEW -lglfw -lXxf86vm -lXrandr -lXrender -pthread \
 	-lfreeimage -lvorbisfile -lvorbis -logg -lopenal -llua5.1 -lfreetype \
-	-lBulletDynamics -lLinearMath -lBulletCollision -lenet
+	-lBulletDynamics -lLinearMath -lBulletCollision -lenet -lassimp
 
 BLENDELF_STATIC_LIBS = -lGL -lGLU /usr/lib/libGLEW.a /usr/lib/libglfw.a \
 	/usr/lib/libXxf86vm.a /usr/lib/libXrandr.a /usr/lib/libXrender.a \
