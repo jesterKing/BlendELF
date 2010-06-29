@@ -37,9 +37,10 @@ it with a flag:
 
 cmake . -G "Unix Makefiles" -DINSTALL_LIBS=ON
 
-Cmake is the primary build system for Assimp too. Use
-the following command to configure, compile and install
-Assimp:
+Cmake is the primary build system for Assimp too. Assimp
+requires boost so you'll have to install that before
+compoling. Use the following command to configure, compile
+and install Assimp:
 
 cmake . && make && make install
 
