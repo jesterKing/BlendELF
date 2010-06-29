@@ -264,7 +264,11 @@ elf_list* elf_get_ray_cast_results(elf_physics_world *world, float x, float y, f
 
 	world->world->getCollisionWorld()->rayTest(btVector3(x, y, z), btVector3(dx, dy, dz), rayResult);
 
-	if(!rayResult.hasHit()) return NULL;
+	if(!rayResult.hasHit())
+	{
+		elf_destroy_list(list);
+		return NULL;
+	}
 
 	return list;
 }
