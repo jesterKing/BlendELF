@@ -148,7 +148,11 @@ unsigned char gfx_set_render_target(gfx_render_target *render_target)
 	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, render_target->fb);
 
 	if(j) glDrawBuffers(j, draw_buffers);
-	else glDrawBuffer(GL_NONE);
+	else
+	{
+		glDrawBuffer(GL_NONE);
+		glReadBuffer(GL_NONE);
+	}
 
 	if(!gfx_check_render_target())
 	{
@@ -175,7 +179,8 @@ void gfx_disable_render_target()
 		}
 	}
 
-	if(!j) glDrawBuffer(GL_BACK);
+	glDrawBuffer(GL_BACK);
+	glReadBuffer(GL_BACK);
 
 	driver->render_target = NULL;
 
