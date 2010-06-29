@@ -349,6 +349,7 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apidefine">elf.UNKNOWN_TYPE</div>
 <div class="apidefine">elf.INVALID_HANDLE</div>
 <div class="apidefine">elf.MISSING_FEATURE</div>
+<div class="apidefine">elf.INVALID_MESH</div>
 <div class="apitopic">OBJECT FUNCTIONS</div>
 <div class="apiinfo">The object functions can be performed on any generic ELF objects.</div>
 <div class="apifunc"><span class="apikeytype">int</span> elf.GetObjectType( <span class="apiobjtype">object</span> obj )</div>
@@ -513,10 +514,6 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc"><span class="apikeytype">int</span> elf.GetTextureDataFormat( <span class="apiobjtype">object</span> texture )</div>
 <div class="apitopic">MATERIAL FUNCTIONS</div>
 <div class="apifunc"><span class="apiobjtype">object</span> elf.CreateMaterial( <span class="apikeytype">string</span> name )</div>
-<div class="apifunc">elf.SetMaterialTexture( <span class="apiobjtype">object</span> material, <span class="apikeytype">int</span> slot, <span class="apiobjtype">object</span> texture )</div>
-<div class="apifunc">elf.SetMaterialTextureType( <span class="apiobjtype">object</span> material, <span class="apikeytype">int</span> slot, <span class="apikeytype">int</span> type )</div>
-<div class="apifunc">elf.SetMaterialTextureParallaxScale( <span class="apiobjtype">object</span> material, <span class="apikeytype">int</span> slot, <span class="apikeytype">float</span> scale )</div>
-<div class="apifunc">elf.SetMaterialTextureAlphaTest( <span class="apiobjtype">object</span> material, <span class="apikeytype">int</span> slot, <span class="apikeytype">float</span> test )</div>
 <div class="apifunc">elf.SetMaterialDiffuseColor( <span class="apiobjtype">object</span> material, <span class="apikeytype">float</span> r, <span class="apikeytype">float</span> g, <span class="apikeytype">float</span> b, <span class="apikeytype">float</span> a )</div>
 <div class="apifunc">elf.SetMaterialSpecularColor( <span class="apiobjtype">object</span> material, <span class="apikeytype">float</span> r, <span class="apikeytype">float</span> g, <span class="apikeytype">float</span> b, <span class="apikeytype">float</span> a )</div>
 <div class="apifunc">elf.SetMaterialAmbientColor( <span class="apiobjtype">object</span> material, <span class="apikeytype">float</span> r, <span class="apikeytype">float</span> g, <span class="apikeytype">float</span> b, <span class="apikeytype">float</span> a )</div>
@@ -524,16 +521,27 @@ This document contains all of the avaialable functions for the BlendELF Lua API.
 <div class="apifunc">elf.SetMaterialLighting( <span class="apiobjtype">object</span> material, <span class="apikeytype">bool</span> lighting )</div>
 <div class="apifunc"><span class="apikeytype">string</span> elf.GetMaterialName( <span class="apiobjtype">object</span> material )</div>
 <div class="apifunc"><span class="apikeytype">string</span> elf.GetMaterialFilePath( <span class="apiobjtype">object</span> material )</div>
-<div class="apifunc"><span class="apiobjtype">object</span> elf.GetMaterialTexture( <span class="apiobjtype">object</span> material, <span class="apikeytype">int</span> slot )</div>
-<div class="apifunc"><span class="apikeytype">int</span> elf.GetMaterialTextureType( <span class="apiobjtype">object</span> material, <span class="apikeytype">int</span> slot )</div>
-<div class="apifunc"><span class="apikeytype">int</span> elf.GetMaterialTextureCount( <span class="apiobjtype">object</span> material )</div>
-<div class="apifunc"><span class="apikeytype">float</span> elf.GetMaterialTextureParallaxScale( <span class="apiobjtype">object</span> material, <span class="apikeytype">int</span> slot )</div>
-<div class="apifunc"><span class="apikeytype">float</span> elf.GetMaterialTextureAlphaTexture( <span class="apiobjtype">object</span> material, <span class="apikeytype">int</span> slot )</div>
 <div class="apifunc"><span class="apikeytype">elf_color</span> elf.GetMaterialDiffuseColor( <span class="apiobjtype">object</span> material )</div>
 <div class="apifunc"><span class="apikeytype">elf_color</span> elf.GetMaterialSpecularColor( <span class="apiobjtype">object</span> material )</div>
 <div class="apifunc"><span class="apikeytype">elf_color</span> elf.GetMaterialAmbientColor( <span class="apiobjtype">object</span> material )</div>
 <div class="apifunc"><span class="apikeytype">float</span> elf.GetMaterialSpecularPower( <span class="apiobjtype">object</span> material )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.GetMaterialLighting( <span class="apiobjtype">object</span> material )</div>
+<div class="apifunc">elf.SetMaterialDiffuseMap( <span class="apiobjtype">object</span> material, <span class="apiobjtype">object</span> texture )</div>
+<div class="apifunc">elf.SetMaterialNormalMap( <span class="apiobjtype">object</span> material, <span class="apiobjtype">object</span> texture )</div>
+<div class="apifunc">elf.SetMaterialHeightMap( <span class="apiobjtype">object</span> material, <span class="apiobjtype">object</span> texture )</div>
+<div class="apifunc">elf.SetMaterialSpecularMap( <span class="apiobjtype">object</span> material, <span class="apiobjtype">object</span> texture )</div>
+<div class="apifunc">elf.SetMaterialLightMap( <span class="apiobjtype">object</span> material, <span class="apiobjtype">object</span> texture )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetMaterialDiffuseMap( <span class="apiobjtype">object</span> material )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetMaterialNormalMap( <span class="apiobjtype">object</span> material )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetMaterialHeightMap( <span class="apiobjtype">object</span> material )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetMaterialSpecularMap( <span class="apiobjtype">object</span> material )</div>
+<div class="apifunc"><span class="apiobjtype">object</span> elf.GetMaterialLightMap( <span class="apiobjtype">object</span> material )</div>
+<div class="apifunc">elf.SetMaterialParallaxScale( <span class="apiobjtype">object</span> material, <span class="apikeytype">float</span> scale )</div>
+<div class="apifunc">elf.SetMaterialAlphaTest( <span class="apiobjtype">object</span> material, <span class="apikeytype">bool</span> alpha_test )</div>
+<div class="apifunc">elf.SetMaterialAlphaThreshold( <span class="apiobjtype">object</span> material, <span class="apikeytype">float</span> threshold )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetMaterialParallaxScale( <span class="apiobjtype">object</span> material )</div>
+<div class="apifunc"><span class="apikeytype">bool</span> elf.GetMaterialAlphaTest( <span class="apiobjtype">object</span> material )</div>
+<div class="apifunc"><span class="apikeytype">float</span> elf.GetMaterialAlphaThreshold( <span class="apiobjtype">object</span> material )</div>
 <div class="apifunc">elf.AddPointToBezierCurve( <span class="apiobjtype">object</span> curve, <span class="apiobjtype">object</span> point )</div>
 <div class="apifunc"><span class="apikeytype">bool</span> elf.AddCurveToIpo( <span class="apiobjtype">object</span> ipo, <span class="apiobjtype">object</span> curve )</div>
 <div class="apifunc"><span class="apikeytype">elf_vec3f</span> elf.GetIpoLoc( <span class="apiobjtype">object</span> ipo, <span class="apikeytype">float</span> x )</div>

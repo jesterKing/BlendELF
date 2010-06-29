@@ -259,6 +259,7 @@
 #define ELF_UNKNOWN_TYPE 0x000B
 #define ELF_INVALID_HANDLE 0x000C
 #define ELF_MISSING_FEATURE 0x000D
+#define ELF_INVALID_MESH 0x000E
 #if defined(__WIN32__) || defined(WIN32) || defined(__CYGWIN__)
 	#ifndef ELF_PLAYER
 		#define ELF_APIENTRY __stdcall
@@ -474,10 +475,6 @@ ELF_API int ELF_APIENTRY elfGetTextureHeight(elf_handle texture);
 ELF_API int ELF_APIENTRY elfGetTextureFormat(elf_handle texture);
 ELF_API int ELF_APIENTRY elfGetTextureDataFormat(elf_handle texture);
 ELF_API elf_handle ELF_APIENTRY elfCreateMaterial(const char* name);
-ELF_API void ELF_APIENTRY elfSetMaterialTexture(elf_handle material, int slot, elf_handle texture);
-ELF_API void ELF_APIENTRY elfSetMaterialTextureType(elf_handle material, int slot, int type);
-ELF_API void ELF_APIENTRY elfSetMaterialTextureParallaxScale(elf_handle material, int slot, float scale);
-ELF_API void ELF_APIENTRY elfSetMaterialTextureAlphaTest(elf_handle material, int slot, float test);
 ELF_API void ELF_APIENTRY elfSetMaterialDiffuseColor(elf_handle material, float r, float g, float b, float a);
 ELF_API void ELF_APIENTRY elfSetMaterialSpecularColor(elf_handle material, float r, float g, float b, float a);
 ELF_API void ELF_APIENTRY elfSetMaterialAmbientColor(elf_handle material, float r, float g, float b, float a);
@@ -485,16 +482,27 @@ ELF_API void ELF_APIENTRY elfSetMaterialSpecularPower(elf_handle material, float
 ELF_API void ELF_APIENTRY elfSetMaterialLighting(elf_handle material, bool lighting);
 ELF_API const char* ELF_APIENTRY elfGetMaterialName(elf_handle material);
 ELF_API const char* ELF_APIENTRY elfGetMaterialFilePath(elf_handle material);
-ELF_API elf_handle ELF_APIENTRY elfGetMaterialTexture(elf_handle material, int slot);
-ELF_API int ELF_APIENTRY elfGetMaterialTextureType(elf_handle material, int slot);
-ELF_API int ELF_APIENTRY elfGetMaterialTextureCount(elf_handle material);
-ELF_API float ELF_APIENTRY elfGetMaterialTextureParallaxScale(elf_handle material, int slot);
-ELF_API float ELF_APIENTRY elfGetMaterialTextureAlphaTexture(elf_handle material, int slot);
 ELF_API elf_color ELF_APIENTRY elfGetMaterialDiffuseColor(elf_handle material);
 ELF_API elf_color ELF_APIENTRY elfGetMaterialSpecularColor(elf_handle material);
 ELF_API elf_color ELF_APIENTRY elfGetMaterialAmbientColor(elf_handle material);
 ELF_API float ELF_APIENTRY elfGetMaterialSpecularPower(elf_handle material);
 ELF_API bool ELF_APIENTRY elfGetMaterialLighting(elf_handle material);
+ELF_API void ELF_APIENTRY elfSetMaterialDiffuseMap(elf_handle material, elf_handle texture);
+ELF_API void ELF_APIENTRY elfSetMaterialNormalMap(elf_handle material, elf_handle texture);
+ELF_API void ELF_APIENTRY elfSetMaterialHeightMap(elf_handle material, elf_handle texture);
+ELF_API void ELF_APIENTRY elfSetMaterialSpecularMap(elf_handle material, elf_handle texture);
+ELF_API void ELF_APIENTRY elfSetMaterialLightMap(elf_handle material, elf_handle texture);
+ELF_API elf_handle ELF_APIENTRY elfGetMaterialDiffuseMap(elf_handle material);
+ELF_API elf_handle ELF_APIENTRY elfGetMaterialNormalMap(elf_handle material);
+ELF_API elf_handle ELF_APIENTRY elfGetMaterialHeightMap(elf_handle material);
+ELF_API elf_handle ELF_APIENTRY elfGetMaterialSpecularMap(elf_handle material);
+ELF_API elf_handle ELF_APIENTRY elfGetMaterialLightMap(elf_handle material);
+ELF_API void ELF_APIENTRY elfSetMaterialParallaxScale(elf_handle material, float scale);
+ELF_API void ELF_APIENTRY elfSetMaterialAlphaTest(elf_handle material, bool alpha_test);
+ELF_API void ELF_APIENTRY elfSetMaterialAlphaThreshold(elf_handle material, float threshold);
+ELF_API float ELF_APIENTRY elfGetMaterialParallaxScale(elf_handle material);
+ELF_API bool ELF_APIENTRY elfGetMaterialAlphaTest(elf_handle material);
+ELF_API float ELF_APIENTRY elfGetMaterialAlphaThreshold(elf_handle material);
 ELF_API void ELF_APIENTRY elfAddPointToBezierCurve(elf_handle curve, elf_handle point);
 ELF_API bool ELF_APIENTRY elfAddCurveToIpo(elf_handle ipo, elf_handle curve);
 ELF_API elf_vec3f ELF_APIENTRY elfGetIpoLoc(elf_handle ipo, float x);

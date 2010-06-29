@@ -44,7 +44,6 @@ class Texture:
 		self.type = ''
 		self.length = 0
 		self.data = None
-		self.parallax_scale = 0.0
 		self.size_bytes = 0
 
 	def load(self, texture):
@@ -113,7 +112,14 @@ class Material:
 		self.ambient = [0.0, 0.0, 0.0, 1.0]
 		self.specular = [0.0, 0.0, 0.0, 1.0]
 		self.shininess = 32.0
-		self.textures = []
+		self.diffuse_map = ''
+		self.normal_map = ''
+		self.height_map = ''
+		self.specular_map = ''
+		self.light_map = ''
+		self.parallax_scale = 0.0
+		self.alpha_test = False
+		self.alpha_threshold = 0.99
 		self.size_bytes = 0
 
 	def load(self, mat):
@@ -133,57 +139,45 @@ class Material:
 
 		for tex in mat.getTextures():
 			if tex != None and tex.tex != None and tex.tex.getImage() != None:
-				ntexture = Texture();
-
-				ntexture.name = tex.tex.getName()
-				ntexture.type = 1
-				if tex.mtNor != 0: ntexture.type = 2
-				elif tex.mtDisp != 0: ntexture.type = 4
-				elif tex.mtSpec != 0: ntexture.type = 8
-				elif tex.mtAmb != 0: ntexture.type = 128
-				ntexture.parallax_scale = tex.dispfac
-
-				self.textures.append(ntexture)
+				if tex.tex.getImage().getDepth() == 32: self.alpha_test = True
+				if tex.mtNor != 0: self.normal_map = tex.tex.getName()
+				elif tex.mtDisp != 0:
+					self.height_map = tex.tex.getName()
+					self.parallax_scale = tex.dispfac
+				elif tex.mtSpec != 0: self.specular_map = tex.tex.getName()
+				elif tex.mtAmb != 0: self.light_map = tex.tex.getName()
+				else: self.diffuse_map = tex.tex.getName()
 
 		self.size_bytes = 0
 
-		# magic
-		self.size_bytes += struct.calcsize('<i')
-		# name
-		self.size_bytes += struct.calcsize('<64s')
-		# colors
-		self.size_bytes += struct.calcsize('<ffff')*3
-		# shininess
-		self.size_bytes += struct.calcsize('<f')
-		# texture count
-		self.size_bytes += struct.calcsize('<B')
-		# textures
-		self.size_bytes += struct.calcsize('<64sfB')*len(self.textures)
+		self.size_bytes += struct.calcsize('<i')	# magic
+		self.size_bytes += struct.calcsize('<64s')	# name
+		self.size_bytes += struct.calcsize('<ffff')*3	# colors
+		self.size_bytes += struct.calcsize('<f')	# specular power
+		self.size_bytes += struct.calcsize('<64s')*5	# textures
+		self.size_bytes += struct.calcsize('<f')	# parallax scale
+		self.size_bytes += struct.calcsize('<Bf')	# alpha test, alpha threshold
 
 		print 'Material \"'+self.name+'\" converted'
 		print '  size: '+str(self.size_bytes)+' bytes'
 
 	def save(self, f):
-		# write magic
-		f.write(struct.pack('<i', 179532109))
-
-		# write name
-		write_name_to_file(self.name, f)
-
-		# write colors
-		f.write(struct.pack('<ffff', self.diffuse[0], self.diffuse[1], self.diffuse[2], self.diffuse[3]))
-		f.write(struct.pack('<ffff', self.ambient[0], self.ambient[1], self.ambient[2], self.ambient[3]))
-		f.write(struct.pack('<ffff', self.specular[0], self.specular[1], self.specular[2], self.specular[3]))
-
-		# write other specs
-		f.write(struct.pack('<f', self.shininess))
-
-		# write textures
-		f.write(struct.pack('<B', len(self.textures)))
-		for i in range(len(self.textures)):
-			write_name_to_file(self.textures[i].name, f)
-			f.write(struct.pack('<B', self.textures[i].type))
-			f.write(struct.pack('<f', self.textures[i].parallax_scale))
+		f.write(struct.pack('<i', 179532109))	# write magic
+		write_name_to_file(self.name, f)	# write name
+		f.write(struct.pack('<ffff', self.diffuse[0], self.diffuse[1], self.diffuse[2], self.diffuse[3]))	# write diffuse color
+		f.write(struct.pack('<ffff', self.ambient[0], self.ambient[1], self.ambient[2], self.ambient[3]))	# write ambient color
+		f.write(struct.pack('<ffff', self.specular[0], self.specular[1], self.specular[2], self.specular[3]))	# write specular color
+		f.write(struct.pack('<f', self.shininess))	# write other specs
+		write_name_to_file(self.diffuse_map, f)	# write diffuse map
+		write_name_to_file(self.normal_map, f)	# write normal map
+		write_name_to_file(self.height_map, f)	# write height map
+		write_name_to_file(self.specular_map, f)	# write specular map
+		write_name_to_file(self.light_map, f)	# write light map
+		f.write(struct.pack('<f', self.parallax_scale))	# parallax scale
+		#  alpha test
+		if self.alpha_test == True: f.write(struct.pack('<B', 1))
+		else: f.write(struct.pack('<B', 0))
+		f.write(struct.pack('<f', self.alpha_threshold))	# alpha threshold
 
 		print 'Material \"'+self.name+'\" saved'
 
